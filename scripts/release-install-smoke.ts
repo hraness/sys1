@@ -27,7 +27,7 @@ async function readBounded(stream: ReadableStream<Uint8Array>, kill: () => void)
   return new TextDecoder().decode(Buffer.concat(chunks, size));
 }
 
-async function run(command: string[], env?: NodeJS.ProcessEnv): Promise<string> {
+async function run(command: string[], env?: NodeJS.ProcessEnv, diagnosticStdout = false): Promise<string> {
   const child = Bun.spawn(command, {
     ...(env === undefined ? {} : { env }),
     stdout: "pipe",
@@ -40,7 +40,10 @@ async function run(command: string[], env?: NodeJS.ProcessEnv): Promise<string> 
     readBounded(child.stderr, kill),
   ]);
   if (code !== 0) {
-    throw new Error(`${command[0] ?? "command"} exited ${code}: ${stderr.slice(0, 2_000)}`);
+    // Only the credential-free doctor report opts in. Keep failed readiness
+    // checks visible even though --json deliberately writes them to stdout.
+    const diagnostic = diagnosticStdout ? `\n${stdout.slice(0, 8_000)}` : "";
+    throw new Error(`${command[0] ?? "command"} exited ${code}: ${stderr.slice(0, 2_000)}${diagnostic}`);
   }
   return stdout;
 }
@@ -94,7 +97,7 @@ async function main(): Promise<void> {
   const executable =
     process.platform === "win32" ? join(prefix, "sys1.cmd") : join(prefix, "bin", "sys1");
   const doctor = JSON.parse(
-    await run([executable, "doctor", "--json"], { ...process.env, SYS1_HOME: home }),
+    await run([executable, "doctor", "--json"], { ...process.env, SYS1_HOME: home }, true),
   ) as { ok?: unknown; version?: unknown };
   if (doctor.ok !== true || doctor.version !== 1) {
     throw new Error("installed release doctor did not report ready");

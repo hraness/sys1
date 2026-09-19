@@ -23,7 +23,7 @@ import {
 import { chooseBackend, requestNeeds } from "./router.ts";
 import { validateResponseForRequest } from "./response.ts";
 
-export const SYS1_VERSION = "0.8.0";
+export const SYS1_VERSION = "0.8.1";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {

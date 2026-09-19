@@ -2,8 +2,13 @@
 import { EngineUnavailableError, type FirstTokenDistribution, type LlamaEngineOptions, type NativeRuntimeProbe } from "./engine-types.ts";
 import { LocalInputError } from "./input.ts";
 
+// Pinned node-llama-cpp 3.20.0 bindings/types.d.ts represents CPU as false.
+// Keep this small boundary local: importing its root declaration also imports
+// optional transitive SDK declarations that are not part of Sys1's API.
+export type NativeGpuType = "metal" | "cuda" | "vulkan" | false;
+
 interface LlamaLike {
-  readonly gpu?: string;
+  readonly gpu?: NativeGpuType;
   readonly supportsGpuOffloading?: boolean;
   loadModel(options: { modelPath: string }): Promise<LlamaModelLike>;
   dispose(): Promise<void>;
@@ -46,8 +51,8 @@ interface LlamaSequenceLike {
 }
 
 interface NodeLlamaCppModule {
-  getLlama(options?: { gpu?: string; logLevel?: "fatal"; build?: "never"; skipDownload?: boolean }): Promise<LlamaLike>;
-  getLlamaGpuTypes(include: "supported"): Promise<string[]>;
+  getLlama(options?: { gpu?: "auto" | NativeGpuType; logLevel?: "fatal"; build?: "never"; skipDownload?: boolean }): Promise<LlamaLike>;
+  getLlamaGpuTypes(include: "supported"): Promise<NativeGpuType[]>;
   resolveChatWrapper(
     model: LlamaModelLike,
     options?: { customWrapperSettings?: { qwen?: { thoughts?: "discourage" } } },
@@ -60,17 +65,19 @@ async function loadNodeLlamaCpp(): Promise<NodeLlamaCppModule> {
   return (await import(specifier)) as unknown as NodeLlamaCppModule;
 }
 
-export async function runNativeProbe(): Promise<NativeRuntimeProbe> {
+export async function runNativeProbe(loadModule: () => Promise<NodeLlamaCppModule> = loadNodeLlamaCpp): Promise<NativeRuntimeProbe> {
   let llama: LlamaLike | null = null;
   try {
-    const mod = await loadNodeLlamaCpp();
+    const mod = await loadModule();
     const supported = await mod.getLlamaGpuTypes("supported");
     llama = await mod.getLlama({ gpu: "auto", logLevel: "fatal", build: "never", skipDownload: true });
     return {
       ok: true,
-      backend: llama.gpu ?? "cpu",
+      // node-llama-cpp represents CPU as `false`, including in the supported
+      // backend list. The public readiness/IPC contract uses string names.
+      backend: llama.gpu === false || llama.gpu === undefined ? "cpu" : llama.gpu,
       gpu_offloading: llama.supportsGpuOffloading ?? false,
-      supported_backends: supported,
+      supported_backends: supported.map((backend) => backend === false ? "cpu" : backend),
     };
   } catch (error) {
     return {
