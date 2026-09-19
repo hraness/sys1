@@ -1,10 +1,12 @@
 import type {
+  Answer,
   ChoiceQuestion,
-  JsonValue,
+  EntryType,
   NoulQuestion,
   Question,
   ScoreQuestion,
   SystemOneRequest,
+  SystemOneResponse,
 } from "../protocol.ts";
 
 /**
@@ -42,9 +44,13 @@ function truncate(text: string, max: number): string {
   return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
 }
 
-function renderState(state: JsonValue): string {
-  const text = typeof state === "string" ? state : JSON.stringify(state);
-  return truncate(text, DECIDE_LIMITS.maxStateChars);
+function renderEntry(value: EntryType, max: number): string {
+  const text = typeof value === "string" ? value : JSON.stringify(value);
+  return truncate(text, max);
+}
+
+function renderState(state: EntryType): string {
+  return renderEntry(state, DECIDE_LIMITS.maxStateChars);
 }
 
 function clamp(text: string): string {
@@ -54,13 +60,13 @@ function clamp(text: string): string {
   return text;
 }
 
-function noulPrompt(state: JsonValue, q: NoulQuestion): string {
+function noulPrompt(state: EntryType, q: NoulQuestion): string {
   const criteria: string[] = [];
-  if (q.criteria?.true !== undefined) {
-    criteria.push(`YES means: ${truncate(q.criteria.true, DECIDE_LIMITS.maxCriterionChars)}`);
+  if (q.criteria?.true != null) {
+    criteria.push(`YES means: ${renderEntry(q.criteria.true, DECIDE_LIMITS.maxCriterionChars)}`);
   }
-  if (q.criteria?.false !== undefined) {
-    criteria.push(`NO means: ${truncate(q.criteria.false, DECIDE_LIMITS.maxCriterionChars)}`);
+  if (q.criteria?.false != null) {
+    criteria.push(`NO means: ${renderEntry(q.criteria.false, DECIDE_LIMITS.maxCriterionChars)}`);
   }
   return clamp(
     [
@@ -70,20 +76,20 @@ function noulPrompt(state: JsonValue, q: NoulQuestion): string {
       '"""',
       renderState(state),
       '"""',
-      `Question: ${truncate(q.instructions ?? "Is the claim true?", DECIDE_LIMITS.maxInstructionChars)}`,
+      `Question: ${renderEntry(q.instructions ?? "Is the claim true?", DECIDE_LIMITS.maxInstructionChars)}`,
       ...(criteria.length > 0 ? [criteria.join(" ")] : []),
       "Answer:",
     ].join("\n"),
   );
 }
 
-function choicePrompt(state: JsonValue, q: ChoiceQuestion): string {
+function choicePrompt(state: EntryType, q: ChoiceQuestion): string {
   const lines = Object.entries(q.criteria)
     .slice(0, DECIDE_LIMITS.maxLabels)
     .map(([option, desc], i) => {
       const name = truncate(option, DECIDE_LIMITS.maxOptionChars);
       const detail =
-        desc === null ? "" : ` — ${truncate(desc, DECIDE_LIMITS.maxCriterionChars)}`;
+        desc === null ? "" : ` — ${renderEntry(desc, DECIDE_LIMITS.maxCriterionChars)}`;
       return `${DECISION_LABELS[i]}: ${name}${detail}`;
     });
   return clamp(
@@ -94,7 +100,7 @@ function choicePrompt(state: JsonValue, q: ChoiceQuestion): string {
       '"""',
       renderState(state),
       '"""',
-      `Question: ${truncate(q.instructions ?? "Choose the best option.", DECIDE_LIMITS.maxInstructionChars)}`,
+      `Question: ${renderEntry(q.instructions ?? "Choose the best option.", DECIDE_LIMITS.maxInstructionChars)}`,
       "Options:",
       ...lines,
       "Answer:",
@@ -102,9 +108,10 @@ function choicePrompt(state: JsonValue, q: ChoiceQuestion): string {
   );
 }
 
-function scorePrompt(state: JsonValue, q: ScoreQuestion): string {
+function scorePrompt(state: EntryType, q: ScoreQuestion): string {
   const lines = q.criteria.map(
-    (desc, i) => `${DECISION_LABELS[i]}: ${truncate(desc, DECIDE_LIMITS.maxCriterionChars)}`,
+    (desc, i) =>
+      `${DECISION_LABELS[i]}: ${desc === null ? "(undescribed)" : renderEntry(desc, DECIDE_LIMITS.maxCriterionChars)}`,
   );
   return clamp(
     [
@@ -114,7 +121,7 @@ function scorePrompt(state: JsonValue, q: ScoreQuestion): string {
       '"""',
       renderState(state),
       '"""',
-      `Question: ${truncate(q.instructions ?? "Rate the state.", DECIDE_LIMITS.maxInstructionChars)}`,
+      `Question: ${renderEntry(q.instructions ?? "Rate the state.", DECIDE_LIMITS.maxInstructionChars)}`,
       "Scale (lowest to highest):",
       ...lines,
       "Answer:",
@@ -137,7 +144,7 @@ export function answerLabels(question: Question): string[] {
   }
 }
 
-export function decisionPrompt(state: JsonValue, question: Question): string {
+export function decisionPrompt(state: EntryType, question: Question): string {
   switch (question.type) {
     case "noul":
       return noulPrompt(state, question);
@@ -242,68 +249,46 @@ export function confidenceOf(distribution: number[]): number {
   return Math.min(1, (top - uniform) / (1 - uniform));
 }
 
-export interface LocalAnswer {
-  type: "noul" | "choice" | "score";
-  noul?: number;
-  choice?: string;
-  score?: number;
-  probabilities?: Record<string, number> | number[];
-  confidence: number;
-  coverage: number;
+export type LocalAnswer = Answer;
+
+function round(value: number): number {
+  return Math.round(value * 1000) / 1000;
 }
 
-/**
- * Map one question's label outcome to the wire answer shape. noul reports
- * `noul` = P(yes); choice reports the winning option key plus the per-option
- * distribution; score reports the 1-based level index plus the per-level
- * distribution.
- */
 export function toLocalAnswer(question: Question, outcome: QuestionOutcome): LocalAnswer {
-  const confidence = Math.round(confidenceOf(outcome.distribution) * 1000) / 1000;
-  const coverage = Math.round(outcome.coverage * 1000) / 1000;
+  const confidence = round(confidenceOf(outcome.distribution));
   switch (question.type) {
-    case "noul": {
-      const yes = outcome.distribution[0] ?? 0;
-      return {
-        type: "noul",
-        noul: Math.round(yes * 1000) / 1000,
-        confidence,
-        coverage,
-      };
-    }
+    case "noul":
+      return { type: "noul", noul: round(outcome.distribution[0] ?? 0) };
     case "choice": {
       const keys = Object.keys(question.criteria);
+      const selected = keys[
+        DECISION_LABELS.indexOf(outcome.label as (typeof DECISION_LABELS)[number])
+      ];
+      if (selected === undefined) throw new Error("choice outcome has no selected option");
       const probabilities: Record<string, number> = {};
       keys.forEach((key, i) => {
-        probabilities[key] = Math.round((outcome.distribution[i] ?? 0) * 1000) / 1000;
+        probabilities[key] = round(outcome.distribution[i] ?? 0);
       });
-      const selected = keys[DECISION_LABELS.indexOf(outcome.label as (typeof DECISION_LABELS)[number])];
-      return {
-        type: "choice",
-        ...(selected === undefined ? {} : { choice: selected }),
-        probabilities,
-        confidence,
-        coverage,
-      };
+      return { type: "choice", choice: selected, probabilities, confidence };
     }
     case "score": {
-      const level = DECISION_LABELS.indexOf(outcome.label as (typeof DECISION_LABELS)[number]) + 1;
-      return {
-        type: "score",
-        score: level > 0 ? level : 1,
-        probabilities: outcome.distribution.map((p) => Math.round(p * 1000) / 1000),
-        confidence,
-        coverage,
-      };
+      const legend: Record<string, EntryType> = {};
+      const probabilities: Record<string, number> = {};
+      let score = 0;
+      question.criteria.forEach((criterion, i) => {
+        const key = String(i);
+        const probability = outcome.distribution[i] ?? 0;
+        legend[key] = criterion;
+        probabilities[key] = round(probability);
+        score += i * probability;
+      });
+      return { type: "score", score: round(score), legend, probabilities, confidence };
     }
   }
 }
 
-export interface LocalResponse {
-  model: string;
-  answers: Record<string, LocalAnswer>;
-  usage: { input_tokens: number; output_tokens: number };
-}
+export type LocalResponse = SystemOneResponse;
 
 export function toLocalResponse(
   model: string,

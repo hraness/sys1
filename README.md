@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.3.2/hraness-sysone-0.3.2.tgz
+  https://github.com/hraness/sysone/releases/download/v0.4.0/hraness-sysone-0.4.0.tgz
 sysone doctor
 ```
 
@@ -116,15 +116,20 @@ full first-token vocabulary distribution with llama.cpp, and sums probability
 mass over constrained answer labels. Choice and score use unique one-character
 labels to avoid ambiguous multi-token option names. Builtin inference supports
 up to 35 choice options; hosted and external backends retain the protocol's
-255-option limit. Answers include:
+255-option limit. Builtin answers use the official Jev wire shapes:
 
-- `confidence`: concentration among allowed labels;
-- `coverage`: total vocabulary probability mass assigned to allowed labels.
+- Noul returns only `type` and probability-of-yes `noul`;
+- Choice returns `choice`, keyed `probabilities`, and `confidence`;
+- Score returns a zero-based probability-weighted fractional `score`, keyed
+  `legend`, keyed `probabilities`, and `confidence`.
 
-Low coverage means the general model did not cleanly follow the decision
-instruction. These values are useful local signals, but a general GGUF is not a
-trained or calibrated Jev model. Use hosted Jev or a qualified System
-One-specific backend where calibrated semantics are required.
+Generic-adapter quality signals stay outside those answer objects:
+`x-sysone-local-min-coverage` is the least total vocabulary mass assigned to
+allowed labels, and `x-sysone-local-min-concentration` is the least distribution
+concentration in the batch. Low coverage means the model did not cleanly follow
+the decision instruction. These are useful local signals, not a calibration
+guarantee. Use hosted Jev or a qualified System One-specific backend where
+calibrated semantics are required.
 
 ## The endpoint
 
@@ -134,9 +139,14 @@ One-specific backend where calibrated semantics are required.
 | `GET /v1/models` | List model ids, backend names, kinds, and reachability |
 | `GET /healthz` | Report daemon liveness and version |
 
-Responses carry `x-sysone-backend` and `x-sysone-attempts`. Any HTTP response
-from a remote backend, including 4xx or 5xx, is definitive. Only a transport
-failure may re-dispatch, at most once, and never for a pinned `backend/model`.
+Responses carry `x-sysone-backend` and `x-sysone-attempts`; builtin GGUF
+responses also carry the local diagnostic headers above. Any HTTP response from
+a remote backend, including 4xx or 5xx, is definitive. Only a transport failure
+may re-dispatch, at most once, and never for a pinned `backend/model`.
+
+`state`, `instructions`, and criterion descriptions accept text, JSON objects,
+JSON arrays, or `null` where the official Jev contract permits it. The public
+package exports request and response schemas for boundary validation.
 
 ### Request example
 

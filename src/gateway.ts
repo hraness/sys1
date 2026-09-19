@@ -9,6 +9,7 @@ import {
   LocalRunner,
   defaultEngineFactory,
   type DecideResult,
+  type LocalQuestionDiagnostic,
 } from "./local/runner.ts";
 import {
   PROTOCOL_LIMITS,
@@ -19,7 +20,7 @@ import {
 } from "./protocol.ts";
 import { chooseBackend } from "./router.ts";
 
-export const SYSONE_VERSION = "0.3.2";
+export const SYSONE_VERSION = "0.4.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -61,6 +62,20 @@ function forwardModel(requested: string | undefined, backend: RuntimeBackend): s
   const slash = requested.indexOf("/");
   if (slash > 0) return requested.slice(slash + 1);
   return requested;
+}
+
+function localDiagnosticHeaders(
+  diagnostics: Record<string, LocalQuestionDiagnostic> | undefined,
+): Record<string, string> {
+  const values = diagnostics === undefined ? [] : Object.values(diagnostics);
+  const coverage = values.length === 0 ? 0 : Math.min(...values.map((value) => value.coverage));
+  const concentration =
+    values.length === 0 ? 0 : Math.min(...values.map((value) => value.concentration));
+  return {
+    "x-sysone-local-adapter": "generic-gguf",
+    "x-sysone-local-min-coverage": coverage.toFixed(3),
+    "x-sysone-local-min-concentration": concentration.toFixed(3),
+  };
 }
 
 export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise<Response> {
@@ -211,6 +226,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
                 status: 200,
                 body: JSON.stringify(decided.response),
                 content_type: "application/json",
+                extra_headers: localDiagnosticHeaders(decided.diagnostics),
               }
             : { kind: "transport" as const, detail: decided.error?.type ?? "local_failed" };
         }
@@ -230,6 +246,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
             "content-type": result.content_type,
             "x-sysone-backend": backend.name,
             "x-sysone-attempts": String(attempt + 1),
+            ...("extra_headers" in result ? result.extra_headers : {}),
           },
         });
       }

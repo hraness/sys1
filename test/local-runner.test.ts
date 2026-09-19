@@ -7,7 +7,7 @@ import { createFetchHandler } from "../src/gateway.ts";
 import type { DecisionEngine, FirstTokenDistribution } from "../src/local/engine.ts";
 import { LocalRunner, type EngineFactory } from "../src/local/runner.ts";
 import { modelsDir, saveManifest, type InstalledModel } from "../src/local/store.ts";
-import type { SystemOneRequest } from "../src/protocol.ts";
+import { systemOneResponseSchema, type SystemOneRequest } from "../src/protocol.ts";
 
 const homes: string[] = [];
 
@@ -113,11 +113,19 @@ describe("LocalRunner", () => {
     const result = await runner.decide(request(), "tiny");
     expect(result.ok).toBe(true);
     expect(result.response?.model).toBe("tiny");
-    expect(result.response?.answers.urgent?.noul).toBeCloseTo(0.778, 3);
-    expect(result.response?.answers.urgent?.coverage).toBe(0.9);
-    expect(result.response?.answers.route?.choice).toBe("page");
-    expect(result.response?.answers.severity?.score).toBe(3);
-    expect(result.response?.usage).toEqual({ input_tokens: 60, output_tokens: 3 });
+    const urgent = result.response?.answers.urgent;
+    const route = result.response?.answers.route;
+    const severity = result.response?.answers.severity;
+    if (urgent?.type !== "noul" || route?.type !== "choice" || severity?.type !== "score") {
+      throw new Error("unexpected answer types");
+    }
+    expect(urgent).toEqual({ type: "noul", noul: 0.778 });
+    expect(route.choice).toBe("page");
+    expect(severity.score).toBe(1.5);
+    expect(severity.legend).toEqual({ "0": "low", "1": "medium", "2": "high" });
+    expect(severity.probabilities).toEqual({ "0": 0.1, "1": 0.3, "2": 0.6 });
+    expect(result.response?.usage).toEqual({ input_tokens: 60, output_tokens: 0 });
+    expect(result.diagnostics?.urgent).toEqual({ coverage: 0.9, concentration: 0.556 });
     await runner.dispose();
   });
 
@@ -206,8 +214,13 @@ describe("builtin gateway backend", () => {
     );
     expect(response.status).toBe(200);
     expect(response.headers.get("x-sysone-backend")).toBe("local-tiny");
-    const body = (await response.json()) as { answers: { route: { choice: string } } };
-    expect(body.answers.route.choice).toBe("page");
+    expect(response.headers.get("x-sysone-local-adapter")).toBe("generic-gguf");
+    expect(response.headers.get("x-sysone-local-min-coverage")).toBe("0.900");
+    expect(response.headers.get("x-sysone-local-min-concentration")).toBe("0.400");
+    const body: unknown = await response.json();
+    const parsed = systemOneResponseSchema.parse(body);
+    expect(parsed.answers.route).toMatchObject({ type: "choice", choice: "page" });
+    expect(JSON.stringify(body)).not.toContain("coverage");
     await runner.dispose();
   });
 

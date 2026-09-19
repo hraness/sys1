@@ -1,21 +1,33 @@
 export {
   PROTOCOL_LIMITS,
+  answerSchema,
+  choiceAnswerSchema,
   choiceQuestionSchema,
+  entrySchema,
   errorBody,
+  noulAnswerSchema,
   noulQuestionSchema,
   questionSchema,
+  scoreAnswerSchema,
   scoreQuestionSchema,
   serializedBytes,
   systemOneRequestSchema,
+  systemOneResponseSchema,
 } from "./protocol.ts";
 export type {
+  Answer,
+  ChoiceAnswer,
   ChoiceQuestion,
+  EntryType,
   GatewayError,
   JsonValue,
+  NoulAnswer,
   NoulQuestion,
   Question,
+  ScoreAnswer,
   ScoreQuestion,
   SystemOneRequest,
+  SystemOneResponse,
 } from "./protocol.ts";
 
 export {
@@ -116,6 +128,7 @@ export type {
   BuiltinCandidate,
   DecideResult,
   EngineFactory,
+  LocalQuestionDiagnostic,
   RunnerOptions,
 } from "./local/runner.ts";
 

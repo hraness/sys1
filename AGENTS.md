@@ -61,8 +61,9 @@
   size, bounded GGUF structure, safe filename, and regular-file checks. Never
   put weights in git, release artifacts, or ordinary CI.
 - Treat generic-GGUF answers as an approximation, not calibrated Jev output.
-  Preserve `coverage` and `confidence`; do not make stronger model-quality
-  claims without checkpoint-specific qualification.
+  Keep Noul/Choice/Score answer objects exactly Jev-compatible; expose adapter
+  coverage and concentration only in `x-sysone-local-*` headers. Do not make
+  stronger model-quality claims without checkpoint-specific qualification.
 - Keep local inference lazy, per-model serialized, cancellation-bounded, and
   residency-capped. Dispose native contexts on eviction and shutdown.
 - Keep operator-registered HTTP runners separately owned; never mutate their

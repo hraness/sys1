@@ -41,8 +41,8 @@ backend answers.
    response is definitive; only transport failure can retry once.
 6. For a builtin candidate, lazily load llama.cpp and evaluate each question at
    its answer position with full-vocabulary probabilities.
-7. Aggregate allowed-label probability mass, return a Jev-style answer, and add
-   `confidence` plus `coverage` diagnostics.
+7. Aggregate allowed-label probability mass and emit the exact Jev answer shape.
+   Generic-adapter coverage and concentration remain in response headers.
 
 ## Generic GGUF semantics
 
@@ -53,11 +53,12 @@ that those weights are trained System One models. Each question is independent:
 - choice presents unique one-character labels and supports up to 35 options;
 - score presents ordered levels with unique one-character labels.
 
-Mass is renormalized across allowed labels for the answer distribution.
-`coverage` preserves how much total vocabulary mass the model assigned to any
-allowed label, so instruction-following failure remains visible. `confidence`
-measures concentration above a uniform choice. Neither value is a calibration
-guarantee.
+Mass is renormalized across allowed labels for the answer distribution. Noul is
+probability of yes; Choice selects the highest-probability option; Score is the
+zero-based probability-weighted expected level with an exact legend. Choice and
+Score confidence uses concentration above a uniform distribution. Batch-minimum
+coverage and concentration are exposed as `x-sysone-local-*` headers so the Jev
+answer objects stay schema-compatible. Neither metric is a calibration guarantee.
 
 The runner is node-llama-cpp rather than a wasm runner. It exposes the complete
 vocabulary distribution needed for label-mass aggregation, lets llama.cpp
