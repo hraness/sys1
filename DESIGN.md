@@ -351,11 +351,13 @@ the visual anchors. Surface-specific evidence and interaction rules live in
 
 `site/skills.html` extends the same Paper system in a reading layout, using
 `site/skills.css` for its left-aligned introduction, three-step explanation,
-and two-column project relationship. The shared header, appearance control,
-copy behavior, code frames, fonts, and pinned footer are reused unchanged.
-The guide stacks its columns on compact screens and introduces no new color,
-font, radius, or asset tokens. Its purpose and content sources are recorded in
-`.impeccable/surfaces/site-skills-html.md`.
+two-column catalog and project relationship, and three-column evidence section.
+The shared header, appearance control, copy behavior, code frames, fonts, and
+pinned footer are reused unchanged. Evidence columns stack at the existing
+medium breakpoint (800px); the other reading patterns retain their established
+responsive rules. This extension introduces no new system tokens or assets.
+The eleven-skill catalog, evidence boundaries, source revision, and finish
+review are recorded in `.impeccable/surfaces/site-skills-html.md`.
 
 ## Do's and Don'ts
 
