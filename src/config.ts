@@ -50,6 +50,14 @@ export const configSchema = z.object({
       api_key_env: z.string().min(1).max(128).default("TYPESAFE_API_KEY"),
     })
     .prefault({}),
+  local: z
+    .object({
+      enabled: z.boolean().default(true),
+      context_tokens: z.number().int().min(256).max(65_536).default(2_048),
+      eval_timeout_ms: z.number().int().min(1_000).max(300_000).default(60_000),
+      max_loaded_models: z.number().int().min(1).max(4).default(1),
+    })
+    .prefault({}),
   backends: z.array(localBackendSchema).max(64).default([]),
 });
 
@@ -120,6 +128,10 @@ export const SETTABLE_KEYS = {
   "hosted.base_url": z.url().max(512),
   "hosted.model": z.string().min(1).max(128),
   "hosted.api_key_env": z.string().min(1).max(128),
+  "local.enabled": z.enum(["true", "false"]).transform((v) => v === "true"),
+  "local.context_tokens": z.coerce.number().int().min(256).max(65_536),
+  "local.eval_timeout_ms": z.coerce.number().int().min(1_000).max(300_000),
+  "local.max_loaded_models": z.coerce.number().int().min(1).max(4),
 } as const;
 
 export type SettableKey = keyof typeof SETTABLE_KEYS;

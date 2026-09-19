@@ -1,149 +1,234 @@
 # sysone
 
-sysone is a local System One gateway for coding agents. It runs a small
-daemon on your machine that exposes a Jev-compatible decisions endpoint
-(`POST /v1/systemone`) and routes each request across the System One models
-you can actually reach: hosted Jev when you have a key, or a local Jev-like
-model — OpenJev, NanoJev, Mini-Jev and friends — when you do not, or when you
-ask for one.
+sysone is a local System One gateway for coding agents. It runs one loopback
+daemon, exposes a Jev-compatible `POST /v1/systemone` endpoint, and routes each
+request across hosted Jev, builtin local GGUF models, and operator-run System
+One HTTP backends.
 
 [Project site](https://sysone.dev) · [Protocol](#the-endpoint) · [Routing](#routing)
 
-System One models take a `state` and a set of typed questions — `noul`
-(yes/no probability), `choice` (one option from a set), `score` (a position
-on an ordered scale) — and return calibrated answers instead of generated
-text. They are cheap and fast, which makes them good routing, guardrail, and
-triage primitives inside agent loops. sysone gives every agent on your
-machine one loopback endpoint for those calls, independent of which backend
-answers.
+System One calls ask typed questions about a state instead of generating prose:
+`noul` for yes/no probability, `choice` for one bounded option, and `score` for
+an ordered level. They fit routing, guardrail, review, and triage decisions
+inside agent loops. sysone gives every local agent the same endpoint regardless
+of which model answers.
 
 ## Install
 
-Requires Bun ≥ 1.3.14.
+Requires Bun 1.3.14 or newer. `node-llama-cpp` installs a platform-specific
+llama.cpp binary for local GGUF inference.
 
 ```sh
 git clone https://github.com/hraness/sysone.git
 cd sysone
 bun install
 bun run build:dist
-```
-
-Then put `dist/cli.js` on your PATH (or run `bun src/cli.ts …` directly):
-
-```sh
 ln -sf "$PWD/dist/cli.js" ~/.local/bin/sysone
 ```
 
-## Quickstart
+## Quickstart: entirely local
 
 ```sh
-export TYPESAFE_API_KEY=…        # enables the hosted Jev backend
-sysone up                        # starts the daemon on 127.0.0.1:13900
-sysone status                    # daemon state + backend reachability
+sysone pull       # downloads + sha256-verifies Qwen3 0.6B Q4_0 (365 MiB)
+sysone up         # starts the gateway on 127.0.0.1:13900
+sysone status
 ```
 
-Point any Jev client at `http://127.0.0.1:13900` — the wire shape is
-TypeSafe's System One API. Or send one from the CLI:
+Send a decision:
 
 ```sh
 sysone eval <<'EOF'
 {
   "state": "Help! My payouts have been failing for 3 days.",
   "questions": {
-    "urgent": { "type": "noul", "instructions": "Does this convey urgency?" }
+    "urgent": {
+      "type": "noul",
+      "instructions": "Does this need immediate attention?",
+      "criteria": {
+        "true": "A customer-impacting incident is ongoing",
+        "false": "This can wait for normal triage"
+      }
+    }
   }
 }
 EOF
 ```
 
+Or point any System One client at `http://127.0.0.1:13900`.
+
+## Add hosted Jev
+
+```sh
+export TYPESAFE_API_KEY=…
+sysone config set routing.policy auto
+```
+
+`auto` prefers hosted Jev while the credential is present and the service is
+reachable, then falls back to the smallest installed or registered local model.
+The credential stays in the environment; sysone never writes it to disk.
+
+## Local GGUF models
+
+`sysone pull` manages GGUF files under `~/.sysone/models` (or
+`$SYSONE_HOME/models`). Downloads stream to a temporary file, enforce an 8 GiB
+ceiling, verify SHA-256, and only then atomically enter the model store. The
+daemon never downloads weights implicitly.
+
+```sh
+sysone pull --list
+sysone pull qwen3-0.6b
+sysone pull qwen3-1.7b
+sysone model list
+sysone model verify qwen3-0.6b
+```
+
+The curated registry currently contains:
+
+| Model | Quantization | Download | Role |
+| --- | --- | ---: | --- |
+| `qwen3-0.6b` | Q4_0 | 365 MiB | smallest default fallback |
+| `qwen3-1.7b` | Q4_K_M | 1.03 GiB | stronger laptop-local tier |
+
+Both are pinned to the publisher's Hugging Face LFS SHA-256. Weight licenses
+and terms remain those of their publishers; weights are not included in the
+sysone package.
+
+An unlisted public Hugging Face model can be installed explicitly:
+
+```sh
+sysone pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
+```
+
+For builtin models, sysone renders a bounded question prompt, evaluates the
+full first-token vocabulary distribution with llama.cpp, and sums probability
+mass over constrained answer labels. Choice and score use unique one-character
+labels to avoid ambiguous multi-token option names. Builtin inference supports
+up to 35 choice options; hosted and external backends retain the protocol's
+255-option limit. Answers include:
+
+- `confidence`: concentration among allowed labels;
+- `coverage`: total vocabulary probability mass assigned to allowed labels.
+
+Low coverage means the general model did not cleanly follow the decision
+instruction. These values are useful local signals, but a general GGUF is not a
+trained or calibrated Jev model. Use hosted Jev or a qualified System
+One-specific backend where calibrated semantics are required.
+
 ## The endpoint
 
 | Route | Purpose |
 | --- | --- |
-| `POST /v1/systemone` | Evaluate `{model?, state, questions}`; answers pass through from the chosen backend |
-| `GET /v1/models` | Aggregate model list across backends, with reachability |
-| `GET /healthz` | Liveness for the daemon itself |
+| `POST /v1/systemone` | Evaluate `{model?, state, questions}` through the selected backend |
+| `GET /v1/models` | List model ids, backend names, kinds, and reachability |
+| `GET /healthz` | Report daemon liveness and version |
 
-Responses carry `x-sysone-backend` naming the backend that answered and
-`x-sysone-attempts` counting transport-failure retries. A backend that
-returned any HTTP response — including 4xx/5xx — is definitive and is never
-retried elsewhere; a request is only re-dispatched when no response arrived
-at all, at most once, and only for unpinned models.
+Responses carry `x-sysone-backend` and `x-sysone-attempts`. Any HTTP response
+from a remote backend, including 4xx or 5xx, is definitive. Only a transport
+failure may re-dispatch, at most once, and never for a pinned `backend/model`.
+
+### Request example
+
+```json
+{
+  "model": "auto",
+  "state": { "tests": "failing", "branch": "main" },
+  "questions": {
+    "action": {
+      "type": "choice",
+      "instructions": "What should the agent do next?",
+      "criteria": {
+        "fix": "Repair the failure before continuing",
+        "continue": "The failure is unrelated and safe to defer",
+        "escalate": "Human judgment is required"
+      }
+    },
+    "risk": {
+      "type": "score",
+      "instructions": "Rate merge risk",
+      "criteria": ["low", "moderate", "high"]
+    }
+  }
+}
+```
 
 ## Routing
 
-`routing.policy` in `~/.sysone/config.json`:
+`routing.policy` controls candidate order:
 
-| Policy | Order tried |
+| Policy | Order |
 | --- | --- |
-| `auto` (default) | hosted Jev, then local backends cheapest-and-smallest first |
-| `prefer-local` | local backends cheapest-and-smallest first, then hosted Jev |
+| `auto` (default) | hosted Jev, then local smallest-first |
+| `prefer-local` | local smallest-first, then hosted Jev |
 | `prefer-hosted` | hosted Jev, then local |
-| `local-only` | local backends only |
+| `local-only` | local only |
 | `hosted-only` | hosted Jev only |
 
-"Cheapest smallest" orders local backends by `size_b` then `cost_rank`, both
-set at `sysone backend add` time. A request may pin a model two ways:
+Local candidates sort by parameter count, then operator `cost_rank`, then
+backend name. Requests can pin either a model id or an exact backend/model:
 
-- `"model": "openjev-4b"` — any backend serving that id, in policy order
-- `"model": "openjev/openjev-4b"` — exactly that backend; never rerouted
+- `"model": "qwen3-0.6b"` selects any backend serving that id;
+- `"model": "local-qwen3-0.6b/qwen3-0.6b"` pins the builtin runner;
+- `"model": "openjev/openjev-4b"` pins a registered HTTP backend.
 
-## Local backends
+## External System One backends
 
-A local backend is any HTTP service on your machine that answers the same
-two routes — `POST /v1/systemone` and `GET /v1/models`. Register one per
-running model:
+Any service implementing `POST /v1/systemone` and `GET /v1/models` can join the
+same router:
 
 ```sh
-sysone backend add --name openjev --url http://127.0.0.1:8080 --model openjev-4b --size-b 4
-sysone backend add --name nanojev --url http://127.0.0.1:8081 --model nanojev-0.6b --size-b 0.6
+sysone backend add \
+  --name openjev \
+  --url http://127.0.0.1:8080 \
+  --model openjev-4b \
+  --size-b 4
 ```
 
-sysone probes each backend's `GET /v1/models` before routing, caches nothing
-between requests, and treats a failed probe as unavailable. The daemon does
-not install, download, or run model weights in this release — local runners
-are separate processes you own.
+These processes remain operator-owned. sysone bounds probes and forwarding but
+does not manage their credentials, weights, or lifecycle.
 
 ## Commands
 
 ```text
-sysone up|down|serve|status|models|eval
+sysone up|down|serve|status
+sysone pull [MODEL]|pull --list
+sysone model list|verify|remove
+sysone models
+sysone eval
 sysone backend list|add|remove
 sysone config path|get|set|unset
 sysone --version|--help
 ```
 
-`status`, `models`, `backend list`, `up`, and `down` accept `--json` for
-machine-readable output. Data goes to stdout, diagnostics to stderr.
+Supporting commands accept `--json`. Machine data goes to stdout; diagnostics
+and download progress go to stderr.
 
 ## Configuration
 
-`~/.sysone/config.json` (`SYSONE_HOME` overrides the directory; `config path`
-prints it). Keys settable via `sysone config set`:
+`~/.sysone/config.json` is created on the first write. `SYSONE_HOME` overrides
+the state directory. Settable keys:
 
-- `routing.policy` — table above
-- `gateway.host`, `gateway.port` — bind address (loopback by default; keep it there)
-- `gateway.request_timeout_ms`, `gateway.probe_timeout_ms`
-- `hosted.enabled`, `hosted.base_url`, `hosted.model`, `hosted.api_key_env`
+- `routing.policy`;
+- `gateway.host`, `gateway.port`, `gateway.request_timeout_ms`,
+  `gateway.probe_timeout_ms`;
+- `hosted.enabled`, `hosted.base_url`, `hosted.model`, `hosted.api_key_env`;
+- `local.enabled`, `local.context_tokens`, `local.eval_timeout_ms`,
+  `local.max_loaded_models`.
 
-The hosted credential is read from the environment (`TYPESAFE_API_KEY` by
-default) — never from the config file.
+The daemon reads config per request, so routing and backend changes do not need
+a restart. Already loaded GGUFs stay resident up to `local.max_loaded_models`
+(default one) and are released on eviction or daemon shutdown. Local inference
+is serialized per model to keep context state isolated and memory bounded.
 
-## Status
-
-Early. Implemented: the daemon, the gateway endpoint, request validation,
-the routing policies above, reachability probing, one bounded retry on
-transport failure, and the CLI surface. Not implemented: installing or
-running local model weights, non-loopback binding, request authentication,
-and streaming. Hosted Jev is a pass-through to TypeSafe's API; sysone does
-not qualify or modify those answers.
+The gateway has no authentication and binds to loopback by default. Do not
+expose it on an untrusted network.
 
 ## Development
 
 ```sh
 bun install
-bun run check   # typecheck + tests + dist build + package smoke check
+bun run check
 ```
 
-See `AGENTS.md` for repository rules and `CONTRIBUTING.md` for the house
-conventions.
+The check runs strict TypeScript, deterministic tests with fake inference,
+distribution builds, and a packed-package smoke test. Large weights and live
+model downloads are excluded from ordinary CI.

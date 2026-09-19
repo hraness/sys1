@@ -6,6 +6,11 @@ import {
 } from "./backends.ts";
 import type { SysoneConfig } from "./config.ts";
 import {
+  LocalRunner,
+  defaultEngineFactory,
+  type DecideResult,
+} from "./local/runner.ts";
+import {
   PROTOCOL_LIMITS,
   errorBody,
   serializedBytes,
@@ -14,7 +19,7 @@ import {
 } from "./protocol.ts";
 import { chooseBackend } from "./router.ts";
 
-export const SYSONE_VERSION = "0.1.0";
+export const SYSONE_VERSION = "0.2.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -26,6 +31,13 @@ export interface GatewayDeps {
    * effect on a running daemon. May throw; a thrown read answers 503.
    */
   reloadConfig?: () => SysoneConfig;
+  /**
+   * State directory. Required for builtin local models; when absent the
+   * gateway only serves URL-registered and hosted backends.
+   */
+  home?: string;
+  /** Injectable local runner (tests substitute a fake engine factory). */
+  localRunner?: LocalRunner;
 }
 
 function currentConfig(deps: GatewayDeps): SysoneConfig {
@@ -53,6 +65,49 @@ function forwardModel(requested: string | undefined, backend: RuntimeBackend): s
 
 export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise<Response> {
   const fetchFn = deps.fetchFn ?? fetch;
+  let runner: LocalRunner | null = deps.localRunner ?? null;
+
+  function localRunner(config: SysoneConfig): LocalRunner | null {
+    if (deps.home === undefined) return null;
+    if (runner === null) {
+      runner = new LocalRunner({
+        home: deps.home,
+        maxLoadedModels: config.local.max_loaded_models,
+        engineFactory: defaultEngineFactory(
+          config.local.context_tokens,
+          config.local.eval_timeout_ms,
+        ),
+      });
+    }
+    return runner;
+  }
+
+  async function boundedLocalDecision(
+    active: LocalRunner,
+    body: SystemOneRequest,
+    modelId: string,
+    timeoutMs: number,
+  ): Promise<DecideResult> {
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<DecideResult>((resolve) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        resolve({
+          ok: false,
+          error: { type: "inference_timeout", message: "local inference timed out" },
+        });
+      }, timeoutMs);
+    });
+    try {
+      return await Promise.race([
+        active.decide(body, modelId, controller.signal),
+        timeout,
+      ]);
+    } finally {
+      if (timer !== undefined) clearTimeout(timer);
+    }
+  }
 
   function loadActiveConfig(): SysoneConfig | Response {
     try {
@@ -71,7 +126,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
   async function handleModels(): Promise<Response> {
     const config = loadActiveConfig();
     if (config instanceof Response) return config;
-    const backends = runtimeBackends(config, deps.env);
+    const backends = runtimeBackends(config, deps.env, deps.home);
     await probeAll(backends, config.gateway.probe_timeout_ms, fetchFn);
     const data = backends.flatMap((backend) =>
       backend.models.map((id) => ({
@@ -113,12 +168,12 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
 
     const config = loadActiveConfig();
     if (config instanceof Response) return config;
-    const backends = runtimeBackends(config, deps.env);
+    const backends = runtimeBackends(config, deps.env, deps.home);
     if (backends.length === 0) {
       return json(
         errorBody(
           "no_backend_configured",
-          "no backends configured; set TYPESAFE_API_KEY or add a local backend with `sysone backend add`",
+          "no backends configured; set TYPESAFE_API_KEY, run `sysone pull`, or add a backend with `sysone backend add`",
         ),
         503,
       );
@@ -138,13 +193,36 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         return json(errorBody(choice.reason, choice.detail), status);
       }
       const backend = choice.backend;
-      const result = await forwardToBackend(
-        backend,
-        rawBody,
-        forwardModel(body.model, backend),
-        config.gateway.request_timeout_ms,
-        fetchFn,
-      );
+      let result;
+      if (backend.builtin !== undefined) {
+        const active = localRunner(config);
+        if (active === null) {
+          result = { kind: "transport" as const, detail: "local runner unavailable" };
+        } else {
+          const decided = await boundedLocalDecision(
+            active,
+            body,
+            backend.builtin.model.id,
+            config.gateway.request_timeout_ms,
+          );
+          result = decided.ok
+            ? {
+                kind: "response" as const,
+                status: 200,
+                body: JSON.stringify(decided.response),
+                content_type: "application/json",
+              }
+            : { kind: "transport" as const, detail: decided.error?.type ?? "local_failed" };
+        }
+      } else {
+        result = await forwardToBackend(
+          backend,
+          rawBody,
+          forwardModel(body.model, backend),
+          config.gateway.request_timeout_ms,
+          fetchFn,
+        );
+      }
       if (result.kind === "response") {
         return new Response(result.body, {
           status: result.status,
@@ -187,11 +265,23 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
 export interface RunningGateway {
   url: string;
   port: number;
-  stop: () => void;
+  stop: () => Promise<void>;
 }
 
 export function startGateway(deps: GatewayDeps & { port?: number }): RunningGateway {
-  const handler = createFetchHandler(deps);
+  const localRunner =
+    deps.localRunner ??
+    (deps.home === undefined
+      ? undefined
+      : new LocalRunner({
+          home: deps.home,
+          maxLoadedModels: deps.config.local.max_loaded_models,
+          engineFactory: defaultEngineFactory(
+            deps.config.local.context_tokens,
+            deps.config.local.eval_timeout_ms,
+          ),
+        }));
+  const handler = createFetchHandler({ ...deps, ...(localRunner === undefined ? {} : { localRunner }) });
   const server = Bun.serve({
     hostname: deps.config.gateway.host,
     port: deps.port ?? deps.config.gateway.port,
@@ -203,6 +293,10 @@ export function startGateway(deps: GatewayDeps & { port?: number }): RunningGate
   return {
     url: `http://${deps.config.gateway.host}:${boundPort}`,
     port: boundPort,
-    stop: () => server.stop(true),
+    stop: async () => {
+      const disposing = localRunner?.dispose();
+      await server.stop(true);
+      if (disposing !== undefined) await disposing;
+    },
   };
 }

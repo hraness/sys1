@@ -1,41 +1,88 @@
 # sysone design
 
-One loopback endpoint for System One decisions, whichever backend answers.
+One bounded loopback endpoint for System One decisions, whichever qualified
+backend answers.
 
-## Pieces
+## Components
 
-- **Gateway** (`src/gateway.ts`) — `Bun.serve` on the configured host/port.
-  Routes: `POST /v1/systemone`, `GET /v1/models`, `GET /healthz`. Everything
-  else is 404.
-- **Router** (`src/router.ts`) — pure function from `(policy, requested model,
-  probed candidates)` to one backend or a typed failure. Probing happens in
-  the gateway, never inside the router.
-- **Backends** (`src/backends.ts`) — `typesafe` (hosted Jev; exists only when
-  enabled *and* the configured env var holds a key) plus operator-registered
-  local backends. A local backend is any HTTP service answering the same two
-  routes.
-- **Daemon** (`src/daemon.ts`) — a detached `sysone serve` child, a pid file
-  at `$SYSONE_HOME/daemon.json`, and a log at `daemon.log`. `up` polls the
-  pid file + `/healthz`; `down` signals the recorded pid only.
+- **Protocol** (`src/protocol.ts`) validates the System One request envelope and
+  bounds bodies, state, question counts, options, levels, and strings.
+- **Gateway** (`src/gateway.ts`) serves `POST /v1/systemone`, `GET /v1/models`,
+  and `GET /healthz` with Bun.
+- **Router** (`src/router.ts`) is a pure policy and model-selection function over
+  probed candidates.
+- **Backends** (`src/backends.ts`) adapts hosted Jev, operator-registered HTTP
+  services, and installed builtin GGUF models into router candidates.
+- **Decision adapter** (`src/local/decide.ts`) renders bounded prompts and maps a
+  full first-token vocabulary distribution into noul, choice, and score answers.
+- **Engine** (`src/local/engine.ts`) lazily owns one node-llama-cpp model/context,
+  serializes evaluations, enforces evaluation timeouts, and releases native
+  resources.
+- **Model store** (`src/local/store.ts`) owns the curated registry, streamed
+  Hugging Face downloads, SHA-256 admission, manifest, verification, and the
+  8 GiB per-download limit.
+- **Local runner** (`src/local/runner.ts`) joins installed models to engines,
+  caps resident models, and produces the wire response.
+- **Daemon** (`src/daemon.ts`) owns detached process, pid file, health check,
+  log, and stop lifecycle.
 
 ## Request flow
 
-1. Bound the body (1 MiB) and parse JSON.
-2. Validate against `systemOneRequestSchema` (question types, option and
-   level counts, 256 KiB state cap).
-3. Probe every configured backend's `GET /v1/models` in parallel
-   (`probe_timeout_ms`).
-4. `chooseBackend` picks per policy + requested model; forward with the
-   backend's resolved model id (`backend/model` strips the prefix,
-   absent/`auto` uses the backend's configured default).
-5. Any HTTP response passes through verbatim with `x-sysone-backend` /
-   `x-sysone-attempts` headers. A transport failure drops that backend and
-   retries once — never for a pinned `backend/model` request.
+1. Bound and parse the body, then validate it as a System One request.
+2. Re-read config and enumerate credential-backed hosted, configured HTTP, and
+   installed builtin candidates.
+3. Probe HTTP candidates in parallel. Builtin candidates are available when
+   their admitted GGUF file exists.
+4. Select with `chooseBackend` using policy, model id, or exact backend/model
+   pinning.
+5. Forward hosted/HTTP calls unchanged except for resolved model id. Any HTTP
+   response is definitive; only transport failure can retry once.
+6. For a builtin candidate, lazily load llama.cpp and evaluate each question at
+   its answer position with full-vocabulary probabilities.
+7. Aggregate allowed-label probability mass, return a Jev-style answer, and add
+   `confidence` plus `coverage` diagnostics.
+
+## Generic GGUF semantics
+
+Builtin inference is an adapter for general GGUF language models, not a claim
+that those weights are trained System One models. Each question is independent:
+
+- noul constrains the first answer token to YES/NO mass;
+- choice presents unique one-character labels and supports up to 35 options;
+- score presents ordered levels with unique one-character labels.
+
+Mass is renormalized across allowed labels for the answer distribution.
+`coverage` preserves how much total vocabulary mass the model assigned to any
+allowed label, so instruction-following failure remains visible. `confidence`
+measures concentration above a uniform choice. Neither value is a calibration
+guarantee.
+
+The runner is node-llama-cpp rather than a wasm runner. It exposes the complete
+vocabulary distribution needed for label-mass aggregation, lets llama.cpp
+select the available platform backend, and runs under Bun. Weights are loaded
+only after an explicit `sysone pull`; CI substitutes the engine boundary and
+never downloads a model.
+
+## Model admission and lifecycle
+
+The curated registry records model id, source repository/file, byte count,
+parameter count, context limit, and SHA-256. Pull writes `<id>.gguf.download`,
+hashes each chunk, checks size and digest, atomically renames it to `<id>.gguf`,
+then atomically updates `manifest.json`. A failed or interrupted pull is never
+listed as installed.
+
+The daemon defaults to one resident model. Evaluations are serialized per
+engine. Loading another model evicts and disposes the least recently used
+engine. Shutdown disposes every model/context. The store and inference queues
+are local only; request state and answers are never written there.
 
 ## Boundaries
 
-- Loopback bind by default; no auth — same-machine agents only.
-- Credential lives in the environment, never the config file.
-- No request/answer bodies in logs, digests, or `--json`.
-- No model downloads or weight execution; local runners are separate
-  operator-owned processes.
+- Loopback by default; there is no request authentication.
+- Hosted credentials are environment-only.
+- Request states, questions, prompts, distributions, and answers are absent from
+  logs, pid files, config, and model manifests.
+- Downloads occur only from an explicit CLI command, are capped, and require a
+  registry pin, publisher LFS digest, or user-supplied SHA-256.
+- No ordinary test or package artifact includes model weights.
+- External backend processes remain operator-owned.

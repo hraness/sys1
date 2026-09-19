@@ -6,70 +6,120 @@
     <title>sysone — local System One gateway for coding agents</title>
     <meta
       name="description"
-      content="One Jev-compatible decisions endpoint on your machine, routed across hosted Jev and local Jev-like models."
+      content="One local System One endpoint for coding agents, routed across hosted Jev, builtin GGUF models, and your own backends."
     />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <!-- hraness-site-footer -->
     <header>
-      <span class="wordmark">sysone</span>
+      <a class="wordmark" href="/">sysone<span>.dev</span></a>
       <nav>
+        <a href="https://github.com/hraness/sysone#quickstart-entirely-local">Docs</a>
         <a href="https://github.com/hraness/sysone">GitHub</a>
       </nav>
     </header>
+
     <main>
       <section class="hero">
-        <h1>One System One endpoint for every agent on your machine.</h1>
+        <div class="eyebrow">Local by default · one endpoint · typed decisions</div>
+        <h1>Your agents need decisions,<br />not another paragraph.</h1>
+        <p class="lead">
+          sysone is a loopback System One gateway. It routes
+          <code>noul</code>, <code>choice</code>, and <code>score</code> calls
+          across hosted Jev, builtin GGUF models, and backends you already run.
+        </p>
+        <div class="terminal" aria-label="sysone local quickstart">
+          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <pre><code><i>$</i> sysone pull
+<span>verified qwen3-0.6b · 365 MiB</span>
+<i>$</i> sysone up
+<span>listening at http://127.0.0.1:13900</span></code></pre>
+        </div>
+        <div class="actions">
+          <a class="primary" href="https://github.com/hraness/sysone#install">Install sysone</a>
+          <a href="https://github.com/hraness/sysone#the-endpoint">Read the protocol</a>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="sysone facts">
+        <div><strong>1</strong><span>loopback endpoint</span></div>
+        <div><strong>3</strong><span>typed question forms</span></div>
+        <div><strong>365 MiB</strong><span>smallest local tier</span></div>
+        <div><strong>0</strong><span>implicit downloads</span></div>
+      </section>
+
+      <section class="features">
+        <article>
+          <div class="number">01</div>
+          <h2>Run GGUF directly</h2>
+          <p>
+            Native llama.cpp inference with the best available platform backend.
+            Models load lazily, requests serialize safely, and memory stays
+            bounded to the residency cap.
+          </p>
+        </article>
+        <article>
+          <div class="number">02</div>
+          <h2>Route with intent</h2>
+          <p>
+            Prefer hosted, prefer local, restrict either side, or let
+            <code>auto</code> use Jev first and the smallest available local
+            model as fallback.
+          </p>
+        </article>
+        <article>
+          <div class="number">03</div>
+          <h2>Keep the boundary small</h2>
+          <p>
+            Loopback by default. Credentials stay in the environment. Request
+            state and answers never enter config, manifests, or daemon logs.
+          </p>
+        </article>
+      </section>
+
+      <section class="flow">
+        <div>
+          <div class="eyebrow">One stable contract</div>
+          <h2>Any agent in.<br />The right decision model out.</h2>
+          <p>
+            Pin an exact model when reproducibility matters, or let sysone
+            order candidates by policy, availability, parameter count, and
+            operator cost rank.
+          </p>
+        </div>
+        <ol>
+          <li><b>Agent</b><span>POST /v1/systemone</span></li>
+          <li><b>sysone</b><span>validate · probe · route</span></li>
+          <li><b>Backend</b><span>Jev · local GGUF · your service</span></li>
+          <li><b>Answer</b><span>probability · choice · score</span></li>
+        </ol>
+      </section>
+
+      <section class="honesty">
+        <h2>Useful signals, honest semantics.</h2>
         <p>
-          sysone runs a small local daemon that speaks the Jev-compatible
-          decisions API — <code>POST /v1/systemone</code> — and routes each
-          request across the models you can actually reach. Hosted Jev when
-          you have a key. The cheapest, smallest local Jev-like model when
-          you don't, or when you ask for one.
+          Builtin GGUF mode scores the model's complete first-token vocabulary
+          over constrained answer labels. Every answer reports
+          <code>coverage</code> and <code>confidence</code>. A general GGUF is
+          not presented as a calibrated Jev model; use trained System One
+          weights when calibration is part of your contract.
         </p>
       </section>
-      <section class="columns">
-        <div>
-          <h2>Typed decisions, not text</h2>
-          <p>
-            <code>noul</code>, <code>choice</code>, and <code>score</code>
-            questions against a state — calibrated probabilities back, no
-            generated prose. Built for routing, guardrails, and triage inside
-            agent loops.
-          </p>
-        </div>
-        <div>
-          <h2>Smart model routing</h2>
-          <p>
-            Five policies from <code>auto</code> to <code>local-only</code>.
-            Pin a model by name or <code>backend/model</code>; fallback runs
-            cheapest-and-smallest local first.
-          </p>
-        </div>
-        <div>
-          <h2>Local by design</h2>
-          <p>
-            Loopback only. Credential lives in the environment, never the
-            config file. No request bodies in logs. Your local runners stay
-            processes you own.
-          </p>
-        </div>
-      </section>
+
       <section class="quickstart">
-        <h2>Quickstart</h2>
-        <pre><code>export TYPESAFE_API_KEY=…
-sysone up        # daemon on 127.0.0.1:13900
-sysone status    # backend reachability</code></pre>
-        <p>
-          Point any System One client at
-          <code>http://127.0.0.1:13900/v1/systemone</code>. Register local
-          Jev-like models with <code>sysone backend add</code>.
-        </p>
+        <div class="eyebrow">Three commands</div>
+        <h2>Give every local agent a System One endpoint.</h2>
+        <pre><code>sysone pull
+sysone up
+sysone status --json</code></pre>
+        <a class="primary" href="https://github.com/hraness/sysone">View source on GitHub</a>
       </section>
     </main>
+
     <footer>
-      <a href="https://github.com/hraness">hraness</a>
+      <span>sysone is an open-source <a href="https://github.com/hraness">hraness</a> project.</span>
+      <a href="https://github.com/hraness/sysone/blob/main/LICENSE">MIT licensed</a>
     </footer>
   </body>
 </html>

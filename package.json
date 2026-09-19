@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sysone",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Local System One gateway for coding agents — one Jev-compatible endpoint routed across hosted and local models.",
   "type": "module",
   "license": "MIT",
@@ -44,11 +44,15 @@
     "prepack": "bun run check"
   },
   "dependencies": {
+    "node-llama-cpp": "3.20.0",
     "zod": "4.6.2"
   },
   "devDependencies": {
     "@types/bun": "1.3.14",
     "@types/node": "26.2.0",
     "typescript": "6.0.3"
-  }
+  },
+  "trustedDependencies": [
+    "node-llama-cpp"
+  ]
 }
