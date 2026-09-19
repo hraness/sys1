@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sysone — local System One gateway for coding agents</title>
+    <meta
+      name="description"
+      content="One Jev-compatible decisions endpoint on your machine, routed across hosted Jev and local Jev-like models."
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- hraness-site-footer -->
+    <header>
+      <span class="wordmark">sysone</span>
+      <nav>
+        <a href="https://github.com/hraness/sysone">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>One System One endpoint for every agent on your machine.</h1>
+        <p>
+          sysone runs a small local daemon that speaks the Jev-compatible
+          decisions API — <code>POST /v1/systemone</code> — and routes each
+          request across the models you can actually reach. Hosted Jev when
+          you have a key. The cheapest, smallest local Jev-like model when
+          you don't, or when you ask for one.
+        </p>
+      </section>
+      <section class="columns">
+        <div>
+          <h2>Typed decisions, not text</h2>
+          <p>
+            <code>noul</code>, <code>choice</code>, and <code>score</code>
+            questions against a state — calibrated probabilities back, no
+            generated prose. Built for routing, guardrails, and triage inside
+            agent loops.
+          </p>
+        </div>
+        <div>
+          <h2>Smart model routing</h2>
+          <p>
+            Five policies from <code>auto</code> to <code>local-only</code>.
+            Pin a model by name or <code>backend/model</code>; fallback runs
+            cheapest-and-smallest local first.
+          </p>
+        </div>
+        <div>
+          <h2>Local by design</h2>
+          <p>
+            Loopback only. Credential lives in the environment, never the
+            config file. No request bodies in logs. Your local runners stay
+            processes you own.
+          </p>
+        </div>
+      </section>
+      <section class="quickstart">
+        <h2>Quickstart</h2>
+        <pre><code>export TYPESAFE_API_KEY=…
+sysone up        # daemon on 127.0.0.1:13900
+sysone status    # backend reachability</code></pre>
+        <p>
+          Point any System One client at
+          <code>http://127.0.0.1:13900/v1/systemone</code>. Register local
+          Jev-like models with <code>sysone backend add</code>.
+        </p>
+      </section>
+    </main>
+    <footer>
+      <a href="https://github.com/hraness">hraness</a>
+    </footer>
+  </body>
+</html>
