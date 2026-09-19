@@ -33,6 +33,22 @@ afterEach(() => {
 });
 
 describe("runDoctor", () => {
+  test.each([42, undefined, -1, NaN, Infinity, 1.5])("includes only valid native probe timing: %s", async (elapsed_ms) => {
+    const report = await runDoctor({
+      home: home(),
+      env: {},
+      runtimeVersion: "1.3.14",
+      nativeProbe: async () => ({ ...(await nativeOk()), ...(elapsed_ms === undefined ? {} : { elapsed_ms }) }),
+      daemonProbe: daemonStopped,
+    });
+    const detail = report.checks.find((check) => check.id === "native.runtime")?.detail;
+    expect(detail).toEqual({
+      gpu_offloading: false,
+      supported_backends: ["cpu"],
+      ...(elapsed_ms === 42 ? { native_probe_ms: 42 } : {}),
+    });
+  });
+
   test("returns a stable ready report for valid defaults", async () => {
     const report = await runDoctor({
       home: home(),

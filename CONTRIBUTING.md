@@ -17,6 +17,19 @@ bun run check
 Runs the typechecker, deterministic tests, the dist build, and an isolated
 import/CLI execution check against the actual packed tarball.
 
+After that gate, `bun run check:native` packs the existing dist, installs it in
+a disposable prefix with the pinned native dependency, and runs `sys1 doctor`.
+Pull-request CI runs this additional check on Linux, macOS and Windows so
+native installation and startup failures are found before tagging a release.
+It downloads package/native binaries, but no model weights, and calls no
+hosted inference. The release workflow still verifies the exact uploaded
+artifact separately on all three platforms.
+Commands bound output and execution time, terminate their owned process tree,
+and collect the tracked child. If descendant cleanup cannot be confirmed
+(for example, a Windows parent exits while a descendant retains its pipes),
+the check fails with `native_check_cleanup_unconfirmed` and retains its unique
+temporary paths for recovery instead of deleting potentially live files.
+
 ## Rules of the house
 
 - Parse every foreign value from `unknown`; bound every input.

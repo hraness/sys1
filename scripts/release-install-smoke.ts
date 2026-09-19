@@ -1,52 +1,8 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, readdirSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { packageSmoke } from "./package-smoke.ts";
-
-const MAX_OUTPUT_BYTES = 4 * 1024 * 1024;
-
-async function readBounded(stream: ReadableStream<Uint8Array>, kill: () => void): Promise<string> {
-  const reader = stream.getReader();
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  try {
-    for (;;) {
-      const next = await reader.read();
-      if (next.done) break;
-      size += next.value.byteLength;
-      if (size > MAX_OUTPUT_BYTES) {
-        kill();
-        throw new Error("release smoke output exceeded 4 MiB");
-      }
-      chunks.push(next.value);
-    }
-  } finally {
-    reader.releaseLock();
-  }
-  return new TextDecoder().decode(Buffer.concat(chunks, size));
-}
-
-async function run(command: string[], env?: NodeJS.ProcessEnv, diagnosticStdout = false): Promise<string> {
-  const child = Bun.spawn(command, {
-    ...(env === undefined ? {} : { env }),
-    stdout: "pipe",
-    stderr: "pipe",
-  });
-  const kill = (): void => child.kill(9);
-  const [code, stdout, stderr] = await Promise.all([
-    child.exited,
-    readBounded(child.stdout, kill),
-    readBounded(child.stderr, kill),
-  ]);
-  if (code !== 0) {
-    // Only the credential-free doctor report opts in. Keep failed readiness
-    // checks visible even though --json deliberately writes them to stdout.
-    const diagnostic = diagnosticStdout ? `\n${stdout.slice(0, 8_000)}` : "";
-    throw new Error(`${command[0] ?? "command"} exited ${code}: ${stderr.slice(0, 2_000)}${diagnostic}`);
-  }
-  return stdout;
-}
+import { nativeInstallSmoke } from "./native-install-smoke.ts";
 
 function releaseFile(directory: string, suffix: string): string {
   const matches = readdirSync(directory).filter((name) => name.endsWith(suffix));
@@ -79,29 +35,7 @@ async function main(): Promise<void> {
   if (observed !== match[1]) throw new Error("release tarball checksum mismatch");
 
   await packageSmoke(tarball);
-  const root = process.env["RUNNER_TEMP"] ?? tmpdir();
-  const prefix = join(root, "sys1-global");
-  const home = join(root, "sys1-home");
-  mkdirSync(prefix, { recursive: true });
-  mkdirSync(home, { recursive: true });
-  const npm = process.platform === "win32" ? "npm.cmd" : "npm";
-  await run([
-    npm,
-    "install",
-    "--global",
-    "--prefix",
-    prefix,
-    "--allow-scripts=node-llama-cpp",
-    tarball,
-  ]);
-  const executable =
-    process.platform === "win32" ? join(prefix, "sys1.cmd") : join(prefix, "bin", "sys1");
-  const doctor = JSON.parse(
-    await run([executable, "doctor", "--json"], { ...process.env, SYS1_HOME: home }, true),
-  ) as { ok?: unknown; version?: unknown };
-  if (doctor.ok !== true || doctor.version !== 1) {
-    throw new Error("installed release doctor did not report ready");
-  }
+  await nativeInstallSmoke(tarball);
   console.log(`release install verified on ${process.platform}-${process.arch}`);
 }
 

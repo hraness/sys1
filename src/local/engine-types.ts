@@ -31,6 +31,9 @@ export interface NativeRuntimeProbe {
   gpu_offloading?: boolean;
   supported_backends?: string[];
   message?: string;
+  /** Sanitized parent-side diagnostic; never native output or request data. */
+  failure_code?: string;
+  elapsed_ms?: number;
 }
 
 export const ENGINE_IPC_LIMITS = {

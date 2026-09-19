@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { spawn, type ChildProcess } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { EngineUnavailableError, LlamaEngine } from "../src/local/engine.ts";
+import { EngineUnavailableError, LlamaEngine, probeNativeRuntime } from "../src/local/engine.ts";
 import { NativeLlamaEngine, runNativeProbe, type NativeGpuType } from "../src/local/engine-core.ts";
 import { LocalInputError } from "../src/local/input.ts";
 
@@ -188,6 +188,58 @@ describe("native worker context admission", () => {
 });
 
 describe("native runtime readiness", () => {
+  test.each([undefined, 30_000])("reports successful probe timing and collects its worker with budget %s", async (timeoutMs) => {
+    let closed = false;
+    const report = await probeNativeRuntime({
+      ...(timeoutMs === undefined ? {} : { timeoutMs }),
+      workerFactory: () => {
+        const child = spawn(process.execPath, [fileURLToPath(new URL("./fixtures/engine-worker.ts", import.meta.url))], { stdio: ["pipe", "pipe", "ignore"] });
+        child.once("close", () => { closed = true; });
+        return child;
+      },
+    });
+    expect(report.ok).toBe(true);
+    expect(report.backend).toBe("cpu");
+    expect(Number.isSafeInteger(report.elapsed_ms)).toBe(true);
+    expect(report.elapsed_ms).toBeGreaterThanOrEqual(0);
+    expect(report.failure_code).toBeUndefined();
+    expect(closed).toBe(true);
+  });
+
+  test("rejects a probe budget above 30 seconds before starting a worker", async () => {
+    const report = await probeNativeRuntime({
+      timeoutMs: 30_001,
+      workerFactory: () => { throw new Error("must not spawn"); },
+    });
+    expect(report.failure_code).toBe("invalid_timeout");
+    expect(report.elapsed_ms).toBe(0);
+  });
+
+  test.each([
+    { mode: "timeout", code: "probe_timeout" },
+    { mode: "exit", code: "worker_exited" },
+    { mode: "invalid", code: "worker_response_invalid" },
+    { mode: "unavailable", code: "native_unavailable" },
+  ])("classifies $mode without exposing worker output", async ({ mode, code }) => {
+    let closed = false;
+    const report = await probeNativeRuntime({
+      timeoutMs: mode === "timeout" ? 200 : 3_000,
+      workerFactory: () => {
+        const child = spawn(process.execPath, [fileURLToPath(new URL("./fixtures/engine-worker.ts", import.meta.url)), mode], { stdio: ["pipe", "pipe", "ignore"] });
+        child.once("close", () => { closed = true; });
+        return child;
+      },
+    });
+    expect(report.ok).toBe(false);
+    expect(report.failure_code).toBe(code);
+    expect(report.elapsed_ms).toBeGreaterThanOrEqual(0);
+    expect(report.message).toContain(`native runtime probe failed: ${code}; elapsed_ms=`);
+    expect(report.message).toContain("phase=");
+    expect(JSON.stringify(report)).not.toContain("private diagnostic");
+    if (mode === "exit") expect(report.message).toContain("exit=17");
+    expect(closed).toBe(true);
+  });
+
   test.each([
     { gpu: false as const, supported: [false] satisfies NativeGpuType[], expected: "cpu", names: ["cpu"] },
     { gpu: "metal" as const, supported: ["metal", false] satisfies NativeGpuType[], expected: "metal", names: ["metal", "cpu"] },
