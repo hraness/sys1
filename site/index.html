@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SysOne — local System One gateway for coding agents</title>
+    <title>Sys1 — typed decisions across local models and Jev</title>
+    <link rel="canonical" href="https://sys1.io/" />
+    <meta property="og:title" content="Sys1 — typed decisions across local models and Jev" />
+    <meta property="og:url" content="https://sys1.io/" />
     <meta
       name="description"
       content="One local System One endpoint for coding agents, routed across hosted Jev, builtin GGUF models, and your own backends."
@@ -13,10 +16,10 @@
   <body>
     <!-- hraness-site-footer -->
     <header>
-      <a class="wordmark" href="/">SysOne<span>.dev</span></a>
+      <a class="wordmark" href="/">Sys1<span>.io</span></a>
       <nav>
-        <a href="https://github.com/hraness/sysone#quickstart-entirely-local">Docs</a>
-        <a href="https://github.com/hraness/sysone">GitHub</a>
+        <a href="https://github.com/hraness/sys1#quickstart-entirely-local">Docs</a>
+        <a href="https://github.com/hraness/sys1">GitHub</a>
       </nav>
     </header>
 
@@ -25,27 +28,27 @@
         <div class="eyebrow">Local by default · one endpoint · typed decisions</div>
         <h1>Your agents need decisions,<br />not another paragraph.</h1>
         <p class="lead">
-          SysOne is a loopback System One gateway. It routes
+          Use Sys1 as a Node/Bun client, an embedded Bun router, or a local gateway. It routes
           <code>noul</code>, <code>choice</code>, and <code>score</code> calls
           across hosted Jev, builtin local models, and backends you already run.
         </p>
-        <div class="terminal" aria-label="SysOne local quickstart">
+        <div class="terminal" aria-label="Sys1 local quickstart">
           <div class="terminal-bar"><span></span><span></span><span></span></div>
-          <pre><code><i>$</i> sysone setup
-<span>platform qualified · local model verified</span>
-<i>$</i> sysone up
+          <pre><code><i>$</i> sys1 setup
+<span>local runtime ready · model verified</span>
+<i>$</i> sys1 up
 <span>listening at http://127.0.0.1:13900</span></code></pre>
         </div>
         <div class="actions">
-          <a class="primary" href="https://github.com/hraness/sysone#install">Install SysOne</a>
-          <a href="https://github.com/hraness/sysone#the-endpoint">Read the protocol</a>
+          <a class="primary" href="https://github.com/hraness/sys1#install">Install Sys1</a>
+          <a href="https://github.com/hraness/sys1#the-endpoint">Read the protocol</a>
         </div>
       </section>
 
-      <section class="stats" aria-label="SysOne facts">
+      <section class="stats" aria-label="Sys1 facts">
         <div><strong>1</strong><span>loopback endpoint</span></div>
         <div><strong>3</strong><span>typed question forms</span></div>
-        <div><strong>6</strong><span>qualified package targets</span></div>
+        <div><strong>6</strong><span>supported package targets</span></div>
         <div><strong>0</strong><span>implicit downloads</span></div>
       </section>
 
@@ -65,17 +68,17 @@
           <p>
             Local inference is on and hosted Jev is off by default. Enable Jev
             explicitly and <code>auto</code> prefers it with a local fallback.
-            Capability-aware routing never dispatches a request beyond a
-            backend's published or configured limits.
+            Routing enforces published or configured option and question
+            limits. Local adapters reject evidence they cannot fit.
           </p>
         </article>
         <article>
           <div class="number">03</div>
-          <h2>Know every boundary</h2>
+          <h2>One interface for your projects</h2>
           <p>
-            <code>sysone doctor</code> checks runtime, config, native backend,
-            model structure, routing, and daemon ownership with stable JSON and
-            closed exit codes.
+            Import <code>@hraness/sys1/client</code> for typed requests,
+            validated answers, cancellation, and backend metadata. Install it
+            without native dependencies, or embed the router in a Bun app.
           </p>
         </article>
       </section>
@@ -85,14 +88,14 @@
           <div class="eyebrow">One stable contract</div>
           <h2>Any agent in.<br />The right decision model out.</h2>
           <p>
-            Pin an exact model when reproducibility matters, or let SysOne
+            Pin an exact model when reproducibility matters, or let Sys1
             order candidates by policy, availability, parameter count, and
             operator cost rank.
           </p>
         </div>
         <ol>
           <li><b>Agent</b><span>POST /v1/systemone</span></li>
-          <li><b>SysOne</b><span>validate · probe · route</span></li>
+          <li><b>Sys1</b><span>validate · probe · route</span></li>
           <li><b>Backend</b><span>Jev · local models · your service</span></li>
           <li><b>Answer</b><span>probability · choice · score</span></li>
         </ol>
@@ -106,25 +109,26 @@
           shapes. Specialist adapters disclose their contracts in response
           headers: the scorer returns true per-option distributions; needle's
           probabilities are an explicitly-labeled confidence approximation.
-          A general GGUF is not presented as a calibrated Jev model; use
-          trained System One weights when calibration is part of your contract.
+          A general GGUF is not presented as a calibrated Jev model. When
+          calibration is part of your contract, use a backend qualified for
+          your application's calibration requirements.
         </p>
       </section>
 
       <section class="quickstart">
         <div class="eyebrow">Four commands</div>
         <h2>Give every local agent a System One endpoint.</h2>
-        <pre><code>sysone setup
-sysone doctor
-sysone up
-sysone status --json</code></pre>
-        <a class="primary" href="https://github.com/hraness/sysone">View source on GitHub</a>
+        <pre><code>sys1 setup
+sys1 doctor
+sys1 up
+sys1 status --json</code></pre>
+        <a class="primary" href="https://github.com/hraness/sys1">View source on GitHub</a>
       </section>
     </main>
 
     <footer>
-      <span>SysOne is an open-source <a href="https://github.com/hraness">hraness</a> project.</span>
-      <a href="https://github.com/hraness/sysone/blob/main/LICENSE">MIT licensed</a>
+      <span>Sys1 is an open-source <a href="https://github.com/hraness">hraness</a> project.</span>
+      <a href="https://github.com/hraness/sys1/blob/main/LICENSE">MIT licensed</a>
     </footer>
   </body>
 </html>

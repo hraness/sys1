@@ -1,47 +1,132 @@
-# SysOne
+# Sys1
 
-SysOne is a local System One gateway for coding agents. It runs one loopback
-daemon, exposes a Jev-compatible `POST /v1/systemone` endpoint, and routes each
-request across hosted Jev, builtin local GGUF models, and operator-run System
-One HTTP backends.
+Sys1 is the decision interface between an agent and its models. Use a small
+Node/Bun client, embed the router in a Bun application, or run one loopback
+daemon. The Jev-compatible `POST /v1/systemone` contract routes requests across
+hosted Jev, builtin local models, and operator-run System One HTTP backends.
 
-[Project site](https://sysone.dev) · [Protocol](#the-endpoint) · [Routing](#routing)
+[Project site](https://sys1.io) · [Protocol](#the-endpoint) · [Routing](#routing)
 
 System One calls ask typed questions about a state instead of generating prose:
 `noul` for yes/no probability, `choice` for one bounded option, and `score` for
 an ordered level. They fit routing, guardrail, review, and triage decisions
-inside agent loops. SysOne gives every local agent the same endpoint regardless
+inside agent loops. Sys1 gives every local agent the same endpoint regardless
 of which model answers.
 
 ## Install
 
 Requires Bun 1.3.14 or newer. The canonical package is the SHA-256-listed
 artifact on the immutable GitHub Release. The install grants postinstall only
-to the exact pinned native dependency; the resulting `sysone` executable runs
+to the exact pinned native dependency; the resulting `sys1` executable runs
 with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.7.0/hraness-sysone-0.7.0.tgz
-sysone doctor
+  https://github.com/hraness/sys1/releases/download/v0.8.0/hraness-sys1-0.8.0.tgz
+sys1 doctor
 ```
 
 To build the current source instead:
 
 ```sh
-git clone https://github.com/hraness/sysone.git
-cd sysone
+git clone https://github.com/hraness/sys1.git
+cd sys1
 bun install
 bun run build:dist
-ln -sf "$PWD/dist/cli.js" ~/.local/bin/sysone
+ln -sf "$PWD/dist/cli.js" ~/.local/bin/sys1
 ```
+
+## Use as a module
+
+For a Node 24 or Bun application that calls a running gateway, install the
+release package without the optional native runtime:
+
+```sh
+npm install --omit=optional \
+  https://github.com/hraness/sys1/releases/download/v0.8.0/hraness-sys1-0.8.0.tgz
+```
+
+```ts
+import { createClient } from "@hraness/sys1/client";
+
+const sys1 = createClient(); // http://127.0.0.1:13900
+const { response, metadata } = await sys1.evaluate({
+  state: "The build failed after a dependency upgrade.",
+  questions: {
+    action: {
+      type: "choice",
+      criteria: { repair: "Fix the build", continue: "Continue work" },
+    },
+  },
+}, { signal: AbortSignal.timeout(5_000) });
+
+console.log(response.answers.action, metadata.backend);
+```
+
+The client validates inputs and correlates every returned answer with its
+question. It bounds response bytes, supports cancellation, and returns stable
+sanitized `Sys1ClientError` codes. It never retries, reads credentials from the
+environment, starts a daemon, downloads weights, or imports native inference.
+Supply `baseUrl` and `headers` explicitly for another approved endpoint.
+Import schemas and request/response types from the same `/client` entry point.
+
+For a Bun application that owns routing and model lifecycle in-process:
+
+```ts
+import { createRouter, DEFAULT_CONFIG } from "@hraness/sys1";
+
+const router = createRouter({
+  config: DEFAULT_CONFIG,
+  env: process.env,
+  home: "/absolute/path/to/sys1-state", // previously installed models
+});
+try {
+  const result = await router.evaluate({
+    state: "All required checks passed.",
+    questions: { ready: { type: "noul", instructions: "Are the checks passing?" } },
+  });
+  console.log(result.response.answers.ready);
+} finally {
+  await router.dispose();
+}
+```
+
+The embedded router opens no port. It uses the same routing and validation as
+the daemon and owns its local runner until disposal. Its runtime requires Bun;
+the `/client` entry point is portable to Node. Keep one router per application,
+not one per request. The root package also exposes lower-level routing and
+model-management APIs; applications should normally use `createClient` or
+`createRouter`.
+
+### Adopting Sys1 in an existing Jev application
+
+Keep domain questions, deterministic fallback, action authorization, and quality
+thresholds in the application. Put endpoint configuration, transport, routing,
+response validation, and local engine lifecycle behind Sys1. Existing HTTP
+clients in other languages can use the same daemon without a JavaScript module.
+
+Use `model: "auto"` or omit `model` to allow local selection. A hardcoded
+`jev-latest` remains a model pin and cannot select an unrelated local model.
+Local calls need no hosted API key; hosted activation stays explicit. A remote
+server's loopback address points to that server. A browser running on the user's
+machine can address local services, so Sys1's network listener rejects browser
+origins and Fetch Metadata site headers, requires a loopback request authority,
+and accepts decision POSTs only as `application/json`.
+
+Start with an opt-in, non-authoritative pilot. Compare decisions on the
+application's representative fixtures and record backend/adapter identity,
+latency, errors, abstentions, and disagreement with the current decision path.
+Do not reuse Jev probability thresholds for generic GGUF or Needle output
+without model-specific evidence. A local-only policy also constrains explicit
+pins; a pin never bypasses the policy. Broad production adoption requires the
+consumer's own quality and operational acceptance, not just wire compatibility.
 
 ## Quickstart: entirely local
 
 ```sh
-sysone setup      # verifies the native runtime and installs the platform default
-sysone up         # starts the gateway on 127.0.0.1:13900
-sysone status
+sys1 setup      # verifies the native runtime and installs the platform default
+sys1 up         # starts the gateway on 127.0.0.1:13900
+sys1 status
 ```
 
 `setup` is the explicit weight-download boundary. It recommends Qwen3 1.7B on
@@ -49,9 +134,9 @@ machines with at least 16 GiB of system memory and Qwen3 0.6B below that. Inspec
 without changing anything, or override the tier:
 
 ```sh
-sysone setup --dry-run --json
-sysone setup --tier compact
-sysone setup --tier quality
+sys1 setup --dry-run --json
+sys1 setup --tier compact
+sys1 setup --tier quality
 ```
 
 The pinned llama.cpp runtime selects the best available backend automatically:
@@ -67,11 +152,13 @@ The pinned llama.cpp runtime selects the best available backend automatically:
 
 Other platform/architecture pairs fail closed before downloading a model. The
 release artifact and package smoke are exercised on Ubuntu, macOS, and Windows.
+This matrix does not prove every OS/architecture pair above; run
+`sys1 doctor` on the actual host before use.
 
 Send a decision:
 
 ```sh
-sysone eval <<'EOF'
+sys1 eval <<'EOF'
 {
   "state": "Help! My payouts have been failing for 3 days.",
   "questions": {
@@ -97,8 +184,8 @@ the environment. Add it explicitly:
 
 ```sh
 export TYPESAFE_API_KEY=…
-sysone jev enable
-sysone jev status
+sys1 jev enable
+sys1 jev status
 ```
 
 `jev enable` requires the credential to be present, stores only
@@ -107,7 +194,7 @@ environment and is never written to disk or printed. Restart a gateway that was
 started before the key was exported. To return to local-only operation:
 
 ```sh
-sysone jev disable
+sys1 jev disable
 ```
 
 With Jev enabled, `auto` prefers reachable hosted Jev and falls back to the
@@ -116,20 +203,20 @@ endpoint continues entirely locally.
 
 ## Local models
 
-`sysone setup` and `sysone pull` manage model artifacts under
-`~/.sysone/models` (or `$SYSONE_HOME/models`). Downloads stream to a temporary
+`sys1 setup` and `sys1 pull` manage model artifacts under
+`~/.sys1/models` (or `$SYS1_HOME/models`). Downloads stream to a temporary
 file, enforce an 8 GiB ceiling, verify SHA-256, run a per-kind structural
 validation, and only then atomically enter the model store. Manifest filenames
 cannot escape the store, symbolic-link weights are not admitted, and the daemon
 never downloads weights implicitly.
 
 ```sh
-sysone pull --list
-sysone pull qwen3-0.6b
-sysone pull cua-s1-forms
-sysone pull needle3
-sysone model list
-sysone model verify qwen3-0.6b
+sys1 pull --list
+sys1 pull qwen3-0.6b
+sys1 pull cua-s1-forms
+sys1 pull needle3
+sys1 model list
+sys1 model verify qwen3-0.6b
 ```
 
 The curated registry contains three artifact kinds:
@@ -143,7 +230,7 @@ The curated registry contains three artifact kinds:
 
 All entries are pinned to the publisher's Hugging Face LFS SHA-256. Weight
 licenses and terms remain those of their publishers; weights are not included
-in the SysOne package.
+in the Sys1 package.
 
 ### Specialists
 
@@ -156,7 +243,7 @@ To use a specialist, pin it explicitly:
 ```
 
 Each kind runs through a different adapter, disclosed in the
-`x-sysone-local-adapter` response header:
+`x-sys1-local-adapter` response header:
 
 - `generic-gguf` — llama.cpp first-token scoring (below);
 - `option-scorer` — the 706K-parameter CUA-S1 checkpoint, ported to pure
@@ -168,13 +255,13 @@ Each kind runs through a different adapter, disclosed in the
 - `needle-extract` — the Cactus Needle `.cact` blob plus a platform engine
   binary, spawned as one bounded process per request with telemetry
   disabled. Questions become arguments of one `evaluate` tool call. Needle
-  returns values plus a calibrated turn confidence rather than per-option
+  returns values plus model-reported turn confidence rather than per-option
   probabilities, so `probabilities` are a disclosed approximation
   (confidence on the pick, the remainder split uniformly).
 
 ### Generic GGUF adapter
 
-For builtin GGUF models, SysOne renders a bounded question prompt, evaluates
+For builtin GGUF models, Sys1 renders a bounded question prompt, evaluates
 the full first-token vocabulary distribution with llama.cpp, and sums
 probability mass over constrained answer labels. Choice and score use unique
 one-character labels to avoid ambiguous multi-token option names. Builtin
@@ -187,9 +274,17 @@ official Jev wire shapes:
 - Score returns a zero-based probability-weighted fractional `score`, keyed
   `legend`, keyed `probabilities`, and `confidence`.
 
+Adapter input bounds fail closed: Sys1 never silently truncates state,
+instructions, or criteria. Generic GGUF accepts up to 6,000 state characters,
+2,000 instruction characters, 96 characters per option name/criterion, and
+16,000 characters for the complete rendered prompt. The bundled scorer has
+224 bytes of combined state/instructions and 96 bytes per rendered option.
+Needle also checks its prompt and tool bounds. An input beyond an adapter's
+bounds returns an error without being sent to a different backend.
+
 Adapter quality signals stay outside those answer objects:
-`x-sysone-local-min-coverage` is the least total probability mass assigned to
-allowed labels, and `x-sysone-local-min-concentration` is the least
+`x-sys1-local-min-coverage` is the least total probability mass assigned to
+allowed labels, and `x-sys1-local-min-concentration` is the least
 distribution concentration in the batch. Low coverage means the model did not
 cleanly follow the decision instruction. These are useful local signals, not
 a calibration guarantee. Use hosted Jev or a qualified System One-specific
@@ -198,7 +293,7 @@ backend where calibrated semantics are required.
 An unlisted public Hugging Face GGUF can be installed explicitly:
 
 ```sh
-sysone pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
+sys1 pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
 ```
 
 ## The endpoint
@@ -209,7 +304,7 @@ sysone pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
 | `GET /v1/models` | List model ids, backend names, kinds, and reachability |
 | `GET /healthz` | Report daemon liveness and version |
 
-Responses carry `x-sysone-backend` and `x-sysone-attempts`; builtin responses
+Responses carry `x-sys1-backend` and `x-sys1-attempts`; builtin responses
 also carry the local adapter and diagnostic headers above. Any HTTP response
 from a remote backend, including 4xx or 5xx, is definitive. Only a transport
 failure may re-dispatch, at most once, and never for a pinned `backend/model`.
@@ -249,14 +344,18 @@ package exports request and response schemas for boundary validation.
 
 | Policy | Order |
 | --- | --- |
-| `auto` (default) | hosted Jev, then local smallest-first |
+| `auto` (default) | hosted backends, then local smallest-first |
 | `prefer-local` | local smallest-first, then hosted Jev |
 | `prefer-hosted` | hosted Jev, then local |
 | `local-only` | local only |
-| `hosted-only` | hosted Jev only |
+| `hosted-only` | hosted backends only |
 
 Local candidates sort by parameter count, then operator `cost_rank`, then
-backend name. Requests can pin either a model id or an exact backend/model:
+backend name. Registered HTTP services are local only when their URL uses a
+loopback host; off-machine URLs count as hosted. Redirects are never followed.
+`local-only` decisions neither probe nor dispatch to hosted endpoints. Explicit
+model discovery and doctor may probe all configured backends. Backend names must
+be unique; `typesafe` and `local-*` are reserved for managed candidates. Requests can pin either a model id or an exact backend/model:
 
 - `"model": "qwen3-0.6b"` selects any backend serving that id;
 - `"model": "local-qwen3-0.6b/qwen3-0.6b"` pins the builtin runner;
@@ -270,8 +369,9 @@ rather than dispatching a request that would fail downstream. Builtin
 backends publish their adapter limits (`generic-gguf` 35 options,
 `option-scorer` 26 options, `needle-extract` 64 questions); remote backends
 are probed at `GET /v1/limits` (openjev-style `max_answers_per_question` and
-`max_questions`). A backend that publishes nothing is treated as unbounded —
-missing limits never mean zero capability.
+`max_questions`). A backend that publishes nothing has unknown capacity; Sys1 can enforce only
+its configured limits and the common protocol envelope. Missing limits never
+mean zero capability.
 
 ## External System One backends
 
@@ -279,7 +379,7 @@ Any service implementing `POST /v1/systemone` and `GET /v1/models` can join the
 same router:
 
 ```sh
-sysone backend add \
+sys1 backend add \
   --name openjev \
   --url http://127.0.0.1:8080 \
   --model openjev-4b \
@@ -290,7 +390,7 @@ Before routing agents to an operator backend, qualify its discovery, limits,
 and all three answer shapes:
 
 ```sh
-sysone backend check --name openjev
+sys1 backend check --name openjev
 ```
 
 The check makes bounded calls to `/v1/models`, `/v1/limits`, and
@@ -298,21 +398,21 @@ The check makes bounded calls to `/v1/models`, `/v1/limits`, and
 normalization, and Score arithmetic; and never prints or persists request or
 response bodies. Backends that do not publish limits receive a warning unless
 static caps were configured. All configured HTTP processes remain
-operator-owned: SysOne probes and forwards to them but does not download their
+operator-owned: Sys1 probes and forwards to them but does not download their
 weights, mutate credentials, or own their lifecycle.
 
 ## Diagnostics
 
-`sysone doctor` is a bounded, machine-readable readiness check. It verifies the
+`sys1 doctor` is a bounded, machine-readable readiness check. It verifies the
 Bun floor, state-directory access, config, native llama.cpp runtime/backend,
 manifest, every admitted artifact (GGUF header, scorer checkpoint structure,
 `.cact` header, engine companion presence/byte count), stale/orphan store
 files, routing candidates, and daemon ownership. It does not hash entire model
-files; use `sysone model verify MODEL` for exact SHA-256 verification.
+files; use `sys1 model verify MODEL` for exact SHA-256 verification.
 
 ```sh
-sysone doctor
-sysone doctor --json
+sys1 doctor
+sys1 doctor --json
 ```
 
 Warnings do not fail readiness. Failed checks return exit code 6. JSON is
@@ -321,16 +421,16 @@ versioned (`version: 1`) and check identifiers are stable and additive.
 ## Commands
 
 ```text
-sysone setup [--tier compact|quality] [--dry-run]
-sysone jev status|enable|disable
-sysone up|down|serve|status|doctor
-sysone pull [MODEL]|pull --list
-sysone model list|verify|remove
-sysone models
-sysone eval
-sysone backend list|add|check|remove
-sysone config path|get|set|unset
-sysone --version|--help
+sys1 setup [--tier compact|quality] [--dry-run]
+sys1 jev status|enable|disable
+sys1 up|down|serve|status|doctor
+sys1 pull [MODEL]|pull --list
+sys1 model list|verify|remove
+sys1 models
+sys1 eval
+sys1 backend list|add|check|remove
+sys1 config path|get|set|unset
+sys1 --version|--help
 ```
 
 Supporting commands accept `--json`. Machine data goes to stdout; diagnostics
@@ -338,26 +438,37 @@ and download progress go to stderr.
 
 ## Configuration
 
-`~/.sysone/config.json` is created on the first write. `SYSONE_HOME` overrides
+`~/.sys1/config.json` is created on the first write. `SYS1_HOME` overrides
 the state directory. Settable keys:
 
 - `routing.policy`;
 - `gateway.host` (loopback addresses only), `gateway.port`,
   `gateway.request_timeout_ms`, `gateway.probe_timeout_ms`;
 - `hosted.base_url`, `hosted.model`, `hosted.api_key_env` (activation uses
-  `sysone jev`);
+  `sys1 jev`);
 - `local.enabled`, `local.context_tokens`, `local.eval_timeout_ms`,
   `local.max_loaded_models`.
 
 Fresh config uses `routing.policy: auto`, `local.enabled: true`, and
 `hosted.enabled: false`. The daemon reads config per request, so routing and
-backend changes do not need a restart. Environment variables are inherited when
+backend changes do not need a restart. Restart after changing local runtime
+context, timeout, or residency settings. Environment variables are inherited when
 the daemon starts, so restart it after exporting a new Jev credential. Already
 loaded GGUFs stay resident up to `local.max_loaded_models` (default one) and are
-released on eviction or daemon shutdown. Local inference is serialized per model
-to keep context state isolated and memory bounded.
+released on eviction or daemon shutdown. Local requests are serialized
+to keep context state isolated and residency bounded. GGUF inference lives in
+an owned worker process; abort, timeout, or disposal terminates and collects
+that worker before the next request can reuse the engine slot.
 
-The gateway has no authentication and accepts loopback binds only.
+The decision endpoint accepts loopback binds only and has no application
+authentication. Network admission blocks browser-originated decision dispatch and
+non-loopback Host authorities, but it does not authenticate local processes.
+Any process that can connect locally can dispatch decisions using the gateway's
+enabled backends and credentials; use it only on a trusted local machine.
+The in-process `createRouter`/`createFetchHandler` surface leaves admission to
+its owning application. Daemon shutdown uses a per-instance
+secret from its private pid file and an authenticated control endpoint. Sys1
+never signals an arbitrary PID read from that file.
 
 ## Releases
 
@@ -379,3 +490,13 @@ The check runs strict TypeScript, deterministic tests with fake inference,
 distribution builds, and an isolated packed-artifact import/CLI smoke test.
 Large weights, live model downloads, and native inference are excluded from
 ordinary CI.
+
+## Needle process boundary
+
+The explicitly pinned Needle specialist requires a private per-request tools
+file containing question instructions and criteria, deleted when the request
+settles. Its native CLI receives state as a process argument, visible to local
+process inspection. Abrupt host termination can leave the private temporary
+file behind. Do not use this adapter for inputs whose policy forbids that
+exposure. The GGUF worker uses private pipes; ordinary request bodies,
+credentials, answers, and prompts are not application logs or durable state.

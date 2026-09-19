@@ -7,7 +7,7 @@ import { NeedleEngineError, runNeedleTurn } from "../src/local/needle.ts";
 const homes: string[] = [];
 
 function home(): string {
-  const dir = mkdtempSync(join(tmpdir(), "sysone-needle-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "sys1-needle-test-"));
   homes.push(dir);
   return dir;
 }

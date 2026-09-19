@@ -20,7 +20,7 @@ import { z } from "zod";
 import { loadScorer } from "./scorer.ts";
 
 /**
- * Local model store. Weights live under `$SYSONE_HOME/models/` as plain GGUF
+ * Local model store. Weights live under `$SYS1_HOME/models/` as plain GGUF
  * files plus a small manifest. Downloads verify sha256 against the curated
  * registry (or a caller-supplied hash for `hf:` sources) before the file is
  * admitted — a truncated or poisoned download never reaches the engine.
@@ -151,7 +151,7 @@ export interface RegistryEntry {
 
 /**
  * Curated models, sha256-pinned to the publisher's LFS object id.
- * Ordered smallest-first; the first entry is the default `sysone pull`.
+ * Ordered smallest-first; the first entry is the default `sys1 pull`.
  * Specialist entries serve pinned requests only — they are not general
  * fallbacks even though they are the smallest models in the registry.
  */
@@ -481,7 +481,7 @@ export type PullTarget =
   | { kind: "hf"; modelKind: "gguf" | "scorer"; repo: string; file: string; id: string };
 
 /**
- * Resolve what `sysone pull <ref>` means: a registry id, or
+ * Resolve what `sys1 pull <ref>` means: a registry id, or
  * `hf:<org>/<repo>:<file.gguf|file.pt>` for an unlisted Hugging Face
  * GGUF or tiny/tinyx scorer checkpoint.
  */
@@ -513,7 +513,7 @@ export function resolvePullTarget(ref: string): PullTarget | { error: string } {
     if (!modelIdSchema.safeParse(id).success) return { error: `cannot derive a model id from ${file}` };
     return { kind: "hf", modelKind, repo, file, id };
   }
-  return { error: `unknown model ${ref}; run \`sysone pull --list\` for the registry` };
+  return { error: `unknown model ${ref}; run \`sys1 pull --list\` for the registry` };
 }
 
 export interface PullResult {

@@ -1,3 +1,4 @@
+import { LocalInputError } from "./input.ts";
 import { lstatSync, readFileSync } from "node:fs";
 import type { SystemOneRequest } from "../protocol.ts";
 import {
@@ -185,25 +186,14 @@ export class LocalRunner {
     return engine;
   }
 
-  private scorerFor(model: InstalledModel): OptionScorer {
+  private async scorerFor(model: InstalledModel): Promise<OptionScorer> {
     const cached = this.scorers.get(model.id);
     if (cached !== undefined) {
       cached.touched = Date.now();
       return cached.scorer;
     }
-    // Scorers are ~3 MB of in-process tensors. When at capacity, evict the
-    // oldest scorer synchronously; if none is evictable, allow one extra
-    // tiny resident rather than blocking on an engine dispose.
-    if (this.residentCount() >= this.options.maxLoadedModels && this.scorers.size > 0) {
-      let oldestId: string | null = null;
-      let oldest = Number.MAX_SAFE_INTEGER;
-      for (const [id, entry] of this.scorers) {
-        if (entry.touched < oldest) {
-          oldest = entry.touched;
-          oldestId = id;
-        }
-      }
-      if (oldestId !== null) this.scorers.delete(oldestId);
+    if (this.residentCount() >= this.options.maxLoadedModels) {
+      await this.evictOldest();
     }
     const path = modelFilePath(this.options.home, model);
     if (lstatSync(path).size > MODEL_LIMITS.maxScorerBytes) {
@@ -233,7 +223,7 @@ export class LocalRunner {
       .catch((error: unknown): DecideResult => ({
         ok: false,
         error: {
-          type: activeSignal.aborted ? "inference_timeout" : "inference_failed",
+          type: error instanceof LocalInputError ? "local_question_unsupported" : activeSignal.aborted ? "inference_timeout" : "inference_failed",
           message: error instanceof Error ? error.message : "local inference failed",
         },
       }));
@@ -282,7 +272,7 @@ export class LocalRunner {
     }
     let scorer: OptionScorer;
     try {
-      scorer = this.scorerFor(model);
+      scorer = await this.scorerFor(model);
     } catch (error) {
       return {
         ok: false,
@@ -314,7 +304,7 @@ export class LocalRunner {
       return {
         ok: false,
         error: {
-          type: signal?.aborted === true ? "inference_timeout" : "inference_failed",
+          type: error instanceof LocalInputError ? "local_question_unsupported" : signal?.aborted === true ? "inference_timeout" : "inference_failed",
           message: error instanceof Error ? error.message : "scorer inference failed",
         },
       };
@@ -371,7 +361,7 @@ export class LocalRunner {
         ok: false,
         error: {
           type:
-            signal?.aborted === true
+            error instanceof LocalInputError ? "local_question_unsupported" : signal?.aborted === true
               ? "inference_timeout"
               : error instanceof NeedleEngineError
                 ? "engine_unavailable"
@@ -489,7 +479,7 @@ export class LocalRunner {
         ok: false,
         error: {
           type:
-            signal?.aborted === true
+            error instanceof LocalInputError ? "local_question_unsupported" : signal?.aborted === true
               ? "inference_timeout"
               : unavailable
                 ? "engine_unavailable"

@@ -2,8 +2,8 @@
 
 - `src/protocol.ts` owns the System One wire format: request/response schemas,
   body and field bounds, and the shared error envelope.
-- `src/config.ts` owns the `~/.sysone/config.json` schema, defaults, load/save,
-  and the settable-key registry. `SYSONE_HOME` overrides the state directory.
+- `src/config.ts` owns the `~/.sys1/config.json` schema, defaults, load/save,
+  and the settable-key registry. `SYS1_HOME` overrides the state directory.
 - `src/router.ts` owns backend selection as a pure function over probed
   candidates — policy order, model pinning, cheapest-smallest local order,
   capability limits, and specialist exclusion from unpinned fallback.
@@ -39,14 +39,16 @@
   stop/status lifecycle.
 - `src/doctor.ts` owns the stable versioned readiness report. Keep checks
   bounded, read-only, credential-free, and additive by id.
-- `src/cli.ts` owns the `sysone` command surface and exit codes.
-- `src/index.ts` is the package's complete public surface.
+- `src/cli.ts` owns the `sys1` command surface and exit codes.
+- `src/client.ts` is the portable Node/Bun client and `/client` export.
+- `src/runtime.ts` is the embedded Bun router with explicit disposal.
+- `src/index.ts` is the runtime package public surface.
 - `test/` contains protocol, routing, config, gateway, model-store, decision,
   and fake-engine tests; no ordinary test downloads weights, touches the
   network, or uses a real credential.
 - `scripts/` holds the dist build, isolated exact-tarball package smoke, and
   cross-platform release install verification.
-- `site/` is the static sysone.dev landing page; it has no product-runtime
+- `site/` is the static sys1.io landing page; it has no product-runtime
   connection.
 - `.github/workflows/check.yml` is read-only CI. `release.yml` is the annotated
   stable-tag channel for exact cross-platform artifacts and immutable GitHub
@@ -58,35 +60,38 @@
 
 - Use Bun 1.3.14. Run `bun run check` before handoff: strict typecheck,
   tests, dist build, and packed-package smoke check.
+- Reject oversized local input without silently truncating evidence.
 - Keep the gateway loopback-only. Config must reject non-loopback binding. Do
   not add remote state without an explicit authenticated design change.
 - Read the hosted credential from the environment only. Never persist keys,
   log them, or put them in the config file, `--json` output, or error bodies.
-- Never log or persist request `state`, `questions`, or answer bodies; log
-  routing metadata only.
+- Never log request `state`, `questions`, or answer bodies; log routing
+  metadata only. Keep the documented private Needle tools-file exception
+  bounded to its request lifecycle; other adapters use pipes, not request files.
 - Parse every foreign value from `unknown` through the protocol schemas.
   Bound every input: body bytes, state bytes, question counts, options,
   timeouts, probes, and retry count.
 - A backend that returned any HTTP response is definitive; only transport
   failures (no response) may re-dispatch, at most once, and never for a
-  `backend/model` pinned request. Surface retries via `x-sysone-attempts`.
+  `backend/model` pinned request. Surface retries via `x-sys1-attempts`.
 - Keep `--json` stable and machine-readable; additive fields only. Data to
   stdout, diagnostics to stderr, closed exit codes.
-- Download weights only from explicit `sysone setup` or `sysone pull`; cap
+- Download weights only from explicit `sys1 setup` or `sys1 pull`; cap
   size, require a trusted SHA-256, stream to a temporary file, and admit only
   after digest, size, per-kind bounded structure (GGUF header, restricted
   torch checkpoint, `.cact` header/directory), safe filename, and regular-file
   checks. Needle entries also verify their platform engine companion the same
   way. Never put weights in git, release artifacts, or ordinary CI.
 - Treat generic-GGUF answers as an approximation, not calibrated Jev output.
-  Scorer and needle adapters disclose their contracts via `x-sysone-local-*`
+  Scorer and needle adapters disclose their contracts via `x-sys1-local-*`
   adapter headers; needle probabilities are a confidence-derived
   approximation, not per-option distributions. Keep Noul/Choice/Score answer
   objects exactly Jev-compatible. Do not make stronger model-quality claims
   without checkpoint-specific qualification.
-- Keep local inference lazy, per-model serialized, cancellation-bounded, and
+- Keep local inference lazy, serialized, cancellation-bounded, and
   residency-capped. Needle runs one bounded process per request with
-  telemetry disabled. Dispose native contexts on eviction and shutdown.
+  telemetry disabled. Terminate and collect owned native worker processes on timeout, abort,
+  eviction, and shutdown. Never claim unsupported native AbortSignal semantics.
 - Specialist models (scorer, needle) never receive unpinned fallback traffic;
   honor published backend capability limits (`/v1/limits`) as advisory, and
   fail over-capability requests closed as `request_unsupported`.
@@ -94,7 +99,7 @@
   weights, credentials, or process lifecycle. Qualify discovery, limits, and
   response conformance without exposing request or response bodies.
 - Fresh config is local-first: hosted Jev stays disabled even when its
-  environment credential exists. Only `sysone jev enable` activates it; the
+  environment credential exists. Only `sys1 jev enable` activates it; the
   credential remains environment-only.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
   exact tarball/checksum identity, Ubuntu/macOS/Windows artifact execution,
@@ -125,3 +130,13 @@
 - Confirm installation with `bunx skills list --global`. If Bun or network access is unavailable, continue with repository-native tools instead of blocking delivery.
 - Treat ALGAL receipts as execution evidence, not provider attestation, and preserve the repository's normal verification and release gates.
 <!-- algal-skills:end -->
+
+## Needle process boundary
+
+The explicitly pinned Needle specialist requires a private per-request tools
+file containing question instructions and criteria, deleted when the request
+settles. Its native CLI receives state as a process argument, visible to local
+process inspection. Abrupt host termination can leave the private temporary
+file behind. Do not use this adapter for inputs whose policy forbids that
+exposure. The GGUF worker uses private pipes; ordinary request bodies,
+credentials, answers, and prompts are not application logs or durable state.

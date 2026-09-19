@@ -48,12 +48,11 @@ describe("scorer adapter", () => {
     expect(input.options[1]).toContain("high");
   });
 
-  test("truncates options to the checkpoint byte limit", () => {
+  test("rejects options and context that would discard evidence", () => {
     const long = "x".repeat(500);
-    const input = scorerInput("s", { ...choiceQ, criteria: { [long]: null } }, 224, 96);
-    for (const option of input.options) {
-      expect(new TextEncoder().encode(option).byteLength).toBeLessThanOrEqual(96);
-    }
+    expect(() => scorerInput("s", { ...choiceQ, criteria: { [long]: null } }, 224, 96)).toThrow();
+    expect(() => scorerInput("x".repeat(224), choiceQ, 224, 96)).toThrow();
+    expect(() => scorerInput("é".repeat(113), noulQ, 224, 96)).toThrow();
   });
 
   test("scorerAnswer builds official answer shapes", () => {
@@ -136,5 +135,16 @@ describe("needle adapter", () => {
     );
     expect(missing).toEqual(["refund", "department"]);
     expect(answers["severity"]?.type).toBe("score");
+  });
+
+  test("missing confidence and fractional score levels fail closed", () => {
+    expect(needleAnswers(request, { refund: true }, null).answers).toEqual({});
+    const result = needleAnswers(request, { refund: true, department: "alpha", severity: 0.5 }, 0.9);
+    expect(result.missing).toEqual(["severity"]);
+  });
+
+  test("a singleton choice retains unit probability mass", () => {
+    const result = needleAnswers({ state: "s", questions: { pick: { type: "choice", criteria: { only: null } } } }, { pick: "only" }, 0.4);
+    expect(result.answers["pick"]).toMatchObject({ probabilities: { only: 1 } });
   });
 });

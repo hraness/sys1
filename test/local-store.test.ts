@@ -26,7 +26,7 @@ import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
 const homes: string[] = [];
 
 function home(): string {
-  const path = mkdtempSync(join(tmpdir(), "sysone-local-test-"));
+  const path = mkdtempSync(join(tmpdir(), "sys1-local-test-"));
   homes.push(path);
   return path;
 }

@@ -1,6 +1,6 @@
 # Contributing
 
-SysOne is early and the contract is deliberately narrow. Contributions are
+Sys1 is early and the contract is deliberately narrow. Contributions are
 welcome; the bar is that the loopback, credential, and bounded-input
 invariants stay checkable.
 
@@ -22,8 +22,9 @@ import/CLI execution check against the actual packed tarball.
 - Parse every foreign value from `unknown`; bound every input.
 - Keep the gateway loopback-only. Runtime network access is limited to
   configured backends; model network access occurs only during explicit pulls.
-- Never log or persist request bodies, `state`, `questions`, answers, prompts,
-  vocabulary distributions, or credentials — routing metadata only.
+- Log routing metadata only. Never persist request bodies, answers, or
+  credentials as durable state. Preserve the documented private Needle tools-file
+  exception and its request-lifetime cleanup.
 - Admit model files only after bounded streamed download, exact SHA-256, safe
   store-local filename, regular-file, and bounded GGUF structure verification.
   Never add weights to git, releases, packages, or ordinary CI.
@@ -32,3 +33,13 @@ import/CLI execution check against the actual packed tarball.
 - Keep fake-engine tests deterministic. Put heavyweight live qualification
   outside the ordinary test gate.
 - Keep `--json` additive-only and machine-readable.
+
+## Needle process boundary
+
+The explicitly pinned Needle specialist requires a private per-request tools
+file containing question instructions and criteria, deleted when the request
+settles. Its native CLI receives state as a process argument, visible to local
+process inspection. Abrupt host termination can leave the private temporary
+file behind. Do not use this adapter for inputs whose policy forbids that
+exposure. The GGUF worker uses private pipes; ordinary request bodies,
+credentials, answers, and prompts are not application logs or durable state.

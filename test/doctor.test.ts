@@ -9,7 +9,7 @@ import { modelsDir, saveManifest } from "../src/local/store.ts";
 const homes: string[] = [];
 
 function home(): string {
-  const path = mkdtempSync(join(tmpdir(), "sysone-doctor-test-"));
+  const path = mkdtempSync(join(tmpdir(), "sys1-doctor-test-"));
   homes.push(path);
   return path;
 }

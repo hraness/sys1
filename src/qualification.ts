@@ -156,7 +156,7 @@ export async function qualifyBackend(
 
   const modelsResponse = await requestJson(
     `${base}/v1/models`,
-    { method: "GET", headers: { accept: "application/json" } },
+    { method: "GET", redirect: "manual", headers: { accept: "application/json" } },
     options.probeTimeoutMs,
     fetchFn,
   );
@@ -178,7 +178,7 @@ export async function qualifyBackend(
 
   const limitsResponse = await requestJson(
     `${base}/v1/limits`,
-    { method: "GET", headers: { accept: "application/json" } },
+    { method: "GET", redirect: "manual", headers: { accept: "application/json" } },
     options.probeTimeoutMs,
     fetchFn,
   );
@@ -214,7 +214,7 @@ export async function qualifyBackend(
   const decisionResponse = await requestJson(
     `${base}/v1/systemone`,
     {
-      method: "POST",
+      method: "POST", redirect: "manual",
       headers: { accept: "application/json", "content-type": "application/json" },
       body: JSON.stringify({ ...QUALIFICATION_REQUEST, model: backend.model }),
     },

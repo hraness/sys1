@@ -1,6 +1,7 @@
 import type { RoutingPolicy } from "./config.ts";
 import type { SystemOneRequest } from "./protocol.ts";
 
+/** Local means builtin inference or a loopback URL; other URLs are hosted. */
 export type BackendKind = "hosted" | "local";
 
 /** Published per-backend request limits; absent fields mean unbounded. */
@@ -12,7 +13,7 @@ export interface BackendCapabilities {
 }
 
 export interface BackendCandidate {
-  /** Unique backend name. Hosted backend is always "typesafe". */
+  /** Unique backend name. The built-in hosted Jev backend is "typesafe". */
   name: string;
   kind: BackendKind;
   /** Whether the backend answered a bounded probe just now. */
@@ -75,6 +76,7 @@ export type RouteChoice<T extends BackendCandidate = BackendCandidate> =
         | "unknown_model"
         | "model_unavailable"
         | "request_unsupported"
+        | "policy_restricted"
         | "no_backend_available";
       detail: string;
     };
@@ -131,6 +133,13 @@ export function chooseBackend<T extends BackendCandidate>(
       if (pinned === undefined) {
         return { ok: false, reason: "unknown_model", detail: `no backend named ${backendName}` };
       }
+      if (ordered(policy, [pinned]).length === 0) {
+        return {
+          ok: false,
+          reason: "policy_restricted",
+          detail: `routing policy ${policy} excludes backend ${backendName}`,
+        };
+      }
       if (!pinned.models.includes(modelId) && pinned.models.length > 0) {
         return {
           ok: false,
@@ -154,10 +163,16 @@ export function chooseBackend<T extends BackendCandidate>(
       }
       return { ok: true, backend: pinned, reason: "pinned" };
     }
-    const serving = ordered(
-      policy,
-      candidates.filter((c) => c.models.includes(requestedModel) && fits(c)),
-    );
+    const matching = candidates.filter((c) => c.models.includes(requestedModel));
+    const allowed = ordered(policy, matching);
+    if (matching.length > 0 && allowed.length === 0) {
+      return {
+        ok: false,
+        reason: "policy_restricted",
+        detail: `routing policy ${policy} excludes every backend serving ${requestedModel}`,
+      };
+    }
+    const serving = allowed.filter(fits);
     const available = serving.find((c) => c.available);
     if (available !== undefined) {
       return { ok: true, backend: available, reason: "model" };
@@ -169,7 +184,7 @@ export function chooseBackend<T extends BackendCandidate>(
         detail: `no reachable backend serves ${requestedModel}`,
       };
     }
-    if (candidates.some((c) => c.models.includes(requestedModel))) {
+    if (allowed.length > 0) {
       return {
         ok: false,
         reason: "request_unsupported",

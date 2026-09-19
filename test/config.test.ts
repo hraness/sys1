@@ -9,14 +9,15 @@ import {
   loadConfig,
   saveConfig,
   setConfigValue,
-  sysoneHome,
+  sys1Home,
+  type SettableKey,
 } from "../src/config.ts";
 import { clearPidFile, daemonStatus, readPidFile, writePidFile } from "../src/daemon.ts";
 
 const homes: string[] = [];
 
 function tempHome(): string {
-  const home = mkdtempSync(join(tmpdir(), "sysone-test-"));
+  const home = mkdtempSync(join(tmpdir(), "sys1-test-"));
   homes.push(home);
   return home;
 }
@@ -82,6 +83,13 @@ describe("config", () => {
     expect(bad.ok).toBe(false);
   });
 
+  test("JavaScript callers cannot select inherited or prototype keys", () => {
+    for (const key of ["__proto__.polluted", "constructor.prototype", "toString"]) {
+      expect(setConfigValue(DEFAULT_CONFIG, key as SettableKey, "true").ok).toBe(false);
+    }
+    expect(Object.hasOwn(Object.prototype, "polluted")).toBe(false);
+  });
+
   test("setConfigValue coerces port numbers", () => {
     const result = setConfigValue(DEFAULT_CONFIG, "gateway.port", "14900");
     expect(result.ok).toBe(true);
@@ -127,15 +135,26 @@ describe("config", () => {
     ).toBe(false);
   });
 
-  test("SYSONE_HOME env overrides the state dir", () => {
-    expect(sysoneHome({ SYSONE_HOME: "/tmp/custom" } as NodeJS.ProcessEnv)).toBe("/tmp/custom");
+  test("backend identities and URLs cannot collide or persist credentials", () => {
+    const backend = { name: "service", base_url: "http://127.0.0.1:8080", model: "m" };
+    expect(configSchema.safeParse({ version: 1, backends: [backend, backend] }).success).toBe(false);
+    for (const name of ["typesafe", "local-custom"]) {
+      expect(configSchema.safeParse({ version: 1, backends: [{ ...backend, name }] }).success).toBe(false);
+    }
+    for (const base_url of ["not a URL", "", "https://user:secret@example.com", "https://example.com?key=secret", "ftp://example.com", "http://example.com"]) {
+      expect(configSchema.safeParse({ version: 1, backends: [{ ...backend, base_url }] }).success).toBe(false);
+    }
+  });
+
+  test("SYS1_HOME env overrides the state dir", () => {
+    expect(sys1Home({ SYS1_HOME: "/tmp/custom" } as NodeJS.ProcessEnv)).toBe("/tmp/custom");
   });
 });
 
 describe("pid file", () => {
   test("write, read, clear round-trip", () => {
     const home = tempHome();
-    writePidFile(home, 4321, "127.0.0.1", 13900);
+    writePidFile(home, 4321, "127.0.0.1", 13900, crypto.randomUUID());
     const record = readPidFile(home);
     expect(record).toMatchObject({ pid: 4321, port: 13900 });
     clearPidFile(home, 4321);
@@ -144,7 +163,7 @@ describe("pid file", () => {
 
   test("status reports a stale pid file without deleting it", async () => {
     const home = tempHome();
-    writePidFile(home, 2_147_483_647, "127.0.0.1", 13900);
+    writePidFile(home, 2_147_483_647, "127.0.0.1", 13900, crypto.randomUUID());
     const fetchFn = (async () => {
       throw new Error("offline");
     }) as unknown as typeof fetch;
@@ -155,7 +174,7 @@ describe("pid file", () => {
 
   test("clear refuses a different pid", () => {
     const home = tempHome();
-    writePidFile(home, 4321, "127.0.0.1", 13900);
+    writePidFile(home, 4321, "127.0.0.1", 13900, crypto.randomUUID());
     clearPidFile(home, 9999);
     expect(readPidFile(home)?.pid).toBe(4321);
   });

@@ -30,13 +30,22 @@ export const loopbackHostSchema = z
   .max(255)
   .refine(isLoopbackHost, "must be a loopback host");
 
+const backendUrlSchema = z.url().max(512).refine((value) => {
+  let url: URL;
+  try { url = new URL(value); } catch { return false; }
+  const host = url.hostname.replace(/^\[|\]$/g, "");
+  return (url.protocol === "https:" || (url.protocol === "http:" && isLoopbackHost(host))) &&
+    url.username === "" && url.password === "" && url.search === "" && url.hash === "";
+}, "use HTTPS or loopback HTTP without URL credentials, query, or fragment");
+
 export const localBackendSchema = z.object({
   name: z
     .string()
     .min(1)
     .max(64)
-    .regex(/^[a-z0-9][a-z0-9-]*$/, "lowercase letters, digits, hyphens"),
-  base_url: z.url().max(512),
+    .regex(/^[a-z0-9][a-z0-9-]*$/, "lowercase letters, digits, hyphens")
+    .refine((name) => name !== "typesafe" && !name.startsWith("local-"), "typesafe and local-* names are reserved"),
+  base_url: backendUrlSchema,
   model: z.string().min(1).max(128),
   size_b: z.number().positive().max(10_000).optional(),
   cost_rank: z.number().int().min(0).max(1_000).optional(),
@@ -67,7 +76,7 @@ export const configSchema = z.object({
   hosted: z
     .object({
       enabled: z.boolean().default(false),
-      base_url: z.url().max(512).default("https://api.typesafe.ai"),
+      base_url: backendUrlSchema.default("https://api.typesafe.ai"),
       model: z.string().min(1).max(128).default("jev-latest"),
       api_key_env: z.string().min(1).max(128).default("TYPESAFE_API_KEY"),
     })
@@ -80,18 +89,21 @@ export const configSchema = z.object({
       max_loaded_models: z.number().int().min(1).max(4).default(1),
     })
     .prefault({}),
-  backends: z.array(localBackendSchema).max(64).default([]),
+  backends: z.array(localBackendSchema).max(64).refine(
+    (backends) => new Set(backends.map((backend) => backend.name)).size === backends.length,
+    "backend names must be unique",
+  ).default([]),
 });
 
 export type LocalBackendConfig = z.infer<typeof localBackendSchema>;
-export type SysoneConfig = z.infer<typeof configSchema>;
+export type Sys1Config = z.infer<typeof configSchema>;
 
-export const DEFAULT_CONFIG: SysoneConfig = configSchema.parse({ version: 1 });
+export const DEFAULT_CONFIG: Sys1Config = configSchema.parse({ version: 1 });
 
-export function sysoneHome(env: NodeJS.ProcessEnv = process.env): string {
-  const override = env["SYSONE_HOME"];
+export function sys1Home(env: NodeJS.ProcessEnv = process.env): string {
+  const override = env["SYS1_HOME"];
   if (override !== undefined && override.length > 0) return override;
-  return join(homedir(), ".sysone");
+  return join(homedir(), ".sys1");
 }
 
 export function configPath(home: string): string {
@@ -107,7 +119,7 @@ export function logPath(home: string): string {
 }
 
 export type ConfigLoadResult =
-  | { ok: true; config: SysoneConfig; path: string; existed: boolean }
+  | { ok: true; config: Sys1Config; path: string; existed: boolean }
   | { ok: false; path: string; message: string };
 
 export function loadConfig(home: string): ConfigLoadResult {
@@ -131,7 +143,7 @@ export function loadConfig(home: string): ConfigLoadResult {
   return { ok: true, config: result.data, path, existed: true };
 }
 
-export function saveConfig(home: string, config: SysoneConfig): string {
+export function saveConfig(home: string, config: Sys1Config): string {
   mkdirSync(home, { recursive: true, mode: 0o700 });
   chmodSync(home, 0o700);
   const path = configPath(home);
@@ -146,7 +158,7 @@ export const SETTABLE_KEYS = {
   "gateway.port": z.coerce.number().int().min(1).max(65_535),
   "gateway.request_timeout_ms": z.coerce.number().int().min(1_000).max(120_000),
   "gateway.probe_timeout_ms": z.coerce.number().int().min(200).max(10_000),
-  "hosted.base_url": z.url().max(512),
+  "hosted.base_url": backendUrlSchema,
   "hosted.model": z.string().min(1).max(128),
   "hosted.api_key_env": z.string().min(1).max(128),
   "local.enabled": z.enum(["true", "false"]).transform((v) => v === "true"),
@@ -158,18 +170,22 @@ export const SETTABLE_KEYS = {
 export type SettableKey = keyof typeof SETTABLE_KEYS;
 
 export function setConfigValue(
-  config: SysoneConfig,
+  config: Sys1Config,
   key: SettableKey,
   rawValue: string,
-): { ok: true; config: SysoneConfig } | { ok: false; message: string } {
+): { ok: true; config: Sys1Config } | { ok: false; message: string } {
+  if (typeof key !== "string" || !Object.hasOwn(SETTABLE_KEYS, key)) {
+    return { ok: false, message: "unknown configuration key" };
+  }
   const schema = SETTABLE_KEYS[key];
   const parsed = schema.safeParse(rawValue);
   if (!parsed.success) {
     return { ok: false, message: `invalid value for ${key}: ${rawValue}` };
   }
   const next = structuredClone(config);
-  const [section, field] = key.split(".") as [keyof SysoneConfig, string];
+  const [section, field] = key.split(".") as [keyof Sys1Config, string];
   const target = next[section] as Record<string, unknown>;
-  target[field] = parsed.data;
+  // Define an own property rather than invoking any inherited setter.
+  Object.defineProperty(target, field, { value: parsed.data, writable: true, enumerable: true, configurable: true });
   return { ok: true, config: configSchema.parse(next) };
 }

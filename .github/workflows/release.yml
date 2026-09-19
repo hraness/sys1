@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: sysone-stable-release
+  group: sys1-stable-release
   cancel-in-progress: false
 
 jobs:
@@ -82,7 +82,7 @@ jobs:
         id: artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: sysone-release-${{ github.run_attempt }}
+          name: sys1-release-${{ github.run_attempt }}
           path: artifacts/
           if-no-files-found: error
           retention-days: 30
@@ -148,8 +148,8 @@ jobs:
           if ! gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
             gh release create "$TAG" artifacts/*.tgz artifacts/SHA256SUMS \
               --repo "$REPOSITORY" \
-              --title "sysone $TAG" \
-              --notes "Automated immutable release of @hraness/sysone from $TAG." \
+              --title "sys1 $TAG" \
+              --notes "Automated immutable release of @hraness/sys1 from $TAG." \
               --verify-tag
           fi
           release="$(gh api "repos/$REPOSITORY/releases/tags/$TAG")"

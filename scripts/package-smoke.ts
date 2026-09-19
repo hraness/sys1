@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
 const PACKAGE_ROOT = resolve(import.meta.dir, "..");
-const PACKAGE_NAME = "@hraness/sysone";
+const PACKAGE_NAME = "@hraness/sys1";
 const MAX_OUTPUT_BYTES = 4 * 1_024 * 1_024;
 
 const REQUIRED = [
@@ -21,6 +21,9 @@ const REQUIRED = [
   "package/dist/cli.js",
   "package/dist/index.js",
   "package/dist/index.d.ts",
+  "package/dist/client.js",
+  "package/dist/client.d.ts",
+  "package/dist/engine-worker.js",
   "package/README.md",
   "package/LICENSE",
 ];
@@ -100,19 +103,23 @@ function record(value: unknown, label: string): Record<string, unknown> {
 function exactDependencies(manifest: Record<string, unknown>): string[] {
   const dependencies = record(manifest["dependencies"], "dependencies");
   const names = Object.keys(dependencies).sort();
-  if (names.length !== 2 || names[0] !== "node-llama-cpp" || names[1] !== "zod") {
+  if (names.length !== 1 || names[0] !== "zod") {
     throw new Error(`packed dependencies are unexpected: ${names.join(", ")}`);
   }
-  for (const [name, version] of Object.entries(dependencies)) {
+  const optional = record(manifest["optionalDependencies"], "optionalDependencies");
+  if (Object.keys(optional).length !== 1 || optional["node-llama-cpp"] === undefined) {
+    throw new Error("native runtime must be the only optional dependency");
+  }
+  for (const [name, version] of Object.entries({ ...dependencies, ...optional })) {
     if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
       throw new Error(`dependency ${name} is not exactly pinned`);
     }
   }
-  return names;
+  return [...names, ...Object.keys(optional)];
 }
 
 export async function packageSmoke(tarballArgument?: string): Promise<void> {
-  const work = mkdtempSync(join(tmpdir(), "sysone-package-"));
+  const work = mkdtempSync(join(tmpdir(), "sys1-package-"));
   try {
     let tarball: string;
     if (tarballArgument === undefined) {
@@ -162,7 +169,7 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     const repository = record(manifest["repository"], "repository");
     if (
       repository["type"] !== "git" ||
-      repository["url"] !== "git+https://github.com/hraness/sysone.git"
+      repository["url"] !== "git+https://github.com/hraness/sys1.git"
     ) {
       throw new Error("packed repository identity is wrong");
     }
@@ -183,27 +190,89 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
       throw new Error("packed native installer trust boundary is wrong");
     }
     const bin = record(manifest["bin"], "bin");
-    if (Object.keys(bin).length !== 1 || bin["sysone"] !== "dist/cli.js") {
-      throw new Error("packed bin must be exactly sysone -> dist/cli.js");
+    if (Object.keys(bin).length !== 1 || bin["sys1"] !== "dist/cli.js") {
+      throw new Error("packed bin must be exactly sys1 -> dist/cli.js");
     }
     const cli = readFileSync(join(packedRoot, "dist/cli.js"), "utf8");
     if (!cli.startsWith("#!/usr/bin/env bun\n")) throw new Error("packed CLI has the wrong shebang");
     const dependencies = exactDependencies(manifest);
+    const exports = record(manifest["exports"], "exports");
+    const clientExport = record(exports["./client"], "client export");
+    if (clientExport["import"] !== "./dist/client.js" || clientExport["types"] !== "./dist/client.d.ts") {
+      throw new Error("packed client subpath is invalid");
+    }
 
     const modules = join(consumer, "node_modules");
-    const packageTarget = join(modules, "@hraness", "sysone");
+    const packageTarget = join(modules, "@hraness", "sys1");
     mkdirSync(dirname(packageTarget), { recursive: true });
     renameSync(packedRoot, packageTarget);
-    for (const dependency of dependencies) {
+    function linkDependency(dependency: string): void {
       const source = realpathSync(join(PACKAGE_ROOT, "node_modules", dependency));
       const destination = join(modules, dependency);
       mkdirSync(dirname(destination), { recursive: true });
       symlinkSync(source, destination, process.platform === "win32" ? "junction" : "dir");
     }
+    // The portable client must work when the optional native runtime is absent.
+    linkDependency("zod");
     writeFileSync(
       join(consumer, "package.json"),
       `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
     );
+    writeFileSync(join(consumer, "client-smoke.mjs"), [
+      `import { createClient, Sys1ClientError } from "${PACKAGE_NAME}/client";`,
+      `let calls = 0;`,
+      `const client = createClient({ fetch: async (url, init) => {`,
+      `  calls++;`,
+      `  if (url !== "http://127.0.0.1:13900/v1/systemone" || init.redirect !== "error") throw new Error("unexpected client target");`,
+      `  return Response.json({ model: "smoke", answers: { q: { type: "noul", noul: 0.5 } }, usage: { input_tokens: 1, output_tokens: 0 } });`,
+      `} });`,
+      `const result = await client.evaluate({ state: "x", questions: { q: { type: "noul" } } });`,
+      `if (result.response.answers.q.noul !== 0.5 || calls !== 1 || !(new Sys1ClientError("timeout") instanceof Error)) throw new Error("portable client failed");`,
+      `console.log("portable client verified");`,
+    ].join("\n"));
+    writeFileSync(join(consumer, "worker-smoke.mjs"), [
+      `import { spawn } from "node:child_process";`,
+      `import { fileURLToPath } from "node:url";`,
+      `const entry = fileURLToPath(new URL("./engine-worker.js", import.meta.resolve("${PACKAGE_NAME}")));`,
+      `await new Promise((resolve, reject) => {`,
+      `  const child = spawn(process.execPath, [entry], { stdio: ["pipe", "pipe", "ignore"], windowsHide: true });`,
+      `  let wire = "", replied = false, failed = false;`,
+      `  const fail = () => { failed = true; child.kill("SIGKILL"); child.stdin.destroy(); };`,
+      `  const timer = setTimeout(fail, 5000);`,
+      `  child.on("error", fail); child.stdin.on("error", fail); child.stdout.on("error", fail);`,
+      `  child.stdout.on("data", (chunk) => {`,
+      `    wire += chunk.toString("utf8");`,
+      `    if (wire.length > 4096) return fail();`,
+      `    if (!wire.endsWith("\\n")) return;`,
+      `    try {`,
+      `      const response = JSON.parse(wire);`,
+      `      if (response.id !== 1 || response.kind !== "probe" || response.value.ok !== false) return fail();`,
+      `      replied = true; child.stdin.end();`,
+      `    } catch { fail(); }`,
+      `  });`,
+      `  child.once("close", (code) => { clearTimeout(timer); if (!failed && replied && code === 0) resolve(); else reject(new Error("packed worker protocol failed")); });`,
+      `  child.stdin.write(JSON.stringify({ id: 1, op: "probe" }) + "\\n");`,
+      `});`,
+      `console.log("packed worker verified");`,
+    ].join("\n"));
+    for (const runtime of [process.execPath, "node"]) {
+      const output = await run([runtime, join(consumer, "client-smoke.mjs")], { cwd: consumer });
+      if (output.trim() !== "portable client verified") throw new Error("portable client returned invalid output");
+      const workerOutput = await run([runtime, join(consumer, "worker-smoke.mjs")], { cwd: consumer });
+      if (workerOutput.trim() !== "packed worker verified") throw new Error("packed worker returned invalid output");
+    }
+    writeFileSync(join(consumer, "client-types.ts"), [
+      `import { createClient, type SystemOneRequest, type EvaluationResult } from "${PACKAGE_NAME}/client";`,
+      `const request: SystemOneRequest = { state: "x", questions: { q: { type: "noul" } } };`,
+      `const result: Promise<EvaluationResult> = createClient().evaluate(request);`,
+      `void result;`,
+    ].join("\n"));
+    writeFileSync(join(consumer, "tsconfig.json"), JSON.stringify({
+      compilerOptions: { strict: true, noEmit: true, target: "ES2022", module: "NodeNext", types: [], lib: ["ES2022", "DOM"] },
+      files: ["client-types.ts"],
+    }));
+    await run([process.execPath, join(PACKAGE_ROOT, "node_modules/typescript/bin/tsc"), "-p", consumer], { cwd: consumer });
+    for (const dependency of dependencies.filter((name) => name !== "zod")) linkDependency(dependency);
     writeFileSync(
       join(consumer, "smoke.mjs"),
       [
@@ -218,7 +287,7 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     );
 
     const home = join(consumer, "home");
-    const env = { ...process.env, SYSONE_HOME: home };
+    const env = { ...process.env, SYS1_HOME: home };
     const imported = JSON.parse(
       (await run([process.execPath, join(consumer, "smoke.mjs")], { cwd: consumer, env })).trim(),
     ) as unknown;
