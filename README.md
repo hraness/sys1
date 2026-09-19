@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.5.0/hraness-sysone-0.5.0.tgz
+  https://github.com/hraness/sysone/releases/download/v0.6.0/hraness-sysone-0.6.0.tgz
 sysone doctor
 ```
 
@@ -249,20 +249,101 @@ sysone backend add \
   --size-b 4
 ```
 
-[Bespoke Nimble](https://github.com/bespokelabsai/nimble) is a drop-in example:
-its public deployment speaks the same wire protocol and publishes its limits
-(2–26 options, ≤64 questions), which sysone picks up automatically:
+### Run Nimble locally
+
+[Bespoke Nimble](https://github.com/bespokelabsai/nimble) ships a native
+System One SGLang server. sysone's `nimble-local` profile carries the qualified
+reference revisions and safe limits, requires a loopback HTTP URL, and keeps
+the foreign GPU process operator-owned:
 
 ```sh
-sysone backend add \
-  --name nimble \
-  --url https://bespokelabs--nimble-sglang-nimble.us-west.modal.direct \
-  --model nimble-latest \
-  --size-b 9
+sysone backend add --profile nimble-local
+sysone backend check --name nimble
 ```
 
-These processes remain operator-owned. sysone bounds probes and forwarding but
-does not manage their credentials, weights, or lifecycle.
+The profile registers `nimble-latest` at `http://127.0.0.1:8000`, records the
+9B size, and statically caps routing at 26 options and 64 questions. The check
+makes three bounded calls: model discovery, published limits, and one synthetic
+System One request containing Noul, Choice, and Score. It validates the response
+schema, distribution normalization, and expected-score arithmetic without
+printing or persisting the request or response body.
+
+Nimble is a Qwen3.5-9B LoRA adapter. Its unquantized merged weights occupy about
+18 GB before runtime memory. The upstream local SGLang service therefore needs
+Linux plus an NVIDIA GPU with BF16 support and enough memory beyond the weights;
+the published service was qualified on 48 GB L40S and 80 GB H100 GPUs. The
+container itself is approximately 15 GB.
+
+Use the exact revisions carried by `NIMBLE_LOCAL_PROFILE`:
+
+```text
+Nimble source: d2387fc0b32d1173bfc995395c076a25a2a107c9
+Nimble model:  93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c
+SGLang image:  lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9
+```
+
+1. Clone Nimble and check out the pinned source revision:
+   `git clone https://github.com/bespokelabsai/nimble.git && cd nimble && git checkout d2387fc0b32d1173bfc995395c076a25a2a107c9`.
+2. Follow its **Download the model** instructions to merge the adapter with
+   its pinned Qwen base into `.cache/models/...`, passing
+   `revision="93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c"` to
+   `snapshot_download` rather than following a moving model head.
+3. Copy the adapter's `schema_config.json` into that merged model directory;
+   the server verifies its prompt hash against the pinned source.
+4. Start `nimble.serving.server` in the pinned SGLang image and expose container
+   port 8000 only as host `127.0.0.1:8000`. The upstream server internally
+   starts SGLang on container loopback port 30000.
+5. Run `sysone backend check --name nimble`; only then route agents to it.
+
+From the pinned Nimble checkout, the upstream preparation step writes
+`.cache/nimble-model.json`. Resolve its model path and copy the contract from
+the exact adapter revision:
+
+```sh
+export NIMBLE_MODEL_PATH="$(python3.12 -c \
+  'import json; print(json.load(open(".cache/nimble-model.json"))["model_path"])')"
+python3.12 - <<'PYTHON'
+import json
+import shutil
+from pathlib import Path
+from huggingface_hub import snapshot_download
+
+config = json.loads(Path(".cache/nimble-model.json").read_text())
+snapshot = Path(snapshot_download(
+    "bespokelabs/Bespoke-Nimble-9B",
+    revision="93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c",
+))
+shutil.copy2(snapshot / "schema_config.json", Path(config["model_path"]) / "schema_config.json")
+PYTHON
+```
+
+A host-port mapping must be loopback-scoped:
+
+```sh
+docker run --rm --gpus all --ipc=host --shm-size=32g \
+  --publish 127.0.0.1:8000:8000 \
+  --mount type=bind,src="$PWD",dst=/opt/app,readonly \
+  --mount type=bind,src="$NIMBLE_MODEL_PATH",dst=/models/nimble,readonly \
+  --entrypoint /bin/bash \
+  lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9 \
+  -lc '/opt/sglang/bin/python -m pip install --no-cache-dir \
+    "openjev-sglang @ https://github.com/ekzhang/openjev-sglang/archive/7f84bedc169439f03379c2fa8d00ada220af2295.tar.gz" \
+    "transformers==5.17.0" "huggingface-hub==1.32.0" && \
+    PYTHONPATH=/opt/app NIMBLE_MODEL_PATH=/models/nimble \
+    TOKENIZERS_PARALLELISM=false \
+    /opt/sglang/bin/python -m nimble.serving.server'
+```
+
+The image and Python dependencies are pinned, but the installation command
+still needs network access on first start. Persist an image derived from these
+exact inputs if repeat startup must be offline. Never publish container port
+8000 as `0.0.0.0:8000`; the Nimble API has no authentication.
+
+The public Nimble deployment can be registered with the generic `backend add`
+command instead, but it is not a local runtime and may cold-start from zero.
+All configured HTTP backends remain operator-owned: sysone probes and forwards
+to them but does not download their weights, mutate their credentials, or own
+their process lifecycle.
 
 ## Diagnostics
 
@@ -289,7 +370,7 @@ sysone pull [MODEL]|pull --list
 sysone model list|verify|remove
 sysone models
 sysone eval
-sysone backend list|add|remove
+sysone backend list|add|check|remove
 sysone config path|get|set|unset
 sysone --version|--help
 ```

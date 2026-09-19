@@ -14,6 +14,9 @@ backend answers.
 - **Backends** (`src/backends.ts`) adapts hosted Jev, operator-registered HTTP
   services, and installed builtin models into router candidates, and merges
   advisory `GET /v1/limits` responses into routing capabilities.
+- **Provider profiles** (`src/providers.ts`) define pinned registration defaults
+  for known operator-owned services and qualify discovery, published limits,
+  and all three answer shapes without taking over their process lifecycle.
 - **Decision adapter** (`src/local/decide.ts`) renders bounded prompts and maps a
   full first-token vocabulary distribution into noul, choice, and score answers.
 - **Engine** (`src/local/engine.ts`) lazily owns one node-llama-cpp model/context,
@@ -134,6 +137,24 @@ the whole runner. Loading another engine or scorer evicts and disposes the
 least recently used resident. Needle spawns per request and holds no
 residency. Shutdown disposes every model/context. The store and inference
 queues are local only; request state and answers are never written there.
+
+## Operator-owned provider profiles
+
+A provider profile persists only routing metadata: loopback URL, model alias,
+parameter size, and conservative capabilities. It never installs dependencies,
+downloads provider weights, or starts/stops the provider. `nimble-local` pins
+the upstream Nimble source/model/SGLang identities, registers
+`http://127.0.0.1:8000`, and retains 26-option/64-question caps even if the
+advisory limits probe is temporarily unavailable. Its URL override must remain
+unauthenticated loopback HTTP.
+
+`backend check` is explicit and bounded. It requests `/v1/models` and
+`/v1/limits`, then sends one fixed synthetic request containing Noul, Choice,
+and Score. Every response body is capped at 4 MiB and parsed from `unknown`.
+The decision response must satisfy the official schema, preserve the requested
+answer types, normalize Choice/Score distributions, and keep Score equal to its
+probability-weighted levels. Reports contain status and bounded diagnostics,
+never the synthetic request or provider response body.
 
 ## Distribution
 

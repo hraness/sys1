@@ -21,7 +21,7 @@ import {
 } from "./protocol.ts";
 import { chooseBackend, requestNeeds } from "./router.ts";
 
-export const SYSONE_VERSION = "0.5.0";
+export const SYSONE_VERSION = "0.6.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -152,6 +152,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         backend: backend.name,
         kind: backend.kind,
         available: backend.available,
+        capabilities: backend.capabilities ?? null,
       })),
     );
     return json({ object: "list", data });

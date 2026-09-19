@@ -62,6 +62,7 @@ export type {
 
 export {
   HOSTED_BACKEND_NAME,
+  extractBackendCapabilities,
   extractModelIds,
   forwardToBackend,
   probeAll,
@@ -69,6 +70,21 @@ export {
   runtimeBackends,
 } from "./backends.ts";
 export type { ForwardResult, ProbeResult, RuntimeBackend } from "./backends.ts";
+
+export {
+  BACKEND_PROFILE_IDS,
+  NIMBLE_LOCAL_PROFILE,
+  qualifyBackend,
+  resolveBackendProfile,
+} from "./providers.ts";
+export type {
+  BackendProfileId,
+  BackendProfileResult,
+  BackendQualificationCheck,
+  BackendQualificationOptions,
+  BackendQualificationReport,
+  BackendQualificationStatus,
+} from "./providers.ts";
 
 export { SYSONE_VERSION, createFetchHandler, startGateway } from "./gateway.ts";
 export type { GatewayDeps, RunningGateway } from "./gateway.ts";

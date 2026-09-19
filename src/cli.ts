@@ -9,6 +9,7 @@ import {
   saveConfig,
   setConfigValue,
   sysoneHome,
+  type LocalBackendConfig,
   type SettableKey,
   type SysoneConfig,
 } from "./config.ts";
@@ -24,6 +25,7 @@ import {
 import { probeAll, runtimeBackends } from "./backends.ts";
 import { runDoctor } from "./doctor.ts";
 import { SYSONE_VERSION, startGateway } from "./gateway.ts";
+import { BACKEND_PROFILE_IDS, qualifyBackend, resolveBackendProfile } from "./providers.ts";
 import {
   MODEL_REGISTRY,
   installedModels,
@@ -70,7 +72,10 @@ Models:
 Routing:
   backend list [--json]         List configured HTTP backends
   backend add --name N --url U --model M [--size-b N] [--cost-rank N]
+  backend add --profile PROFILE [--name N] [--url U]
                                 Register a System One HTTP backend
+  backend check --name N [--json]
+                                Qualify discovery, limits, and all answer types
   backend remove --name N       Remove an HTTP backend
   config path                   Print the config file location
   config get [--json]           Print the effective config
@@ -86,6 +91,7 @@ Flags:
   --version                     Print version
   --help                        This help
 
+Backend profiles: ${BACKEND_PROFILE_IDS.join(", ")}
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
@@ -133,6 +139,7 @@ const VALUE_FLAGS = new Set([
   "--model",
   "--size-b",
   "--cost-rank",
+  "--profile",
   "--file",
   "--sha256",
 ]);
@@ -250,6 +257,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
       available: backend.available,
       models: backend.models,
       size_b: backend.size_b,
+      capabilities: backend.capabilities ?? null,
       probe: probes.get(backend.name)?.detail ?? null,
     })),
   };
@@ -474,7 +482,7 @@ function cmdConfig(home: string, args: ParsedArgs): void {
   }
 }
 
-function cmdBackend(home: string, args: ParsedArgs): void {
+async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
   const [sub] = args.positional.slice(1);
   const loaded = loadConfig(home);
   if (!loaded.ok) fail(loaded.message, EXIT.config);
@@ -495,35 +503,76 @@ function cmdBackend(home: string, args: ParsedArgs): void {
       return;
     }
     case "add": {
-      const name = flagString(args.flags, "name");
-      const url = flagString(args.flags, "url");
-      const model = flagString(args.flags, "model");
-      if (name === undefined || url === undefined || model === undefined) {
-        fail("usage: sysone backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
+      const profile = flagString(args.flags, "profile");
+      let backend: LocalBackendConfig;
+      if (profile !== undefined) {
+        if (
+          flagString(args.flags, "model") !== undefined ||
+          flagNumber(args.flags, "size-b") !== undefined ||
+          flagNumber(args.flags, "cost-rank") !== undefined
+        ) {
+          fail("profile model, size, and capabilities are pinned; only --name and --url may be overridden", EXIT.usage);
+        }
+        const resolved = resolveBackendProfile(profile, {
+          ...(flagString(args.flags, "name") === undefined
+            ? {}
+            : { name: flagString(args.flags, "name") as string }),
+          ...(flagString(args.flags, "url") === undefined
+            ? {}
+            : { base_url: flagString(args.flags, "url") as string }),
+        });
+        if (!resolved.ok) fail(resolved.message, EXIT.usage);
+        backend = resolved.backend;
+      } else {
+        const name = flagString(args.flags, "name");
+        const url = flagString(args.flags, "url");
+        const model = flagString(args.flags, "model");
+        if (name === undefined || url === undefined || model === undefined) {
+          fail("usage: sysone backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
+        }
+        const size = flagNumber(args.flags, "size-b");
+        const costRank = flagNumber(args.flags, "cost-rank");
+        const parsed = localBackendSchema.safeParse({
+          name,
+          base_url: url,
+          model,
+          ...(size === undefined ? {} : { size_b: size }),
+          ...(costRank === undefined ? {} : { cost_rank: costRank }),
+          enabled: true,
+        });
+        if (!parsed.success) {
+          const issue = parsed.error.issues[0];
+          fail(`invalid backend: ${issue?.path.join(".") ?? ""} ${issue?.message ?? ""}`, EXIT.usage);
+        }
+        backend = parsed.data;
       }
-      if (loaded.config.backends.some((b) => b.name === name)) {
-        fail(`backend ${name} already exists`, EXIT.usage);
-      }
-      const parsed = localBackendSchema.safeParse({
-        name,
-        base_url: url,
-        model,
-        ...(flagNumber(args.flags, "size-b") === undefined
-          ? {}
-          : { size_b: flagNumber(args.flags, "size-b") }),
-        ...(flagNumber(args.flags, "cost-rank") === undefined
-          ? {}
-          : { cost_rank: flagNumber(args.flags, "cost-rank") }),
-        enabled: true,
-      });
-      if (!parsed.success) {
-        const issue = parsed.error.issues[0];
-        fail(`invalid backend: ${issue?.path.join(".") ?? ""} ${issue?.message ?? ""}`, EXIT.usage);
+      if (loaded.config.backends.some((candidate) => candidate.name === backend.name)) {
+        fail(`backend ${backend.name} already exists`, EXIT.usage);
       }
       const next = structuredClone(loaded.config);
-      next.backends.push(parsed.data);
+      next.backends.push(backend);
       const path = saveConfig(home, next);
-      out(`backend ${name} added (${path})`);
+      out(`backend ${backend.name} added (${path})`);
+      return;
+    }
+    case "check": {
+      const name = flagString(args.flags, "name");
+      if (name === undefined) fail("usage: sysone backend check --name N [--json]", EXIT.usage);
+      const backend = loaded.config.backends.find((candidate) => candidate.name === name);
+      if (backend === undefined) fail(`no backend named ${name}`, EXIT.usage);
+      const report = await qualifyBackend(backend, {
+        probeTimeoutMs: loaded.config.gateway.probe_timeout_ms,
+        requestTimeoutMs: loaded.config.gateway.request_timeout_ms,
+      });
+      if (args.flags.get("json") === true) {
+        out(JSON.stringify(report, null, 2));
+      } else {
+        for (const check of report.checks) {
+          out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
+        }
+        out(`backend ${backend.name}: ${report.ok ? "ready" : "not ready"}`);
+      }
+      if (!report.ok) process.exit(EXIT.backend);
       return;
     }
     case "remove": {
@@ -538,7 +587,7 @@ function cmdBackend(home: string, args: ParsedArgs): void {
       return;
     }
     default:
-      fail("usage: sysone backend <list|add|remove>", EXIT.usage);
+      fail("usage: sysone backend <list|add|check|remove>", EXIT.usage);
   }
 }
 
@@ -588,7 +637,7 @@ async function main(): Promise<void> {
       cmdConfig(home, args);
       return;
     case "backend":
-      cmdBackend(home, args);
+      await cmdBackend(home, args);
       return;
     default:
       err(`sysone: unknown command ${command}`);

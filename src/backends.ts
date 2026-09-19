@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { LocalBackendConfig, SysoneConfig } from "./config.ts";
 import { builtinCandidates } from "./local/runner.ts";
 import { modelsDir, type InstalledModel } from "./local/store.ts";
-import type { BackendCandidate } from "./router.ts";
+import type { BackendCandidate, BackendCapabilities } from "./router.ts";
 
 export const HOSTED_BACKEND_NAME = "typesafe";
 
@@ -52,6 +52,41 @@ export function extractModelIds(body: unknown): string[] {
     .map((entry) => (typeof entry === "string" ? entry : entry.id))
     .filter((id) => id.length > 0)
     .slice(0, 512);
+}
+
+export function extractBackendCapabilities(body: unknown): BackendCapabilities | null {
+  const parsed = limitsResponseSchema.safeParse(body);
+  if (!parsed.success) return null;
+  return {
+    ...(parsed.data.max_answers_per_question === undefined
+      ? {}
+      : { maxOptions: parsed.data.max_answers_per_question }),
+    ...(parsed.data.max_questions === undefined
+      ? {}
+      : { maxQuestions: parsed.data.max_questions }),
+  };
+}
+
+function constrainedCapabilities(
+  configured: BackendCapabilities | undefined,
+  published: BackendCapabilities,
+): BackendCapabilities {
+  const maxOptions =
+    configured?.maxOptions === undefined
+      ? published.maxOptions
+      : published.maxOptions === undefined
+        ? configured.maxOptions
+        : Math.min(configured.maxOptions, published.maxOptions);
+  const maxQuestions =
+    configured?.maxQuestions === undefined
+      ? published.maxQuestions
+      : published.maxQuestions === undefined
+        ? configured.maxQuestions
+        : Math.min(configured.maxQuestions, published.maxQuestions);
+  return {
+    ...(maxOptions === undefined ? {} : { maxOptions }),
+    ...(maxQuestions === undefined ? {} : { maxQuestions }),
+  };
 }
 
 /**
@@ -119,6 +154,18 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
     models: [local.model],
     size_b: local.size_b ?? null,
     cost_rank: local.cost_rank ?? 0,
+    ...(local.capabilities === undefined
+      ? {}
+      : {
+          capabilities: {
+            ...(local.capabilities.max_options === undefined
+              ? {}
+              : { maxOptions: local.capabilities.max_options }),
+            ...(local.capabilities.max_questions === undefined
+              ? {}
+              : { maxQuestions: local.capabilities.max_questions }),
+          },
+        }),
     base_url: local.base_url.replace(/\/+$/, ""),
     headers: {},
     default_model: local.model,
@@ -143,16 +190,9 @@ async function probeLimits(
       signal: AbortSignal.timeout(timeoutMs),
     });
     if (!response.ok) return;
-    const parsed = limitsResponseSchema.safeParse(await response.json());
-    if (!parsed.success) return;
-    const caps = backend.capabilities ?? {};
-    if (parsed.data.max_answers_per_question !== undefined) {
-      caps.maxOptions = parsed.data.max_answers_per_question;
-    }
-    if (parsed.data.max_questions !== undefined) {
-      caps.maxQuestions = parsed.data.max_questions;
-    }
-    backend.capabilities = caps;
+    const published = extractBackendCapabilities(await response.json());
+    if (published === null) return;
+    backend.capabilities = constrainedCapabilities(backend.capabilities, published);
   } catch {
     // limits probing is advisory only
   }
