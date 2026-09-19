@@ -123,11 +123,11 @@ describe("chooseBackend model routing", () => {
 });
 
 describe("capability-aware routing", () => {
-  const nimble: BackendCandidate = {
-    name: "nimble",
+  const capped: BackendCandidate = {
+    name: "capped-service",
     kind: "local",
     available: true,
-    models: ["nimble-latest"],
+    models: ["capped-model"],
     size_b: 9,
     cost_rank: 1,
     capabilities: { maxOptions: 26, maxQuestions: 64 },
@@ -137,31 +137,31 @@ describe("capability-aware routing", () => {
   const needsFit = { maxOptions: 20, questions: 2 };
 
   test("a request over a published cap skips that backend", () => {
-    const choice = chooseBackend("prefer-local", undefined, [nimble, localSmall], needsWide);
+    const choice = chooseBackend("prefer-local", undefined, [capped, localSmall], needsWide);
     expect(choice).toMatchObject({ ok: true, backend: { name: "nanojev" } });
   });
 
   test("a fitting request still uses the capped backend", () => {
-    const choice = chooseBackend("prefer-local", "nimble-latest", [nimble, localSmall], needsFit);
-    expect(choice).toMatchObject({ ok: true, backend: { name: "nimble" } });
+    const choice = chooseBackend("prefer-local", "capped-model", [capped, localSmall], needsFit);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "capped-service" } });
   });
 
   test("pinning a backend past its cap reports request_unsupported", () => {
-    const choice = chooseBackend("auto", "nimble/nimble-latest", [nimble], needsWide);
+    const choice = chooseBackend("auto", "capped-service/capped-model", [capped], needsWide);
     expect(choice).toMatchObject({ ok: false, reason: "request_unsupported" });
   });
 
   test("a bare model over every server's cap reports request_unsupported", () => {
-    const choice = chooseBackend("auto", "nimble-latest", [hosted, nimble], needsWide);
+    const choice = chooseBackend("auto", "capped-model", [hosted, capped], needsWide);
     expect(choice).toMatchObject({ ok: false, reason: "request_unsupported" });
   });
 
   test("missing caps mean unbounded", () => {
-    const choice = chooseBackend("auto", "nimble-latest", [localSmall], needsWide);
+    const choice = chooseBackend("auto", "capped-model", [localSmall], needsWide);
     expect(choice).toMatchObject({ ok: false, reason: "unknown_model" });
-    const { capabilities: _dropped, ...uncapped } = nimble;
-    const unlimited = chooseBackend("prefer-local", "nimble-latest", [uncapped]);
-    expect(unlimited).toMatchObject({ ok: true, backend: { name: "nimble" } });
+    const { capabilities: _dropped, ...uncapped } = capped;
+    const unlimited = chooseBackend("prefer-local", "capped-model", [uncapped]);
+    expect(unlimited).toMatchObject({ ok: true, backend: { name: "capped-service" } });
   });
 });
 

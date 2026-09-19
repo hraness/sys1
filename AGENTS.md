@@ -11,9 +11,10 @@
   environment only), configured HTTP services, installed builtin candidates,
   bounded probing (including advisory `GET /v1/limits`), and request
   forwarding.
-- `src/providers.ts` owns pinned external-backend profiles and bounded
-  conformance qualification. Profiles may register operator-owned processes,
-  but must not install, start, stop, or mutate them.
+- `src/defaults.ts` owns qualified platform targets and deterministic compact
+  versus quality local-model recommendations.
+- `src/qualification.ts` owns bounded conformance checks for operator-configured
+  System One HTTP backends.
 - `src/local/decide.ts` owns bounded generic-GGUF prompts and the pure mapping
   from vocabulary probability mass to System One answers.
 - `src/local/engine.ts` owns the lazy node-llama-cpp lifecycle and serialized
@@ -43,7 +44,8 @@
 - `test/` contains protocol, routing, config, gateway, model-store, decision,
   and fake-engine tests; no ordinary test downloads weights, touches the
   network, or uses a real credential.
-- `scripts/` holds the dist build and isolated exact-tarball package smoke.
+- `scripts/` holds the dist build, isolated exact-tarball package smoke, and
+  cross-platform release install verification.
 - `site/` is the static sysone.dev landing page; it has no product-runtime
   connection.
 - `.github/workflows/check.yml` is read-only CI. `release.yml` is the annotated
@@ -70,12 +72,12 @@
   `backend/model` pinned request. Surface retries via `x-sysone-attempts`.
 - Keep `--json` stable and machine-readable; additive fields only. Data to
   stdout, diagnostics to stderr, closed exit codes.
-- Download weights only from an explicit `sysone pull`; cap size, require a
-  trusted SHA-256, stream to a temporary file, and admit only after digest,
-  size, per-kind bounded structure (GGUF header, restricted torch checkpoint,
-  `.cact` header/directory), safe filename, and regular-file checks. Needle
-  entries also verify their platform engine companion the same way. Never put
-  weights in git, release artifacts, or ordinary CI.
+- Download weights only from explicit `sysone setup` or `sysone pull`; cap
+  size, require a trusted SHA-256, stream to a temporary file, and admit only
+  after digest, size, per-kind bounded structure (GGUF header, restricted
+  torch checkpoint, `.cact` header/directory), safe filename, and regular-file
+  checks. Needle entries also verify their platform engine companion the same
+  way. Never put weights in git, release artifacts, or ordinary CI.
 - Treat generic-GGUF answers as an approximation, not calibrated Jev output.
   Scorer and needle adapters disclose their contracts via `x-sysone-local-*`
   adapter headers; needle probabilities are a confidence-derived
@@ -89,12 +91,13 @@
   honor published backend capability limits (`/v1/limits`) as advisory, and
   fail over-capability requests closed as `request_unsupported`.
 - Keep operator-registered HTTP runners separately owned; never mutate their
-  weights, credentials, or process lifecycle. Provider profiles must pin known
-  identities and safe routing caps, restrict unauthenticated local profiles to
-  loopback, and qualify discovery, limits, and response conformance without
-  exposing request or response bodies.
+  weights, credentials, or process lifecycle. Qualify discovery, limits, and
+  response conformance without exposing request or response bodies.
+- Fresh config is local-first: hosted Jev stays disabled even when its
+  environment credential exists. Only `sysone jev enable` activates it; the
+  credential remains environment-only.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
-  exact tarball/checksum identity, Ubuntu/macOS artifact execution, repository
-  release immutability, and the no-npm-publication boundary.
+  exact tarball/checksum identity, Ubuntu/macOS/Windows artifact execution,
+  repository release immutability, and the no-npm-publication boundary.
 - Keep the public repository independently buildable. No sibling checkouts,
   private packages, internal project names, or unpublished provenance.

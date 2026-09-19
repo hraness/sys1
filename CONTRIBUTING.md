@@ -1,6 +1,6 @@
 # Contributing
 
-sysone is early and the contract is deliberately narrow. Contributions are
+SysOne is early and the contract is deliberately narrow. Contributions are
 welcome; the bar is that the loopback, credential, and bounded-input
 invariants stay checkable.
 

@@ -95,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-15]
+        os: [ubuntu-24.04, macos-15, windows-2025]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -119,20 +119,7 @@ jobs:
         env:
           ARTIFACT_DIGEST: ${{ needs.verify.outputs.artifact_digest }}
           ARTIFACT_ID: ${{ needs.verify.outputs.artifact_id }}
-        run: |
-          set -euo pipefail
-          if [[ ! "$ARTIFACT_ID" =~ ^[1-9][0-9]*$ || ! "$ARTIFACT_DIGEST" =~ ^[0-9a-f]{64}$ ]]; then
-            echo "::error::Release artifact identity is invalid"
-            exit 1
-          fi
-          cd artifacts
-          shasum -a 256 -c SHA256SUMS
-          cd ..
-          bun scripts/package-smoke.ts artifacts/*.tgz
-          prefix="$RUNNER_TEMP/sysone-global"
-          npm install --global --prefix "$prefix" --allow-scripts=node-llama-cpp ./artifacts/*.tgz
-          SYSONE_HOME="$RUNNER_TEMP/sysone-home" "$prefix/bin/sysone" doctor --json > "$RUNNER_TEMP/doctor.json"
-          jq -e '.ok == true and .version == 1' "$RUNNER_TEMP/doctor.json" >/dev/null
+        run: bun scripts/release-install-smoke.ts artifacts
 
   publish:
     name: Publish immutable GitHub Release

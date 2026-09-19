@@ -66,7 +66,7 @@ export const configSchema = z.object({
     .prefault({}),
   hosted: z
     .object({
-      enabled: z.boolean().default(true),
+      enabled: z.boolean().default(false),
       base_url: z.url().max(512).default("https://api.typesafe.ai"),
       model: z.string().min(1).max(128).default("jev-latest"),
       api_key_env: z.string().min(1).max(128).default("TYPESAFE_API_KEY"),
@@ -146,7 +146,6 @@ export const SETTABLE_KEYS = {
   "gateway.port": z.coerce.number().int().min(1).max(65_535),
   "gateway.request_timeout_ms": z.coerce.number().int().min(1_000).max(120_000),
   "gateway.probe_timeout_ms": z.coerce.number().int().min(200).max(10_000),
-  "hosted.enabled": z.enum(["true", "false"]).transform((v) => v === "true"),
   "hosted.base_url": z.url().max(512),
   "hosted.model": z.string().min(1).max(128),
   "hosted.api_key_env": z.string().min(1).max(128),

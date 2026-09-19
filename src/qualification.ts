@@ -1,77 +1,6 @@
 import type { LocalBackendConfig } from "./config.ts";
-import { isLoopbackHost, localBackendSchema } from "./config.ts";
 import { extractBackendCapabilities, extractModelIds } from "./backends.ts";
 import { systemOneResponseSchema, type SystemOneRequest } from "./protocol.ts";
-
-export const BACKEND_PROFILE_IDS = ["nimble-local"] as const;
-export type BackendProfileId = (typeof BACKEND_PROFILE_IDS)[number];
-
-export const NIMBLE_LOCAL_PROFILE = {
-  id: "nimble-local" as const,
-  upstreamRepository: "https://github.com/bespokelabsai/nimble",
-  upstreamRevision: "d2387fc0b32d1173bfc995395c076a25a2a107c9",
-  modelRepository: "bespokelabs/Bespoke-Nimble-9B",
-  modelRevision: "93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c",
-  sglangImage:
-    "lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9",
-  backend: {
-    name: "nimble",
-    base_url: "http://127.0.0.1:8000",
-    model: "nimble-latest",
-    size_b: 9,
-    cost_rank: 0,
-    capabilities: { max_options: 26, max_questions: 64 },
-    enabled: true,
-  },
-} as const;
-
-export type BackendProfileResult =
-  | { ok: true; backend: LocalBackendConfig }
-  | { ok: false; message: string };
-
-export function resolveBackendProfile(
-  id: string,
-  overrides: { name?: string; base_url?: string } = {},
-): BackendProfileResult {
-  if (id !== NIMBLE_LOCAL_PROFILE.id) {
-    return { ok: false, message: `unknown backend profile ${id}` };
-  }
-  const base_url = overrides.base_url ?? NIMBLE_LOCAL_PROFILE.backend.base_url;
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(base_url);
-  } catch {
-    return { ok: false, message: `invalid profile URL ${base_url}` };
-  }
-  const hostname = parsedUrl.hostname.replace(/^\[|\]$/g, "");
-  if (
-    parsedUrl.protocol !== "http:" ||
-    !isLoopbackHost(hostname) ||
-    parsedUrl.username.length > 0 ||
-    parsedUrl.password.length > 0 ||
-    (parsedUrl.pathname !== "/" && parsedUrl.pathname !== "") ||
-    parsedUrl.search.length > 0 ||
-    parsedUrl.hash.length > 0
-  ) {
-    return {
-      ok: false,
-      message: "nimble-local requires an unauthenticated loopback http URL",
-    };
-  }
-  const parsed = localBackendSchema.safeParse({
-    ...NIMBLE_LOCAL_PROFILE.backend,
-    ...(overrides.name === undefined ? {} : { name: overrides.name }),
-    base_url,
-  });
-  if (!parsed.success) {
-    const issue = parsed.error.issues[0];
-    return {
-      ok: false,
-      message: `invalid backend profile${issue === undefined ? "" : ` at ${issue.path.join(".")}: ${issue.message}`}`,
-    };
-  }
-  return { ok: true, backend: parsed.data };
-}
 
 export type BackendQualificationStatus = "pass" | "warn" | "fail";
 
@@ -126,7 +55,7 @@ async function requestJson(
   init: RequestInit,
   timeoutMs: number,
   fetchFn: typeof fetch,
-): Promise<{ ok: true; status: number; body: unknown } | { ok: false; detail: string }> {
+): Promise<{ ok: true; body: unknown } | { ok: false; detail: string }> {
   try {
     const response = await fetchFn(url, {
       ...init,
@@ -135,7 +64,7 @@ async function requestJson(
     const text = await boundedText(response);
     if (!response.ok) return { ok: false, detail: `HTTP ${response.status}` };
     try {
-      return { ok: true, status: response.status, body: JSON.parse(text) as unknown };
+      return { ok: true, body: JSON.parse(text) as unknown };
     } catch {
       return { ok: false, detail: "response is not valid JSON" };
     }
@@ -194,8 +123,7 @@ function responseContract(body: unknown): string | null {
   return null;
 }
 
-const QUALIFICATION_REQUEST: SystemOneRequest = {
-  model: "nimble-latest",
+const QUALIFICATION_REQUEST: Omit<SystemOneRequest, "model"> = {
   state: "The customer was charged twice, requests a refund, and can still use checkout.",
   questions: {
     refund: {
@@ -283,13 +211,12 @@ export async function qualifyBackend(
     }
   }
 
-  const request = { ...QUALIFICATION_REQUEST, model: backend.model };
   const decisionResponse = await requestJson(
     `${base}/v1/systemone`,
     {
       method: "POST",
       headers: { accept: "application/json", "content-type": "application/json" },
-      body: JSON.stringify(request),
+      body: JSON.stringify({ ...QUALIFICATION_REQUEST, model: backend.model }),
     },
     options.requestTimeoutMs,
     fetchFn,

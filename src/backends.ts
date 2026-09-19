@@ -174,9 +174,8 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
 
 /**
  * Best-effort `GET /v1/limits`: backends that publish openjev-style request
- * limits (e.g. Nimble's 26-option cap) get those merged into their routing
- * capabilities. Any failure leaves capabilities untouched — an unpublished
- * limit means unbounded, not zero.
+ * limits get those merged into their routing capabilities. Any failure leaves
+ * capabilities untouched — an unpublished limit means unbounded, not zero.
  */
 async function probeLimits(
   backend: RuntimeBackend,

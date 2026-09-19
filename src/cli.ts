@@ -9,7 +9,6 @@ import {
   saveConfig,
   setConfigValue,
   sysoneHome,
-  type LocalBackendConfig,
   type SettableKey,
   type SysoneConfig,
 } from "./config.ts";
@@ -23,9 +22,11 @@ import {
   writePidFile,
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
+import { LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
 import { runDoctor } from "./doctor.ts";
 import { SYSONE_VERSION, startGateway } from "./gateway.ts";
-import { BACKEND_PROFILE_IDS, qualifyBackend, resolveBackendProfile } from "./providers.ts";
+import { probeNativeRuntime } from "./local/engine.ts";
+import { qualifyBackend } from "./qualification.ts";
 import {
   MODEL_REGISTRY,
   installedModels,
@@ -33,6 +34,7 @@ import {
   removeModel,
   storeBytes,
   verifyModel,
+  type PullResult,
 } from "./local/store.ts";
 
 const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5, doctor: 6 } as const;
@@ -54,6 +56,12 @@ const USAGE = `sysone — local System One gateway for coding agents
 
 Usage: sysone <command> [flags]
 
+Setup:
+  setup [--tier compact|quality] [--dry-run] [--json]
+                                Configure and install the local default
+  jev status|enable|disable [--json]
+                                Manage explicit hosted Jev activation
+
 Daemon:
   up [--port N] [--json]        Start the gateway daemon in the background
   down [--json]                 Stop the gateway daemon
@@ -72,7 +80,6 @@ Models:
 Routing:
   backend list [--json]         List configured HTTP backends
   backend add --name N --url U --model M [--size-b N] [--cost-rank N]
-  backend add --profile PROFILE [--name N] [--url U]
                                 Register a System One HTTP backend
   backend check --name N [--json]
                                 Qualify discovery, limits, and all answer types
@@ -91,12 +98,12 @@ Flags:
   --version                     Print version
   --help                        This help
 
-Backend profiles: ${BACKEND_PROFILE_IDS.join(", ")}
+Local tiers: ${LOCAL_MODEL_TIERS.join(", ")}
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
   SYSONE_HOME                   State directory (default ~/.sysone)
-  TYPESAFE_API_KEY              Hosted Jev credential (enables the typesafe backend)
+  TYPESAFE_API_KEY              Hosted Jev credential (used only after \`jev enable\`)
 
 Endpoint: POST http://127.0.0.1:13900/v1/systemone, GET /v1/models, GET /healthz
 `;
@@ -139,7 +146,7 @@ const VALUE_FLAGS = new Set([
   "--model",
   "--size-b",
   "--cost-rank",
-  "--profile",
+  "--tier",
   "--file",
   "--sha256",
 ]);
@@ -168,6 +175,138 @@ function mustConfig(home: string): SysoneConfig {
   const loaded = loadConfig(home);
   if (!loaded.ok) fail(loaded.message, EXIT.config);
   return loaded.config;
+}
+
+function setupTier(flags: Map<string, string | boolean>): LocalModelTier | undefined {
+  const raw = flagString(flags, "tier");
+  if (raw === undefined) return undefined;
+  if (raw !== "compact" && raw !== "quality") {
+    fail(`--tier must be ${LOCAL_MODEL_TIERS.join(" or ")}`, EXIT.usage);
+  }
+  return raw;
+}
+
+async function cmdSetup(home: string, flags: Map<string, string | boolean>): Promise<void> {
+  const tier = setupTier(flags);
+  const recommendation = platformRecommendation({
+    ...(tier === undefined ? {} : { tier }),
+  });
+  if (!recommendation.supported || recommendation.model === null) {
+    fail(recommendation.reason, EXIT.backend);
+  }
+  if (flags.get("dry-run") === true) {
+    const report = { ok: true, dry_run: true, recommendation };
+    if (flags.get("json") === true) out(JSON.stringify(report, null, 2));
+    else {
+      out(`platform: ${recommendation.target} (${recommendation.acceleration})`);
+      out(`default: ${recommendation.model} (${recommendation.tier}) — ${recommendation.reason}`);
+    }
+    return;
+  }
+
+  const native = await probeNativeRuntime();
+  if (!native.ok) fail(native.message ?? "local llama.cpp runtime is unavailable", EXIT.backend);
+  const loaded = loadConfig(home);
+  if (!loaded.ok) fail(loaded.message, EXIT.config);
+  const config = structuredClone(loaded.config);
+  config.local.enabled = true;
+  if (config.routing.policy === "hosted-only") config.routing.policy = "auto";
+  const path = saveConfig(home, config);
+
+  const existing = installedModels(home).find((model) => model.id === recommendation.model);
+  let pull: PullResult | undefined;
+  if (existing === undefined) {
+    let lastProgress = 0;
+    pull = await pullModel(home, recommendation.model, {
+      onProgress: (done, total) => {
+        if (flags.get("json") === true || Date.now() - lastProgress < 1_000) return;
+        lastProgress = Date.now();
+        const suffix = total === null ? "" : ` / ${formatBytes(total)}`;
+        err(`downloading ${recommendation.model}: ${formatBytes(done)}${suffix}`);
+      },
+    });
+    if (!pull.ok) {
+      if (flags.get("json") === true) {
+        out(JSON.stringify({ ok: false, recommendation, config_path: path, pull }, null, 2));
+      } else {
+        err(`sysone: ${pull.message ?? "default model download failed"}`);
+      }
+      process.exit(EXIT.backend);
+    }
+  }
+
+  const report = {
+    ok: true,
+    dry_run: false,
+    recommendation,
+    native: {
+      backend: native.backend ?? "cpu",
+      gpu_offloading: native.gpu_offloading ?? false,
+    },
+    config_path: path,
+    model: {
+      id: recommendation.model,
+      already_installed: existing !== undefined,
+      ...(existing === undefined ? { path: pull?.path, bytes: pull?.bytes } : { bytes: existing.bytes }),
+    },
+  };
+  if (flags.get("json") === true) out(JSON.stringify(report, null, 2));
+  else {
+    out(`platform: ${recommendation.target} (${native.backend ?? "cpu"})`);
+    out(`${recommendation.model}: ${existing === undefined ? "installed" : "already installed"}`);
+    out("local setup ready; run `sysone up`");
+  }
+}
+
+function cmdJev(home: string, args: ParsedArgs): void {
+  const [sub] = args.positional.slice(1);
+  const loaded = loadConfig(home);
+  if (!loaded.ok) fail(loaded.message, EXIT.config);
+  const credentialPresent = (process.env[loaded.config.hosted.api_key_env]?.length ?? 0) > 0;
+  if (sub === "status") {
+    const report = {
+      enabled: loaded.config.hosted.enabled,
+      credential_env: loaded.config.hosted.api_key_env,
+      credential_present: credentialPresent,
+      active: loaded.config.hosted.enabled && credentialPresent,
+      model: loaded.config.hosted.model,
+      base_url: loaded.config.hosted.base_url,
+    };
+    if (args.flags.get("json") === true) out(JSON.stringify(report, null, 2));
+    else {
+      out(`Jev: ${report.active ? "active" : report.enabled ? "enabled, credential missing" : "disabled"}`);
+      out(`model: ${report.model}`);
+      out(`credential: ${report.credential_env} (${credentialPresent ? "present" : "missing"})`);
+    }
+    return;
+  }
+  if (sub === "enable") {
+    if (!credentialPresent) {
+      fail(`set ${loaded.config.hosted.api_key_env} in the environment before enabling Jev`, EXIT.config);
+    }
+    const next = structuredClone(loaded.config);
+    next.hosted.enabled = true;
+    next.routing.policy = "auto";
+    const path = saveConfig(home, next);
+    const report = { enabled: true, active: true, model: next.hosted.model, config_path: path };
+    if (args.flags.get("json") === true) out(JSON.stringify(report, null, 2));
+    else {
+      out(`Jev enabled for ${next.hosted.model} (${path})`);
+      out("restart the gateway if it was started before the credential was exported");
+    }
+    return;
+  }
+  if (sub === "disable") {
+    const next = structuredClone(loaded.config);
+    next.hosted.enabled = false;
+    if (next.routing.policy === "hosted-only") next.routing.policy = "auto";
+    const path = saveConfig(home, next);
+    const report = { enabled: false, active: false, config_path: path };
+    if (args.flags.get("json") === true) out(JSON.stringify(report, null, 2));
+    else out(`Jev disabled (${path})`);
+    return;
+  }
+  fail("usage: sysone jev <status|enable|disable> [--json]", EXIT.usage);
 }
 
 async function cmdUp(home: string, flags: Map<string, string | boolean>): Promise<void> {
@@ -274,7 +413,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
     out(`  ${backend.name} (${backend.kind})${size}: ${marker} — ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
-    out("  no backends configured; run `sysone pull`, set TYPESAFE_API_KEY, or `sysone backend add`");
+    out("  no backends configured; run `sysone setup`, `sysone jev enable`, or `sysone backend add`");
   }
 }
 
@@ -503,56 +642,33 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
       return;
     }
     case "add": {
-      const profile = flagString(args.flags, "profile");
-      let backend: LocalBackendConfig;
-      if (profile !== undefined) {
-        if (
-          flagString(args.flags, "model") !== undefined ||
-          flagNumber(args.flags, "size-b") !== undefined ||
-          flagNumber(args.flags, "cost-rank") !== undefined
-        ) {
-          fail("profile model, size, and capabilities are pinned; only --name and --url may be overridden", EXIT.usage);
-        }
-        const resolved = resolveBackendProfile(profile, {
-          ...(flagString(args.flags, "name") === undefined
-            ? {}
-            : { name: flagString(args.flags, "name") as string }),
-          ...(flagString(args.flags, "url") === undefined
-            ? {}
-            : { base_url: flagString(args.flags, "url") as string }),
-        });
-        if (!resolved.ok) fail(resolved.message, EXIT.usage);
-        backend = resolved.backend;
-      } else {
-        const name = flagString(args.flags, "name");
-        const url = flagString(args.flags, "url");
-        const model = flagString(args.flags, "model");
-        if (name === undefined || url === undefined || model === undefined) {
-          fail("usage: sysone backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
-        }
-        const size = flagNumber(args.flags, "size-b");
-        const costRank = flagNumber(args.flags, "cost-rank");
-        const parsed = localBackendSchema.safeParse({
-          name,
-          base_url: url,
-          model,
-          ...(size === undefined ? {} : { size_b: size }),
-          ...(costRank === undefined ? {} : { cost_rank: costRank }),
-          enabled: true,
-        });
-        if (!parsed.success) {
-          const issue = parsed.error.issues[0];
-          fail(`invalid backend: ${issue?.path.join(".") ?? ""} ${issue?.message ?? ""}`, EXIT.usage);
-        }
-        backend = parsed.data;
+      const name = flagString(args.flags, "name");
+      const url = flagString(args.flags, "url");
+      const model = flagString(args.flags, "model");
+      if (name === undefined || url === undefined || model === undefined) {
+        fail("usage: sysone backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
       }
-      if (loaded.config.backends.some((candidate) => candidate.name === backend.name)) {
-        fail(`backend ${backend.name} already exists`, EXIT.usage);
+      if (loaded.config.backends.some((candidate) => candidate.name === name)) {
+        fail(`backend ${name} already exists`, EXIT.usage);
+      }
+      const size = flagNumber(args.flags, "size-b");
+      const costRank = flagNumber(args.flags, "cost-rank");
+      const parsed = localBackendSchema.safeParse({
+        name,
+        base_url: url,
+        model,
+        ...(size === undefined ? {} : { size_b: size }),
+        ...(costRank === undefined ? {} : { cost_rank: costRank }),
+        enabled: true,
+      });
+      if (!parsed.success) {
+        const issue = parsed.error.issues[0];
+        fail(`invalid backend: ${issue?.path.join(".") ?? ""} ${issue?.message ?? ""}`, EXIT.usage);
       }
       const next = structuredClone(loaded.config);
-      next.backends.push(backend);
+      next.backends.push(parsed.data);
       const path = saveConfig(home, next);
-      out(`backend ${backend.name} added (${path})`);
+      out(`backend ${name} added (${path})`);
       return;
     }
     case "check": {
@@ -606,6 +722,12 @@ async function main(): Promise<void> {
   }
 
   switch (command) {
+    case "setup":
+      await cmdSetup(home, args.flags);
+      return;
+    case "jev":
+      cmdJev(home, args);
+      return;
     case "up":
       await cmdUp(home, args.flags);
       return;
