@@ -1,7 +1,8 @@
 import { chmodSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const PACKAGE_ROOT = new URL("..", import.meta.url).pathname;
+const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TYPESCRIPT_CLI = join(PACKAGE_ROOT, "node_modules/typescript/bin/tsc");
 
 async function run(command: string[]): Promise<void> {
