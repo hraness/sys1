@@ -12,6 +12,12 @@ export const HOSTED_BACKEND_NAME = "typesafe";
 const MAX_PROBE_BYTES = 1_048_576;
 const MAX_RESPONSE_BYTES = 4_194_304;
 
+function trimTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === "/") end -= 1;
+  return value.slice(0, end);
+}
+
 function boundedSignal(timeoutMs: number, signal?: AbortSignal): AbortSignal {
   const timeout = AbortSignal.timeout(timeoutMs);
   return signal === undefined ? timeout : AbortSignal.any([signal, timeout]);
@@ -121,7 +127,7 @@ export function runtimeBackends(
         models: [config.hosted.model],
         size_b: null,
         cost_rank: 0,
-        base_url: config.hosted.base_url.replace(/\/+$/, ""),
+        base_url: trimTrailingSlashes(config.hosted.base_url),
         headers: { authorization: `Bearer ${apiKey}` },
         default_model: config.hosted.model,
       });
@@ -179,7 +185,7 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
               : { maxQuestions: local.capabilities.max_questions }),
           },
         }),
-    base_url: local.base_url.replace(/\/+$/, ""),
+    base_url: trimTrailingSlashes(local.base_url),
     headers: {},
     default_model: local.model,
   };

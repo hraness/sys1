@@ -10,6 +10,7 @@ import {
   saveConfig,
   setConfigValue,
   sys1Home,
+  type SettableKey,
 } from "../src/config.ts";
 import { clearPidFile, daemonStatus, readPidFile, writePidFile } from "../src/daemon.ts";
 
@@ -80,6 +81,13 @@ describe("config", () => {
 
     const bad = setConfigValue(DEFAULT_CONFIG, "routing.policy", "chaos");
     expect(bad.ok).toBe(false);
+  });
+
+  test("JavaScript callers cannot select inherited or prototype keys", () => {
+    for (const key of ["__proto__.polluted", "constructor.prototype", "toString"]) {
+      expect(setConfigValue(DEFAULT_CONFIG, key as SettableKey, "true").ok).toBe(false);
+    }
+    expect(Object.hasOwn(Object.prototype, "polluted")).toBe(false);
   });
 
   test("setConfigValue coerces port numbers", () => {

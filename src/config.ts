@@ -174,6 +174,9 @@ export function setConfigValue(
   key: SettableKey,
   rawValue: string,
 ): { ok: true; config: Sys1Config } | { ok: false; message: string } {
+  if (typeof key !== "string" || !Object.hasOwn(SETTABLE_KEYS, key)) {
+    return { ok: false, message: "unknown configuration key" };
+  }
   const schema = SETTABLE_KEYS[key];
   const parsed = schema.safeParse(rawValue);
   if (!parsed.success) {
@@ -182,6 +185,7 @@ export function setConfigValue(
   const next = structuredClone(config);
   const [section, field] = key.split(".") as [keyof Sys1Config, string];
   const target = next[section] as Record<string, unknown>;
-  target[field] = parsed.data;
+  // Define an own property rather than invoking any inherited setter.
+  Object.defineProperty(target, field, { value: parsed.data, writable: true, enumerable: true, configurable: true });
   return { ok: true, config: configSchema.parse(next) };
 }

@@ -35,31 +35,35 @@ interface StubOptions {
   limits?: { max_answers_per_question?: number; max_questions?: number };
 }
 
+function requestUrl(input: RequestInfo | URL): URL {
+  return new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
+}
+
 function stubFetch(options: StubOptions): typeof fetch {
   const hostedUp = options.hostedUp ?? true;
   const localUp = options.localUp ?? true;
   const localModels = options.localModels ?? ["openjev-4b"];
   const fn = async (input: RequestInfo | URL): Promise<Response> => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-    if (url.startsWith("https://api.typesafe.ai")) {
+    const url = requestUrl(input);
+    if (url.origin === "https://api.typesafe.ai") {
       if (!hostedUp) throw new Error("connect refused");
-      if (url.endsWith("/v1/models")) {
+      if (url.pathname === "/v1/models") {
         return Response.json({ data: [{ id: "jev-latest" }, { id: "jev-1.13.0" }] });
       }
-      if (url.endsWith("/v1/systemone")) {
+      if (url.pathname === "/v1/systemone") {
         return new Response(JEV_ANSWER, { headers: { "content-type": "application/json" } });
       }
     }
-    if (url.startsWith("http://127.0.0.1:18080")) {
+    if (url.origin === "http://127.0.0.1:18080") {
       if (!localUp) throw new Error("connect refused");
-      if (url.endsWith("/v1/models")) {
+      if (url.pathname === "/v1/models") {
         return Response.json({ data: localModels.map((id) => ({ id })) });
       }
-      if (url.endsWith("/v1/limits")) {
+      if (url.pathname === "/v1/limits") {
         if (options.limits === undefined) return new Response("not found", { status: 404 });
         return Response.json(options.limits);
       }
-      if (url.endsWith("/v1/systemone")) {
+      if (url.pathname === "/v1/systemone") {
         return new Response(LOCAL_ANSWER, { headers: { "content-type": "application/json" } });
       }
     }
@@ -235,7 +239,7 @@ describe("gateway cancellation and redispatch boundaries", () => {
   function recordingFetch(postFn: (url: string, init: RequestInit) => Promise<Response>): typeof fetch {
     const discovery = stubFetch({});
     return (async (input: RequestInfo | URL, init?: RequestInit) => {
-      if (init?.method === "POST") return postFn(String(input), init);
+      if (init?.method === "POST") return postFn(requestUrl(input).href, init);
       return discovery(input, init);
     }) as unknown as typeof fetch;
   }
@@ -300,7 +304,7 @@ describe("gateway cancellation and redispatch boundaries", () => {
     let hostedCalls = 0;
     const forward = recordingFetch(async () => { posts += 1; return new Response(JEV_ANSWER); });
     const fetchFn = (async (input: RequestInfo | URL, init?: RequestInit) => {
-      if (String(input).startsWith("https://api.typesafe.ai")) hostedCalls += 1;
+      if (requestUrl(input).origin === "https://api.typesafe.ai") hostedCalls += 1;
       return forward(input, init);
     }) as typeof fetch;
     const handle = createFetchHandler({
