@@ -4,7 +4,7 @@ import {
   runtimeBackends,
   type RuntimeBackend,
 } from "./backends.ts";
-import { configSchema, type Sys1Config } from "./config.ts";
+import { configSchema, isLoopbackHost, type Sys1Config } from "./config.ts";
 import { HttpBodyLimitError, readBoundedText } from "./http.ts";
 import {
   LocalRunner,
@@ -376,6 +376,51 @@ export interface RunningGateway {
   stop: () => Promise<void>;
 }
 
+/** Native HTTP clients only; embedded callers retain their own admission policy. */
+function networkAdmission(request: Request): Response | null {
+  const url = new URL(request.url);
+  const hostname = url.hostname.startsWith("[") ? url.hostname.slice(1, -1) : url.hostname;
+  if (!isLoopbackHost(hostname) || url.username !== "" || url.password !== "") {
+    return json(errorBody("request_host_forbidden", "gateway requires a loopback request authority"), 403);
+  }
+  const host = request.headers.get("host");
+  if (host !== null) {
+    try {
+      const authority = new URL(`${url.protocol}//${host}`);
+      if (authority.origin !== url.origin || authority.username !== "" || authority.password !== "" ||
+          authority.pathname !== "/" || authority.search !== "" || authority.hash !== "") {
+        return json(errorBody("request_host_forbidden", "request Host must match its loopback authority"), 403);
+      }
+    } catch {
+      return json(errorBody("request_host_forbidden", "request Host is invalid"), 403);
+    }
+  }
+  // Node's fetch sends Sec-Fetch-Mode too, so that header alone is not a
+  // browser indicator. Browsers supply Origin or Sec-Fetch-Site; none are
+  // admitted because this daemon does not host or authorize a browser UI.
+  if (request.headers.has("origin") || request.headers.has("sec-fetch-site")) {
+    return json(errorBody("browser_request_forbidden", "browser requests are not supported by the local gateway"), 403);
+  }
+  if (request.method === "POST" && url.pathname === "/v1/systemone" &&
+      request.headers.get("content-type")?.split(";", 1)[0]?.trim().toLowerCase() !== "application/json") {
+    return json(errorBody("unsupported_media_type", "decision requests require application/json"), 415);
+  }
+  return null;
+}
+
+/** Network admission wrapper, shared by the listener and boundary tests. */
+export function createNetworkFetchHandler(deps: GatewayDeps): (req: Request) => Promise<Response> {
+  const handler = createFetchHandler(deps);
+  return async (request: Request): Promise<Response> => {
+    const rejected = networkAdmission(request);
+    if (rejected !== null) {
+      void request.body?.cancel().catch(() => {});
+      return rejected;
+    }
+    return handler(request);
+  };
+}
+
 export function startGateway(deps: GatewayDeps & { port?: number }): RunningGateway {
   // The module API must preserve the CLI's loopback boundary for JavaScript
   // callers too; TypeScript annotations alone do not validate runtime values.
@@ -393,7 +438,7 @@ export function startGateway(deps: GatewayDeps & { port?: number }): RunningGate
           ),
           needleTimeoutMs: config.gateway.request_timeout_ms,
         }));
-  const handler = createFetchHandler({ ...deps, config, ...(localRunner === undefined ? {} : { localRunner }) });
+  const handler = createNetworkFetchHandler({ ...deps, config, ...(localRunner === undefined ? {} : { localRunner }) });
   const server = Bun.serve({
     hostname: config.gateway.host,
     port: deps.port ?? config.gateway.port,

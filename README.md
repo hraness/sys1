@@ -107,8 +107,11 @@ clients in other languages can use the same daemon without a JavaScript module.
 
 Use `model: "auto"` or omit `model` to allow local selection. A hardcoded
 `jev-latest` remains a model pin and cannot select an unrelated local model.
-Local calls need no hosted API key; hosted activation stays explicit. A browser
-or remote server cannot reach a user's machine through its own loopback address.
+Local calls need no hosted API key; hosted activation stays explicit. A remote
+server's loopback address points to that server. A browser running on the user's
+machine can address local services, so Sys1's network listener rejects browser
+origins and Fetch Metadata site headers, requires a loopback request authority,
+and accepts decision POSTs only as `application/json`.
 
 Start with an opt-in, non-authoritative pilot. Compare decisions on the
 application's representative fixtures and record backend/adapter identity,
@@ -457,8 +460,13 @@ to keep context state isolated and residency bounded. GGUF inference lives in
 an owned worker process; abort, timeout, or disposal terminates and collects
 that worker before the next request can reuse the engine slot.
 
-The decision endpoint accepts loopback binds only and has no authentication;
-use it only on a trusted local machine. Daemon shutdown uses a per-instance
+The decision endpoint accepts loopback binds only and has no application
+authentication. Network admission blocks browser-originated decision dispatch and
+non-loopback Host authorities, but it does not authenticate local processes.
+Any process that can connect locally can dispatch decisions using the gateway's
+enabled backends and credentials; use it only on a trusted local machine.
+The in-process `createRouter`/`createFetchHandler` surface leaves admission to
+its owning application. Daemon shutdown uses a per-instance
 secret from its private pid file and an authenticated control endpoint. Sys1
 never signals an arbitrary PID read from that file.
 

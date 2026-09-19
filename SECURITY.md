@@ -8,6 +8,16 @@ a listener escaping loopback, a model bypassing SHA-256/GGUF/store admission,
 an immutable release carrying bytes other than the checked artifact, or input
 exceeding its documented bounds — are the issues we want reported.
 
+The network listener accepts loopback request authorities only, checks Host
+against that authority, rejects Origin and browser Sec-Fetch-Site headers, and
+requires `application/json` for decision POSTs. It does not enable CORS or a
+browser UI. These checks block browser-originated decision dispatch and DNS
+rebinding; they are not authentication for local processes. Health and model
+discovery do not require authentication. A native process on the same
+machine can use every backend the gateway has enabled, including hosted
+credentials. Embedded handlers have no network listener and rely on their
+owning application's admission policy.
+
 ## Reporting
 
 Open a private security advisory on the GitHub repository
