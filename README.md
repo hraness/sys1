@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.3.1/hraness-sysone-0.3.1.tgz
+  https://github.com/hraness/sysone/releases/download/v0.3.2/hraness-sysone-0.3.2.tgz
 sysone doctor
 ```
 
