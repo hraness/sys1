@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.4.0/hraness-sysone-0.4.0.tgz
+  https://github.com/hraness/sysone/releases/download/v0.5.0/hraness-sysone-0.5.0.tgz
 sysone doctor
 ```
 
@@ -77,59 +77,92 @@ sysone config set routing.policy auto
 reachable, then falls back to the smallest installed or registered local model.
 The credential stays in the environment; sysone never writes it to disk.
 
-## Local GGUF models
+## Local models
 
-`sysone pull` manages GGUF files under `~/.sysone/models` (or
+`sysone pull` manages model artifacts under `~/.sysone/models` (or
 `$SYSONE_HOME/models`). Downloads stream to a temporary file, enforce an 8 GiB
-ceiling, verify SHA-256, validate the bounded GGUF header/version/counts, and
-only then atomically enter the model store. Manifest filenames cannot escape
-the store, symbolic-link weights are not admitted, and the daemon never
-downloads weights implicitly.
+ceiling, verify SHA-256, run a per-kind structural validation, and only then
+atomically enter the model store. Manifest filenames cannot escape the store,
+symbolic-link weights are not admitted, and the daemon never downloads weights
+implicitly.
 
 ```sh
 sysone pull --list
 sysone pull qwen3-0.6b
-sysone pull qwen3-1.7b
+sysone pull cua-s1-forms
+sysone pull needle3
 sysone model list
 sysone model verify qwen3-0.6b
 ```
 
-The curated registry currently contains:
+The curated registry contains three artifact kinds:
 
-| Model | Quantization | Download | Role |
+| Model | Kind | Download | Role |
 | --- | --- | ---: | --- |
-| `qwen3-0.6b` | Q4_0 | 365 MiB | smallest default fallback |
-| `qwen3-1.7b` | Q4_K_M | 1.03 GiB | stronger laptop-local tier |
+| `qwen3-0.6b` | `gguf` | 365 MiB | smallest default fallback |
+| `qwen3-1.7b` | `gguf` | 1.03 GiB | stronger laptop-local tier |
+| `cua-s1-forms` | `scorer` | 2.8 MiB | CUA-S1 form-action option scorer (specialist) |
+| `needle3` | `needle` | 34 MiB + engine | Cactus Needle extraction model (specialist) |
 
-Both are pinned to the publisher's Hugging Face LFS SHA-256. Weight licenses
-and terms remain those of their publishers; weights are not included in the
-sysone package.
+All entries are pinned to the publisher's Hugging Face LFS SHA-256. Weight
+licenses and terms remain those of their publishers; weights are not included
+in the sysone package.
 
-An unlisted public Hugging Face model can be installed explicitly:
+### Specialists
 
-```sh
-sysone pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
+`scorer` and `needle` models are **specialists**: they never absorb unpinned
+fallback traffic. Only `gguf` models serve `auto`/`prefer-local` requests.
+To use a specialist, pin it explicitly:
+
+```json
+{ "model": "local-cua-s1-forms/cua-s1-forms", "state": "...", "questions": { ... } }
 ```
 
-For builtin models, sysone renders a bounded question prompt, evaluates the
-full first-token vocabulary distribution with llama.cpp, and sums probability
-mass over constrained answer labels. Choice and score use unique one-character
-labels to avoid ambiguous multi-token option names. Builtin inference supports
-up to 35 choice options; hosted and external backends retain the protocol's
-255-option limit. Builtin answers use the official Jev wire shapes:
+Each kind runs through a different adapter, disclosed in the
+`x-sysone-local-adapter` response header:
+
+- `generic-gguf` — llama.cpp first-token scoring (below);
+- `option-scorer` — the 706K-parameter CUA-S1 checkpoint, ported to pure
+  TypeScript. A byte-level option-attention transformer scores up to 26
+  options per question in a single forward pass — real per-option
+  distributions, ~3 MB resident, no native runtime. Its training domain is
+  web-form actions (`fill`/`check`/`click`/`skip`), so pin it for
+  form-shaped state→action decisions;
+- `needle-extract` — the Cactus Needle `.cact` blob plus a platform engine
+  binary, spawned as one bounded process per request with telemetry
+  disabled. Questions become arguments of one `evaluate` tool call. Needle
+  returns values plus a calibrated turn confidence rather than per-option
+  probabilities, so `probabilities` are a disclosed approximation
+  (confidence on the pick, the remainder split uniformly).
+
+### Generic GGUF adapter
+
+For builtin GGUF models, sysone renders a bounded question prompt, evaluates
+the full first-token vocabulary distribution with llama.cpp, and sums
+probability mass over constrained answer labels. Choice and score use unique
+one-character labels to avoid ambiguous multi-token option names. Builtin
+inference supports up to 35 options per question; hosted and external
+backends retain the protocol's 255-option limit. Builtin answers use the
+official Jev wire shapes:
 
 - Noul returns only `type` and probability-of-yes `noul`;
 - Choice returns `choice`, keyed `probabilities`, and `confidence`;
 - Score returns a zero-based probability-weighted fractional `score`, keyed
   `legend`, keyed `probabilities`, and `confidence`.
 
-Generic-adapter quality signals stay outside those answer objects:
-`x-sysone-local-min-coverage` is the least total vocabulary mass assigned to
-allowed labels, and `x-sysone-local-min-concentration` is the least distribution
-concentration in the batch. Low coverage means the model did not cleanly follow
-the decision instruction. These are useful local signals, not a calibration
-guarantee. Use hosted Jev or a qualified System One-specific backend where
-calibrated semantics are required.
+Adapter quality signals stay outside those answer objects:
+`x-sysone-local-min-coverage` is the least total probability mass assigned to
+allowed labels, and `x-sysone-local-min-concentration` is the least
+distribution concentration in the batch. Low coverage means the model did not
+cleanly follow the decision instruction. These are useful local signals, not
+a calibration guarantee. Use hosted Jev or a qualified System One-specific
+backend where calibrated semantics are required.
+
+An unlisted public Hugging Face GGUF can be installed explicitly:
+
+```sh
+sysone pull 'hf:owner/repository:path/model.gguf' --sha256 <64-hex-digest>
+```
 
 ## The endpoint
 
@@ -139,10 +172,10 @@ calibrated semantics are required.
 | `GET /v1/models` | List model ids, backend names, kinds, and reachability |
 | `GET /healthz` | Report daemon liveness and version |
 
-Responses carry `x-sysone-backend` and `x-sysone-attempts`; builtin GGUF
-responses also carry the local diagnostic headers above. Any HTTP response from
-a remote backend, including 4xx or 5xx, is definitive. Only a transport failure
-may re-dispatch, at most once, and never for a pinned `backend/model`.
+Responses carry `x-sysone-backend` and `x-sysone-attempts`; builtin responses
+also carry the local adapter and diagnostic headers above. Any HTTP response
+from a remote backend, including 4xx or 5xx, is definitive. Only a transport
+failure may re-dispatch, at most once, and never for a pinned `backend/model`.
 
 `state`, `instructions`, and criterion descriptions accept text, JSON objects,
 JSON arrays, or `null` where the official Jev contract permits it. The public
@@ -192,6 +225,17 @@ backend name. Requests can pin either a model id or an exact backend/model:
 - `"model": "local-qwen3-0.6b/qwen3-0.6b"` pins the builtin runner;
 - `"model": "openjev/openjev-4b"` pins a registered HTTP backend.
 
+Selection is capability-aware. Each request's needs — its largest option
+count and total question count — are compared against the backend's published
+limits. A backend the request exceeds is skipped; when no configured backend
+can serve the request at all the gateway answers `422 request_unsupported`
+rather than dispatching a request that would fail downstream. Builtin
+backends publish their adapter limits (`generic-gguf` 35 options,
+`option-scorer` 26 options, `needle-extract` 64 questions); remote backends
+are probed at `GET /v1/limits` (openjev-style `max_answers_per_question` and
+`max_questions`). A backend that publishes nothing is treated as unbounded —
+missing limits never mean zero capability.
+
 ## External System One backends
 
 Any service implementing `POST /v1/systemone` and `GET /v1/models` can join the
@@ -205,6 +249,18 @@ sysone backend add \
   --size-b 4
 ```
 
+[Bespoke Nimble](https://github.com/bespokelabsai/nimble) is a drop-in example:
+its public deployment speaks the same wire protocol and publishes its limits
+(2–26 options, ≤64 questions), which sysone picks up automatically:
+
+```sh
+sysone backend add \
+  --name nimble \
+  --url https://bespokelabs--nimble-sglang-nimble.us-west.modal.direct \
+  --model nimble-latest \
+  --size-b 9
+```
+
 These processes remain operator-owned. sysone bounds probes and forwarding but
 does not manage their credentials, weights, or lifecycle.
 
@@ -212,9 +268,10 @@ does not manage their credentials, weights, or lifecycle.
 
 `sysone doctor` is a bounded, machine-readable readiness check. It verifies the
 Bun floor, state-directory access, config, native llama.cpp runtime/backend,
-manifest, every admitted GGUF header and byte count, stale/orphan store files,
-routing candidates, and daemon ownership. It does not hash entire model files;
-use `sysone model verify MODEL` for exact SHA-256 verification.
+manifest, every admitted artifact (GGUF header, scorer checkpoint structure,
+`.cact` header, engine companion presence/byte count), stale/orphan store
+files, routing candidates, and daemon ownership. It does not hash entire model
+files; use `sysone model verify MODEL` for exact SHA-256 verification.
 
 ```sh
 sysone doctor

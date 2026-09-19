@@ -33,6 +33,13 @@ const modelsResponseSchema = z.union([
   z.array(z.union([z.string(), z.object({ id: z.string() })])),
 ]);
 
+const limitsResponseSchema = z
+  .object({
+    max_answers_per_question: z.number().int().positive().optional(),
+    max_questions: z.number().int().positive().optional(),
+  })
+  .loose();
+
 export function extractModelIds(body: unknown): string[] {
   const parsed = modelsResponseSchema.safeParse(body);
   if (!parsed.success) return [];
@@ -89,6 +96,8 @@ export function runtimeBackends(
         models: candidate.models,
         size_b: candidate.size_b,
         cost_rank: candidate.cost_rank,
+        specialist: candidate.specialist,
+        capabilities: candidate.capabilities,
         base_url: "",
         headers: {},
         default_model: candidate.model.id,
@@ -114,6 +123,39 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
     headers: {},
     default_model: local.model,
   };
+}
+
+/**
+ * Best-effort `GET /v1/limits`: backends that publish openjev-style request
+ * limits (e.g. Nimble's 26-option cap) get those merged into their routing
+ * capabilities. Any failure leaves capabilities untouched — an unpublished
+ * limit means unbounded, not zero.
+ */
+async function probeLimits(
+  backend: RuntimeBackend,
+  timeoutMs: number,
+  fetchFn: typeof fetch,
+): Promise<void> {
+  try {
+    const response = await fetchFn(`${backend.base_url}/v1/limits`, {
+      method: "GET",
+      headers: { accept: "application/json", ...backend.headers },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!response.ok) return;
+    const parsed = limitsResponseSchema.safeParse(await response.json());
+    if (!parsed.success) return;
+    const caps = backend.capabilities ?? {};
+    if (parsed.data.max_answers_per_question !== undefined) {
+      caps.maxOptions = parsed.data.max_answers_per_question;
+    }
+    if (parsed.data.max_questions !== undefined) {
+      caps.maxQuestions = parsed.data.max_questions;
+    }
+    backend.capabilities = caps;
+  } catch {
+    // limits probing is advisory only
+  }
 }
 
 export async function probeBackend(
@@ -148,6 +190,7 @@ export async function probeBackend(
     }
     const body: unknown = await response.json();
     const models = extractModelIds(body);
+    await probeLimits(backend, timeoutMs, fetchFn);
     return {
       available: true,
       models: models.length > 0 ? models : backend.models,

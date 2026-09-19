@@ -2,6 +2,7 @@ import {
   accessSync,
   constants,
   existsSync,
+  lstatSync,
   readdirSync,
   statSync,
 } from "node:fs";
@@ -14,7 +15,10 @@ import {
 import { daemonStatus, type DaemonState } from "./daemon.ts";
 import { probeNativeRuntime, type NativeRuntimeProbe } from "./local/engine.ts";
 import {
+  engineFilePath,
+  inspectCactFile,
   inspectGgufFile,
+  inspectScorerFile,
   loadManifestChecked,
   modelFilePath,
   modelsDir,
@@ -87,6 +91,33 @@ function stateDirectoryCheck(home: string): DoctorCheck {
   }
 }
 
+/** Per-kind structural check used by the models.files check. */
+function inspectModelFile(
+  home: string,
+  model: Manifest["models"][number],
+): { ok: boolean; bytes?: number; message?: string } {
+  const path = modelFilePath(home, model);
+  if (model.kind === "scorer") return inspectScorerFile(path);
+  if (model.kind === "needle") return inspectCactFile(path);
+  return inspectGgufFile(path);
+}
+
+/** Engine companion check for needle models; null means healthy. */
+function inspectEngineFile(home: string, model: Manifest["models"][number]): string | null {
+  const path = engineFilePath(home, model);
+  if (path === null) return null;
+  try {
+    const stats = lstatSync(path);
+    if (!stats.isFile() || stats.isSymbolicLink()) return "engine binary is not a regular file";
+    if (model.engine_bytes !== undefined && stats.size !== model.engine_bytes) {
+      return "engine byte count differs from the admitted manifest";
+    }
+    return null;
+  } catch {
+    return "engine binary is missing";
+  }
+}
+
 function modelChecks(home: string): {
   manifest: DoctorCheck;
   files: DoctorCheck;
@@ -111,11 +142,14 @@ function modelChecks(home: string): {
   const manifest: Manifest = loaded.manifest;
   const problems: { id: string; issue: string }[] = [];
   for (const model of manifest.models) {
-    const inspection = inspectGgufFile(modelFilePath(home, model));
+    const inspection = inspectModelFile(home, model);
     if (!inspection.ok) {
-      problems.push({ id: model.id, issue: boundedDetail(inspection.message, home) });
+      problems.push({ id: model.id, issue: boundedDetail(inspection.message ?? "inspection failed", home) });
     } else if (inspection.bytes !== model.bytes) {
       problems.push({ id: model.id, issue: "byte count differs from the admitted manifest" });
+    } else {
+      const engine = inspectEngineFile(home, model);
+      if (engine !== null) problems.push({ id: model.id, issue: engine });
     }
   }
 
@@ -128,10 +162,18 @@ function modelChecks(home: string): {
   if (existsSync(directory)) {
     try {
       const entries = readdirSync(directory, { withFileTypes: true }).slice(0, 257);
-      const admitted = new Set(manifest.models.map((model) => model.file));
+      const admitted = new Set(
+        manifest.models.flatMap((model) =>
+          model.engine_file === undefined ? [model.file] : [model.file, model.engine_file],
+        ),
+      );
       const stale = entries.filter((entry) => entry.name.endsWith(".download") || entry.name.endsWith(".tmp")).length;
       const orphaned = entries.filter(
-        (entry) => entry.isFile() && entry.name.endsWith(".gguf") && !admitted.has(entry.name),
+        (entry) =>
+          entry.isFile() &&
+          /\.(gguf|pt|cact|exe)$|^[^.]+\.engine$/.test(entry.name) &&
+          !entry.name.endsWith(".download") &&
+          !admitted.has(entry.name),
       ).length;
       const links = entries.filter((entry) => entry.isSymbolicLink()).length;
       if (entries.length > 256 || stale > 0 || orphaned > 0 || links > 0) {

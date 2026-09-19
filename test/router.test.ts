@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { chooseBackend, type BackendCandidate } from "../src/router.ts";
+import {
+  chooseBackend,
+  requestNeeds,
+  type BackendCandidate,
+} from "../src/router.ts";
 
 const hosted: BackendCandidate = {
   name: "typesafe",
@@ -115,5 +119,99 @@ describe("chooseBackend model routing", () => {
       { ...localBig, available: false },
     ]);
     expect(choice).toMatchObject({ ok: false, reason: "model_unavailable" });
+  });
+});
+
+describe("capability-aware routing", () => {
+  const nimble: BackendCandidate = {
+    name: "nimble",
+    kind: "local",
+    available: true,
+    models: ["nimble-latest"],
+    size_b: 9,
+    cost_rank: 1,
+    capabilities: { maxOptions: 26, maxQuestions: 64 },
+  };
+
+  const needsWide = { maxOptions: 40, questions: 2 };
+  const needsFit = { maxOptions: 20, questions: 2 };
+
+  test("a request over a published cap skips that backend", () => {
+    const choice = chooseBackend("prefer-local", undefined, [nimble, localSmall], needsWide);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "nanojev" } });
+  });
+
+  test("a fitting request still uses the capped backend", () => {
+    const choice = chooseBackend("prefer-local", "nimble-latest", [nimble, localSmall], needsFit);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "nimble" } });
+  });
+
+  test("pinning a backend past its cap reports request_unsupported", () => {
+    const choice = chooseBackend("auto", "nimble/nimble-latest", [nimble], needsWide);
+    expect(choice).toMatchObject({ ok: false, reason: "request_unsupported" });
+  });
+
+  test("a bare model over every server's cap reports request_unsupported", () => {
+    const choice = chooseBackend("auto", "nimble-latest", [hosted, nimble], needsWide);
+    expect(choice).toMatchObject({ ok: false, reason: "request_unsupported" });
+  });
+
+  test("missing caps mean unbounded", () => {
+    const choice = chooseBackend("auto", "nimble-latest", [localSmall], needsWide);
+    expect(choice).toMatchObject({ ok: false, reason: "unknown_model" });
+    const { capabilities: _dropped, ...uncapped } = nimble;
+    const unlimited = chooseBackend("prefer-local", "nimble-latest", [uncapped]);
+    expect(unlimited).toMatchObject({ ok: true, backend: { name: "nimble" } });
+  });
+});
+
+describe("specialist routing", () => {
+  const specialist: BackendCandidate = {
+    name: "local-cua-s1-forms",
+    kind: "local",
+    available: true,
+    models: ["cua-s1-forms"],
+    size_b: 0.0007,
+    cost_rank: 0,
+    specialist: true,
+    capabilities: { maxOptions: 26 },
+  };
+
+  test("unpinned requests never fall back to a specialist", () => {
+    const choice = chooseBackend("prefer-local", undefined, [specialist, localBig]);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "openjev" } });
+  });
+
+  test("a specialist is still reachable by bare model name", () => {
+    const choice = chooseBackend("prefer-local", "cua-s1-forms", [specialist, localBig]);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "local-cua-s1-forms" } });
+  });
+
+  test("a specialist is reachable by backend/model pin", () => {
+    const choice = chooseBackend("auto", "local-cua-s1-forms/cua-s1-forms", [hosted, specialist]);
+    expect(choice).toMatchObject({
+      ok: true,
+      backend: { name: "local-cua-s1-forms" },
+      reason: "pinned",
+    });
+  });
+
+  test("a specialist alone leaves unpinned requests with no backend", () => {
+    const choice = chooseBackend("local-only", undefined, [specialist]);
+    expect(choice).toMatchObject({ ok: false, reason: "no_backend_available" });
+  });
+});
+
+describe("requestNeeds", () => {
+  test("summarizes the largest criteria count and question count", () => {
+    const needs = requestNeeds({
+      state: "s",
+      questions: {
+        a: { type: "noul" },
+        b: { type: "choice", criteria: { x: null, y: null, z: null } },
+        c: { type: "score", criteria: ["l1", "l2", "l3", "l4"] },
+      },
+    });
+    expect(needs).toEqual({ maxOptions: 4, questions: 3 });
   });
 });

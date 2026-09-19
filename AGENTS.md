@@ -5,18 +5,29 @@
 - `src/config.ts` owns the `~/.sysone/config.json` schema, defaults, load/save,
   and the settable-key registry. `SYSONE_HOME` overrides the state directory.
 - `src/router.ts` owns backend selection as a pure function over probed
-  candidates — policy order, model pinning, cheapest-smallest local order.
+  candidates — policy order, model pinning, cheapest-smallest local order,
+  capability limits, and specialist exclusion from unpinned fallback.
 - `src/backends.ts` owns runtime backends: hosted Jev (credential from the
   environment only), configured HTTP services, installed builtin candidates,
-  bounded probing, and request forwarding.
+  bounded probing (including advisory `GET /v1/limits`), and request
+  forwarding.
 - `src/local/decide.ts` owns bounded generic-GGUF prompts and the pure mapping
   from vocabulary probability mass to System One answers.
 - `src/local/engine.ts` owns the lazy node-llama-cpp lifecycle and serialized
   first-token distribution evaluation.
-- `src/local/store.ts` owns the curated model registry, SHA-256-admitted GGUF
-  store, manifest, download limits, verification, and removal.
-- `src/local/runner.ts` owns builtin candidate enumeration, engine residency,
-  and local response assembly.
+- `src/local/torchckpt.ts` owns the bounded ZIP reader, restricted pickle
+  interpreter, and tensor materialization for `torch.save` checkpoints.
+- `src/local/scorer.ts` owns the pure-TypeScript CUA-S1 tiny/tinyx option
+  scorer: checkpoint config validation and the forward pass.
+- `src/local/needle.ts` owns the bounded per-request Cactus Needle engine
+  process: tools/prompt bounds, telemetry disabled, validated JSON turns.
+- `src/local/adapt.ts` owns the System One ↔ scorer/Needle contract mappings
+  and the disclosed needle-extract probability approximation.
+- `src/local/store.ts` owns the curated model registry, the SHA-256-admitted
+  multi-kind store (`gguf`, `scorer`, `needle` + engine companion), manifest,
+  download limits, structural validation, verification, and removal.
+- `src/local/runner.ts` owns builtin candidate enumeration, engine/scorer
+  residency, per-kind dispatch, and local response assembly.
 - `src/gateway.ts` owns the loopback HTTP surface (`POST /v1/systemone`,
   `GET /v1/models`, `GET /healthz`), request validation, and the bounded
   retry loop.
@@ -58,14 +69,22 @@
   stdout, diagnostics to stderr, closed exit codes.
 - Download weights only from an explicit `sysone pull`; cap size, require a
   trusted SHA-256, stream to a temporary file, and admit only after digest,
-  size, bounded GGUF structure, safe filename, and regular-file checks. Never
-  put weights in git, release artifacts, or ordinary CI.
+  size, per-kind bounded structure (GGUF header, restricted torch checkpoint,
+  `.cact` header/directory), safe filename, and regular-file checks. Needle
+  entries also verify their platform engine companion the same way. Never put
+  weights in git, release artifacts, or ordinary CI.
 - Treat generic-GGUF answers as an approximation, not calibrated Jev output.
-  Keep Noul/Choice/Score answer objects exactly Jev-compatible; expose adapter
-  coverage and concentration only in `x-sysone-local-*` headers. Do not make
-  stronger model-quality claims without checkpoint-specific qualification.
+  Scorer and needle adapters disclose their contracts via `x-sysone-local-*`
+  adapter headers; needle probabilities are a confidence-derived
+  approximation, not per-option distributions. Keep Noul/Choice/Score answer
+  objects exactly Jev-compatible. Do not make stronger model-quality claims
+  without checkpoint-specific qualification.
 - Keep local inference lazy, per-model serialized, cancellation-bounded, and
-  residency-capped. Dispose native contexts on eviction and shutdown.
+  residency-capped. Needle runs one bounded process per request with
+  telemetry disabled. Dispose native contexts on eviction and shutdown.
+- Specialist models (scorer, needle) never receive unpinned fallback traffic;
+  honor published backend capability limits (`/v1/limits`) as advisory, and
+  fail over-capability requests closed as `request_unsupported`.
 - Keep operator-registered HTTP runners separately owned; never mutate their
   weights, credentials, or process lifecycle.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
