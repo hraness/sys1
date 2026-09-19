@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/hraness/site-footer",
+    "commit": "3f29aaa1116205b86a0a65d779120532aeb2cc5d",
+    "version": "0.15.0"
+  },
+  "files": {
+    "stylex.css": {
+      "path": "dist/stylex.css",
+      "sha256": "5d44c8313b457e00e877cc10734b4166dcfd8cde1096eef23914a33e06f8e92b",
+      "bytes": 27340
+    },
+    "LICENSE": {
+      "path": "LICENSE",
+      "sha256": "defe80a70685c1a690b2d904941cb837f9a0d6e9f568a41acb5b2770a90d2549",
+      "bytes": 1065
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "sha256": "c557d18a65eb3497a68e2e897c8f57687dc211b675c043583821bf1adcec0e9a",
+      "bytes": 682
+    }
+  },
+  "renderer": {
+    "path": "dist/index.js",
+    "sha256": "cafe2c96c4c240d74ca4d6973b73434d1e603656a1f18beab989137bdbb17937",
+    "options": {
+      "mailingList": {
+        "kind": "none"
+      },
+      "placement": "flow"
+    },
+    "output": {
+      "sha256": "4a76718c3372a46e9d68942029cbdf1e67f331de5771bcb728c7d809ed419699",
+      "bytes": 7947
+    },
+    "adapter": {
+      "path": "adapt-static-footer.mjs",
+      "sha256": "8237cb828fb623f156fc544513d420d05648a447f846916997d51abe507ebb2a",
+      "removes": "[data-slot=\"hraness-cookie-consent\"]",
+      "reason": "The pinned renderer has no consent opt-out. Sys1 configures no consent runtime; omit the inactive action and copy."
+    }
+  }
+}

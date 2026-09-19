@@ -13,6 +13,13 @@ an ordered level. They fit routing, guardrail, review, and triage decisions
 inside agent loops. Sys1 gives every local agent the same endpoint regardless
 of which model answers.
 
+Sys1 complements [OpenJev](https://github.com/razorback16/openjev) by routing
+its common System One decision API; OpenJev's image, chat, and advanced sampling
+extensions are outside Sys1's contract. The optional
+[CUA-S1 forms checkpoint](https://huggingface.co/cua-ai/cua-s1-forms) runs through
+Sys1's TypeScript scorer as a form-action specialist. This checkpoint adapter
+does not include Cua Driver or desktop execution.
+
 ## Install
 
 Requires Bun 1.3.14 or newer. The canonical package is the SHA-256-listed
@@ -143,7 +150,7 @@ The pinned llama.cpp runtime selects the best available backend automatically:
 
 | Package target | Runtime preference |
 | --- | --- |
-| macOS ARM64 | Metal, then CPU |
+| macOS ARM64 | Metal (the pinned runtime's only automatic selection) |
 | macOS x64 | CPU |
 | Linux x64 | CUDA, Vulkan, then CPU |
 | Linux ARM64 | CPU |
@@ -359,7 +366,7 @@ be unique; `typesafe` and `local-*` are reserved for managed candidates. Request
 
 - `"model": "qwen3-0.6b"` selects any backend serving that id;
 - `"model": "local-qwen3-0.6b/qwen3-0.6b"` pins the builtin runner;
-- `"model": "openjev/openjev-4b"` pins a registered HTTP backend.
+- `"model": "openjev/openjev-latest"` pins a registered HTTP backend that advertises that alias.
 
 Selection is capability-aware. Each request's needs — its largest option
 count and total question count — are compared against the backend's published
@@ -376,14 +383,16 @@ mean zero capability.
 ## External System One backends
 
 Any service implementing `POST /v1/systemone` and `GET /v1/models` can join the
-same router:
+same router. For an existing OpenJev server, first inspect its advertised model
+IDs. The example uses OpenJev's documented `openjev-latest` alias; replace it if
+your server advertises a different ID:
 
 ```sh
+curl http://127.0.0.1:8080/v1/models
 sys1 backend add \
   --name openjev \
   --url http://127.0.0.1:8080 \
-  --model openjev-4b \
-  --size-b 4
+  --model openjev-latest
 ```
 
 Before routing agents to an operator backend, qualify its discovery, limits,

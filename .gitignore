@@ -16,3 +16,6 @@ artifacts/
 *.engine
 *.engine.download
 .env*
+
+# Local design review captures; durable design context remains tracked.
+.impeccable/review/
