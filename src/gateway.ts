@@ -9,6 +9,7 @@ import {
   LocalRunner,
   defaultEngineFactory,
   type DecideResult,
+  type LocalAdapter,
   type LocalQuestionDiagnostic,
 } from "./local/runner.ts";
 import {
@@ -18,9 +19,9 @@ import {
   systemOneRequestSchema,
   type SystemOneRequest,
 } from "./protocol.ts";
-import { chooseBackend } from "./router.ts";
+import { chooseBackend, requestNeeds } from "./router.ts";
 
-export const SYSONE_VERSION = "0.4.0";
+export const SYSONE_VERSION = "0.5.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -65,6 +66,7 @@ function forwardModel(requested: string | undefined, backend: RuntimeBackend): s
 }
 
 function localDiagnosticHeaders(
+  adapter: LocalAdapter | undefined,
   diagnostics: Record<string, LocalQuestionDiagnostic> | undefined,
 ): Record<string, string> {
   const values = diagnostics === undefined ? [] : Object.values(diagnostics);
@@ -72,7 +74,7 @@ function localDiagnosticHeaders(
   const concentration =
     values.length === 0 ? 0 : Math.min(...values.map((value) => value.concentration));
   return {
-    "x-sysone-local-adapter": "generic-gguf",
+    "x-sysone-local-adapter": adapter ?? "generic-gguf",
     "x-sysone-local-min-coverage": coverage.toFixed(3),
     "x-sysone-local-min-concentration": concentration.toFixed(3),
   };
@@ -92,6 +94,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
           config.local.context_tokens,
           config.local.eval_timeout_ms,
         ),
+        needleTimeoutMs: config.gateway.request_timeout_ms,
       });
     }
     return runner;
@@ -197,14 +200,20 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
 
     const policy = config.routing.policy;
     const pinned = body.model !== undefined && body.model.includes("/");
+    const needs = requestNeeds(body);
     let remaining = backends;
     let lastTransport: string | null = null;
 
     for (let attempt = 0; attempt < MAX_ATTEMPTS && remaining.length > 0; attempt += 1) {
-      const choice = chooseBackend(policy, body.model, remaining);
+      const choice = chooseBackend(policy, body.model, remaining, needs);
       if (!choice.ok) {
         if (lastTransport !== null && choice.reason === "no_backend_available") break;
-        const status = choice.reason === "unknown_model" ? 404 : 503;
+        const status =
+          choice.reason === "unknown_model"
+            ? 404
+            : choice.reason === "request_unsupported"
+              ? 422
+              : 503;
         return json(errorBody(choice.reason, choice.detail), status);
       }
       const backend = choice.backend;
@@ -226,7 +235,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
                 status: 200,
                 body: JSON.stringify(decided.response),
                 content_type: "application/json",
-                extra_headers: localDiagnosticHeaders(decided.diagnostics),
+                extra_headers: localDiagnosticHeaders(decided.adapter, decided.diagnostics),
               }
             : { kind: "transport" as const, detail: decided.error?.type ?? "local_failed" };
         }
@@ -297,6 +306,7 @@ export function startGateway(deps: GatewayDeps & { port?: number }): RunningGate
             deps.config.local.context_tokens,
             deps.config.local.eval_timeout_ms,
           ),
+          needleTimeoutMs: deps.config.gateway.request_timeout_ms,
         }));
   const handler = createFetchHandler({ ...deps, ...(localRunner === undefined ? {} : { localRunner }) });
   const server = Bun.serve({

@@ -84,6 +84,7 @@ describe("runDoctor", () => {
       models: [
         {
           id: "broken",
+          kind: "gguf",
           file: "broken.gguf",
           source: "test",
           sha256: "0".repeat(64),

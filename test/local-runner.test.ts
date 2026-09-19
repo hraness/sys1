@@ -1,13 +1,16 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
 import { configSchema } from "../src/config.ts";
 import { createFetchHandler } from "../src/gateway.ts";
 import type { DecisionEngine, FirstTokenDistribution } from "../src/local/engine.ts";
 import { LocalRunner, type EngineFactory } from "../src/local/runner.ts";
 import { modelsDir, saveManifest, type InstalledModel } from "../src/local/store.ts";
 import { systemOneResponseSchema, type SystemOneRequest } from "../src/protocol.ts";
+import { buildCactBlob } from "./fixtures/cact.ts";
+import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
 
 const homes: string[] = [];
 
@@ -16,6 +19,7 @@ function homeWithModels(ids: string[] = ["tiny"]): string {
   homes.push(home);
   const models: InstalledModel[] = ids.map((id) => ({
     id,
+    kind: "gguf",
     file: `${id}.gguf`,
     size_b: 0.6,
     source: `test:${id}`,
@@ -187,6 +191,189 @@ describe("LocalRunner", () => {
     expect(result.ok).toBe(false);
     expect(result.error?.type).toBe("local_question_unsupported");
     expect(runner.loadedModels()).toEqual([]);
+    await runner.dispose();
+  });
+
+  test("answers a request through a synthetic scorer checkpoint", async () => {
+    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    homes.push(home);
+    const ckpt = buildScorerCheckpoint({
+      encoder: "tinyx",
+      width: 8,
+      rank: 8,
+      layers: 1,
+      heads: 2,
+      context_tokens: 64,
+      option_tokens: 32,
+    });
+    mkdirSync(modelsDir(home), { recursive: true });
+    writeFileSync(join(modelsDir(home), "ckpt.pt"), ckpt);
+    saveManifest(home, {
+      version: 1,
+      models: [
+        {
+          id: "ckpt",
+          kind: "scorer",
+          file: "ckpt.pt",
+          source: "test",
+          sha256: createHash("sha256").update(ckpt).digest("hex"),
+          bytes: ckpt.byteLength,
+          context: 2048,
+          installed_at: "2026-01-01T00:00:00.000Z",
+        },
+      ],
+    });
+    const runner = new LocalRunner({
+      home,
+      maxLoadedModels: 1,
+      engineFactory: (model) => new FakeEngine(model.id),
+    });
+    const result = await runner.decide(request(), "ckpt");
+    expect(result.ok).toBe(true);
+    expect(result.adapter).toBe("option-scorer");
+    const route = result.response?.answers.route;
+    expect(route?.type).toBe("choice");
+    if (route?.type === "choice") {
+      expect(Object.keys(route.probabilities)).toEqual(["backlog", "page"]);
+      const total = Object.values(route.probabilities).reduce((a, b) => a + b, 0);
+      expect(total).toBeCloseTo(1, 2);
+    }
+    const urgent = result.response?.answers.urgent;
+    expect(urgent?.type).toBe("noul");
+    const severity = result.response?.answers.severity;
+    expect(severity?.type).toBe("score");
+    if (severity?.type === "score") {
+      expect(severity.legend).toEqual({ "0": "low", "1": "medium", "2": "high" });
+    }
+    expect(runner.loadedModels()).toEqual(["ckpt"]);
+    await runner.dispose();
+  });
+
+  test("answers a request through an injected needle turn", async () => {
+    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    homes.push(home);
+    const cact = buildCactBlob();
+    const engine = Buffer.alloc(1_024, 9);
+    mkdirSync(modelsDir(home), { recursive: true });
+    writeFileSync(join(modelsDir(home), "n3.cact"), cact);
+    writeFileSync(join(modelsDir(home), "n3.engine"), engine);
+    saveManifest(home, {
+      version: 1,
+      models: [
+        {
+          id: "n3",
+          kind: "needle",
+          file: "n3.cact",
+          source: "test",
+          sha256: createHash("sha256").update(cact).digest("hex"),
+          bytes: cact.byteLength,
+          context: 2048,
+          engine_file: "n3.engine",
+          engine_sha256: createHash("sha256").update(engine).digest("hex"),
+          engine_bytes: engine.byteLength,
+          engine_platform: "darwin-arm64",
+          installed_at: "2026-01-01T00:00:00.000Z",
+        },
+      ],
+    });
+    const spawnFn = ((_argv: string[]) => ({
+      stdout: new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(
+            new TextEncoder().encode(
+              JSON.stringify({
+                function_calls: [
+                  { name: "evaluate", arguments: { urgent: true, route: "page", severity: "2" } },
+                ],
+                confidence: 0.9,
+              }),
+            ),
+          );
+          controller.close();
+        },
+      }),
+      stderr: new ReadableStream<Uint8Array>({ start: (c) => c.close() }),
+      exited: Promise.resolve(0),
+      exitCode: 0,
+      kill: () => {},
+    })) as unknown as typeof Bun.spawn;
+    const runner = new LocalRunner({
+      home,
+      maxLoadedModels: 1,
+      engineFactory: (model) => new FakeEngine(model.id),
+      needleSpawnFn: spawnFn,
+    });
+    const result = await runner.decide(request(), "n3");
+    expect(result.ok).toBe(true);
+    expect(result.adapter).toBe("needle-extract");
+    expect(result.response?.answers.urgent).toEqual({ type: "noul", noul: 0.9 });
+    const route = result.response?.answers.route;
+    if (route?.type === "choice") expect(route.choice).toBe("page");
+    const severity = result.response?.answers.severity;
+    if (severity?.type === "score") {
+      expect(severity.score).toBeCloseTo(1.85, 5);
+      expect(severity.legend).toEqual({ "0": "low", "1": "medium", "2": "high" });
+    }
+    await runner.dispose();
+  });
+
+  test("a needle turn without the evaluate call fails closed", async () => {
+    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    homes.push(home);
+    const cact = buildCactBlob();
+    const engine = Buffer.alloc(1_024, 9);
+    mkdirSync(modelsDir(home), { recursive: true });
+    writeFileSync(join(modelsDir(home), "n3.cact"), cact);
+    writeFileSync(join(modelsDir(home), "n3.engine"), engine);
+    saveManifest(home, {
+      version: 1,
+      models: [
+        {
+          id: "n3",
+          kind: "needle",
+          file: "n3.cact",
+          source: "test",
+          sha256: createHash("sha256").update(cact).digest("hex"),
+          bytes: cact.byteLength,
+          context: 2048,
+          engine_file: "n3.engine",
+          engine_sha256: createHash("sha256").update(engine).digest("hex"),
+          engine_bytes: engine.byteLength,
+          engine_platform: "darwin-arm64",
+          installed_at: "2026-01-01T00:00:00.000Z",
+        },
+      ],
+    });
+    const spawnFn = ((_argv: string[]) => ({
+      stdout: new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(
+            new TextEncoder().encode(
+              JSON.stringify({
+                function_calls: [],
+                suppressed_calls: [{ name: "evaluate", arguments: {} }],
+                confidence: 0.2,
+              }),
+            ),
+          );
+          controller.close();
+        },
+      }),
+      stderr: new ReadableStream<Uint8Array>({ start: (c) => c.close() }),
+      exited: Promise.resolve(0),
+      exitCode: 0,
+      kill: () => {},
+    })) as unknown as typeof Bun.spawn;
+    const runner = new LocalRunner({
+      home,
+      maxLoadedModels: 1,
+      engineFactory: (model) => new FakeEngine(model.id),
+      needleSpawnFn: spawnFn,
+    });
+    const result = await runner.decide(request(), "n3");
+    expect(result.ok).toBe(false);
+    expect(result.error?.type).toBe("inference_unreadable");
+    expect(result.error?.message).toContain("grounding");
     await runner.dispose();
   });
 });

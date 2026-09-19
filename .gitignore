@@ -11,4 +11,8 @@ coverage/
 artifacts/
 *.gguf
 *.gguf.download
+*.pt
+*.cact
+*.engine
+*.engine.download
 .env*

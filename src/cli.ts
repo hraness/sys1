@@ -60,9 +60,9 @@ Daemon:
   doctor [--json]               Diagnose runtime, config, store, routing, daemon
 
 Models:
-  pull [MODEL] [--json]         Download + verify a GGUF (default qwen3-0.6b)
+  pull [MODEL] [--json]         Download + verify a model (default qwen3-0.6b)
   pull --list [--json]          Show the curated model registry
-  model list [--json]           Show installed GGUF models
+  model list [--json]           Show installed models
   model verify MODEL [--json]   Recompute and verify a model's sha256
   model remove MODEL            Remove an installed model
   models [--json]               List models across reachable backends
@@ -311,6 +311,8 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
   if (args.flags.get("list") === true) {
     const rows = MODEL_REGISTRY.map((entry) => ({
       id: entry.id,
+      kind: entry.kind,
+      specialist: entry.specialist === true,
       size_b: entry.size_b,
       bytes: entry.bytes,
       description: entry.description,
@@ -321,7 +323,8 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
       return;
     }
     for (const row of rows) {
-      out(`${row.id}\t${formatBytes(row.bytes)}\t${row.installed ? "installed" : "available"}\t${row.description}`);
+      const tag = row.specialist ? `${row.kind},pin-only` : row.kind;
+      out(`${row.id}\t${tag}\t${formatBytes(row.bytes)}\t${row.installed ? "installed" : "available"}\t${row.description}`);
     }
     return;
   }
@@ -363,9 +366,9 @@ async function cmdModel(home: string, args: ParsedArgs): Promise<void> {
     }
     for (const model of models) {
       const size = model.size_b === undefined ? "unknown" : `${model.size_b}B`;
-      out(`${model.id}\t${size}\t${formatBytes(model.bytes)}\t${model.source}`);
+      out(`${model.id}\t${model.kind}\t${size}\t${formatBytes(model.bytes)}\t${model.source}`);
     }
-    if (models.length === 0) out("no GGUF models installed; run `sysone pull`");
+    if (models.length === 0) out("no models installed; run `sysone pull`");
     return;
   }
   if (sub === "verify") {

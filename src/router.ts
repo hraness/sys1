@@ -1,6 +1,15 @@
 import type { RoutingPolicy } from "./config.ts";
+import type { SystemOneRequest } from "./protocol.ts";
 
 export type BackendKind = "hosted" | "local";
+
+/** Published per-backend request limits; absent fields mean unbounded. */
+export interface BackendCapabilities {
+  /** Largest criteria count a single choice/score question may carry. */
+  maxOptions?: number;
+  /** Largest question count a single request may carry. */
+  maxQuestions?: number;
+}
 
 export interface BackendCandidate {
   /** Unique backend name. Hosted backend is always "typesafe". */
@@ -14,13 +23,59 @@ export interface BackendCandidate {
   size_b: number | null;
   /** Operator-set cost ordering; lower is cheaper. */
   cost_rank: number;
+  /**
+   * Specialist backends only serve requests that explicitly name them —
+   * they never receive unpinned policy-order fallback traffic.
+   */
+  specialist?: boolean;
+  /** Probed or configured request limits. */
+  capabilities?: BackendCapabilities;
+}
+
+/** What one request demands of a backend, computed from its questions. */
+export interface RequestNeeds {
+  /** Largest criteria count across choice/score questions (noul counts 2). */
+  maxOptions: number;
+  /** Question count in the request. */
+  questions: number;
+}
+
+export function requestNeeds(request: SystemOneRequest): RequestNeeds {
+  let maxOptions = 0;
+  const questions = Object.values(request.questions);
+  for (const question of questions) {
+    switch (question.type) {
+      case "choice":
+        maxOptions = Math.max(maxOptions, Object.keys(question.criteria).length);
+        break;
+      case "score":
+        maxOptions = Math.max(maxOptions, question.criteria.length);
+        break;
+      case "noul":
+        maxOptions = Math.max(maxOptions, 2);
+        break;
+    }
+  }
+  return { maxOptions, questions: questions.length };
+}
+
+function compatible(candidate: BackendCandidate, needs: RequestNeeds): boolean {
+  const caps = candidate.capabilities;
+  if (caps === undefined) return true;
+  if (caps.maxOptions !== undefined && needs.maxOptions > caps.maxOptions) return false;
+  if (caps.maxQuestions !== undefined && needs.questions > caps.maxQuestions) return false;
+  return true;
 }
 
 export type RouteChoice<T extends BackendCandidate = BackendCandidate> =
   | { ok: true; backend: T; reason: string }
   | {
       ok: false;
-      reason: "unknown_model" | "model_unavailable" | "no_backend_available";
+      reason:
+        | "unknown_model"
+        | "model_unavailable"
+        | "request_unsupported"
+        | "no_backend_available";
       detail: string;
     };
 
@@ -55,12 +110,18 @@ function ordered<T extends BackendCandidate>(policy: RoutingPolicy, candidates: 
  * matches any backend listing it, in policy order. No model means policy
  * order among available backends: `auto` prefers hosted Jev and falls back to
  * the cheapest smallest local backend, `prefer-local` inverts that.
+ *
+ * `needs` makes selection capability-aware: a backend whose published limits
+ * the request exceeds is never chosen, and specialists are skipped unless the
+ * request explicitly names them.
  */
 export function chooseBackend<T extends BackendCandidate>(
   policy: RoutingPolicy,
   requestedModel: string | undefined,
   candidates: T[],
+  needs?: RequestNeeds,
 ): RouteChoice<T> {
+  const fits = (candidate: T): boolean => needs === undefined || compatible(candidate, needs);
   if (requestedModel !== undefined && requestedModel !== "auto") {
     const slash = requestedModel.indexOf("/");
     if (slash > 0) {
@@ -84,11 +145,18 @@ export function chooseBackend<T extends BackendCandidate>(
           detail: `backend ${backendName} is not reachable`,
         };
       }
+      if (!fits(pinned)) {
+        return {
+          ok: false,
+          reason: "request_unsupported",
+          detail: `request exceeds the published limits of backend ${backendName}`,
+        };
+      }
       return { ok: true, backend: pinned, reason: "pinned" };
     }
     const serving = ordered(
       policy,
-      candidates.filter((c) => c.models.includes(requestedModel)),
+      candidates.filter((c) => c.models.includes(requestedModel) && fits(c)),
     );
     const available = serving.find((c) => c.available);
     if (available !== undefined) {
@@ -101,6 +169,13 @@ export function chooseBackend<T extends BackendCandidate>(
         detail: `no reachable backend serves ${requestedModel}`,
       };
     }
+    if (candidates.some((c) => c.models.includes(requestedModel))) {
+      return {
+        ok: false,
+        reason: "request_unsupported",
+        detail: `request exceeds the published limits of every backend serving ${requestedModel}`,
+      };
+    }
     return {
       ok: false,
       reason: "unknown_model",
@@ -108,9 +183,20 @@ export function chooseBackend<T extends BackendCandidate>(
     };
   }
 
-  const fallback = ordered(policy, candidates).find((c) => c.available);
+  const viable = ordered(
+    policy,
+    candidates.filter((c) => c.specialist !== true),
+  );
+  const fallback = viable.find((c) => c.available && fits(c));
   if (fallback !== undefined) {
     return { ok: true, backend: fallback, reason: policy === "auto" ? "auto" : "policy" };
+  }
+  if (viable.length > 0 && viable.every((c) => !fits(c))) {
+    return {
+      ok: false,
+      reason: "request_unsupported",
+      detail: "request exceeds the published limits of every configured backend",
+    };
   }
   return {
     ok: false,
