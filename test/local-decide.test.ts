@@ -127,9 +127,25 @@ describe("vocabulary mass aggregation", () => {
       distribution: [0.1, 0.8, 0.1],
       coverage: 0.9,
     });
+    if (answer.type !== "choice") throw new Error("expected choice answer");
     expect(answer.choice).toBe("second");
     expect(answer.probabilities).toEqual({ first: 0.1, second: 0.8, third: 0.1 });
     expect(answer.confidence).toBe(0.7);
-    expect(answer.coverage).toBe(0.9);
+  });
+
+  test("maps score probability to the fractional zero-based Jev shape", () => {
+    const question: Question = {
+      type: "score",
+      criteria: ["low", { label: "medium" }, ["high"]],
+    };
+    const answer = toLocalAnswer(question, {
+      label: "3",
+      distribution: [0.02, 0.36, 0.62],
+      coverage: 0.99,
+    });
+    if (answer.type !== "score") throw new Error("expected score answer");
+    expect(answer.score).toBe(1.6);
+    expect(answer.legend).toEqual({ "0": "low", "1": { label: "medium" }, "2": ["high"] });
+    expect(answer.probabilities).toEqual({ "0": 0.02, "1": 0.36, "2": 0.62 });
   });
 });

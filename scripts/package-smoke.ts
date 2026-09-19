@@ -207,9 +207,10 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     writeFileSync(
       join(consumer, "smoke.mjs"),
       [
-        `import { DECISION_LABELS, isLoopbackHost, systemOneRequestSchema } from "${PACKAGE_NAME}";`,
+        `import { DECISION_LABELS, isLoopbackHost, systemOneRequestSchema, systemOneResponseSchema } from "${PACKAGE_NAME}";`,
         `const parsed = systemOneRequestSchema.safeParse({ state: "x", questions: { q: { type: "noul" } } });`,
-        `if (!parsed.success || DECISION_LABELS.length !== 35 || !isLoopbackHost("127.0.0.1"))`,
+        `const response = systemOneResponseSchema.safeParse({ model: "smoke", answers: { q: { type: "noul", noul: 0.5 } }, usage: { input_tokens: 1, output_tokens: 0 } });`,
+        `if (!parsed.success || !response.success || DECISION_LABELS.length !== 35 || !isLoopbackHost("127.0.0.1"))`,
         `  throw new Error("packed public API failed");`,
         `console.log(JSON.stringify({ labels: DECISION_LABELS.length, loopback: true }));`,
       ].join("\n"),

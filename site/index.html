@@ -103,8 +103,8 @@
         <h2>Useful signals, honest semantics.</h2>
         <p>
           Builtin GGUF mode scores the model's complete first-token vocabulary
-          over constrained answer labels. Every answer reports
-          <code>coverage</code> and <code>confidence</code>. A general GGUF is
+          while preserving exact Jev Noul, Choice, and fractional Score answer
+          shapes. Adapter coverage stays in response headers. A general GGUF is
           not presented as a calibrated Jev model; use trained System One
           weights when calibration is part of your contract.
         </p>

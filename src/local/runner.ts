@@ -3,6 +3,7 @@ import {
   DECIDE_LIMITS,
   aggregateMass,
   answerLabels,
+  confidenceOf,
   decisionPrompt,
   outcomeFromMass,
   questionEntries,
@@ -78,9 +79,15 @@ export interface RunnerOptions {
   engineFactory: EngineFactory;
 }
 
+export interface LocalQuestionDiagnostic {
+  coverage: number;
+  concentration: number;
+}
+
 export interface DecideResult {
   ok: boolean;
   response?: LocalResponse;
+  diagnostics?: Record<string, LocalQuestionDiagnostic>;
   error?: { type: string; message: string };
 }
 
@@ -127,8 +134,8 @@ export class LocalRunner {
 
   /**
    * Run one validated request against an installed model. Each question is an
-   * independent one-token decision; a question whose label mass is empty
-   * reports confidence 0 rather than guessing.
+   * independent one-token decision; empty label mass fails rather than
+   * returning a malformed Jev answer.
    */
   decide(
     request: SystemOneRequest,
@@ -194,6 +201,7 @@ export class LocalRunner {
     }
 
     const answers: Record<string, LocalAnswer> = {};
+    const diagnostics: Record<string, LocalQuestionDiagnostic> = {};
     let inputTokens = 0;
     try {
       signal?.throwIfAborted();
@@ -206,10 +214,19 @@ export class LocalRunner {
         const mass = aggregateMass(distribution.entries, labels);
         const outcome = outcomeFromMass(mass, labels);
         if (outcome === null) {
-          answers[name] = emptyAnswer(question.type);
-        } else {
-          answers[name] = toLocalAnswer(question, outcome);
+          return {
+            ok: false,
+            error: {
+              type: "inference_unreadable",
+              message: `model assigned no probability mass to allowed labels for ${name}`,
+            },
+          };
         }
+        answers[name] = toLocalAnswer(question, outcome);
+        diagnostics[name] = {
+          coverage: Math.round(outcome.coverage * 1000) / 1000,
+          concentration: Math.round(confidenceOf(outcome.distribution) * 1000) / 1000,
+        };
       }
     } catch (error) {
       const unavailable = error instanceof EngineUnavailableError;
@@ -231,8 +248,9 @@ export class LocalRunner {
       ok: true,
       response: toLocalResponse(model.id, answers, {
         input_tokens: inputTokens,
-        output_tokens: questions.length,
+        output_tokens: 0,
       }),
+      diagnostics,
     };
   }
 
@@ -243,14 +261,4 @@ export class LocalRunner {
     this.engines.clear();
     await Promise.all(engines.map((entry) => entry.engine.dispose().catch(() => {})));
   }
-}
-
-function emptyAnswer(type: "noul" | "choice" | "score"): LocalAnswer {
-  if (type === "noul") {
-    return { type: "noul", noul: 0.5, confidence: 0, coverage: 0 };
-  }
-  if (type === "choice") {
-    return { type: "choice", probabilities: {}, confidence: 0, coverage: 0 };
-  }
-  return { type: "score", probabilities: [], confidence: 0, coverage: 0 };
 }
