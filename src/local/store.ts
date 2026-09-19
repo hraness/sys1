@@ -138,6 +138,8 @@ export interface RegistryEntry {
   kind: ModelKind;
   size_b: number;
   repo: string;
+  /** Immutable Hugging Face commit shared by weights and engine companions. */
+  revision: string;
   file: string;
   sha256: string;
   bytes: number;
@@ -150,7 +152,7 @@ export interface RegistryEntry {
 }
 
 /**
- * Curated models, sha256-pinned to the publisher's LFS object id.
+ * Curated models, pinned to an immutable publisher revision and LFS SHA-256.
  * Ordered smallest-first; the first entry is the default `sys1 pull`.
  * Specialist entries serve pinned requests only — they are not general
  * fallbacks even though they are the smallest models in the registry.
@@ -161,6 +163,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     kind: "gguf",
     size_b: 0.6,
     repo: "unsloth/Qwen3-0.6B-GGUF",
+    revision: "50968a4468ef4233ed78cd7c3de230dd1d61a56b",
     file: "Qwen3-0.6B-Q4_0.gguf",
     sha256: "33bcc57074ec7b6eada5a90651ee546ec0c2b271002c22baf9f1b2dd1e8f75cb",
     bytes: 382_156_480,
@@ -172,6 +175,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     kind: "gguf",
     size_b: 1.7,
     repo: "unsloth/Qwen3-1.7B-GGUF",
+    revision: "d7f544eead698dbd1f15126ef60b45a1e1933222",
     file: "Qwen3-1.7B-Q4_K_M.gguf",
     sha256: "b139949c5bd74937ad8ed8c8cf3d9ffb1e99c866c823204dc42c0d91fa181897",
     bytes: 1_107_409_472,
@@ -183,6 +187,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     kind: "scorer",
     size_b: 0.0007,
     repo: "cua-ai/cua-s1-forms",
+    revision: "f54adbf447f4ca6ec259f529ee3f2e3e09f8cc71",
     file: "cua-s1-forms.pt",
     sha256: "f5077f0c9baf6b5fc10f21512e1aa15207a395598416a6ffdd95f0d3dd5ab8df",
     bytes: 2_840_436,
@@ -196,6 +201,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     kind: "needle",
     size_b: 0.12,
     repo: "Cactus-Compute/needle3",
+    revision: "b009f8937124b2d0458f4ed040c10c41fd2a0dfc",
     file: "needle3.cact",
     sha256: "c9d915eca282ed42d1a09b143b592adb4cc6744ffe2d294adf5cfc5548170c38",
     bytes: 35_335_380,
@@ -487,7 +493,12 @@ export type PullTarget =
  */
 export function resolvePullTarget(ref: string): PullTarget | { error: string } {
   const entry = findRegistry(ref);
-  if (entry !== undefined) return { kind: "registry", entry };
+  if (entry !== undefined) {
+    if (!/^[0-9a-f]{40}$/.test(entry.revision)) {
+      return { error: `invalid registry revision for ${entry.id}; expected an immutable 40-character commit` };
+    }
+    return { kind: "registry", entry };
+  }
   if (ref.startsWith("hf:")) {
     const rest = ref.slice(3);
     const colon = rest.lastIndexOf(":");
@@ -679,6 +690,7 @@ export async function pullModel(
   const fetchFn = options.fetchFn ?? fetch;
   const id = target.kind === "registry" ? target.entry.id : target.id;
   const repo = target.kind === "registry" ? target.entry.repo : target.repo;
+  const revision = target.kind === "registry" ? target.entry.revision : "main";
   const file = target.kind === "registry" ? target.entry.file : target.file;
   const modelKind: ModelKind =
     target.kind === "registry" ? target.entry.kind : target.modelKind;
@@ -729,7 +741,7 @@ export async function pullModel(
   mkdirSync(modelsDir(home), { recursive: true, mode: 0o700 });
   const tmpPath = `${finalPath}.download`;
   const weights = await downloadVerified(
-    `https://huggingface.co/${repo}/resolve/main/${file}`,
+    `https://huggingface.co/${repo}/resolve/${revision}/${file}`,
     tmpPath,
     expectedSha,
     expectedBytes,
@@ -768,7 +780,7 @@ export async function pullModel(
     const engineFinal = join(modelsDir(home), engineFile);
     const engineTmp = `${engineFinal}.download`;
     const engine = await downloadVerified(
-      `https://huggingface.co/${repo}/resolve/main/${engineSpec.file}`,
+      `https://huggingface.co/${repo}/resolve/${revision}/${engineSpec.file}`,
       engineTmp,
       engineSpec.sha256,
       engineSpec.bytes,

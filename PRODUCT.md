@@ -31,7 +31,8 @@ choice, or score answers with routing metadata.
   validation, and local model lifecycle belong to Sys1. Application policy,
   permissions, quality thresholds, and deterministic fallback stay in the app.
 - A compatible response schema does not establish equal calibration, model
-  quality, speed, or cost. No comparative model benchmark is claimed.
+  quality, speed, or cost. Comparisons must identify exact artifacts, datasets,
+  runtimes, hardware, and whether evidence is measured locally or upstream.
 - MIT source and npm-format immutable GitHub Release artifacts are available.
 
 ## Brand Commitments
@@ -45,5 +46,7 @@ role from Jev, OpenJev, CUA-S1, and its underlying model runtimes.
 
 README.md, source, docs/DESIGN.md (runtime architecture), release workflows,
 and deterministic/native-install checks document implemented capabilities.
-No comparative inference benchmark, customer adoption count, or testimonial
-is supplied. Illustrative page examples must be labelled as such.
+The comparison page adds an opt-in public synthetic local adapter benchmark
+and primary-source upstream measurements, each with its own scope and limits.
+No customer adoption count or testimonial is supplied. Illustrative page
+examples must be labelled as such.

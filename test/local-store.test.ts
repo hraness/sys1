@@ -152,10 +152,12 @@ describe("local model store", () => {
   test("admits a custom download only after hash and GGUF validation", async () => {
     const dir = home();
     const bytes = gguf();
-    const fetchFn = (async () =>
-      new Response(new Uint8Array(bytes), {
+    const fetchFn = (async (input: RequestInfo | URL) => {
+      expect(String(input)).toBe("https://huggingface.co/owner/repo/resolve/main/model.gguf");
+      return new Response(new Uint8Array(bytes), {
         headers: { "content-length": String(bytes.byteLength) },
-      })) as unknown as typeof fetch;
+      });
+    }) as unknown as typeof fetch;
     const result = await pullModel(dir, "hf:owner/repo:model.gguf", {
       sha256: sha256(bytes),
       fetchFn,
@@ -302,6 +304,76 @@ describe("local model store", () => {
     const result = await pullModel(dir, "needle3", { fetchFn });
     expect(result.ok).toBe(false);
     expect(result.message).toContain("sha256 mismatch");
+  });
+
+  test("curated pulls use one immutable revision for weights and the platform engine", async () => {
+    const dir = home();
+    const weights = buildCactBlob();
+    const engine = Buffer.alloc(1_024, 9);
+    const revision = "a".repeat(40);
+    const fixture = {
+      id: "needle-revision-fixture",
+      kind: "needle" as const,
+      size_b: 0.12,
+      repo: "owner/revision-fixture",
+      revision,
+      file: "model.cact",
+      sha256: sha256(weights),
+      bytes: weights.byteLength,
+      context: 2048,
+      description: "revision fixture",
+      specialist: true,
+      engine: {
+        [needlePlatformKey()]: {
+          file: "platform/needle",
+          sha256: sha256(engine),
+          bytes: engine.byteLength,
+        },
+      },
+    };
+    const weightsUrl = `https://huggingface.co/${fixture.repo}/resolve/${revision}/model.cact`;
+    const engineUrl = `https://huggingface.co/${fixture.repo}/resolve/${revision}/platform/needle`;
+    const requested: string[] = [];
+    const fetchFn = (async (input: RequestInfo | URL) => {
+      const url = String(input);
+      requested.push(url);
+      if (url === weightsUrl) return new Response(new Uint8Array(weights));
+      if (url === engineUrl) return new Response(new Uint8Array(engine));
+      return new Response("not found", { status: 404 });
+    }) as unknown as typeof fetch;
+    MODEL_REGISTRY.push(fixture);
+    try {
+      const result = await pullModel(dir, fixture.id, { fetchFn });
+      expect(result.ok).toBe(true);
+      expect(requested).toEqual([weightsUrl, engineUrl]);
+      expect((await verifyModel(dir, fixture.id)).ok).toBe(true);
+    } finally {
+      MODEL_REGISTRY.splice(MODEL_REGISTRY.indexOf(fixture), 1);
+    }
+  });
+
+  test("curated pulls reject mutable or malformed revisions before fetching", async () => {
+    const base = MODEL_REGISTRY[0];
+    if (base === undefined) throw new Error("missing curated model");
+    for (const revision of ["main", "../main", "a".repeat(39), "g".repeat(40)]) {
+      const dir = home();
+      const fixture = { ...base, id: "invalid-revision-fixture", revision };
+      let fetches = 0;
+      const fetchFn = (async () => {
+        fetches += 1;
+        return new Response("unexpected fetch");
+      }) as unknown as typeof fetch;
+      MODEL_REGISTRY.push(fixture);
+      try {
+        const result = await pullModel(dir, fixture.id, { fetchFn });
+        expect(result.ok).toBe(false);
+        expect(result.message).toContain("invalid registry revision");
+        expect(fetches).toBe(0);
+        expect(existsSync(modelsDir(dir))).toBe(false);
+      } finally {
+        MODEL_REGISTRY.splice(MODEL_REGISTRY.indexOf(fixture), 1);
+      }
+    }
   });
 
   test("scorer and needle registry entries are pinned specialists", () => {

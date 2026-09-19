@@ -335,6 +335,18 @@ links, and native disclosures remain useful without JavaScript. Sidecar
 snippets show the implemented visual states; they do not supply application
 event handlers for these behaviors.
 
+### Model comparison
+
+`site/compare.html` extends the Paper reading surface with captioned data
+tables, contextual evidence rows, native disclosures, and a small cost
+calculator. Wide tables scroll within labelled keyboard-focusable regions;
+supporting grids stack on compact screens. Numeric columns use tabular figures.
+The comparison stylesheet reuses the existing colors, fonts, radii, and
+breakpoints, adding local layout and density rules without new system tokens
+or assets. The shared header, appearance control, and pinned footer remain
+the visual anchors. Surface-specific evidence and interaction rules live in
+`.impeccable/surfaces/site-compare-html.md`.
+
 ## Agent skills guide
 
 `site/skills.html` extends the same Paper system in a reading layout, using
