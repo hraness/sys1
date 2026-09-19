@@ -10,7 +10,7 @@ import {
   setConfigValue,
   sysoneHome,
 } from "../src/config.ts";
-import { clearPidFile, readPidFile, writePidFile } from "../src/daemon.ts";
+import { clearPidFile, daemonStatus, readPidFile, writePidFile } from "../src/daemon.ts";
 
 const homes: string[] = [];
 
@@ -82,6 +82,13 @@ describe("config", () => {
     if (result.ok) expect(result.config.gateway.port).toBe(14900);
   });
 
+  test("gateway host remains loopback-only", () => {
+    expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "127.0.0.2").ok).toBe(true);
+    expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "::1").ok).toBe(true);
+    expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "0.0.0.0").ok).toBe(false);
+    expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "192.168.1.2").ok).toBe(false);
+  });
+
   test("SYSONE_HOME env overrides the state dir", () => {
     expect(sysoneHome({ SYSONE_HOME: "/tmp/custom" } as NodeJS.ProcessEnv)).toBe("/tmp/custom");
   });
@@ -95,6 +102,17 @@ describe("pid file", () => {
     expect(record).toMatchObject({ pid: 4321, port: 13900 });
     clearPidFile(home, 4321);
     expect(readPidFile(home)).toBeNull();
+  });
+
+  test("status reports a stale pid file without deleting it", async () => {
+    const home = tempHome();
+    writePidFile(home, 2_147_483_647, "127.0.0.1", 13900);
+    const fetchFn = (async () => {
+      throw new Error("offline");
+    }) as unknown as typeof fetch;
+    const state = await daemonStatus(home, DEFAULT_CONFIG, fetchFn);
+    expect(state.state).toBe("stale_pidfile");
+    expect(readPidFile(home)?.pid).toBe(2_147_483_647);
   });
 
   test("clear refuses a different pid", () => {

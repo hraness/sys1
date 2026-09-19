@@ -1,0 +1,202 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sysone-stable-release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify release source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      artifact_digest: ${{ steps.artifact.outputs.artifact-digest }}
+      artifact_id: ${{ steps.artifact.outputs.artifact-id }}
+      sha: ${{ steps.identity.outputs.sha }}
+      tag: ${{ steps.identity.outputs.tag }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          fetch-tags: false
+          persist-credentials: false
+          ref: refs/tags/${{ github.ref_name }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: 1.3.14
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.19.0
+      - name: Verify tag, package, main and immutable-release authority
+        id: identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::Release tag is not a stable semantic version"
+            exit 1
+          fi
+          version="$(bun -e 'const p = await Bun.file("package.json").json(); process.stdout.write(String(p.version))')"
+          if [[ "$TAG" != "v$version" ]]; then
+            echo "::error::Tag $TAG does not match package version v$version"
+            exit 1
+          fi
+          sha="$(git rev-parse HEAD)"
+          main_sha="$(gh api "repos/$REPOSITORY/git/ref/heads/${{ github.event.repository.default_branch }}" --jq '.object.sha')"
+          if [[ "$sha" != "$main_sha" ]]; then
+            echo "::error::Release commit is not the exact current default-branch head"
+            exit 1
+          fi
+          tag_type="$(gh api "repos/$REPOSITORY/git/ref/tags/$TAG" --jq '.object.type')"
+          if [[ "$tag_type" != "tag" ]]; then
+            echo "::error::Release tag must be annotated"
+            exit 1
+          fi
+          target_sha="$(gh api "repos/$REPOSITORY/git/ref/tags/$TAG" --jq '.object.sha' | xargs -I{} gh api "repos/$REPOSITORY/git/tags/{}" --jq '.object.sha')"
+          if [[ "$target_sha" != "$sha" ]]; then
+            echo "::error::Annotated tag does not target the verified commit"
+            exit 1
+          fi
+          immutable="$(gh api "repos/$REPOSITORY/immutable-releases" --jq '.enabled')"
+          if [[ "$immutable" != "true" ]]; then
+            echo "::error::Repository immutable releases must be enabled before tagging"
+            exit 1
+          fi
+          printf 'sha=%s\ntag=%s\n' "$sha" "$TAG" >> "$GITHUB_OUTPUT"
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run check
+      - name: Pack exact artifact and checksum
+        run: |
+          set -euo pipefail
+          mkdir artifacts
+          npm pack --ignore-scripts --pack-destination artifacts .
+          cd artifacts
+          shasum -a 256 ./*.tgz > SHA256SUMS
+      - name: Preserve exact release bytes
+        id: artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sysone-release-${{ github.run_attempt }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+  install:
+    name: Exact artifact install (${{ matrix.os }})
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          fetch-tags: false
+          persist-credentials: false
+          ref: ${{ needs.verify.outputs.sha }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: 1.3.14
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.19.0
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact_id }}
+          merge-multiple: true
+          path: artifacts
+      - name: Bind and execute the exact package
+        env:
+          ARTIFACT_DIGEST: ${{ needs.verify.outputs.artifact_digest }}
+          ARTIFACT_ID: ${{ needs.verify.outputs.artifact_id }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$ARTIFACT_ID" =~ ^[1-9][0-9]*$ || ! "$ARTIFACT_DIGEST" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "::error::Release artifact identity is invalid"
+            exit 1
+          fi
+          cd artifacts
+          shasum -a 256 -c SHA256SUMS
+          cd ..
+          bun scripts/package-smoke.ts artifacts/*.tgz
+          prefix="$RUNNER_TEMP/sysone-global"
+          npm install --global --prefix "$prefix" --allow-scripts=node-llama-cpp artifacts/*.tgz
+          SYSONE_HOME="$RUNNER_TEMP/sysone-home" "$prefix/bin/sysone" doctor --json > "$RUNNER_TEMP/doctor.json"
+          jq -e '.ok == true and .version == 1' "$RUNNER_TEMP/doctor.json" >/dev/null
+
+  publish:
+    name: Publish immutable GitHub Release
+    needs: [verify, install]
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact_id }}
+          merge-multiple: true
+          path: artifacts
+      - name: Publish and prove exact immutable assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ needs.verify.outputs.sha }}
+          TAG: ${{ needs.verify.outputs.tag }}
+        run: |
+          set -euo pipefail
+          cd artifacts
+          shasum -a 256 -c SHA256SUMS
+          cd ..
+          if ! gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$TAG" artifacts/*.tgz artifacts/SHA256SUMS \
+              --repo "$REPOSITORY" \
+              --title "sysone $TAG" \
+              --notes "Automated immutable release of @hraness/sysone from $TAG." \
+              --verify-tag
+          fi
+          release="$(gh api "repos/$REPOSITORY/releases/tags/$TAG")"
+          if [[ "$(jq -r '.immutable' <<<"$release")" != "true" || "$(jq -r '.draft' <<<"$release")" != "false" ]]; then
+            echo "::error::GitHub Release is not immutable and published"
+            exit 1
+          fi
+          tag_object="$(gh api "repos/$REPOSITORY/git/ref/tags/$TAG" --jq '.object.sha')"
+          target_sha="$(gh api "repos/$REPOSITORY/git/tags/$tag_object" --jq '.object.sha')"
+          if [[ "$target_sha" != "$SHA" ]]; then
+            echo "::error::GitHub Release tag does not bind the verified commit"
+            exit 1
+          fi
+          mapfile -t local_assets < <(printf '%s\n' artifacts/*.tgz artifacts/SHA256SUMS)
+          if [[ "$(jq '.assets | length' <<<"$release")" -ne "${#local_assets[@]}" ]]; then
+            echo "::error::GitHub Release asset count is wrong"
+            exit 1
+          fi
+          for source in "${local_assets[@]}"; do
+            name="$(basename "$source")"
+            expected="sha256:$(shasum -a 256 "$source" | awk '{print $1}')"
+            observed="$(jq -r --arg name "$name" '.assets[] | select(.name == $name) | .digest' <<<"$release")"
+            if [[ "$observed" != "$expected" ]]; then
+              echo "::error::Release digest mismatch for $name"
+              exit 1
+            fi
+          done
+          directory="$(mktemp -d)"
+          gh release download "$TAG" --repo "$REPOSITORY" --dir "$directory"
+          for source in "${local_assets[@]}"; do
+            cmp "$source" "$directory/$(basename "$source")"
+          done

@@ -19,8 +19,10 @@ backend answers.
   serializes evaluations, enforces evaluation timeouts, and releases native
   resources.
 - **Model store** (`src/local/store.ts`) owns the curated registry, streamed
-  Hugging Face downloads, SHA-256 admission, manifest, verification, and the
-  8 GiB per-download limit.
+  Hugging Face downloads, SHA-256 and structural GGUF admission, safe manifest
+  filenames, verification, and the 8 GiB per-download limit.
+- **Doctor** (`src/doctor.ts`) reports a stable versioned readiness surface over
+  runtime, config, native llama.cpp, store, routing, and daemon boundaries.
 - **Local runner** (`src/local/runner.ts`) joins installed models to engines,
   caps resident models, and produces the wire response.
 - **Daemon** (`src/daemon.ts`) owns detached process, pid file, health check,
@@ -67,18 +69,29 @@ never downloads a model.
 
 The curated registry records model id, source repository/file, byte count,
 parameter count, context limit, and SHA-256. Pull writes `<id>.gguf.download`,
-hashes each chunk, checks size and digest, atomically renames it to `<id>.gguf`,
-then atomically updates `manifest.json`. A failed or interrupted pull is never
-listed as installed.
+hashes each chunk, checks size and digest, validates GGUF magic, version, tensor
+count, and metadata count, atomically renames it to `<id>.gguf`, then atomically
+updates `manifest.json`. Manifest filenames are store-local and regular files
+only. A failed or interrupted pull is never listed as installed.
 
 The daemon defaults to one resident model. Evaluations are serialized per
 engine. Loading another model evicts and disposes the least recently used
 engine. Shutdown disposes every model/context. The store and inference queues
 are local only; request state and answers are never written there.
 
+## Distribution
+
+The build preserves exactly one Bun shebang and emits an npm-format ESM package.
+The package smoke check unpacks the real tarball into an isolated consumer,
+links only the exact pinned dependencies from the frozen install, imports the
+public API, and executes version, help, and JSON CLI surfaces. Stable annotated
+tags trigger a release only at the exact current `main` head. Exact tarball
+bytes and `SHA256SUMS` must pass Ubuntu and macOS installation before an
+immutable GitHub Release can be published.
+
 ## Boundaries
 
-- Loopback by default; there is no request authentication.
+- Gateway binds are restricted to loopback; there is no request authentication.
 - Hosted credentials are environment-only.
 - Request states, questions, prompts, distributions, and answers are absent from
   logs, pid files, config, and model manifests.

@@ -28,6 +28,8 @@ export class EngineUnavailableError extends Error {
 }
 
 interface LlamaLike {
+  readonly gpu?: string;
+  readonly supportsGpuOffloading?: boolean;
   loadModel(options: { modelPath: string }): Promise<LlamaModelLike>;
   dispose(): Promise<void>;
 }
@@ -69,11 +71,47 @@ interface LlamaSequenceLike {
 
 interface NodeLlamaCppModule {
   getLlama(options?: { gpu?: string; logLevel?: "fatal" }): Promise<LlamaLike>;
+  getLlamaGpuTypes(include: "supported"): Promise<string[]>;
   resolveChatWrapper(
     model: LlamaModelLike,
     options?: { customWrapperSettings?: { qwen?: { thoughts?: "discourage" } } },
   ): ChatWrapperLike;
   NoBinaryFoundError?: new (...args: never[]) => Error;
+}
+
+async function loadNodeLlamaCpp(): Promise<NodeLlamaCppModule> {
+  const specifier: string = "node-llama-cpp";
+  return (await import(specifier)) as unknown as NodeLlamaCppModule;
+}
+
+export interface NativeRuntimeProbe {
+  ok: boolean;
+  backend?: string;
+  gpu_offloading?: boolean;
+  supported_backends?: string[];
+  message?: string;
+}
+
+export async function probeNativeRuntime(): Promise<NativeRuntimeProbe> {
+  let llama: LlamaLike | null = null;
+  try {
+    const mod = await loadNodeLlamaCpp();
+    const supported = await mod.getLlamaGpuTypes("supported");
+    llama = await mod.getLlama({ gpu: "auto", logLevel: "fatal" });
+    return {
+      ok: true,
+      backend: llama.gpu ?? "cpu",
+      gpu_offloading: llama.supportsGpuOffloading ?? false,
+      supported_backends: supported,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "native runtime unavailable",
+    };
+  } finally {
+    if (llama !== null) await llama.dispose().catch(() => {});
+  }
 }
 
 export interface LlamaEngineOptions {
@@ -107,10 +145,7 @@ export class LlamaEngine implements DecisionEngine {
     if (this.context !== null) return;
     let mod: NodeLlamaCppModule;
     try {
-      // Keep the native dependency outside this package's declaration graph;
-      // node-llama-cpp currently ships declarations that TS 6 rejects.
-      const specifier: string = "node-llama-cpp";
-      mod = (await import(specifier)) as unknown as NodeLlamaCppModule;
+      mod = await loadNodeLlamaCpp();
     } catch {
       throw new EngineUnavailableError(
         "node-llama-cpp is not installed",

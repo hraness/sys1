@@ -71,9 +71,7 @@ export async function daemonStatus(
     }
     return { state: "stale_pidfile", pid: record.pid };
   }
-  if (record !== null) {
-    rmSync(pidPath(home), { force: true });
-  }
+  if (record !== null) return { state: "stale_pidfile", pid: record.pid };
   if (await healthz(config.gateway.host, config.gateway.port, 800, fetchFn)) {
     return { state: "foreign_listener", port: config.gateway.port };
   }

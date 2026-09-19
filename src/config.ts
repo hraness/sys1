@@ -14,6 +14,22 @@ export const ROUTING_POLICIES = [
 export const routingPolicySchema = z.enum(ROUTING_POLICIES);
 export type RoutingPolicy = z.infer<typeof routingPolicySchema>;
 
+export function isLoopbackHost(host: string): boolean {
+  if (host === "localhost" || host === "::1") return true;
+  const octets = host.split(".");
+  return (
+    octets.length === 4 &&
+    octets[0] === "127" &&
+    octets.every((octet) => /^\d{1,3}$/.test(octet) && Number(octet) <= 255)
+  );
+}
+
+export const loopbackHostSchema = z
+  .string()
+  .min(1)
+  .max(255)
+  .refine(isLoopbackHost, "must be a loopback host");
+
 export const localBackendSchema = z.object({
   name: z
     .string()
@@ -31,7 +47,7 @@ export const configSchema = z.object({
   version: z.literal(1),
   gateway: z
     .object({
-      host: z.string().min(1).max(255).default("127.0.0.1"),
+      host: loopbackHostSchema.default("127.0.0.1"),
       port: z.number().int().min(1).max(65_535).default(13_900),
       request_timeout_ms: z.number().int().min(1_000).max(120_000).default(15_000),
       probe_timeout_ms: z.number().int().min(200).max(10_000).default(1_500),
@@ -120,7 +136,7 @@ export function saveConfig(home: string, config: SysoneConfig): string {
 
 export const SETTABLE_KEYS = {
   "routing.policy": routingPolicySchema,
-  "gateway.host": z.string().min(1).max(255),
+  "gateway.host": loopbackHostSchema,
   "gateway.port": z.coerce.number().int().min(1).max(65_535),
   "gateway.request_timeout_ms": z.coerce.number().int().min(1_000).max(120_000),
   "gateway.probe_timeout_ms": z.coerce.number().int().min(200).max(10_000),

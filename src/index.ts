@@ -23,8 +23,10 @@ export {
   ROUTING_POLICIES,
   SETTABLE_KEYS,
   configSchema,
+  isLoopbackHost,
   loadConfig,
   localBackendSchema,
+  loopbackHostSchema,
   routingPolicySchema,
   saveConfig,
   setConfigValue,
@@ -52,6 +54,14 @@ export type { ForwardResult, ProbeResult, RuntimeBackend } from "./backends.ts";
 
 export { SYSONE_VERSION, createFetchHandler, startGateway } from "./gateway.ts";
 export type { GatewayDeps, RunningGateway } from "./gateway.ts";
+
+export { runDoctor } from "./doctor.ts";
+export type {
+  DoctorCheck,
+  DoctorOptions,
+  DoctorReport,
+  DoctorStatus,
+} from "./doctor.ts";
 
 export {
   clearPidFile,
@@ -83,11 +93,16 @@ export type {
   QuestionOutcome,
 } from "./local/decide.ts";
 
-export { EngineUnavailableError, LlamaEngine } from "./local/engine.ts";
+export {
+  EngineUnavailableError,
+  LlamaEngine,
+  probeNativeRuntime,
+} from "./local/engine.ts";
 export type {
   DecisionEngine,
   FirstTokenDistribution,
   LlamaEngineOptions,
+  NativeRuntimeProbe,
 } from "./local/engine.ts";
 
 export {
@@ -109,6 +124,7 @@ export {
   MODEL_REGISTRY,
   findInstalled,
   findRegistry,
+  inspectGgufFile,
   installedModels,
   loadManifest,
   loadManifestChecked,
@@ -123,10 +139,13 @@ export {
   verifyModel,
 } from "./local/store.ts";
 export type {
+  GgufInspection,
   InstalledModel,
   Manifest,
   ManifestLoadResult,
+  PullOptions,
   PullResult,
   PullTarget,
   RegistryEntry,
+  VerifyModelResult,
 } from "./local/store.ts";

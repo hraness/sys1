@@ -9,4 +9,6 @@ dist/
 site/.vercel
 coverage/
 artifacts/
+*.gguf
+*.gguf.download
 .env*
