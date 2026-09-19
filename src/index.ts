@@ -42,13 +42,13 @@ export {
   routingPolicySchema,
   saveConfig,
   setConfigValue,
-  sysoneHome,
+  sys1Home,
 } from "./config.ts";
 export type {
   LocalBackendConfig,
   RoutingPolicy,
   SettableKey,
-  SysoneConfig,
+  Sys1Config,
 } from "./config.ts";
 
 export { chooseBackend, requestNeeds } from "./router.ts";
@@ -87,7 +87,7 @@ export type {
   BackendQualificationStatus,
 } from "./qualification.ts";
 
-export { SYSONE_VERSION, createFetchHandler, startGateway } from "./gateway.ts";
+export { SYS1_VERSION, createFetchHandler, startGateway } from "./gateway.ts";
 export type { GatewayDeps, RunningGateway } from "./gateway.ts";
 
 export { runDoctor } from "./doctor.ts";
@@ -217,3 +217,11 @@ export type {
   ScorerInspection,
   VerifyModelResult,
 } from "./local/store.ts";
+
+export { createClient, DEFAULT_BASE_URL, Sys1ClientError } from "./client.ts";
+export type {
+  ClientErrorCode, ClientOptions, EvaluationOptions, EvaluationResult,
+  RouteMetadata, Sys1Client,
+} from "./client.ts";
+export { createRouter } from "./runtime.ts";
+export type { RouterOptions, EmbeddedRouter } from "./runtime.ts";

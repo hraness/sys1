@@ -1,3 +1,5 @@
+import { LocalInputError } from "./input.ts";
+
 import type {
   Answer,
   ChoiceQuestion,
@@ -41,7 +43,8 @@ export const DECIDE_LIMITS = {
 export const NOUL_LABELS = ["yes", "no"] as const;
 
 function truncate(text: string, max: number): string {
-  return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
+  if (text.length > max) throw new LocalInputError(`local input exceeds ${max} characters`);
+  return text;
 }
 
 function renderEntry(value: EntryType, max: number): string {
@@ -55,7 +58,7 @@ function renderState(state: EntryType): string {
 
 function clamp(text: string): string {
   if (text.length > DECIDE_LIMITS.maxPromptChars) {
-    throw new Error(`decision prompt exceeds ${DECIDE_LIMITS.maxPromptChars} characters`);
+    throw new LocalInputError(`decision prompt exceeds ${DECIDE_LIMITS.maxPromptChars} characters`);
   }
   return text;
 }
@@ -134,6 +137,8 @@ function scorePrompt(state: EntryType, q: ScoreQuestion): string {
  * YES/NO; choice and score use the unique one-character label table.
  */
 export function answerLabels(question: Question): string[] {
+  const count = question.type === "choice" ? Object.keys(question.criteria).length : question.type === "score" ? question.criteria.length : 2;
+  if (count > DECIDE_LIMITS.maxLabels) throw new LocalInputError("too many local answer labels");
   switch (question.type) {
     case "noul":
       return [...NOUL_LABELS];
@@ -145,6 +150,7 @@ export function answerLabels(question: Question): string[] {
 }
 
 export function decisionPrompt(state: EntryType, question: Question): string {
+  answerLabels(question);
   switch (question.type) {
     case "noul":
       return noulPrompt(state, question);

@@ -7,7 +7,7 @@ import { configSchema } from "../src/config.ts";
 import { createFetchHandler } from "../src/gateway.ts";
 import type { DecisionEngine, FirstTokenDistribution } from "../src/local/engine.ts";
 import { LocalRunner, type EngineFactory } from "../src/local/runner.ts";
-import { modelsDir, saveManifest, type InstalledModel } from "../src/local/store.ts";
+import { modelsDir, saveManifest, installedModels, type InstalledModel } from "../src/local/store.ts";
 import { systemOneResponseSchema, type SystemOneRequest } from "../src/protocol.ts";
 import { buildCactBlob } from "./fixtures/cact.ts";
 import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
@@ -15,7 +15,7 @@ import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
 const homes: string[] = [];
 
 function homeWithModels(ids: string[] = ["tiny"]): string {
-  const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+  const home = mkdtempSync(join(tmpdir(), "sys1-runner-test-"));
   homes.push(home);
   const models: InstalledModel[] = ids.map((id) => ({
     id,
@@ -153,6 +153,25 @@ describe("LocalRunner", () => {
     expect(engines[1]?.disposed).toBe(true);
   });
 
+  test("a scorer evicts a resident GGUF at the shared residency cap", async () => {
+    const home = homeWithModels(["one"]);
+    const checkpoint = buildScorerCheckpoint({ encoder: "tinyx", width: 8, rank: 8, layers: 1, heads: 2, context_tokens: 256, option_tokens: 96 });
+    writeFileSync(join(modelsDir(home), "scorer.pt"), checkpoint);
+    saveManifest(home, { version: 1, models: [...installedModels(home), {
+      id: "scorer", kind: "scorer", file: "scorer.pt", source: "test",
+      sha256: createHash("sha256").update(checkpoint).digest("hex"), bytes: checkpoint.byteLength,
+      context: 256, installed_at: "2026-01-01T00:00:00.000Z",
+    }] });
+    const engine = new FakeEngine("one");
+    const runner = new LocalRunner({ home, maxLoadedModels: 1, engineFactory: () => engine });
+    try {
+      expect((await runner.decide(request(), "one")).ok).toBe(true);
+      expect((await runner.decide(request(), "scorer")).ok).toBe(true);
+      expect(engine.disposed).toBe(true);
+      expect(runner.loadedModels()).toEqual(["scorer"]);
+    } finally { await runner.dispose(); }
+  });
+
   test("serializes complete requests across different models", async () => {
     const home = homeWithModels(["one", "two"]);
     const stats: EngineStats = { active: 0, maxActive: 0 };
@@ -195,7 +214,7 @@ describe("LocalRunner", () => {
   });
 
   test("answers a request through a synthetic scorer checkpoint", async () => {
-    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    const home = mkdtempSync(join(tmpdir(), "sys1-runner-test-"));
     homes.push(home);
     const ckpt = buildScorerCheckpoint({
       encoder: "tinyx",
@@ -250,7 +269,7 @@ describe("LocalRunner", () => {
   });
 
   test("answers a request through an injected needle turn", async () => {
-    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    const home = mkdtempSync(join(tmpdir(), "sys1-runner-test-"));
     homes.push(home);
     const cact = buildCactBlob();
     const engine = Buffer.alloc(1_024, 9);
@@ -318,7 +337,7 @@ describe("LocalRunner", () => {
   });
 
   test("a needle turn without the evaluate call fails closed", async () => {
-    const home = mkdtempSync(join(tmpdir(), "sysone-runner-test-"));
+    const home = mkdtempSync(join(tmpdir(), "sys1-runner-test-"));
     homes.push(home);
     const cact = buildCactBlob();
     const engine = Buffer.alloc(1_024, 9);
@@ -400,10 +419,10 @@ describe("builtin gateway backend", () => {
       }),
     );
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-sysone-backend")).toBe("local-tiny");
-    expect(response.headers.get("x-sysone-local-adapter")).toBe("generic-gguf");
-    expect(response.headers.get("x-sysone-local-min-coverage")).toBe("0.900");
-    expect(response.headers.get("x-sysone-local-min-concentration")).toBe("0.400");
+    expect(response.headers.get("x-sys1-backend")).toBe("local-tiny");
+    expect(response.headers.get("x-sys1-local-adapter")).toBe("generic-gguf");
+    expect(response.headers.get("x-sys1-local-min-coverage")).toBe("0.900");
+    expect(response.headers.get("x-sys1-local-min-concentration")).toBe("0.400");
     const body: unknown = await response.json();
     const parsed = systemOneResponseSchema.parse(body);
     expect(parsed.answers.route).toMatchObject({ type: "choice", choice: "page" });
@@ -433,9 +452,9 @@ describe("builtin gateway backend", () => {
         body: JSON.stringify(request("tiny")),
       }),
     );
-    expect(response.status).toBe(503);
+    expect(response.status).toBe(504);
     const body = (await response.json()) as { error: { message: string } };
-    expect(body.error.message).toContain("inference_timeout");
+    expect(body.error.message).toBe("request deadline exceeded");
     await runner.dispose();
   });
 });

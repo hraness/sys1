@@ -44,19 +44,31 @@ describe("local decision prompts", () => {
   test("maximum local choice prompt preserves every label and answer position", () => {
     const criteria = Object.fromEntries(
       Array.from({ length: 35 }, (_, i) => [
-        `option-${i}-${"k".repeat(240)}`,
-        "description".repeat(100),
+        `option-${i}`,
+        "description",
       ]),
     );
     const question: Question = {
       type: "choice",
-      instructions: "instruction".repeat(500),
+      instructions: "Pick the best option",
       criteria,
     };
-    const prompt = decisionPrompt("state".repeat(4_000), question);
+    const prompt = decisionPrompt("state", question);
     expect(prompt.length).toBeLessThanOrEqual(DECIDE_LIMITS.maxPromptChars);
     expect(prompt).toContain("Z: option-34");
     expect(prompt.endsWith("Answer:")).toBe(true);
+  });
+
+  test("rejects oversized evidence rather than silently truncating it", () => {
+    expect(() => decisionPrompt("x".repeat(DECIDE_LIMITS.maxStateChars + 1), { type: "noul" })).toThrow();
+    expect(() => decisionPrompt("state", { type: "noul", instructions: "x".repeat(2001) })).toThrow();
+    expect(() => decisionPrompt("state", { type: "choice", criteria: { x: "x".repeat(97) } })).toThrow();
+  });
+
+  test("public prompt helpers reject choice sets above the label capacity", () => {
+    const question: Question = { type: "choice", criteria: Object.fromEntries(Array.from({ length: 36 }, (_, i) => [String(i), null])) };
+    expect(() => answerLabels(question)).toThrow();
+    expect(() => decisionPrompt("state", question)).toThrow();
   });
 
   test("score prompt labels levels from one", () => {

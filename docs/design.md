@@ -1,10 +1,29 @@
-# SysOne design
+# Sys1 design
 
 One bounded loopback endpoint for System One decisions, whichever qualified
 backend answers.
 
+## Product boundary
+
+Applications own domain criteria, action permissions, quality thresholds, and
+fallback behavior. Sys1 owns transport, routing policy, bounded schema
+validation, and the lifecycle of explicitly installed local models. Wire shape
+compatibility does not imply equal calibration or application quality.
+
+The portable `@hraness/sys1/client` entry exports the typed HTTP client and
+protocol schemas. It runs on Node 24 and Bun without loading the optional
+native runtime. The root entry supplies a Bun `createRouter` with explicit
+configuration, no listening socket, and a required disposal lifecycle. The CLI
+and daemon are another frontend to the same gateway handler. Rust and other
+language clients use the HTTP contract directly.
+
 ## Components
 
+- **Client** (`src/client.ts`) bounds requests and responses, propagates aborts,
+  validates request-correlated answers, and returns routing metadata without
+  retries or implicit credentials.
+- **Embedded runtime** (`src/runtime.ts`) owns a gateway handler and local
+  runner, exposing `evaluate`, `fetch`, and `dispose` without binding a port.
 - **Protocol** (`src/protocol.ts`) validates the System One request envelope and
   bounds bodies, state, question counts, options, levels, and strings.
 - **Gateway** (`src/gateway.ts`) serves `POST /v1/systemone`, `GET /v1/models`,
@@ -20,9 +39,9 @@ backend answers.
   and all three answer shapes for operator-owned HTTP services.
 - **Decision adapter** (`src/local/decide.ts`) renders bounded prompts and maps a
   full first-token vocabulary distribution into noul, choice, and score answers.
-- **Engine** (`src/local/engine.ts`) lazily owns one node-llama-cpp model/context,
-  serializes evaluations, enforces evaluation timeouts, and releases native
-  resources.
+- **Engine** (`src/local/engine.ts`) lazily owns a warm worker process with
+  one node-llama-cpp model/context. Abort, timeout, and disposal terminate and
+  collect that worker; native evaluation cannot strand the parent queue.
 - **Torch checkpoint reader** (`src/local/torchckpt.ts`) parses `torch.save`
   archives in-process: a bounded ZIP reader, a restricted pickle interpreter
   (no arbitrary globals), and Float32 tensor materialization.
@@ -46,7 +65,8 @@ backend answers.
   per-kind runtime, caps resident engines and scorers, and produces the wire
   response with an adapter identity.
 - **Daemon** (`src/daemon.ts`) owns detached process, pid file, health check,
-  log, and stop lifecycle.
+  log, and stop lifecycle. Authenticated per-instance shutdown never signals a
+  saved PID whose ownership may have changed.
 
 ## Request flow
 
@@ -60,8 +80,10 @@ backend answers.
    `chooseBackend` using policy, model id, or exact backend/model pinning.
    Specialists are skipped unless pinned; over-capability candidates are
    skipped, and a request no backend can serve fails as `request_unsupported`.
-5. Forward hosted/HTTP calls unchanged except for resolved model id. Any HTTP
-   response is definitive; only transport failure can retry once.
+5. Forward hosted/HTTP calls with the resolved model id and a bounded deadline.
+   Any HTTP response is definitive, including failures while reading its body;
+   only failure before receiving headers can retry once. Validate successful
+   answers against the original questions before returning them.
 6. For a builtin candidate, dispatch on model kind:
    - `gguf`: lazily load llama.cpp and evaluate each question at its answer
      position with full-vocabulary probabilities;
@@ -70,7 +92,7 @@ backend answers.
    - `needle`: spawn one bounded engine process per request, feed the
      `evaluate` tool schema, and parse the validated JSON turn.
 7. Map the adapter output to the exact Jev answer shape. Adapter identity and
-   diagnostics remain in `x-sysone-local-*` response headers.
+   diagnostics remain in `x-sys1-local-*` response headers.
 
 ## Generic GGUF semantics
 
@@ -85,14 +107,20 @@ Mass is renormalized across allowed labels for the answer distribution. Noul is
 probability of yes; Choice selects the highest-probability option; Score is the
 zero-based probability-weighted expected level with an exact legend. Choice and
 Score confidence uses concentration above a uniform distribution. Batch-minimum
-coverage and concentration are exposed as `x-sysone-local-*` headers so the Jev
+coverage and concentration are exposed as `x-sys1-local-*` headers so the Jev
 answer objects stay schema-compatible. Neither metric is a calibration guarantee.
 
 The runner is node-llama-cpp rather than a wasm runner. It exposes the complete
 vocabulary distribution needed for label-mass aggregation, lets llama.cpp
 select the available platform backend, and runs under Bun. Weights are loaded
-only after explicit `sysone setup` or `sysone pull`; CI substitutes the engine
+only after explicit `sys1 setup` or `sys1 pull`; CI substitutes the engine
 boundary and never downloads a model.
+
+Adapter bounds reject oversized fields instead of silently truncating evidence.
+The generic adapter permits 6,000 state characters, 2,000 instruction characters,
+96 characters per option name/criterion, and 16,000 rendered prompt characters.
+Scorer context and option limits come from its admitted checkpoint. Oversized
+local inputs fail without being redispatched to a hosted backend.
 
 ## Option-scorer semantics
 
@@ -142,12 +170,12 @@ queues are local only; request state and answers are never written there.
 ## Local-first defaults and hosted Jev
 
 Fresh config enables local inference, uses `auto` routing, and keeps hosted Jev
-disabled even when its credential variable exists. `sysone jev enable` requires
+disabled even when its credential variable exists. `sys1 jev enable` requires
 the environment credential, persists only the activation flag, and switches to
 `auto`; `jev disable` repairs `hosted-only` back to `auto`. Credentials never
 enter config, output, pid files, or logs.
 
-`sysone setup` is an explicit download boundary. The qualified target table
+`sys1 setup` is an explicit download boundary. The supported target table
 covers macOS, Linux, and Windows on x64/ARM64. llama.cpp auto-selects Metal,
 CUDA, Vulkan, or CPU where packaged. Below 16 GiB system memory setup chooses
 Qwen3 0.6B; at or above 16 GiB it chooses Qwen3 1.7B. `--tier compact|quality`
@@ -176,8 +204,19 @@ an immutable GitHub Release can be published.
 - Gateway binds are restricted to loopback; there is no request authentication.
 - Hosted credentials are environment-only.
 - Request states, questions, prompts, distributions, and answers are absent from
-  logs, pid files, config, and model manifests.
+  logs, pid files, config, and model manifests. The pinned Needle adapter has
+  the explicit temporary tools-file/process-argument boundary described below.
 - Downloads occur only from an explicit CLI command, are capped, and require a
   registry pin, publisher LFS digest, or user-supplied SHA-256.
 - No ordinary test or package artifact includes model weights.
 - External backend processes remain operator-owned.
+
+## Needle process boundary
+
+The explicitly pinned Needle specialist requires a private per-request tools
+file containing question instructions and criteria, deleted when the request
+settles. Its native CLI receives state as a process argument, visible to local
+process inspection. Abrupt host termination can leave the private temporary
+file behind. Do not use this adapter for inputs whose policy forbids that
+exposure. The GGUF worker uses private pipes; ordinary request bodies,
+credentials, answers, and prompts are not application logs or durable state.

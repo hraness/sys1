@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
-import { existsSync, readFileSync } from "node:fs";
+import { readBoundedText } from "./http.ts";
+import { existsSync } from "node:fs";
 import {
   DEFAULT_CONFIG,
   SETTABLE_KEYS,
@@ -8,9 +9,9 @@ import {
   localBackendSchema,
   saveConfig,
   setConfigValue,
-  sysoneHome,
+  sys1Home,
   type SettableKey,
-  type SysoneConfig,
+  type Sys1Config,
 } from "./config.ts";
 import {
   clearPidFile,
@@ -18,13 +19,14 @@ import {
   daemonStatus,
   daemonUp,
   healthz,
+  gatewayUrl,
   readPidFile,
   writePidFile,
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
 import { LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
 import { runDoctor } from "./doctor.ts";
-import { SYSONE_VERSION, startGateway } from "./gateway.ts";
+import { SYS1_VERSION, startGateway } from "./gateway.ts";
 import { probeNativeRuntime } from "./local/engine.ts";
 import { qualifyBackend } from "./qualification.ts";
 import {
@@ -48,13 +50,13 @@ function err(text: string): void {
 }
 
 function fail(message: string, code: number): never {
-  err(`sysone: ${message}`);
+  err(`sys1: ${message}`);
   process.exit(code);
 }
 
-const USAGE = `sysone — local System One gateway for coding agents
+const USAGE = `sys1 — local System One gateway for coding agents
 
-Usage: sysone <command> [flags]
+Usage: sys1 <command> [flags]
 
 Setup:
   setup [--tier compact|quality] [--dry-run] [--json]
@@ -102,7 +104,7 @@ Local tiers: ${LOCAL_MODEL_TIERS.join(", ")}
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
-  SYSONE_HOME                   State directory (default ~/.sysone)
+  SYS1_HOME                   State directory (default ~/.sys1)
   TYPESAFE_API_KEY              Hosted Jev credential (used only after \`jev enable\`)
 
 Endpoint: POST http://127.0.0.1:13900/v1/systemone, GET /v1/models, GET /healthz
@@ -171,7 +173,7 @@ function formatBytes(bytes: number): string {
   return `${(bytes / 1024 ** 3).toFixed(2)} GiB`;
 }
 
-function mustConfig(home: string): SysoneConfig {
+function mustConfig(home: string): Sys1Config {
   const loaded = loadConfig(home);
   if (!loaded.ok) fail(loaded.message, EXIT.config);
   return loaded.config;
@@ -229,7 +231,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
       if (flags.get("json") === true) {
         out(JSON.stringify({ ok: false, recommendation, config_path: path, pull }, null, 2));
       } else {
-        err(`sysone: ${pull.message ?? "default model download failed"}`);
+        err(`sys1: ${pull.message ?? "default model download failed"}`);
       }
       process.exit(EXIT.backend);
     }
@@ -254,7 +256,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
   else {
     out(`platform: ${recommendation.target} (${native.backend ?? "cpu"})`);
     out(`${recommendation.model}: ${existing === undefined ? "installed" : "already installed"}`);
-    out("local setup ready; run `sysone up`");
+    out("local setup ready; run `sys1 up`");
   }
 }
 
@@ -306,7 +308,7 @@ function cmdJev(home: string, args: ParsedArgs): void {
     else out(`Jev disabled (${path})`);
     return;
   }
-  fail("usage: sysone jev <status|enable|disable> [--json]", EXIT.usage);
+  fail("usage: sys1 jev <status|enable|disable> [--json]", EXIT.usage);
 }
 
 async function cmdUp(home: string, flags: Map<string, string | boolean>): Promise<void> {
@@ -319,9 +321,9 @@ async function cmdUp(home: string, flags: Map<string, string | boolean>): Promis
   if (flags.get("json") === true) {
     out(JSON.stringify(result));
   } else if (result.ok) {
-    out(`sysone gateway running at ${result.url} (pid ${result.pid})`);
+    out(`sys1 gateway running at ${result.url} (pid ${result.pid})`);
   } else {
-    out(`sysone: ${result.message}`);
+    out(`sys1: ${result.message}`);
   }
   if (!result.ok) process.exit(EXIT.daemon);
 }
@@ -332,7 +334,7 @@ async function cmdDown(home: string, flags: Map<string, string | boolean>): Prom
   if (flags.get("json") === true) {
     out(JSON.stringify(result));
   } else {
-    out(`sysone: ${result.message}`);
+    out(`sys1: ${result.message}`);
   }
   if (!result.ok) process.exit(EXIT.daemon);
 }
@@ -344,7 +346,9 @@ async function cmdServe(
   const config = mustConfig(home);
   const port = flagNumber(flags, "port");
   const daemonChild = flags.get("daemon-child") === true;
+  const instance = crypto.randomUUID();
   const gateway = startGateway({
+    ...(daemonChild ? { daemon: { instance, onShutdown: () => shutdown() } } : {}),
     config,
     env: process.env,
     home,
@@ -356,9 +360,9 @@ async function cmdServe(
     },
   });
   if (daemonChild) {
-    writePidFile(home, process.pid, config.gateway.host, gateway.port);
+    writePidFile(home, process.pid, config.gateway.host, gateway.port, instance);
   }
-  err(`sysone ${SYSONE_VERSION} listening at ${gateway.url}`);
+  err(`sys1 ${SYS1_VERSION} listening at ${gateway.url}`);
   let shuttingDown = false;
   const shutdown = (): void => {
     if (shuttingDown) return;
@@ -370,7 +374,7 @@ async function cmdServe(
         process.exit(0);
       })
       .catch((error: unknown) => {
-        err(`sysone: shutdown failed: ${error instanceof Error ? error.message : "unknown error"}`);
+        err(`sys1: shutdown failed: ${error instanceof Error ? error.message : "unknown error"}`);
         process.exit(1);
       });
   };
@@ -404,7 +408,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
     out(JSON.stringify(report, null, 2));
     return;
   }
-  out(`daemon: ${daemon.state}${daemon.state === "running" ? ` pid ${daemon.pid} http://${daemon.host}:${daemon.port}` : ""}`);
+  out(`daemon: ${daemon.state}${daemon.state === "running" ? ` pid ${daemon.pid} ${gatewayUrl(daemon.host, daemon.port)}` : ""}`);
   out(`routing: ${config.routing.policy}`);
   out(`local store: ${localModels.length} model${localModels.length === 1 ? "" : "s"}, ${formatBytes(report.local_store.bytes)}`);
   for (const backend of report.backends) {
@@ -413,7 +417,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
     out(`  ${backend.name} (${backend.kind})${size}: ${marker} — ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
-    out("  no backends configured; run `sysone setup`, `sysone jev enable`, or `sysone backend add`");
+    out("  no backends configured; run `sys1 setup`, `sys1 jev enable`, or `sys1 backend add`");
   }
 }
 
@@ -498,7 +502,7 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
   } else if (result.ok) {
     out(`installed ${result.id} at ${result.path} (${formatBytes(result.bytes ?? 0)})`);
   } else {
-    err(`sysone: ${result.message ?? "model download failed"}`);
+    err(`sys1: ${result.message ?? "model download failed"}`);
   }
   if (!result.ok) process.exit(EXIT.backend);
 }
@@ -515,11 +519,11 @@ async function cmdModel(home: string, args: ParsedArgs): Promise<void> {
       const size = model.size_b === undefined ? "unknown" : `${model.size_b}B`;
       out(`${model.id}\t${model.kind}\t${size}\t${formatBytes(model.bytes)}\t${model.source}`);
     }
-    if (models.length === 0) out("no models installed; run `sysone pull`");
+    if (models.length === 0) out("no models installed; run `sys1 pull`");
     return;
   }
   if (sub === "verify") {
-    if (id === undefined) fail("usage: sysone model verify MODEL", EXIT.usage);
+    if (id === undefined) fail("usage: sys1 model verify MODEL", EXIT.usage);
     const result = await verifyModel(home, id);
     if (args.flags.get("json") === true) {
       out(JSON.stringify({ id, ...result }, null, 2));
@@ -530,7 +534,7 @@ async function cmdModel(home: string, args: ParsedArgs): Promise<void> {
     return;
   }
   if (sub === "remove") {
-    if (id === undefined) fail("usage: sysone model remove MODEL", EXIT.usage);
+    if (id === undefined) fail("usage: sys1 model remove MODEL", EXIT.usage);
     const result = removeModel(home, id);
     if (args.flags.get("json") === true) {
       out(JSON.stringify({ id, ...result }, null, 2));
@@ -540,7 +544,7 @@ async function cmdModel(home: string, args: ParsedArgs): Promise<void> {
     if (!result.ok) process.exit(EXIT.backend);
     return;
   }
-  fail("usage: sysone model <list|verify|remove> [MODEL]", EXIT.usage);
+  fail("usage: sys1 model <list|verify|remove> [MODEL]", EXIT.usage);
 }
 
 async function cmdEval(home: string, flags: Map<string, string | boolean>): Promise<void> {
@@ -548,29 +552,30 @@ async function cmdEval(home: string, flags: Map<string, string | boolean>): Prom
   const file = flagString(flags, "file");
   let raw: string;
   if (file === undefined || file === "-") {
-    raw = await new Response(Bun.stdin.stream()).text();
+    raw = await readBoundedText({ body: Bun.stdin.stream() }, 1_048_576);
   } else {
     if (!existsSync(file)) fail(`no such file: ${file}`, EXIT.usage);
-    raw = readFileSync(file, "utf8");
+    raw = await readBoundedText({ body: Bun.file(file).stream() }, 1_048_576);
   }
   const record = readPidFile(home);
   const host = record?.host ?? config.gateway.host;
   const port = record?.port ?? config.gateway.port;
   if (!(await healthz(host, port))) {
-    fail(`gateway is not running at http://${host}:${port}; run \`sysone up\``, EXIT.daemon);
+    fail(`gateway is not running at ${gatewayUrl(host, port)}; run \`sys1 up\``, EXIT.daemon);
   }
   let response: Response;
   try {
-    response = await fetch(`http://${host}:${port}/v1/systemone`, {
+    response = await fetch(`${gatewayUrl(host, port)}/v1/systemone`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: raw,
       signal: AbortSignal.timeout(config.gateway.request_timeout_ms + 5_000),
+      redirect: "error",
     });
   } catch (error) {
     fail(`gateway request failed: ${error instanceof Error ? error.message : "transport"}`, EXIT.backend);
   }
-  const body = await response.text();
+  const body = await readBoundedText(response, 4_194_304, AbortSignal.timeout(config.gateway.request_timeout_ms));
   out(body);
   if (!response.ok) process.exit(EXIT.backend);
 }
@@ -591,7 +596,7 @@ function cmdConfig(home: string, args: ParsedArgs): void {
     case "set": {
       const [key, value] = rest;
       if (key === undefined || value === undefined) {
-        fail("usage: sysone config set <key> <value>", EXIT.usage);
+        fail("usage: sys1 config set <key> <value>", EXIT.usage);
       }
       if (!(key in SETTABLE_KEYS)) {
         fail(`unknown key ${key}; settable: ${Object.keys(SETTABLE_KEYS).join(", ")}`, EXIT.usage);
@@ -604,11 +609,11 @@ function cmdConfig(home: string, args: ParsedArgs): void {
     }
     case "unset": {
       const [key] = rest;
-      if (key === undefined) fail("usage: sysone config unset <key>", EXIT.usage);
+      if (key === undefined) fail("usage: sys1 config unset <key>", EXIT.usage);
       if (!(key in SETTABLE_KEYS)) {
         fail(`unknown key ${key}`, EXIT.usage);
       }
-      const [section, field] = key.split(".") as [keyof SysoneConfig, string];
+      const [section, field] = key.split(".") as [keyof Sys1Config, string];
       const defaults = DEFAULT_CONFIG[section] as Record<string, unknown>;
       const next = structuredClone(loaded.config);
       (next[section] as Record<string, unknown>)[field] = defaults[field];
@@ -617,7 +622,7 @@ function cmdConfig(home: string, args: ParsedArgs): void {
       return;
     }
     default:
-      fail("usage: sysone config <path|get|set|unset>", EXIT.usage);
+      fail("usage: sys1 config <path|get|set|unset>", EXIT.usage);
   }
 }
 
@@ -646,7 +651,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
       const url = flagString(args.flags, "url");
       const model = flagString(args.flags, "model");
       if (name === undefined || url === undefined || model === undefined) {
-        fail("usage: sysone backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
+        fail("usage: sys1 backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
       }
       if (loaded.config.backends.some((candidate) => candidate.name === name)) {
         fail(`backend ${name} already exists`, EXIT.usage);
@@ -673,7 +678,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
     }
     case "check": {
       const name = flagString(args.flags, "name");
-      if (name === undefined) fail("usage: sysone backend check --name N [--json]", EXIT.usage);
+      if (name === undefined) fail("usage: sys1 backend check --name N [--json]", EXIT.usage);
       const backend = loaded.config.backends.find((candidate) => candidate.name === name);
       if (backend === undefined) fail(`no backend named ${name}`, EXIT.usage);
       const report = await qualifyBackend(backend, {
@@ -693,7 +698,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
     }
     case "remove": {
       const name = flagString(args.flags, "name");
-      if (name === undefined) fail("usage: sysone backend remove --name N", EXIT.usage);
+      if (name === undefined) fail("usage: sys1 backend remove --name N", EXIT.usage);
       const next = structuredClone(loaded.config);
       const before = next.backends.length;
       next.backends = next.backends.filter((b) => b.name !== name);
@@ -703,17 +708,17 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
       return;
     }
     default:
-      fail("usage: sysone backend <list|add|check|remove>", EXIT.usage);
+      fail("usage: sys1 backend <list|add|check|remove>", EXIT.usage);
   }
 }
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const [command] = args.positional;
-  const home = sysoneHome(process.env);
+  const home = sys1Home(process.env);
 
   if (args.flags.get("version") === true || command === "version") {
-    out(SYSONE_VERSION);
+    out(SYS1_VERSION);
     return;
   }
   if (command === undefined || args.flags.get("help") === true || command === "help") {
@@ -762,7 +767,7 @@ async function main(): Promise<void> {
       await cmdBackend(home, args);
       return;
     default:
-      err(`sysone: unknown command ${command}`);
+      err(`sys1: unknown command ${command}`);
       err(USAGE);
       process.exit(EXIT.usage);
   }

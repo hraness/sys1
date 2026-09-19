@@ -100,6 +100,21 @@ describe("chooseBackend model routing", () => {
     expect(choice).toMatchObject({ ok: true, backend: { name: "openjev" }, reason: "pinned" });
   });
 
+  test("an exact pin cannot override a local-only or hosted-only policy", () => {
+    expect(chooseBackend("local-only", "typesafe/jev-latest", all)).toMatchObject({
+      ok: false, reason: "policy_restricted",
+    });
+    expect(chooseBackend("hosted-only", "openjev/openjev-4b", all)).toMatchObject({
+      ok: false, reason: "policy_restricted",
+    });
+  });
+
+  test("a bare model excluded by policy reports policy_restricted", () => {
+    expect(chooseBackend("local-only", "jev-latest", all)).toMatchObject({
+      ok: false, reason: "policy_restricted",
+    });
+  });
+
   test("pinned backend that is down reports model_unavailable", () => {
     const choice = chooseBackend("auto", "openjev/openjev-4b", [
       hosted,

@@ -77,8 +77,8 @@ async function main(): Promise<void> {
 
   await packageSmoke(tarball);
   const root = process.env["RUNNER_TEMP"] ?? tmpdir();
-  const prefix = join(root, "sysone-global");
-  const home = join(root, "sysone-home");
+  const prefix = join(root, "sys1-global");
+  const home = join(root, "sys1-home");
   mkdirSync(prefix, { recursive: true });
   mkdirSync(home, { recursive: true });
   const npm = process.platform === "win32" ? "npm.cmd" : "npm";
@@ -92,9 +92,9 @@ async function main(): Promise<void> {
     tarball,
   ]);
   const executable =
-    process.platform === "win32" ? join(prefix, "sysone.cmd") : join(prefix, "bin", "sysone");
+    process.platform === "win32" ? join(prefix, "sys1.cmd") : join(prefix, "bin", "sys1");
   const doctor = JSON.parse(
-    await run([executable, "doctor", "--json"], { ...process.env, SYSONE_HOME: home }),
+    await run([executable, "doctor", "--json"], { ...process.env, SYS1_HOME: home }),
   ) as { ok?: unknown; version?: unknown };
   if (doctor.ok !== true || doctor.version !== 1) {
     throw new Error("installed release doctor did not report ready");

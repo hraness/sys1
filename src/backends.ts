@@ -1,12 +1,21 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
-import type { LocalBackendConfig, SysoneConfig } from "./config.ts";
+import { isLoopbackHost, type LocalBackendConfig, type Sys1Config } from "./config.ts";
+import { HttpBodyLimitError, readBoundedText } from "./http.ts";
 import { builtinCandidates } from "./local/runner.ts";
 import { modelsDir, type InstalledModel } from "./local/store.ts";
+import { errorBody } from "./protocol.ts";
 import type { BackendCandidate, BackendCapabilities } from "./router.ts";
 
 export const HOSTED_BACKEND_NAME = "typesafe";
+const MAX_PROBE_BYTES = 1_048_576;
+const MAX_RESPONSE_BYTES = 4_194_304;
+
+function boundedSignal(timeoutMs: number, signal?: AbortSignal): AbortSignal {
+  const timeout = AbortSignal.timeout(timeoutMs);
+  return signal === undefined ? timeout : AbortSignal.any([signal, timeout]);
+}
 
 export interface RuntimeBackend extends BackendCandidate {
   base_url: string;
@@ -97,7 +106,7 @@ function constrainedCapabilities(
  * as a builtin `local-<id>` pseudo-backend served by the in-process runner.
  */
 export function runtimeBackends(
-  config: SysoneConfig,
+  config: Sys1Config,
   env: NodeJS.ProcessEnv,
   home?: string,
 ): RuntimeBackend[] {
@@ -147,9 +156,13 @@ export function runtimeBackends(
 }
 
 function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
+  const hostname = new URL(local.base_url).hostname;
+  const host = hostname.startsWith("[") ? hostname.slice(1, -1) : hostname;
   return {
     name: local.name,
-    kind: "local",
+    // Operator ownership does not make an off-machine service local. Policy
+    // boundaries follow where the request goes, not how it was registered.
+    kind: isLoopbackHost(host) ? "local" : "hosted",
     available: false,
     models: [local.model],
     size_b: local.size_b ?? null,
@@ -181,15 +194,24 @@ async function probeLimits(
   backend: RuntimeBackend,
   timeoutMs: number,
   fetchFn: typeof fetch,
+  signal?: AbortSignal,
 ): Promise<void> {
   try {
+    const activeSignal = boundedSignal(timeoutMs, signal);
+    activeSignal.throwIfAborted();
     const response = await fetchFn(`${backend.base_url}/v1/limits`, {
       method: "GET",
       headers: { accept: "application/json", ...backend.headers },
-      signal: AbortSignal.timeout(timeoutMs),
+      redirect: "manual",
+      signal: activeSignal,
     });
-    if (!response.ok) return;
-    const published = extractBackendCapabilities(await response.json());
+    if (!response.ok) {
+      void response.body?.cancel().catch(() => {});
+      return;
+    }
+    const published = extractBackendCapabilities(
+      JSON.parse(await readBoundedText(response, MAX_PROBE_BYTES, activeSignal)) as unknown,
+    );
     if (published === null) return;
     backend.capabilities = constrainedCapabilities(backend.capabilities, published);
   } catch {
@@ -201,7 +223,9 @@ export async function probeBackend(
   backend: RuntimeBackend,
   timeoutMs: number,
   fetchFn: typeof fetch = fetch,
+  signal?: AbortSignal,
 ): Promise<ProbeResult> {
+  signal?.throwIfAborted();
   if (backend.builtin !== undefined) {
     const present = existsSync(backend.builtin.path);
     return {
@@ -213,13 +237,16 @@ export async function probeBackend(
   }
   const started = Date.now();
   try {
+    const activeSignal = boundedSignal(timeoutMs, signal);
     const response = await fetchFn(`${backend.base_url}/v1/models`, {
       method: "GET",
       headers: { accept: "application/json", ...backend.headers },
-      signal: AbortSignal.timeout(timeoutMs),
+      redirect: "manual",
+      signal: activeSignal,
     });
     const latency = Date.now() - started;
     if (!response.ok) {
+      void response.body?.cancel().catch(() => {});
       return {
         available: false,
         models: backend.models,
@@ -227,9 +254,9 @@ export async function probeBackend(
         detail: `GET /v1/models -> ${response.status}`,
       };
     }
-    const body: unknown = await response.json();
+    const body: unknown = JSON.parse(await readBoundedText(response, MAX_PROBE_BYTES, activeSignal));
     const models = extractModelIds(body);
-    await probeLimits(backend, timeoutMs, fetchFn);
+    await probeLimits(backend, timeoutMs, fetchFn, signal);
     return {
       available: true,
       models: models.length > 0 ? models : backend.models,
@@ -250,10 +277,11 @@ export async function probeAll(
   backends: RuntimeBackend[],
   timeoutMs: number,
   fetchFn: typeof fetch = fetch,
+  signal?: AbortSignal,
 ): Promise<Map<string, ProbeResult>> {
   const results = await Promise.all(
     backends.map(async (backend) => {
-      const result = await probeBackend(backend, timeoutMs, fetchFn);
+      const result = await probeBackend(backend, timeoutMs, fetchFn, signal);
       backend.available = result.available;
       backend.models = result.models;
       return [backend.name, result] as const;
@@ -277,6 +305,7 @@ export async function forwardToBackend(
   resolvedModel: string | undefined,
   timeoutMs: number,
   fetchFn: typeof fetch = fetch,
+  signal?: AbortSignal,
 ): Promise<ForwardResult> {
   let body = rawBody;
   if (resolvedModel !== undefined) {
@@ -290,8 +319,11 @@ export async function forwardToBackend(
       // body was already schema-validated; keep it unchanged on a parse surprise
     }
   }
+  const activeSignal = boundedSignal(timeoutMs, signal);
+  let response: Response;
   try {
-    const response = await fetchFn(`${backend.base_url}/v1/systemone`, {
+    activeSignal.throwIfAborted();
+    response = await fetchFn(`${backend.base_url}/v1/systemone`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -299,15 +331,9 @@ export async function forwardToBackend(
         ...backend.headers,
       },
       body,
-      signal: AbortSignal.timeout(timeoutMs),
+      redirect: "manual",
+      signal: activeSignal,
     });
-    const text = await response.text();
-    return {
-      kind: "response",
-      status: response.status,
-      body: text.slice(0, 4_194_304),
-      content_type: response.headers.get("content-type") ?? "application/json",
-    };
   } catch (error) {
     const detail =
       error instanceof Error && error.name === "TimeoutError"
@@ -316,5 +342,26 @@ export async function forwardToBackend(
           ? error.name
           : "transport failure";
     return { kind: "transport", detail };
+  }
+  // Receiving HTTP headers makes this attempt definitive. A reset, timeout,
+  // or oversized body after that point must never cause another dispatch.
+  try {
+    const text = await readBoundedText(response, MAX_RESPONSE_BYTES, activeSignal);
+    return {
+      kind: "response",
+      status: response.status,
+      body: text,
+      content_type: response.headers.get("content-type") ?? "application/json",
+    };
+  } catch (error) {
+    return {
+      kind: "response",
+      status: 502,
+      body: JSON.stringify(errorBody(
+        error instanceof HttpBodyLimitError ? "backend_response_too_large" : "backend_response_unreadable",
+        error instanceof HttpBodyLimitError ? "backend response exceeds 4 MiB" : "backend response body could not be read",
+      )),
+      content_type: "application/json",
+    };
   }
 }

@@ -10,7 +10,7 @@ import { dirname } from "node:path";
 import {
   DEFAULT_CONFIG,
   loadConfig,
-  type SysoneConfig,
+  type Sys1Config,
 } from "./config.ts";
 import { daemonStatus, type DaemonState } from "./daemon.ts";
 import { probeNativeRuntime, type NativeRuntimeProbe } from "./local/engine.ts";
@@ -47,7 +47,7 @@ export interface DoctorOptions {
   env?: NodeJS.ProcessEnv;
   runtimeVersion?: string;
   nativeProbe?: () => Promise<NativeRuntimeProbe>;
-  daemonProbe?: (home: string, config: SysoneConfig) => Promise<DaemonState>;
+  daemonProbe?: (home: string, config: Sys1Config) => Promise<DaemonState>;
 }
 
 function compareVersion(actual: string, required: string): number {
@@ -62,7 +62,7 @@ function compareVersion(actual: string, required: string): number {
 }
 
 function boundedDetail(value: string, home: string): string {
-  return value.replaceAll(home, "$SYSONE_HOME").slice(0, 512);
+  return value.replaceAll(home, "$SYS1_HOME").slice(0, 512);
 }
 
 function stateDirectoryCheck(home: string): DoctorCheck {
@@ -219,7 +219,7 @@ function modelChecks(home: string): {
 }
 
 function routingCheck(
-  config: SysoneConfig,
+  config: Sys1Config,
   env: NodeJS.ProcessEnv,
   validModels: number,
 ): DoctorCheck {

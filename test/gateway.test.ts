@@ -2,8 +2,8 @@ import { describe, expect, test, afterEach } from "bun:test";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { configSchema, type SysoneConfig } from "../src/config.ts";
-import { createFetchHandler } from "../src/gateway.ts";
+import { configSchema, type Sys1Config } from "../src/config.ts";
+import { createFetchHandler, startGateway } from "../src/gateway.ts";
 import type { DecisionEngine, FirstTokenDistribution } from "../src/local/engine.ts";
 import { LocalRunner } from "../src/local/runner.ts";
 import { modelsDir, saveManifest } from "../src/local/store.ts";
@@ -25,6 +25,7 @@ const JEV_ANSWER = JSON.stringify({
 const LOCAL_ANSWER = JSON.stringify({
   model: "openjev-4b",
   answers: { urgent: { type: "noul", noul: 0.88 } },
+  usage: { input_tokens: 40, output_tokens: 8 },
 });
 
 interface StubOptions {
@@ -67,7 +68,7 @@ function stubFetch(options: StubOptions): typeof fetch {
   return fn as typeof fetch;
 }
 
-function testConfig(overrides: Record<string, unknown> = {}): SysoneConfig {
+function testConfig(overrides: Record<string, unknown> = {}): Sys1Config {
   return configSchema.parse({
     version: 1,
     hosted: { enabled: true },
@@ -85,7 +86,7 @@ function testConfig(overrides: Record<string, unknown> = {}): SysoneConfig {
 
 const ENV = { TYPESAFE_API_KEY: "test-key" } as NodeJS.ProcessEnv;
 
-function handler(config: SysoneConfig, stub: StubOptions) {
+function handler(config: Sys1Config, stub: StubOptions) {
   return createFetchHandler({ config, env: ENV, fetchFn: stubFetch(stub) });
 }
 
@@ -102,7 +103,7 @@ describe("gateway /v1/systemone", () => {
     const handle = handler(testConfig(), {});
     const response = await handle(post(VALID_BODY));
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-sysone-backend")).toBe("typesafe");
+    expect(response.headers.get("x-sys1-backend")).toBe("typesafe");
     const body = (await response.json()) as { answers: { urgent: { noul: number } } };
     expect(body.answers.urgent.noul).toBe(0.91);
   });
@@ -111,14 +112,14 @@ describe("gateway /v1/systemone", () => {
     const handle = handler(testConfig(), { hostedUp: false });
     const response = await handle(post(VALID_BODY));
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-sysone-backend")).toBe("openjev");
+    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
   });
 
   test("prefer-local routes to the local backend first", async () => {
     const config = testConfig({ routing: { policy: "prefer-local" } });
     const handle = handler(config, {});
     const response = await handle(post(VALID_BODY));
-    expect(response.headers.get("x-sysone-backend")).toBe("openjev");
+    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
   });
 
   test("bare model routes to its backend", async () => {
@@ -126,7 +127,7 @@ describe("gateway /v1/systemone", () => {
     const body = JSON.parse(VALID_BODY) as Record<string, unknown>;
     body["model"] = "openjev-4b";
     const response = await handle(post(JSON.stringify(body)));
-    expect(response.headers.get("x-sysone-backend")).toBe("openjev");
+    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
   });
 
   test("backend/model pins the backend", async () => {
@@ -134,7 +135,7 @@ describe("gateway /v1/systemone", () => {
     const body = JSON.parse(VALID_BODY) as Record<string, unknown>;
     body["model"] = "openjev/openjev-4b";
     const response = await handle(post(JSON.stringify(body)));
-    expect(response.headers.get("x-sysone-backend")).toBe("openjev");
+    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
   });
 
   test("unknown model returns 404", async () => {
@@ -164,8 +165,8 @@ describe("gateway /v1/systemone", () => {
     expect(response.status).toBe(503);
     const parsed = (await response.json()) as { error: { type: string; message: string } };
     expect(parsed.error.type).toBe("no_backend_configured");
-    expect(parsed.error.message).toContain("sysone setup");
-    expect(parsed.error.message).toContain("sysone jev enable");
+    expect(parsed.error.message).toContain("sys1 setup");
+    expect(parsed.error.message).toContain("sys1 jev enable");
   });
 
   test("a Jev credential alone does not activate hosted routing", async () => {
@@ -230,6 +231,168 @@ describe("gateway /v1/models and /healthz", () => {
   });
 });
 
+describe("gateway cancellation and redispatch boundaries", () => {
+  function recordingFetch(postFn: (url: string, init: RequestInit) => Promise<Response>): typeof fetch {
+    const discovery = stubFetch({});
+    return (async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (init?.method === "POST") return postFn(String(input), init);
+      return discovery(input, init);
+    }) as unknown as typeof fetch;
+  }
+
+  test("does not redispatch after an HTTP response whose body fails", async () => {
+    let posts = 0;
+    const fetchFn = recordingFetch(async () => {
+      posts += 1;
+      return new Response(new ReadableStream({
+        start(controller) { controller.error(new Error("private backend output")); },
+      }));
+    });
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(post(VALID_BODY));
+    expect(response.status).toBe(502);
+    expect(response.headers.get("x-sys1-attempts")).toBe("1");
+    expect(posts).toBe(1);
+    expect(await response.text()).not.toContain("private backend output");
+  });
+
+  test("only a failure before response headers may dispatch a second time", async () => {
+    let posts = 0;
+    const fetchFn = recordingFetch(async () => {
+      posts += 1;
+      if (posts === 1) throw new TypeError("connection failed");
+      return new Response(LOCAL_ANSWER);
+    });
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(post(VALID_BODY));
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-sys1-attempts")).toBe("2");
+    expect(posts).toBe(2);
+  });
+
+  test("a successful HTTP response with the wrong answer keys is a definitive 502", async () => {
+    let posts = 0;
+    const fetchFn = recordingFetch(async () => {
+      posts += 1;
+      return Response.json({
+        model: "test", answers: { different: { type: "noul", noul: 0.7 } },
+        usage: { input_tokens: 1, output_tokens: 1 },
+      });
+    });
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(post(VALID_BODY));
+    expect(response.status).toBe(502);
+    expect((await response.json()).error.type).toBe("backend_response_invalid");
+    expect(posts).toBe(1);
+  });
+
+  test("a pinned backend never redispatches after transport failure", async () => {
+    let posts = 0;
+    const fetchFn = recordingFetch(async () => { posts += 1; throw new TypeError("connection failed"); });
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(post(JSON.stringify({ ...JSON.parse(VALID_BODY), model: "typesafe/jev-latest" })));
+    expect(response.status).toBe(503);
+    expect(posts).toBe(1);
+  });
+
+  test("a hosted model pin cannot override local-only routing", async () => {
+    let posts = 0;
+    let hostedCalls = 0;
+    const forward = recordingFetch(async () => { posts += 1; return new Response(JEV_ANSWER); });
+    const fetchFn = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (String(input).startsWith("https://api.typesafe.ai")) hostedCalls += 1;
+      return forward(input, init);
+    }) as typeof fetch;
+    const handle = createFetchHandler({
+      config: testConfig({ routing: { policy: "local-only" } }), env: ENV, fetchFn,
+    });
+    const response = await handle(post(JSON.stringify({ ...JSON.parse(VALID_BODY), model: "typesafe/jev-latest" })));
+    expect(response.status).toBe(422);
+    expect((await response.json()).error.type).toBe("policy_restricted");
+    expect(posts).toBe(0);
+    expect(hostedCalls).toBe(0);
+  });
+
+  test("bounds chunked incoming bodies before any backend probe", async () => {
+    let cancelled = false;
+    let probes = 0;
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) { controller.enqueue(new Uint8Array(1_048_577)); },
+      cancel() { cancelled = true; },
+    });
+    const fetchFn = (async () => { probes += 1; throw new Error("unexpected probe"); }) as unknown as typeof fetch;
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(new Request("http://127.0.0.1/v1/systemone", { method: "POST", body }));
+    expect(response.status).toBe(413);
+    expect(cancelled).toBe(true);
+    expect(probes).toBe(0);
+  });
+
+  test("caller cancellation aborts active forwarding and cannot trigger fallback", async () => {
+    const controller = new AbortController();
+    let posts = 0;
+    let receivedAbort = false;
+    const fetchFn = recordingFetch(async (_url, init) => {
+      posts += 1;
+      return new Promise<Response>((_, reject) => {
+        init.signal?.addEventListener("abort", () => {
+          receivedAbort = true;
+          reject(init.signal?.reason);
+        }, { once: true });
+        queueMicrotask(() => controller.abort());
+      });
+    });
+    const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
+    const response = await handle(new Request("http://127.0.0.1/v1/systemone", {
+      method: "POST", body: VALID_BODY, signal: controller.signal,
+    }));
+    expect(response.status).toBe(499);
+    expect(receivedAbort).toBe(true);
+    expect(posts).toBe(1);
+  });
+
+  test("the request deadline also bounds incoming body reads", async () => {
+    const config = testConfig();
+    config.gateway.request_timeout_ms = 5;
+    const handle = createFetchHandler({ config, env: ENV, fetchFn: stubFetch({}) });
+    const response = await handle(new Request("http://127.0.0.1/v1/systemone", {
+      method: "POST", body: new ReadableStream<Uint8Array>(),
+    }));
+    expect(response.status).toBe(504);
+  });
+});
+
+describe("daemon ownership endpoints", () => {
+  test("embedded gateway binding rejects non-loopback runtime configuration", () => {
+    const config = testConfig();
+    config.gateway.host = "0.0.0.0";
+    expect(() => startGateway({ config, env: {} })).toThrow("loopback");
+  });
+
+  test("only the owner can read instance identity or request shutdown", async () => {
+    let shutdowns = 0;
+    const handle = createFetchHandler({
+      config: testConfig(), env: ENV,
+      daemon: { instance: "private-instance", onShutdown: () => { shutdowns += 1; } },
+    });
+    const publicHealth = await handle(new Request("http://127.0.0.1/healthz"));
+    expect(await publicHealth.json()).not.toHaveProperty("instance");
+    const ownedHealth = await handle(new Request("http://127.0.0.1/healthz", {
+      headers: { authorization: "Bearer private-instance" },
+    }));
+    expect(await ownedHealth.json()).toMatchObject({ instance: "private-instance", pid: process.pid });
+    const denied = await handle(new Request("http://127.0.0.1/_sys1/shutdown", { method: "POST" }));
+    expect(denied.status).toBe(401);
+    expect(shutdowns).toBe(0);
+    const accepted = await handle(new Request("http://127.0.0.1/_sys1/shutdown", {
+      method: "POST", headers: { authorization: "Bearer private-instance" },
+    }));
+    expect(accepted.status).toBe(202);
+    await Bun.sleep(1);
+    expect(shutdowns).toBe(1);
+  });
+});
+
 describe("gateway builtin local backends", () => {
   const homes: string[] = [];
 
@@ -252,7 +415,7 @@ describe("gateway builtin local backends", () => {
   }
 
   function homeWithGguf(): string {
-    const home = mkdtempSync(join(tmpdir(), "sysone-gw-test-"));
+    const home = mkdtempSync(join(tmpdir(), "sys1-gw-test-"));
     homes.push(home);
     saveManifest(home, {
       version: 1,
@@ -275,7 +438,7 @@ describe("gateway builtin local backends", () => {
   }
 
   function homeWithScorer(): string {
-    const home = mkdtempSync(join(tmpdir(), "sysone-gw-test-"));
+    const home = mkdtempSync(join(tmpdir(), "sys1-gw-test-"));
     homes.push(home);
     const ckpt = buildScorerCheckpoint({
       encoder: "tinyx",
@@ -283,7 +446,7 @@ describe("gateway builtin local backends", () => {
       rank: 8,
       layers: 1,
       heads: 2,
-      context_tokens: 64,
+      context_tokens: 256,
       option_tokens: 32,
     });
     mkdirSync(modelsDir(home), { recursive: true });
@@ -298,7 +461,7 @@ describe("gateway builtin local backends", () => {
           source: "test",
           sha256: "0".repeat(64),
           bytes: ckpt.byteLength,
-          context: 64,
+          context: 256,
           installed_at: "2026-01-01T00:00:00.000Z",
         },
       ],
@@ -306,7 +469,7 @@ describe("gateway builtin local backends", () => {
     return home;
   }
 
-  function localOnlyConfig(): SysoneConfig {
+  function localOnlyConfig(): Sys1Config {
     return configSchema.parse({ version: 1, backends: [], hosted: { enabled: false } });
   }
 
@@ -326,9 +489,35 @@ describe("gateway builtin local backends", () => {
     });
     const response = await handle(post(VALID_BODY));
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-sysone-backend")).toBe("local-tiny");
-    expect(response.headers.get("x-sysone-local-adapter")).toBe("generic-gguf");
-    expect(response.headers.get("x-sysone-local-min-coverage")).not.toBeNull();
+    expect(response.headers.get("x-sys1-backend")).toBe("local-tiny");
+    expect(response.headers.get("x-sys1-local-adapter")).toBe("generic-gguf");
+    expect(response.headers.get("x-sys1-local-min-coverage")).not.toBeNull();
+    await runner.dispose();
+  });
+
+  test("an unsupported local request is definitive and never falls through to hosted", async () => {
+    const home = homeWithGguf();
+    const runner = new LocalRunner({
+      home, maxLoadedModels: 1, engineFactory: (model) => new FakeEngine(model.id),
+    });
+    runner.decide = async () => ({
+      ok: false, error: { type: "local_question_unsupported", message: "private request fragment" },
+    });
+    let posts = 0;
+    const discovery = stubFetch({});
+    const fetchFn = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (init?.method === "POST") posts += 1;
+      return discovery(input, init);
+    }) as unknown as typeof fetch;
+    const handle = createFetchHandler({
+      config: testConfig({ routing: { policy: "prefer-local" } }),
+      env: ENV, home, localRunner: runner, fetchFn,
+    });
+    const response = await handle(post(VALID_BODY));
+    expect(response.status).toBe(422);
+    expect(response.headers.get("x-sys1-attempts")).toBe("1");
+    expect(posts).toBe(0);
+    expect(await response.text()).not.toContain("private request fragment");
     await runner.dispose();
   });
 
@@ -350,8 +539,8 @@ describe("gateway builtin local backends", () => {
     body["model"] = "local-ckpt/ckpt";
     const response = await handle(post(JSON.stringify(body)));
     expect(response.status).toBe(200);
-    expect(response.headers.get("x-sysone-backend")).toBe("local-ckpt");
-    expect(response.headers.get("x-sysone-local-adapter")).toBe("option-scorer");
+    expect(response.headers.get("x-sys1-backend")).toBe("local-ckpt");
+    expect(response.headers.get("x-sys1-local-adapter")).toBe("option-scorer");
     const parsed = (await response.json()) as {
       answers: { urgent: { type: string; noul: number } };
     };

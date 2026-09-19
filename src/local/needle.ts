@@ -15,7 +15,7 @@ import { z } from "zod";
  * as a true per-option distribution.
  *
  * The engine binary phones anonymous telemetry home by default upstream;
- * sysone always spawns it with NEEDLE_TELEMETRY=0 and DO_NOT_TRACK=1.
+ * sys1 always spawns it with NEEDLE_TELEMETRY=0 and DO_NOT_TRACK=1.
  */
 
 export const NEEDLE_LIMITS = {

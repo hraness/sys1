@@ -60,7 +60,7 @@ function stubFetch(options: StubOptions = {}): {
 }
 
 const backend = localBackendSchema.parse({
-  name: "local-service",
+  name: "operator-service",
   base_url: "http://127.0.0.1:18080",
   model: "systemone-local",
   capabilities: { max_options: 26, max_questions: 64 },

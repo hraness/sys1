@@ -25,10 +25,26 @@ async function buildDist(): Promise<void> {
     process.execPath,
     "build",
     "src/index.ts",
+    "src/client.ts",
     "--outdir",
     outdir,
     "--root",
     "src",
+    "--target",
+    "node",
+    "--format",
+    "esm",
+    "--packages",
+    "external",
+  ]);
+  await run([
+    process.execPath,
+    "build",
+    "src/local/engine-worker.ts",
+    "--outdir",
+    outdir,
+    "--root",
+    "src/local",
     "--target",
     "node",
     "--format",
@@ -60,7 +76,7 @@ async function buildDist(): Promise<void> {
     : `#!/usr/bin/env bun\n${cliSource}`;
   writeFileSync(cliPath, executable, { mode: 0o755 });
   chmodSync(cliPath, 0o755);
-  console.log("dist/: index.js, index.d.ts, cli.js");
+  console.log("dist/: index.js, client.js, engine-worker.js, declarations, cli.js");
 }
 
 if (import.meta.main) await buildDist();

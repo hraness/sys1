@@ -1,3 +1,5 @@
+import { LocalInputError } from "./input.ts";
+
 import type {
   Answer,
   EntryType,
@@ -32,15 +34,14 @@ export const SCORER_ADAPT_LIMITS = {
 function renderEntry(value: EntryType | undefined, max = 512): string {
   if (value === undefined || value === null) return "";
   const text = typeof value === "string" ? value : JSON.stringify(value);
-  return text.length <= max ? text : text.slice(0, max);
+  if (text.length > max) throw new LocalInputError(`local field exceeds ${max} characters`);
+  return text;
 }
 
-function truncateBytes(text: string, max: number): string {
+function boundedBytes(text: string, max: number): string {
   const bytes = new TextEncoder().encode(text);
   if (bytes.byteLength <= max) return text;
-  // Byte-truncate like the model's own collator, then drop a possibly
-  // partial trailing UTF-8 sequence by decoding with replacement.
-  return new TextDecoder("utf-8").decode(bytes.subarray(0, max));
+  throw new LocalInputError(`local field exceeds ${max} UTF-8 bytes`);
 }
 
 // ---------- option scorer ----------
@@ -54,7 +55,7 @@ export function scorerInput(
 ): { context: string; options: string[]; keys: string[] } {
   const stateText = renderEntry(state, SCORER_ADAPT_LIMITS.maxContextBytes);
   const instruction = renderEntry(question.instructions ?? undefined, 256);
-  const context = truncateBytes(
+  const context = boundedBytes(
     instruction.length === 0 ? stateText : `${stateText}\n${instruction}`,
     contextBytes,
   );
@@ -64,7 +65,7 @@ export function scorerInput(
       const falseLabel = renderEntry(question.criteria?.false ?? undefined, 48) || "no";
       return {
         context,
-        options: [trueLabel, falseLabel].map((o) => truncateBytes(o, optionBytes)),
+        options: [trueLabel, falseLabel].map((o) => boundedBytes(o, optionBytes)),
         keys: ["true", "false"],
       };
     }
@@ -73,7 +74,7 @@ export function scorerInput(
       return {
         context,
         options: entries.map(([key, desc]) =>
-          truncateBytes(
+          boundedBytes(
             desc === null ? key : `${key}: ${renderEntry(desc, 96)}`,
             optionBytes,
           ),
@@ -86,7 +87,7 @@ export function scorerInput(
       return {
         context,
         options: entries.map((desc, i) =>
-          truncateBytes(
+          boundedBytes(
             desc === null ? `level ${i}` : `${i}: ${renderEntry(desc, 96)}`,
             optionBytes,
           ),
@@ -214,7 +215,7 @@ export function needlePrompt(state: EntryType): string {
 }
 
 function needleProbabilities(keys: string[], selectedIndex: number, confidence: number): Record<string, number> {
-  const pick = Math.min(1, Math.max(0, confidence));
+  const pick = keys.length === 1 ? 1 : Math.min(1, Math.max(0, confidence));
   const rest = keys.length > 1 ? (1 - pick) / (keys.length - 1) : 0;
   const probabilities: Record<string, number> = {};
   keys.forEach((key, i) => {
@@ -240,12 +241,15 @@ export function needleAnswers(
 ): { answers: Record<string, Answer>; missing: string[] } {
   const answers: Record<string, Answer> = {};
   const missing: string[] = [];
-  const conf = round(confidence ?? 0);
+  if (confidence === null || !Number.isFinite(confidence) || confidence < 0 || confidence > 1) {
+    return { answers, missing: Object.keys(request.questions) };
+  }
+  const conf = round(confidence);
   for (const [name, question] of Object.entries(request.questions)) {
     const value = needleValue(callsArguments, name);
     switch (question.type) {
       case "noul": {
-        if (typeof value !== "boolean") {
+        if (typeof value !== "boolean" || confidence < 0.5) {
           missing.push(name);
           continue;
         }
@@ -255,7 +259,7 @@ export function needleAnswers(
       case "choice": {
         const keys = Object.keys(question.criteria);
         const index = typeof value === "string" ? keys.indexOf(value) : -1;
-        if (index < 0) {
+        if (index < 0 || (keys.length > 1 && confidence < 1 / keys.length)) {
           missing.push(name);
           continue;
         }
@@ -270,7 +274,7 @@ export function needleAnswers(
       case "score": {
         const keys = question.criteria.map((_, i) => String(i));
         const index = typeof value === "string" ? keys.indexOf(value) : typeof value === "number" ? value : -1;
-        if (index < 0 || index >= question.criteria.length) {
+        if (!Number.isInteger(index) || index < 0 || index >= question.criteria.length || confidence < 1 / keys.length) {
           missing.push(name);
           continue;
         }

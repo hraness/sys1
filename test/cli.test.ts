@@ -10,7 +10,7 @@ const CLI = join(PROJECT_ROOT, "src", "cli.ts");
 const homes: string[] = [];
 
 function home(): string {
-  const path = mkdtempSync(join(tmpdir(), "sysone-cli-test-"));
+  const path = mkdtempSync(join(tmpdir(), "sys1-cli-test-"));
   homes.push(path);
   return path;
 }
@@ -21,7 +21,7 @@ async function runCli(
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   const child = Bun.spawn([process.execPath, CLI, ...args], {
     cwd: PROJECT_ROOT,
-    env: { ...process.env, SYSONE_HOME: options.home, ...options.env },
+    env: { ...process.env, SYS1_HOME: options.home, ...options.env },
     stdout: "pipe",
     stderr: "pipe",
   });
