@@ -1,4 +1,4 @@
-# sysone design
+# SysOne design
 
 One bounded loopback endpoint for System One decisions, whichever qualified
 backend answers.
@@ -14,9 +14,10 @@ backend answers.
 - **Backends** (`src/backends.ts`) adapts hosted Jev, operator-registered HTTP
   services, and installed builtin models into router candidates, and merges
   advisory `GET /v1/limits` responses into routing capabilities.
-- **Provider profiles** (`src/providers.ts`) define pinned registration defaults
-  for known operator-owned services and qualify discovery, published limits,
-  and all three answer shapes without taking over their process lifecycle.
+- **Defaults** (`src/defaults.ts`) maps qualified OS/architecture targets and
+  system memory to deterministic compact or quality local-model tiers.
+- **Qualification** (`src/qualification.ts`) checks discovery, published limits,
+  and all three answer shapes for operator-owned HTTP services.
 - **Decision adapter** (`src/local/decide.ts`) renders bounded prompts and maps a
   full first-token vocabulary distribution into noul, choice, and score answers.
 - **Engine** (`src/local/engine.ts`) lazily owns one node-llama-cpp model/context,
@@ -90,8 +91,8 @@ answer objects stay schema-compatible. Neither metric is a calibration guarantee
 The runner is node-llama-cpp rather than a wasm runner. It exposes the complete
 vocabulary distribution needed for label-mass aggregation, lets llama.cpp
 select the available platform backend, and runs under Bun. Weights are loaded
-only after an explicit `sysone pull`; CI substitutes the engine boundary and
-never downloads a model.
+only after explicit `sysone setup` or `sysone pull`; CI substitutes the engine
+boundary and never downloads a model.
 
 ## Option-scorer semantics
 
@@ -138,17 +139,21 @@ least recently used resident. Needle spawns per request and holds no
 residency. Shutdown disposes every model/context. The store and inference
 queues are local only; request state and answers are never written there.
 
-## Operator-owned provider profiles
+## Local-first defaults and hosted Jev
 
-A provider profile persists only routing metadata: loopback URL, model alias,
-parameter size, and conservative capabilities. It never installs dependencies,
-downloads provider weights, or starts/stops the provider. `nimble-local` pins
-the upstream Nimble source/model/SGLang identities, registers
-`http://127.0.0.1:8000`, and retains 26-option/64-question caps even if the
-advisory limits probe is temporarily unavailable. Its URL override must remain
-unauthenticated loopback HTTP.
+Fresh config enables local inference, uses `auto` routing, and keeps hosted Jev
+disabled even when its credential variable exists. `sysone jev enable` requires
+the environment credential, persists only the activation flag, and switches to
+`auto`; `jev disable` repairs `hosted-only` back to `auto`. Credentials never
+enter config, output, pid files, or logs.
 
-`backend check` is explicit and bounded. It requests `/v1/models` and
+`sysone setup` is an explicit download boundary. The qualified target table
+covers macOS, Linux, and Windows on x64/ARM64. llama.cpp auto-selects Metal,
+CUDA, Vulkan, or CPU where packaged. Below 16 GiB system memory setup chooses
+Qwen3 0.6B; at or above 16 GiB it chooses Qwen3 1.7B. `--tier compact|quality`
+overrides memory selection, and unsupported targets fail before download.
+
+`backend check` remains explicit and bounded. It requests `/v1/models` and
 `/v1/limits`, then sends one fixed synthetic request containing Noul, Choice,
 and Score. Every response body is capped at 4 MiB and parsed from `unknown`.
 The decision response must satisfy the official schema, preserve the requested
@@ -163,8 +168,8 @@ The package smoke check unpacks the real tarball into an isolated consumer,
 links only the exact pinned dependencies from the frozen install, imports the
 public API, and executes version, help, and JSON CLI surfaces. Stable annotated
 tags trigger a release only at the exact current `main` head. Exact tarball
-bytes and `SHA256SUMS` must pass Ubuntu and macOS installation before an
-immutable GitHub Release can be published.
+bytes and `SHA256SUMS` must pass Ubuntu, macOS, and Windows installation before
+an immutable GitHub Release can be published.
 
 ## Boundaries
 

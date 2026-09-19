@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   DEFAULT_CONFIG,
+  SETTABLE_KEYS,
   configSchema,
   loadConfig,
   saveConfig,
@@ -31,7 +32,12 @@ describe("config", () => {
   test("missing file yields defaults", () => {
     const loaded = loadConfig(tempHome());
     expect(loaded).toMatchObject({ ok: true, existed: false });
-    if (loaded.ok) expect(loaded.config).toEqual(DEFAULT_CONFIG);
+    if (loaded.ok) {
+      expect(loaded.config).toEqual(DEFAULT_CONFIG);
+      expect(loaded.config.hosted.enabled).toBe(false);
+      expect(loaded.config.routing.policy).toBe("auto");
+      expect(loaded.config.local.enabled).toBe(true);
+    }
   });
 
   test("save then load round-trips", () => {
@@ -82,6 +88,10 @@ describe("config", () => {
     if (result.ok) expect(result.config.gateway.port).toBe(14900);
   });
 
+  test("hosted activation is owned by the Jev command", () => {
+    expect("hosted.enabled" in SETTABLE_KEYS).toBe(false);
+  });
+
   test("gateway host remains loopback-only", () => {
     expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "127.0.0.2").ok).toBe(true);
     expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "::1").ok).toBe(true);
@@ -94,9 +104,9 @@ describe("config", () => {
       version: 1,
       backends: [
         {
-          name: "nimble",
+          name: "capped-service",
           base_url: "http://127.0.0.1:8000",
-          model: "nimble-latest",
+          model: "systemone-local",
           capabilities: { max_options: 26, max_questions: 64 },
         },
       ],

@@ -72,19 +72,20 @@ export {
 export type { ForwardResult, ProbeResult, RuntimeBackend } from "./backends.ts";
 
 export {
-  BACKEND_PROFILE_IDS,
-  NIMBLE_LOCAL_PROFILE,
-  qualifyBackend,
-  resolveBackendProfile,
-} from "./providers.ts";
+  DEFAULT_LOCAL_MODELS,
+  LOCAL_MODEL_TIERS,
+  QUALITY_MEMORY_THRESHOLD,
+  platformRecommendation,
+} from "./defaults.ts";
+export type { LocalModelTier, PlatformRecommendation } from "./defaults.ts";
+
+export { qualifyBackend } from "./qualification.ts";
 export type {
-  BackendProfileId,
-  BackendProfileResult,
   BackendQualificationCheck,
   BackendQualificationOptions,
   BackendQualificationReport,
   BackendQualificationStatus,
-} from "./providers.ts";
+} from "./qualification.ts";
 
 export { SYSONE_VERSION, createFetchHandler, startGateway } from "./gateway.ts";
 export type { GatewayDeps, RunningGateway } from "./gateway.ts";

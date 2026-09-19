@@ -70,6 +70,7 @@ function stubFetch(options: StubOptions): typeof fetch {
 function testConfig(overrides: Record<string, unknown> = {}): SysoneConfig {
   return configSchema.parse({
     version: 1,
+    hosted: { enabled: true },
     backends: [
       {
         name: "openjev",
@@ -157,6 +158,21 @@ describe("gateway /v1/systemone", () => {
     const handle = createFetchHandler({
       config,
       env: {} as NodeJS.ProcessEnv,
+      fetchFn: stubFetch({}),
+    });
+    const response = await handle(post(VALID_BODY));
+    expect(response.status).toBe(503);
+    const parsed = (await response.json()) as { error: { type: string; message: string } };
+    expect(parsed.error.type).toBe("no_backend_configured");
+    expect(parsed.error.message).toContain("sysone setup");
+    expect(parsed.error.message).toContain("sysone jev enable");
+  });
+
+  test("a Jev credential alone does not activate hosted routing", async () => {
+    const config = configSchema.parse({ version: 1, backends: [] });
+    const handle = createFetchHandler({
+      config,
+      env: ENV,
       fetchFn: stubFetch({}),
     });
     const response = await handle(post(VALID_BODY));

@@ -1,6 +1,6 @@
-# sysone
+# SysOne
 
-sysone is a local System One gateway for coding agents. It runs one loopback
+SysOne is a local System One gateway for coding agents. It runs one loopback
 daemon, exposes a Jev-compatible `POST /v1/systemone` endpoint, and routes each
 request across hosted Jev, builtin local GGUF models, and operator-run System
 One HTTP backends.
@@ -10,7 +10,7 @@ One HTTP backends.
 System One calls ask typed questions about a state instead of generating prose:
 `noul` for yes/no probability, `choice` for one bounded option, and `score` for
 an ordered level. They fit routing, guardrail, review, and triage decisions
-inside agent loops. sysone gives every local agent the same endpoint regardless
+inside agent loops. SysOne gives every local agent the same endpoint regardless
 of which model answers.
 
 ## Install
@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sysone/releases/download/v0.6.0/hraness-sysone-0.6.0.tgz
+  https://github.com/hraness/sysone/releases/download/v0.7.0/hraness-sysone-0.7.0.tgz
 sysone doctor
 ```
 
@@ -39,10 +39,34 @@ ln -sf "$PWD/dist/cli.js" ~/.local/bin/sysone
 ## Quickstart: entirely local
 
 ```sh
-sysone pull       # downloads + sha256-verifies Qwen3 0.6B Q4_0 (365 MiB)
+sysone setup      # verifies the native runtime and installs the platform default
 sysone up         # starts the gateway on 127.0.0.1:13900
 sysone status
 ```
+
+`setup` is the explicit weight-download boundary. It recommends Qwen3 1.7B on
+machines with at least 16 GiB of system memory and Qwen3 0.6B below that. Inspect
+without changing anything, or override the tier:
+
+```sh
+sysone setup --dry-run --json
+sysone setup --tier compact
+sysone setup --tier quality
+```
+
+The pinned llama.cpp runtime selects the best available backend automatically:
+
+| Package target | Runtime preference |
+| --- | --- |
+| macOS ARM64 | Metal, then CPU |
+| macOS x64 | CPU |
+| Linux x64 | CUDA, Vulkan, then CPU |
+| Linux ARM64 | CPU |
+| Windows x64 | CUDA, Vulkan, then CPU |
+| Windows ARM64 | CPU |
+
+Other platform/architecture pairs fail closed before downloading a model. The
+release artifact and package smoke are exercised on Ubuntu, macOS, and Windows.
 
 Send a decision:
 
@@ -68,23 +92,36 @@ Or point any System One client at `http://127.0.0.1:13900`.
 
 ## Add hosted Jev
 
+Hosted Jev is disabled by default—even if `TYPESAFE_API_KEY` happens to exist in
+the environment. Add it explicitly:
+
 ```sh
 export TYPESAFE_API_KEY=…
-sysone config set routing.policy auto
+sysone jev enable
+sysone jev status
 ```
 
-`auto` prefers hosted Jev while the credential is present and the service is
-reachable, then falls back to the smallest installed or registered local model.
-The credential stays in the environment; sysone never writes it to disk.
+`jev enable` requires the credential to be present, stores only
+`hosted.enabled: true`, and sets routing to `auto`. The key remains in the
+environment and is never written to disk or printed. Restart a gateway that was
+started before the key was exported. To return to local-only operation:
+
+```sh
+sysone jev disable
+```
+
+With Jev enabled, `auto` prefers reachable hosted Jev and falls back to the
+installed local model. With Jev disabled or its credential absent, the same
+endpoint continues entirely locally.
 
 ## Local models
 
-`sysone pull` manages model artifacts under `~/.sysone/models` (or
-`$SYSONE_HOME/models`). Downloads stream to a temporary file, enforce an 8 GiB
-ceiling, verify SHA-256, run a per-kind structural validation, and only then
-atomically enter the model store. Manifest filenames cannot escape the store,
-symbolic-link weights are not admitted, and the daemon never downloads weights
-implicitly.
+`sysone setup` and `sysone pull` manage model artifacts under
+`~/.sysone/models` (or `$SYSONE_HOME/models`). Downloads stream to a temporary
+file, enforce an 8 GiB ceiling, verify SHA-256, run a per-kind structural
+validation, and only then atomically enter the model store. Manifest filenames
+cannot escape the store, symbolic-link weights are not admitted, and the daemon
+never downloads weights implicitly.
 
 ```sh
 sysone pull --list
@@ -99,14 +136,14 @@ The curated registry contains three artifact kinds:
 
 | Model | Kind | Download | Role |
 | --- | --- | ---: | --- |
-| `qwen3-0.6b` | `gguf` | 365 MiB | smallest default fallback |
-| `qwen3-1.7b` | `gguf` | 1.03 GiB | stronger laptop-local tier |
+| `qwen3-0.6b` | `gguf` | 365 MiB | compact default below 16 GiB RAM |
+| `qwen3-1.7b` | `gguf` | 1.03 GiB | quality default at 16 GiB RAM or above |
 | `cua-s1-forms` | `scorer` | 2.8 MiB | CUA-S1 form-action option scorer (specialist) |
 | `needle3` | `needle` | 34 MiB + engine | Cactus Needle extraction model (specialist) |
 
 All entries are pinned to the publisher's Hugging Face LFS SHA-256. Weight
 licenses and terms remain those of their publishers; weights are not included
-in the sysone package.
+in the SysOne package.
 
 ### Specialists
 
@@ -137,7 +174,7 @@ Each kind runs through a different adapter, disclosed in the
 
 ### Generic GGUF adapter
 
-For builtin GGUF models, sysone renders a bounded question prompt, evaluates
+For builtin GGUF models, SysOne renders a bounded question prompt, evaluates
 the full first-token vocabulary distribution with llama.cpp, and sums
 probability mass over constrained answer labels. Choice and score use unique
 one-character labels to avoid ambiguous multi-token option names. Builtin
@@ -249,101 +286,20 @@ sysone backend add \
   --size-b 4
 ```
 
-### Run Nimble locally
-
-[Bespoke Nimble](https://github.com/bespokelabsai/nimble) ships a native
-System One SGLang server. sysone's `nimble-local` profile carries the qualified
-reference revisions and safe limits, requires a loopback HTTP URL, and keeps
-the foreign GPU process operator-owned:
+Before routing agents to an operator backend, qualify its discovery, limits,
+and all three answer shapes:
 
 ```sh
-sysone backend add --profile nimble-local
-sysone backend check --name nimble
+sysone backend check --name openjev
 ```
 
-The profile registers `nimble-latest` at `http://127.0.0.1:8000`, records the
-9B size, and statically caps routing at 26 options and 64 questions. The check
-makes three bounded calls: model discovery, published limits, and one synthetic
-System One request containing Noul, Choice, and Score. It validates the response
-schema, distribution normalization, and expected-score arithmetic without
-printing or persisting the request or response body.
-
-Nimble is a Qwen3.5-9B LoRA adapter. Its unquantized merged weights occupy about
-18 GB before runtime memory. The upstream local SGLang service therefore needs
-Linux plus an NVIDIA GPU with BF16 support and enough memory beyond the weights;
-the published service was qualified on 48 GB L40S and 80 GB H100 GPUs. The
-container itself is approximately 15 GB.
-
-Use the exact revisions carried by `NIMBLE_LOCAL_PROFILE`:
-
-```text
-Nimble source: d2387fc0b32d1173bfc995395c076a25a2a107c9
-Nimble model:  93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c
-SGLang image:  lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9
-```
-
-1. Clone Nimble and check out the pinned source revision:
-   `git clone https://github.com/bespokelabsai/nimble.git && cd nimble && git checkout d2387fc0b32d1173bfc995395c076a25a2a107c9`.
-2. Follow its **Download the model** instructions to merge the adapter with
-   its pinned Qwen base into `.cache/models/...`, passing
-   `revision="93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c"` to
-   `snapshot_download` rather than following a moving model head.
-3. Copy the adapter's `schema_config.json` into that merged model directory;
-   the server verifies its prompt hash against the pinned source.
-4. Start `nimble.serving.server` in the pinned SGLang image and expose container
-   port 8000 only as host `127.0.0.1:8000`. The upstream server internally
-   starts SGLang on container loopback port 30000.
-5. Run `sysone backend check --name nimble`; only then route agents to it.
-
-From the pinned Nimble checkout, the upstream preparation step writes
-`.cache/nimble-model.json`. Resolve its model path and copy the contract from
-the exact adapter revision:
-
-```sh
-export NIMBLE_MODEL_PATH="$(python3.12 -c \
-  'import json; print(json.load(open(".cache/nimble-model.json"))["model_path"])')"
-python3.12 - <<'PYTHON'
-import json
-import shutil
-from pathlib import Path
-from huggingface_hub import snapshot_download
-
-config = json.loads(Path(".cache/nimble-model.json").read_text())
-snapshot = Path(snapshot_download(
-    "bespokelabs/Bespoke-Nimble-9B",
-    revision="93ec5d6ff1a9cd31d6cc0e0c58d312465d36de7c",
-))
-shutil.copy2(snapshot / "schema_config.json", Path(config["model_path"]) / "schema_config.json")
-PYTHON
-```
-
-A host-port mapping must be loopback-scoped:
-
-```sh
-docker run --rm --gpus all --ipc=host --shm-size=32g \
-  --publish 127.0.0.1:8000:8000 \
-  --mount type=bind,src="$PWD",dst=/opt/app,readonly \
-  --mount type=bind,src="$NIMBLE_MODEL_PATH",dst=/models/nimble,readonly \
-  --entrypoint /bin/bash \
-  lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9 \
-  -lc '/opt/sglang/bin/python -m pip install --no-cache-dir \
-    "openjev-sglang @ https://github.com/ekzhang/openjev-sglang/archive/7f84bedc169439f03379c2fa8d00ada220af2295.tar.gz" \
-    "transformers==5.17.0" "huggingface-hub==1.32.0" && \
-    PYTHONPATH=/opt/app NIMBLE_MODEL_PATH=/models/nimble \
-    TOKENIZERS_PARALLELISM=false \
-    /opt/sglang/bin/python -m nimble.serving.server'
-```
-
-The image and Python dependencies are pinned, but the installation command
-still needs network access on first start. Persist an image derived from these
-exact inputs if repeat startup must be offline. Never publish container port
-8000 as `0.0.0.0:8000`; the Nimble API has no authentication.
-
-The public Nimble deployment can be registered with the generic `backend add`
-command instead, but it is not a local runtime and may cold-start from zero.
-All configured HTTP backends remain operator-owned: sysone probes and forwards
-to them but does not download their weights, mutate their credentials, or own
-their process lifecycle.
+The check makes bounded calls to `/v1/models`, `/v1/limits`, and
+`/v1/systemone`; validates the official response schema, probability
+normalization, and Score arithmetic; and never prints or persists request or
+response bodies. Backends that do not publish limits receive a warning unless
+static caps were configured. All configured HTTP processes remain
+operator-owned: SysOne probes and forwards to them but does not download their
+weights, mutate credentials, or own their lifecycle.
 
 ## Diagnostics
 
@@ -365,6 +321,8 @@ versioned (`version: 1`) and check identifiers are stable and additive.
 ## Commands
 
 ```text
+sysone setup [--tier compact|quality] [--dry-run]
+sysone jev status|enable|disable
 sysone up|down|serve|status|doctor
 sysone pull [MODEL]|pull --list
 sysone model list|verify|remove
@@ -386,14 +344,18 @@ the state directory. Settable keys:
 - `routing.policy`;
 - `gateway.host` (loopback addresses only), `gateway.port`,
   `gateway.request_timeout_ms`, `gateway.probe_timeout_ms`;
-- `hosted.enabled`, `hosted.base_url`, `hosted.model`, `hosted.api_key_env`;
+- `hosted.base_url`, `hosted.model`, `hosted.api_key_env` (activation uses
+  `sysone jev`);
 - `local.enabled`, `local.context_tokens`, `local.eval_timeout_ms`,
   `local.max_loaded_models`.
 
-The daemon reads config per request, so routing and backend changes do not need
-a restart. Already loaded GGUFs stay resident up to `local.max_loaded_models`
-(default one) and are released on eviction or daemon shutdown. Local inference
-is serialized per model to keep context state isolated and memory bounded.
+Fresh config uses `routing.policy: auto`, `local.enabled: true`, and
+`hosted.enabled: false`. The daemon reads config per request, so routing and
+backend changes do not need a restart. Environment variables are inherited when
+the daemon starts, so restart it after exporting a new Jev credential. Already
+loaded GGUFs stay resident up to `local.max_loaded_models` (default one) and are
+released on eviction or daemon shutdown. Local inference is serialized per model
+to keep context state isolated and memory bounded.
 
 The gateway has no authentication and accepts loopback binds only.
 
@@ -402,9 +364,9 @@ The gateway has no authentication and accepts loopback binds only.
 An annotated `v<version>` tag at the exact current `main` head requests a
 release. The tag must match `package.json`. The release workflow reruns the
 complete gate, creates one npm-format tarball and `SHA256SUMS`, installs and
-executes those exact bytes with the native dependency and `doctor` on Ubuntu
-and macOS, then publishes them to a repository-enforced immutable GitHub
-Release. No npm registry package is claimed or required.
+executes those exact bytes with the native dependency and `doctor` on Ubuntu,
+macOS, and Windows, then publishes them to a repository-enforced immutable
+GitHub Release. No npm registry package is claimed or required.
 
 ## Development
 

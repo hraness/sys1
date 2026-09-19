@@ -21,7 +21,7 @@ import {
 } from "./protocol.ts";
 import { chooseBackend, requestNeeds } from "./router.ts";
 
-export const SYSONE_VERSION = "0.6.0";
+export const SYSONE_VERSION = "0.7.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -192,7 +192,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
       return json(
         errorBody(
           "no_backend_configured",
-          "no backends configured; set TYPESAFE_API_KEY, run `sysone pull`, or add a backend with `sysone backend add`",
+          "no backends configured; run `sysone setup`, `sysone jev enable`, or add a backend with `sysone backend add`",
         ),
         503,
       );

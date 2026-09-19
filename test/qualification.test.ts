@@ -1,14 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { configSchema, localBackendSchema } from "../src/config.ts";
-import { probeBackend, runtimeBackends } from "../src/backends.ts";
-import {
-  NIMBLE_LOCAL_PROFILE,
-  qualifyBackend,
-  resolveBackendProfile,
-} from "../src/providers.ts";
+import { localBackendSchema } from "../src/config.ts";
+import { qualifyBackend } from "../src/qualification.ts";
 
 const VALID_RESPONSE = {
-  model: "bespokelabs/Bespoke-Nimble-9B",
+  model: "systemone-local",
   answers: {
     refund: { type: "noul", noul: 0.9 },
     department: {
@@ -48,20 +43,12 @@ function stubFetch(options: StubOptions = {}): {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     requests.push({ url, init });
     if (url.endsWith("/v1/models")) {
-      return Response.json(
-        options.models ?? {
-          data: [
-            { id: "nimble-latest" },
-            { id: "bespokelabs/Bespoke-Nimble-9B" },
-          ],
-        },
-      );
+      return Response.json(options.models ?? { data: [{ id: "systemone-local" }] });
     }
     if (url.endsWith("/v1/limits")) {
-      const status = options.limitsStatus ?? 200;
       return Response.json(
         options.limits ?? { max_answers_per_question: 26, max_questions: 64 },
-        { status },
+        { status: options.limitsStatus ?? 200 },
       );
     }
     if (url.endsWith("/v1/systemone")) {
@@ -72,82 +59,14 @@ function stubFetch(options: StubOptions = {}): {
   return { fetchFn, requests };
 }
 
-describe("nimble-local backend profile", () => {
-  test("resolves pinned local defaults", () => {
-    const resolved = resolveBackendProfile("nimble-local");
-    expect(resolved).toEqual({ ok: true, backend: NIMBLE_LOCAL_PROFILE.backend });
-  });
-
-  test("allows loopback name and URL overrides", () => {
-    const resolved = resolveBackendProfile("nimble-local", {
-      name: "nimble-gpu",
-      base_url: "http://127.0.0.2:18000",
-    });
-    expect(resolved).toMatchObject({
-      ok: true,
-      backend: {
-        name: "nimble-gpu",
-        base_url: "http://127.0.0.2:18000",
-        model: "nimble-latest",
-        capabilities: { max_options: 26, max_questions: 64 },
-      },
-    });
-    expect(
-      resolveBackendProfile("nimble-local", { base_url: "http://[::1]:8000" }),
-    ).toMatchObject({ ok: true });
-  });
-
-  test("rejects remote, credential-bearing, and unknown profiles", () => {
-    expect(
-      resolveBackendProfile("nimble-local", { base_url: "https://example.com" }),
-    ).toMatchObject({ ok: false });
-    expect(
-      resolveBackendProfile("nimble-local", { base_url: "http://user:pass@127.0.0.1:8000" }),
-    ).toMatchObject({ ok: false });
-    expect(resolveBackendProfile("unknown")).toMatchObject({ ok: false });
-  });
-
-  test("configured caps become router capabilities before a live probe", () => {
-    const config = configSchema.parse({
-      version: 1,
-      hosted: { enabled: false },
-      backends: [NIMBLE_LOCAL_PROFILE.backend],
-    });
-    expect(runtimeBackends(config, {} as NodeJS.ProcessEnv)[0]?.capabilities).toEqual({
-      maxOptions: 26,
-      maxQuestions: 64,
-    });
-  });
-
-  test("published limits may narrow but never widen profile caps", async () => {
-    const config = configSchema.parse({
-      version: 1,
-      hosted: { enabled: false },
-      backends: [NIMBLE_LOCAL_PROFILE.backend],
-    });
-    const wide = runtimeBackends(config, {} as NodeJS.ProcessEnv)[0];
-    if (wide === undefined) throw new Error("missing runtime backend");
-    await probeBackend(
-      wide,
-      1_000,
-      stubFetch({ limits: { max_answers_per_question: 100, max_questions: 64 } }).fetchFn,
-    );
-    expect(wide.capabilities).toEqual({ maxOptions: 26, maxQuestions: 64 });
-
-    const narrow = runtimeBackends(config, {} as NodeJS.ProcessEnv)[0];
-    if (narrow === undefined) throw new Error("missing runtime backend");
-    await probeBackend(
-      narrow,
-      1_000,
-      stubFetch({ limits: { max_answers_per_question: 8, max_questions: 32 } }).fetchFn,
-    );
-    expect(narrow.capabilities).toEqual({ maxOptions: 8, maxQuestions: 32 });
-  });
+const backend = localBackendSchema.parse({
+  name: "local-service",
+  base_url: "http://127.0.0.1:18080",
+  model: "systemone-local",
+  capabilities: { max_options: 26, max_questions: 64 },
 });
 
 describe("backend qualification", () => {
-  const backend = localBackendSchema.parse(NIMBLE_LOCAL_PROFILE.backend);
-
   test("checks model identity, limits, and all answer types", async () => {
     const stub = stubFetch();
     const report = await qualifyBackend(backend, {
@@ -157,7 +76,7 @@ describe("backend qualification", () => {
     });
     expect(report.ok).toBe(true);
     expect(report.checks).toEqual([
-      { id: "models", status: "pass", summary: "backend serves nimble-latest" },
+      { id: "models", status: "pass", summary: "backend serves systemone-local" },
       { id: "limits", status: "pass", summary: "limits published · 26 options · 64 questions" },
       { id: "systemone", status: "pass", summary: "noul, choice, and score response is conformant" },
     ]);
@@ -169,7 +88,7 @@ describe("backend qualification", () => {
     const raw = stub.requests[2]?.init?.body;
     expect(typeof raw).toBe("string");
     const sent = JSON.parse(raw as string) as { model: string; questions: Record<string, unknown> };
-    expect(sent.model).toBe("nimble-latest");
+    expect(sent.model).toBe("systemone-local");
     expect(Object.keys(sent.questions)).toEqual(["refund", "department", "urgency"]);
     expect(JSON.stringify(report)).not.toContain("charged twice");
     expect(JSON.stringify(report)).not.toContain("billing\":0.8");
@@ -185,7 +104,7 @@ describe("backend qualification", () => {
     expect(report.checks[0]).toMatchObject({ id: "models", status: "fail" });
   });
 
-  test("fails when published limits are below the profile caps", async () => {
+  test("fails when published limits are below configured caps", async () => {
     const report = await qualifyBackend(backend, {
       probeTimeoutMs: 1_000,
       requestTimeoutMs: 2_000,
@@ -199,17 +118,17 @@ describe("backend qualification", () => {
     const report = await qualifyBackend(backend, {
       probeTimeoutMs: 1_000,
       requestTimeoutMs: 2_000,
-      fetchFn: stubFetch({ response: { model: "nimble-latest", answers: {} } }).fetchFn,
+      fetchFn: stubFetch({ response: { model: "systemone-local", answers: {} } }).fetchFn,
     });
     expect(report.ok).toBe(false);
     expect(report.checks[2]).toMatchObject({ id: "systemone", status: "fail" });
   });
 
-  test("missing limits only warns for an unbounded generic backend", async () => {
+  test("missing limits only warns for an unbounded backend", async () => {
     const generic = localBackendSchema.parse({
       name: "generic",
       base_url: "http://127.0.0.1:9000",
-      model: "nimble-latest",
+      model: "systemone-local",
     });
     const report = await qualifyBackend(generic, {
       probeTimeoutMs: 1_000,
