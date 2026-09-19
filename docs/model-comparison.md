@@ -1,7 +1,7 @@
 # Model comparison: evidence and measurement
 
-Checked **2026-09-19**. These are published upstream results, not a Sys1
-head-to-head benchmark. Different models, hardware, workloads, and timing
+Checked **2026-09-19**. The upstream evidence below is separate from the [local Sys1 adapter
+measurements](https://sys1.io/compare#local-results). Different models, hardware, workloads, and timing
 boundaries answer different questions. Sys1 provides a common interface and
 routing policy; it does not make the underlying models equally fast or accurate.
 
@@ -118,3 +118,30 @@ revision: cold load separately from warm p50/p95 latency, failures, correct
 decisions per second, peak memory, and confidence calibration. Keep request
 count separate from question count, and record quantization, concurrency,
 cache state, token-count provenance, and sample size alongside every result.
+
+## Local Sys1 result snapshot
+
+The [public raw report](../site/data/forms-v1-m5-max-2026-09-19.json) records
+100 repeated calls per adapter, on an Apple M5 Max with 36 GiB system RAM,
+Bun 1.3.14 and a Metal capability probe. Source `83ca299` was unmodified for
+all runtime/harness inputs. This is a shared development host, not isolated hardware.
+
+| Adapter | Correct / 20 authored cases | p50 / p95 adapter latency | Valid responses |
+| --- | ---: | ---: | ---: |
+| CUA-S1 Forms | 8/20 | 54.8 / 60.7 ms | 100/100 |
+| Cactus Needle 3 | 8/20 | 143.5 / 171.3 ms | 100/100 |
+| Qwen3 0.6B | 8/20 | 206.6 / 225.1 ms | 100/100 |
+| Qwen3 1.7B | 18/20 | 258.3 / 271.4 ms | 100/100 |
+
+These narrative submit/correct/wait questions differ from CUA’s native
+TASK/FORM/ELEMENT observations and field-action candidates. Needle is adapted
+from extraction to choice. The test measures request-format transfer, not
+native specialist performance. All four passed schema validation; only Qwen
+1.7B achieved high correctness on this tiny fixture, and even it missed two
+cases. None is qualified for a broad automatic application migration by this
+experiment. Always choosing the most frequent label yields 7/20.
+
+Both Qwen tiers report 12,960 input tokens over 100 calls (129.6 per call).
+CUA token throughput is inapplicable; Needle accounting is not exposed. The
+[methodology and harness](../benchmarks/README.md) disclose startup/cache
+boundaries, percentiles, timing exclusions, sample counts, and failure rules.

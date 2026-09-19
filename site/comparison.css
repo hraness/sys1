@@ -57,3 +57,6 @@
 .results-notes li { margin-bottom: .65rem; }
 @media (max-width: 800px) { .comparison-intro { width: calc(100% - 2.5rem); } .evidence-block { gap: 1.5rem; grid-template-columns: 1fr 2fr; } .cost-example { gap: 2rem; padding: 1.5rem; } }
 @media (max-width: 560px) { .comparison-intro { padding-top: 2.5rem; } .comparison-page .section { padding-block: 3rem; } .comparison-intro .summary { font-size: 1rem; } .evidence-block, .accounting-list > div, .cost-example { grid-template-columns: 1fr; gap: .75rem; } .cost-example { gap: 1.5rem; } .evidence-block { padding-block: 1.5rem; } .evidence-block h3 { margin-bottom: .4rem; } .contents { gap: .8rem 1.25rem; } .comparison-table { font-size: .85rem; } }
+/* Grid children must be allowed to shrink around scrollable data tables. */
+.evidence-block > div, .cost-example > div { min-width: 0; }
+.results-table + .results-summary, .table-scroll + .results-summary { margin-top: 1.25rem; }

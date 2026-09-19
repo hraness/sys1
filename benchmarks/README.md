@@ -7,8 +7,11 @@ balanced 7/7/6. Every case fits the CUA-S1 Forms checkpoint's 224-byte combined
 state/instruction context and 96-byte option bounds.
 
 This is a small reproducible sanity check, not a general quality benchmark or
-evidence of calibration. The tasks favor the form specialist's domain. They do
-not establish extraction, reasoning, safety, or production performance.
+evidence of calibration. These are narrative submit/correct/wait questions, unlike the CUA checkpoint's
+training format (TASK/FORM/ELEMENT contexts and fill/check/click/skip actions).
+This checks transfer into a common Sys1 request shape, not native specialist
+performance. It does not establish extraction, reasoning, safety, or production
+performance.
 
 ## Run
 
