@@ -1,11 +1,11 @@
-# Sys1
+# SYS1
 
 Sys1 is the decision interface between an agent and its models. Use a small
 Node/Bun client, embed the router in a Bun application, or run one loopback
 daemon. The Jev-compatible `POST /v1/systemone` contract routes requests across
 hosted Jev, builtin local models, and operator-run System One HTTP backends.
 
-[Project site](https://sys1.io) · [Protocol](#the-endpoint) · [Routing](#routing)
+[Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
 
 System One calls ask typed questions about a state instead of generating prose:
 `noul` for yes/no probability, `choice` for one bounded option, and `score` for
@@ -19,6 +19,19 @@ extensions are outside Sys1's contract. The optional
 [CUA-S1 forms checkpoint](https://huggingface.co/cua-ai/cua-s1-forms) runs through
 Sys1's TypeScript scorer as a form-action specialist. This checkpoint adapter
 does not include Cua Driver or desktop execution.
+
+## System One skills
+
+[system-one-skills](https://github.com/0thernet/system-one-skills) provides
+`system-one-verify`, a focused skill for Devin, Claude Code, and Codex. It runs
+a known noisy test or build command once, returns its exit status and compact
+evidence, and keeps the full log locally for inspection.
+
+SYS1 provides the decision interface for applications and agents; the skill
+handles deterministic log reduction without a model, API key, or SYS1
+installation. Installing either project does not configure the other.
+[Browse the skills guide](https://sys1.io/skills) for installation, when to use
+the skill, and the limits of the efficiency evidence.
 
 ## Install
 

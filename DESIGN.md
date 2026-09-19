@@ -335,6 +335,16 @@ links, and native disclosures remain useful without JavaScript. Sidecar
 snippets show the implemented visual states; they do not supply application
 event handlers for these behaviors.
 
+## Agent skills guide
+
+`site/skills.html` extends the same Paper system in a reading layout, using
+`site/skills.css` for its left-aligned introduction, three-step explanation,
+and two-column project relationship. The shared header, appearance control,
+copy behavior, code frames, fonts, and pinned footer are reused unchanged.
+The guide stacks its columns on compact screens and introduces no new color,
+font, radius, or asset tokens. Its purpose and content sources are recorded in
+`.impeccable/surfaces/site-skills-html.md`.
+
 ## Do's and Don'ts
 
 ### Do:
