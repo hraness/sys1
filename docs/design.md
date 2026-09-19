@@ -142,7 +142,7 @@ tools file (one `evaluate` tool whose arguments are the request's questions),
 spawns the engine with `NEEDLE_TELEMETRY=0`, `DO_NOT_TRACK=1`, and
 `HF_HUB_OFFLINE=1`, bounds stdout, parses only validated JSON, kills on
 timeout/abort, and removes the temp file. Needle's grounding gate can withhold
-calls, and it emits a calibrated turn confidence rather than per-option
+calls, and it emits model-reported turn confidence rather than per-option
 distributions — so extracted values are reported with a disclosed
 approximation (`confidence` on the pick, remainder uniform) under the
 `needle-extract` adapter id, and suppressed/malformed turns fail closed.

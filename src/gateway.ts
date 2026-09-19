@@ -339,10 +339,17 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
     if (models || decision) {
       const config = loadActiveConfig();
       if (config instanceof Response) return config;
-      const signal = AbortSignal.any([
-        request.signal,
-        AbortSignal.timeout(config.gateway.request_timeout_ms),
-      ]);
+      // Own a referenced timer for the entire request. An incoming stream can
+      // be the only pending work, so its deadline must keep the event loop
+      // awake independently of AbortSignal.timeout's runtime timer handling.
+      const controller = new AbortController();
+      const signal = controller.signal;
+      const onCallerAbort = (): void => controller.abort(request.signal.reason);
+      request.signal.addEventListener("abort", onCallerAbort, { once: true });
+      if (request.signal.aborted) onCallerAbort();
+      const timer = setTimeout(() => {
+        controller.abort(new DOMException("request deadline exceeded", "TimeoutError"));
+      }, config.gateway.request_timeout_ms);
       try {
         signal.throwIfAborted();
         return await (models ? handleModels(config, signal) : handleSystemOne(request, config, signal));
@@ -354,6 +361,9 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
           return json(errorBody("inference_timeout", "request deadline exceeded"), 504);
         }
         return json(errorBody("gateway_unavailable", "gateway could not process the request"), 503);
+      } finally {
+        clearTimeout(timer);
+        request.signal.removeEventListener("abort", onCallerAbort);
       }
     }
     return json(errorBody("not_found", "unknown route"), 404);

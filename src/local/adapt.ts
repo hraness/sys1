@@ -19,7 +19,7 @@ import { SCORER_LIMITS } from "./scorer.ts";
  * options) are disclosed via the adapter header, not hidden.
  *
  * `needle`: the tool-call contract is one `evaluate` tool whose arguments are
- * the request's questions. Needle returns values plus a calibrated turn
+ * the request's questions. Needle returns values plus model-reported turn
  * confidence — not per-option probabilities — so probabilities are a
  * disclosed top-label approximation (confidence on the pick, remaining mass
  * split uniformly), reported as `needle-extract`.
@@ -230,7 +230,7 @@ function needleValue(callArguments: Record<string, unknown>, name: string): unkn
 
 /**
  * Build answers from one needle turn. `evaluate` arguments carry every
- * question's extracted value; `confidence` is the engine's calibrated turn
+ * question's extracted value; `confidence` is the engine's reported turn
  * score applied to every answer — the disclosed `needle-extract`
  * approximation.
  */

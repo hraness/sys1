@@ -252,7 +252,7 @@ Each kind runs through a different adapter, disclosed in the
 - `needle-extract` — the Cactus Needle `.cact` blob plus a platform engine
   binary, spawned as one bounded process per request with telemetry
   disabled. Questions become arguments of one `evaluate` tool call. Needle
-  returns values plus a calibrated turn confidence rather than per-option
+  returns values plus model-reported turn confidence rather than per-option
   probabilities, so `probabilities` are a disclosed approximation
   (confidence on the pick, the remainder split uniformly).
 

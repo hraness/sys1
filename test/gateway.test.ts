@@ -364,6 +364,24 @@ describe("gateway cancellation and redispatch boundaries", () => {
     }));
     expect(response.status).toBe(504);
   });
+
+  test("incoming body deadline cancels a stalled source without awaiting its cleanup", async () => {
+    const config = testConfig();
+    config.gateway.request_timeout_ms = 5;
+    let cancelled = false;
+    const body = new ReadableStream<Uint8Array>({
+      pull() { return new Promise<void>(() => {}); },
+      cancel() {
+        cancelled = true;
+        return new Promise<void>(() => {});
+      },
+    });
+    const handle = createFetchHandler({ config, env: ENV, fetchFn: stubFetch({}) });
+    const response = await handle(new Request("http://127.0.0.1/v1/systemone", { method: "POST", body }));
+    expect(response.status).toBe(504);
+    expect((await response.json()).error.type).toBe("inference_timeout");
+    expect(cancelled).toBe(true);
+  });
 });
 
 describe("daemon ownership endpoints", () => {
