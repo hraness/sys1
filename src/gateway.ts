@@ -19,7 +19,7 @@ import {
 } from "./protocol.ts";
 import { chooseBackend } from "./router.ts";
 
-export const SYSONE_VERSION = "0.3.1";
+export const SYSONE_VERSION = "0.3.2";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
