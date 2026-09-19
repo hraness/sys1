@@ -147,6 +147,12 @@ async function requestJson(
   }
 }
 
+function withoutTrailingSlashes(value: string): string {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === "/") end -= 1;
+  return value.slice(0, end);
+}
+
 function distributionTotal(probabilities: Record<string, number>): number {
   return Object.values(probabilities).reduce((sum, probability) => sum + probability, 0);
 }
@@ -217,7 +223,7 @@ export async function qualifyBackend(
   options: BackendQualificationOptions,
 ): Promise<BackendQualificationReport> {
   const fetchFn = options.fetchFn ?? fetch;
-  const base = backend.base_url.replace(/\/+$/, "");
+  const base = withoutTrailingSlashes(backend.base_url);
   const checks: BackendQualificationCheck[] = [];
 
   const modelsResponse = await requestJson(
