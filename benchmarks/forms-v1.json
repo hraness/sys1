@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "id": "forms-v1",
+  "description": "Twenty authored synthetic form-action cases. This small public sanity check does not establish general model quality.",
+  "instructions": "Choose the next form action.",
+  "criteria": {
+    "submit": "Submit the completed valid form",
+    "correct": "Correct missing or invalid fields",
+    "wait": "Wait for an operation to finish"
+  },
+  "cases": [
+    {
+      "id": "form-01",
+      "state": "The email and password fields are valid. Required consent is checked. No errors or pending requests remain.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-02",
+      "state": "The email field is blank. The form requires an email address before submission.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-03",
+      "state": "A valid form has been submitted. A spinner says Saving. The submit button is disabled.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-04",
+      "state": "Every required shipping field is complete and valid. Address verification has finished successfully.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-05",
+      "state": "The password is only three characters. The form requires at least eight characters.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-06",
+      "state": "The selected file is still uploading. Progress is 60 percent. All other fields are valid.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-07",
+      "state": "A valid file finished uploading. All required fields are complete. The submit button is enabled.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-08",
+      "state": "The confirmation password differs from the password. Both fields must match.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-09",
+      "state": "The form is checking whether the username is available. A loading indicator is active.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-10",
+      "state": "The username availability check succeeded. All required fields are valid and the form is idle.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-11",
+      "state": "The postal code contains letters, but this form requires exactly five digits.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-12",
+      "state": "The payment form is processing the submitted payment. A message says Do not submit again.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-13",
+      "state": "The required survey questions are answered. Validation passed and no request is running.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-14",
+      "state": "The required country menu still shows Choose a country. The remaining fields are valid.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-15",
+      "state": "An address lookup is in progress. The form says Please wait for verification before submitting.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-16",
+      "state": "The booking date is available. Contact details are valid. There are no errors or active checks.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-17",
+      "state": "The email field shows alex.example.com. A validation message says the address must contain @.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-18",
+      "state": "The completed form is sending its request. A progress bar is moving and the submit control is disabled.",
+      "expected": "wait",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-19",
+      "state": "The application form passed all checks. Every required field is complete, and Submit is enabled.",
+      "expected": "submit",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    },
+    {
+      "id": "form-20",
+      "state": "The required consent checkbox is unchecked. Submission requires consent.",
+      "expected": "correct",
+      "option_order": [
+        "submit",
+        "correct",
+        "wait"
+      ]
+    }
+  ]
+}

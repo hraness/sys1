@@ -29,7 +29,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.2/hraness-sys1-0.8.2.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
 sys1 doctor
 ```
 
@@ -50,7 +50,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.8.2/hraness-sys1-0.8.2.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
 ```
 
 ```ts
@@ -513,3 +513,7 @@ process inspection. Abrupt host termination can leave the private temporary
 file behind. Do not use this adapter for inputs whose policy forbids that
 exposure. The GGUF worker uses private pipes; ordinary request bodies,
 credentials, answers, and prompts are not application logs or durable state.
+
+## Comparing models
+
+See [the model comparison](https://sys1.io/compare) for download footprints, local adapter measurements, upstream benchmarks, and token/cost semantics. The [evidence appendix](docs/model-comparison.md) records source conditions, and the [opt-in benchmark](benchmarks/README.md) runs the same public synthetic cases through explicitly pinned local models. Small synthetic results do not establish general model quality.

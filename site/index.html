@@ -28,6 +28,7 @@
         <nav aria-label="Primary">
           <a href="#how-it-works">Features</a>
           <a href="#ecosystem">Ecosystem</a>
+          <a href="/compare">Compare</a>
           <a href="https://github.com/hraness/sys1#use-as-a-module">Docs</a>
         </nav>
         <div class="header-actions">
@@ -155,6 +156,11 @@ console.log(metadata.backend);</code></pre>
         <aside class="semantics"><h3>One answer format. Different model behavior.</h3><p>Schema compatibility makes integration simpler. It does not make models equally accurate or equally calibrated. Evaluate the model on your task before carrying over thresholds or changing defaults. Sys1 exposes adapter metadata so that distinction stays visible.</p><a href="https://github.com/hraness/sys1#generic-gguf-adapter">Read the adapter semantics <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a></aside>
       </section>
 
+      <section class="section comparison-teaser" aria-labelledby="comparison-heading">
+        <div class="section-intro"><h2 id="comparison-heading">What does a decision cost?</h2><p>Compare Cactus Needle, Qwen, CUA-S1, and Jev with local measurements, published speed results, hardware requirements, and token accounting.</p></div>
+        <a class="button button-secondary" href="/compare">Compare models, speed &amp; cost</a>
+      </section>
+
       <section id="install" class="section install" aria-labelledby="install-heading">
         <div class="section-intro">
           <h2 id="install-heading">Start on your machine.</h2>
@@ -163,14 +169,14 @@ console.log(metadata.backend);</code></pre>
         <div class="install-terminal">
           <div class="code-heading"><span>Local quickstart</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy commands</button></div>
           <pre><code id="install-command">npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.2/hraness-sys1-0.8.2.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
 sys1 setup
 sys1 doctor
 sys1 up</code></pre>
         </div>
         <p class="install-requirements">Bun 1.3.14+ · macOS, Linux &amp; Windows · Setup downloads model weights</p>
         <p id="copy-status" class="copy-status" role="status"></p>
-        <div class="install-links"><a href="https://github.com/hraness/sys1#install">Installation guide</a><a href="https://github.com/hraness/sys1/releases/tag/v0.8.2">Release &amp; checksums</a><a href="https://github.com/hraness/sys1">View source</a></div>
+        <div class="install-links"><a href="https://github.com/hraness/sys1#install">Installation guide</a><a href="https://github.com/hraness/sys1/releases/tag/v0.8.3">Release &amp; checksums</a><a href="https://github.com/hraness/sys1">View source</a></div>
       </section>
 
       <section class="section questions" aria-labelledby="questions-heading">

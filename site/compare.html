@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" data-hraness-theme="paper" data-palette="paper" data-hraness-marketing-preset="editorial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Compare models — Sys1</title>
+    <meta name="description" content="Compare Cactus Needle, Qwen, CUA-S1, Jev, and OpenJev: local measurements, published benchmarks, token usage, cost, and hardware requirements." />
+    <link rel="canonical" href="https://sys1.io/compare" />
+    <meta property="og:title" content="Compare models — Sys1" />
+    <meta property="og:description" content="Decision latency, token accounting, footprint, and evidence for choosing your model." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sys1.io/compare" />
+    <meta name="theme-color" content="#f8f7f4" />
+    <script src="/appearance.js"></script>
+    <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
+    <link rel="stylesheet" href="/vendor/hraness-paper/paper-theme.css" />
+    <link rel="stylesheet" href="/vendor/hraness-marketing/product-marketing-preset.css" />
+    <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/comparison.css" />
+    <script src="/site.js" defer></script>
+    <script src="/comparison.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="wordmark" href="/" aria-label="Sys1 home">sys1<span>.io</span></a>
+        <nav aria-label="Primary">
+          <a href="/#how-it-works">Features</a>
+          <a href="/compare" aria-current="page">Compare</a>
+          <a href="https://github.com/hraness/sys1#use-as-a-module">Docs</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-small" href="/#install">Get started</a>
+          <label class="appearance js-only"><span class="sr-only">Appearance</span><select id="appearance" aria-label="Appearance"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="comparison-page">
+      <div class="comparison-intro">
+        <a href="/">Sys1 /</a>
+        <h1>Choose the model.<br />Understand the tradeoffs.</h1>
+        <p class="summary">Cactus Needle, Qwen, CUA-S1, and Jev solve different parts of the decision problem. Compare their speed, footprint, token usage, and evidence before choosing what runs behind your interface.</p>
+        <p class="comparison-date">Sources checked September 19, 2026 · Sys1 local adapters and upstream results</p>
+        <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#local-results">Local results</a><a href="#upstream">Published benchmarks</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Methodology</a></nav>
+      </div>
+
+      <section id="choose" class="section" aria-labelledby="choose-heading">
+        <div class="section-intro"><h2 id="choose-heading">Start with the job.</h2><p>Sys1 supplies routing and a validated contract. The model supplies the judgment. Smaller files, faster answers, and better decisions are separate properties.</p></div>
+        <div class="table-scroll" role="region" aria-label="Model capabilities and download sizes" tabindex="0"><table class="comparison-table">
+          <caption>What each route gives you in Sys1</caption>
+          <thead><tr><th scope="col">Model / service</th><th scope="col">Best starting point</th><th scope="col">Pinned download</th><th scope="col">Execution &amp; limits</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">CUA-S1 Forms<span class="table-detail">706K parameter specialist</span></th><td>Short form-action selection</td><td class="number">2.71 MiB</td><td>In-process option scorer. 224-byte combined context; 96-byte options. Explicit pin required.</td></tr>
+            <tr><th scope="row">Cactus Needle 3<span class="table-detail">121M parameter specialist</span></th><td>Tool calls and extraction</td><td class="number">33.70 MiB<span class="table-detail">+ 0.75 MiB engine on macOS ARM64</span></td><td>New native process per request. Sys1 maps decisions into an extraction tool. Explicit pin required.</td></tr>
+            <tr><th scope="row">Qwen3 0.6B<span class="table-detail">Q4_0 GGUF</span></th><td>Small general local fallback</td><td class="number">364.45 MiB</td><td>llama.cpp via node-llama-cpp. Scores the first-token distribution; 2,048-token configured context.</td></tr>
+            <tr><th scope="row">Qwen3 1.7B<span class="table-detail">Q4_K_M GGUF</span></th><td>Another local quality candidate</td><td class="number">1,056.11 MiB</td><td>Same Sys1 adapter as 0.6B. Evaluate your task before trading memory for model size.</td></tr>
+            <tr><th scope="row">Jev<span class="table-detail">Hosted TypeSafe service</span></th><td>Hosted typed decisions and probabilities</td><td>No local weights</td><td>Opt in with your credentials. State shared across parallel questions; provider bills input tokens.</td></tr>
+            <tr><th scope="row">OpenJev<span class="table-detail">razorback16/openjev</span></th><td>Your own compatible GPU server</td><td>Operator-managed</td><td>DiffusionGemma 26B-A4B via vLLM. Register an HTTP backend; Sys1 uses its common decision contract.</td></tr>
+          </tbody></table></div>
+        <p class="section-footnote">MiB = 1,048,576 bytes. File sizes are verified download footprints, not RAM requirements. Sys1 caches one local model by default; that limits model count, not memory bytes. <a href="https://github.com/hraness/sys1/blob/main/src/local/store.ts">Registry &amp; artifact pins</a>.</p>
+      </section>
+
+      <section id="local-results" class="section" aria-labelledby="local-heading">
+        <div class="section-intro"><h2 id="local-heading">Measured through Sys1.</h2><p>One public, synthetic forms workload, run through the local adapters on one machine. Every request asks for one of three actions. Timing and correctness are reported separately.</p></div>
+        <!-- LOCAL_RESULTS -->
+      </section>
+
+      <section id="upstream" class="section" aria-labelledby="upstream-heading">
+        <div class="section-intro"><h2 id="upstream-heading">What the publishers report.</h2><p>Useful context, with the hardware and workload attached. These results use different datasets and runtimes; their numbers do not form a shared leaderboard.</p></div>
+        <article class="evidence-block">
+          <div><h3>Jev: hosted decision latency</h3><p class="evidence-origin">TypeSafe · September 15 launch report</p></div>
+          <div><p><strong>70–500 ms end to end</strong>, generally from West Coast laptops to TypeSafe’s West Coast service. The published range does not specify a percentile or sample count.</p><p>TypeSafe’s separate four-workflow evaluation displays <strong>67.8% reference agreement</strong>, about <strong>0.4 seconds</strong> and <strong>$0.0004 per workflow case</strong>. These are rounded, equal-weight overview values. Agreement is with a frontier-model consensus, rather than human-labelled accuracy.</p><p class="source-line"><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Launch conditions</a> · <a href="https://evals.typesafe.ai/">Workflow results &amp; methodology</a></p></div>
+        </article>
+        <article class="evidence-block">
+          <div><h3>OpenJev: latency under load</h3><p class="evidence-origin">DiffusionGemma 26B-A4B NVFP4 · RTX PRO 6000</p></div>
+          <div><p>Three questions per request, cache-busted states, and an allocation described upstream as “38% of the GPU.” This is a server-throughput result; input-token distribution, sample count, and accuracy are not supplied.</p>
+            <div class="table-scroll" role="region" aria-label="OpenJev published concurrency results" tabindex="0"><table class="comparison-table compact-table"><caption>Upstream OpenJev benchmark</caption><thead><tr><th scope="col">Concurrency</th><th scope="col">Requests/s</th><th scope="col">p50</th><th scope="col">p95</th></tr></thead><tbody><tr><th scope="row">1</th><td>10.7</td><td>94 ms</td><td>94 ms</td></tr><tr><th scope="row">16</th><td>43.3</td><td>367 ms</td><td>369 ms</td></tr><tr><th scope="row">32</th><td>51.7</td><td>545 ms</td><td>618 ms</td></tr><tr><th scope="row">64</th><td>57.4</td><td>760 ms</td><td>1,109 ms</td></tr></tbody></table></div>
+            <p class="source-line">More concurrent traffic raises total throughput and the time each request waits. <a href="https://github.com/razorback16/openjev/blob/91d5005effcf8cc0ecccaa9538ceabbb130fef59/README.md">Pinned source &amp; conditions</a>.</p>
+          </div>
+        </article>
+        <article class="evidence-block">
+          <div><h3>Cactus Needle: edge inference</h3><p class="evidence-origin">Needle 3 family · Raspberry Pi 5</p></div>
+          <div><p><strong>400–4,000 decode tokens/s</strong> and <strong>1,000–10,000 prefill tokens/s</strong> across the vendor’s model-depth range. Prefill reads the input; decode produces new tokens. The range is not an end-to-end measurement of Sys1’s pinned 121M model.</p><p>Sequence lengths, repeat counts, and a per-depth speed mapping are not attached to that headline. Current upstream 8–29 MB size claims also differ from Sys1’s verified 33.70 MiB weight artifact.</p><p class="source-line"><a href="https://cactuscompute.com/needle">Needle release &amp; benchmarks</a> · <a href="https://huggingface.co/Cactus-Compute/needle3/tree/b009f8937124b2d0458f4ed040c10c41fd2a0dfc">Sys1’s pinned artifacts</a></p></div>
+        </article>
+        <article class="evidence-block">
+          <div><h3>Qwen: generation throughput</h3><p class="evidence-origin">BF16 · NVIDIA H20 96 GB · SGLang</p></div>
+          <div><p>Qwen’s official table reports <strong>414.17 tokens/s for Qwen3 0.6B</strong> and <strong>227.80 tokens/s for 1.7B</strong>: batch one, one input token, 2,048 generated tokens, SGLang 0.4.6.post1. Its formula includes input plus generated tokens.</p><p>Sys1 uses quantized GGUF weights and a first-token probability readout. A long-generation GPU benchmark cannot predict its local decision latency.</p><p class="source-line"><a href="https://qwen.readthedocs.io/en/latest/getting_started/speed_benchmark.html">Official Qwen speed table &amp; method</a></p></div>
+        </article>
+        <details class="comparison-detail"><summary>Why avoiding generated text can help</summary><div class="detail-body"><p>Related research in <strong>SemIf</strong> compares two output paths for the same Qwen3.5-4B BF16 model on an RTX 3090. For 21 binary questions, direct probability readout took a median <strong>1.023 s with zero generated answer tokens</strong>; a generated JSON array took <strong>5.332 s and 111 output tokens</strong>, over three runs.</p><p>The paths agreed on 18 of 21 decisions, so this demonstrates an output-path tradeoff rather than equivalent answer quality. SemIf was previously named TheoLeeCJ/openjev; it is separate from the OpenJev server above and is not a bundled Sys1 adapter. <a href="https://github.com/TheoLeeCJ/SemIf/blob/ca3ba65f142967030ecb453346e94d6f476a69df/docs/RESULTS.md">Pinned results</a>.</p></div></details>
+      </section>
+
+      <section id="tokens" class="section" aria-labelledby="tokens-heading">
+        <div class="section-intro"><h2 id="tokens-heading">Zero output tokens still takes work.</h2><p>A classifier, a tool-calling model, and a text generator count work differently. Use completed decisions per second for a shared unit, then inspect what the token counters actually mean.</p></div>
+        <dl class="accounting-list">
+          <div><dt>Qwen through Sys1</dt><dd>Reports the actual tokenized prompt count, summed across questions. Each question evaluates its own wrapped prompt, so repeating a large state can cost input processing time. Output usage is zero because Sys1 reads the first-token probability distribution instead of returning generated text.</dd></div>
+          <div><dt>CUA-S1 Forms</dt><dd>Scores UTF-8 byte representations directly. Generative tokens per second is not an applicable metric. The wire response uses zero token counters.</dd></div>
+          <div><dt>Cactus Needle</dt><dd>Performs native tool-call inference. Sys1 currently returns zero token counters because this adapter does not expose accounting. Read them as <strong>unreported</strong>, not as zero model work.</dd></div>
+          <div><dt>Hosted Jev</dt><dd>Reads shared state once and evaluates questions in parallel. Use provider-reported billable input tokens. Its documented account rate limits describe allowed traffic, not achieved inference speed. <a href="https://docs.typesafe.ai/models">Current model &amp; pricing</a>.</dd></div>
+        </dl>
+        <div class="cost-example">
+          <div><h3>Estimate Jev input cost.</h3><p>Published price for Jev 1.13: <strong>$0.042 per million input tokens</strong>, with output free. Change request volume and average billed input tokens to estimate a monthly total.</p><p class="section-footnote">Arithmetic only. Excludes retries and any future price changes. Local models have hardware, memory, energy, and operating costs instead of this API charge.</p></div>
+          <div class="calculator">
+            <label for="requests">Requests per month</label><input id="requests" type="number" inputmode="numeric" min="0" max="1000000000000" step="1" value="1000000" aria-describedby="cost-note" />
+            <label for="input-tokens">Average billed input tokens / request</label><input id="input-tokens" type="number" inputmode="numeric" min="0" max="64000" step="1" value="1000" aria-describedby="cost-note" />
+            <p id="cost-note" class="section-footnote">Use the provider’s usage counters, not JSON byte length.</p>
+            <output id="estimated-cost" for="requests input-tokens" aria-live="polite">$42.00 / month</output>
+            <noscript><p class="section-footnote">Enable JavaScript to change this estimate. The default is 1 million requests × 1,000 input tokens.</p></noscript>
+          </div>
+        </div>
+      </section>
+
+      <section id="method" class="section" aria-labelledby="method-heading">
+        <div class="section-intro"><h2 id="method-heading">Make the result useful for your app.</h2><p>Start with labelled cases from your actual workflow. Pin the model, adapter, and hardware. Then measure the whole path your users will wait for.</p></div>
+        <ol class="measurement-list"><li><strong>Check correctness and failures.</strong> A valid answer shape can still contain a wrong decision. Keep wrong answers, timeouts, and unsupported requests visible.</li><li><strong>Separate first call from steady use.</strong> Loading weights and starting processes can dominate a short request. OS file caching makes a fresh runner different from a cold machine.</li><li><strong>Keep workload size explicit.</strong> Record state length, question count, options, concurrency, and context configuration. Report p50 and p95 latency with sample counts.</li><li><strong>Evaluate confidence separately.</strong> A normalized probability or model-reported confidence is not evidence of calibration. Test thresholds against held-out labels before letting them authorize actions.</li></ol>
+        <p>Sys1’s advantage is that you can run this comparison behind the same application contract, then choose a policy or an explicit model pin. Switching the interface does not establish interchangeable model quality.</p>
+        <div class="actions comparison-actions"><a class="button" href="https://github.com/hraness/sys1/tree/main/benchmarks">Run the local benchmark</a><a class="button button-secondary" href="https://github.com/hraness/sys1/blob/main/docs/model-comparison.md">Sources &amp; detailed notes</a><a class="button button-secondary" href="/#install">Install Sys1</a></div>
+      </section>
+    </main>
+    <footer aria-label="Hraness network" class="hraness-site-footer x1ktp55a x8d9m59 x96ybla x14z8vex x8c10za xdg0xw2 x1munjs5 xsctza4 xtq98z5 x1w6jg7m x3luoqq x1xgbxbt x9cmhvv x4sry57 xys6ka6 x1d4g2j8 x1sphz0r x19y8ktx x1h47zgc x1ghcxmq xe0js8b xiuoait x1g4142m xprmc4t xkpwil5 x12mkk0b" data-brand="visible" data-mailing-list="none" data-slot="hraness-site-footer" id="hraness-site-footer"><div class="hraness-site-footer__inner x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x12e8u3k x12h1iku x1n2onr6 xrvj5dj x182hbjg x196kgno x1rkzygb x1qs5i8y xv7uhgh xiuoait xzlj3eo x5vl0wm x1tec7hu xesnm00 xc26acl x6s0dn4 x1n78d84 x1lfezxm x1b1eqt9 x3so8kt x1gz0dqr x1np48w9 x1hhhz6w x9yvj25 x1bhgv95 xpcvst1 x1i0wikq xs8f16d"><a aria-label="Hraness home" class="hraness-site-footer__brand x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 x1pmbb8p xamitd3 xl56j7k xart1r9 xeuuy2l x6i6fhv x1d3i0y6 x1heor9g xxeg0yr x19s9jnd x130jcwj xo5v014 x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/" lang="en" dir="ltr"><svg aria-hidden="true" class="hraness-site-footer__mark x1c4vz4f x2lah0s xdl72j9 xif76xs x1wugil3" data-slot="hraness-mark" focusable="false" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z" fill="currentColor" fill-rule="evenodd"></path><path d="M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z" fill="currentColor"></path><path d="M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z" fill="currentColor" fill-rule="evenodd"></path><path d="M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z" fill="currentColor"></path><circle cx="166" cy="307" fill="currentColor" r="8"></circle></svg><span class="hraness-site-footer__brand-name xj5idha x1dcheo9 xk50ysn x1i21sxh xuxw1ft">by Hraness</span></a><nav aria-label="Hraness links" class="hraness-site-footer__links x78zum5 x6s0dn4 xt33hwp xgc5ccc x12h1iku xiuoait xesnm00 x13a6bvl xvc5jky"><ul class="hraness-site-footer__socials x78zum5 xesnm00 x13a6bvl x1enigpx x1ghz6dp x1717udv x3ct3a4 x43c9pm xnbnhf8"><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1lliihq"><a aria-label="Hraness on Substack" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://substack.com/@hraness" rel="me" title="Substack"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836ZM1.46 10.812v2.836h21.08v-2.836H1.46ZM22.54 16.218V24L12 18.11 1.46 24v-7.782h21.08ZM1.46 0v2.836h21.08V0H1.46Z" fill="currentColor"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xhzsqoz x6w72mi"><a aria-label="Hraness on X" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://x.com/hraness" rel="me" title="X"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg x18g50z5 x101cbvv"><a aria-label="Hraness on LinkedIn" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://www.linkedin.com/company/hraness" rel="me" title="LinkedIn"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M7.125 6.75H7M7.25 6.75C7.25 6.88807 7.13807 7 7 7C6.86193 7 6.75 6.88807 6.75 6.75C6.75 6.61193 6.86193 6.5 7 6.5C7.13807 6.5 7.25 6.61193 7.25 6.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3C16.2426 3 18.364 3 19.682 4.31802C21 5.63604 21 7.75736 21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xir82yx xwl02xf"><a aria-label="Hraness on GitHub" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://github.com/hraness" rel="me" title="GitHub"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li></ul></nav></div></footer>
+
+  </body>
+</html>
