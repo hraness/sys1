@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sys1",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Typed decisions for agents: a local model router, Jev-compatible gateway, and Node/Bun client.",
   "type": "module",
   "license": "MIT",
@@ -42,6 +42,7 @@
   "scripts": {
     "build:dist": "bun scripts/build-dist.ts",
     "check:package": "bun scripts/package-smoke.ts",
+    "check:native": "bun scripts/check-native.ts",
     "test": "bun test ./src ./test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check": "bun run typecheck && bun run test && bun run build:dist && bun run check:package",

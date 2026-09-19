@@ -5,7 +5,18 @@ import { writeEngineMessage as send } from "../../src/local/engine-ipc.ts";
 let count = 0;
 process.on("SIGTERM", () => {});
 for await (const line of createInterface({ input: process.stdin })) {
-  const request = JSON.parse(line) as { id: number; prompt: string };
+  const request = JSON.parse(line) as { id: number; prompt: string; op?: string };
+  if (request.op === "probe") {
+    const mode = process.argv[2];
+    if (mode === "exit") process.exit(17);
+    if (mode === "timeout") await new Promise(() => {});
+    if (mode === "invalid") {
+      writeSync(1, "private diagnostic must not escape\n");
+      continue;
+    }
+    await send({ id: request.id, kind: "probe", value: mode === "unavailable" ? { ok: false, message: "private diagnostic must not escape" } : { ok: true, backend: "cpu", supported_backends: ["cpu"] } });
+    continue;
+  }
   count += 1;
   if (request.prompt === "hang") {
     process.stderr.write("ready\n");

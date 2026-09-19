@@ -11,7 +11,7 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -24,11 +24,13 @@ jobs:
           node-version: 24.19.0
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run check
+      - name: Install candidate and verify native readiness
+        run: bun run check:native
 
   platform:
     name: Platform (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -45,3 +47,5 @@ jobs:
           node-version: 24.19.0
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run check
+      - name: Install candidate and verify native readiness
+        run: bun run check:native

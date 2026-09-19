@@ -65,6 +65,7 @@ function unavailable(detail: string): EngineUnavailableError {
 }
 
 class EngineWorker {
+  phase: "created" | "request_sent" | "response_started" | "response_received" = "created";
   private readonly child: ChildProcess;
   private readonly collected: Promise<void>;
   private readonly pipes: Array<Readable | Writable>;
@@ -103,6 +104,7 @@ class EngineWorker {
 
   private accept(chunk: Buffer): void {
     if (this.stopped) return;
+    this.phase = "response_started";
     this.bytes += chunk.byteLength;
     if (this.bytes > ENGINE_IPC_LIMITS.responseBytes) {
       void this.fail("worker_response_limit");
@@ -130,6 +132,7 @@ class EngineWorker {
       return;
     }
     this.pending = null;
+    this.phase = "response_received";
     pending.resolve(response);
   }
 
@@ -153,7 +156,10 @@ class EngineWorker {
         this.pending = { id, resolve, reject };
         signal.addEventListener("abort", abort, { once: true });
         if (signal.aborted) abort();
-        else this.child.stdin!.write(wire);
+        else {
+          this.phase = "request_sent";
+          this.child.stdin!.write(wire);
+        }
       });
     } finally {
       signal.removeEventListener("abort", abort);
@@ -173,6 +179,13 @@ class EngineWorker {
       this.bytes = 0;
     })();
     return this.stopPromise;
+  }
+
+  exitStatus(): string {
+    const signal = this.child.signalCode;
+    if (signal !== null && /^SIG[A-Z0-9]{1,16}$/.test(signal)) return signal;
+    const code = this.child.exitCode;
+    return code !== null && Number.isSafeInteger(code) ? String(code) : "unknown";
   }
 }
 
@@ -244,25 +257,48 @@ export class LlamaEngine implements DecisionEngine {
 }
 
 /** Native capability discovery is also isolated and bounded; it loads no model. */
-export async function probeNativeRuntime(): Promise<NativeRuntimeProbe> {
-  const worker = new EngineWorker(defaultWorker);
+export async function probeNativeRuntime(options: { workerFactory?: WorkerFactory; timeoutMs?: number } = {}): Promise<NativeRuntimeProbe> {
+  const started = performance.now();
+  const timeoutMs = options.timeoutMs ?? 10_000;
+  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 10_000) {
+    return { ok: false, failure_code: "invalid_timeout", elapsed_ms: 0, message: "native runtime probe failed: invalid_timeout" };
+  }
+  let worker: EngineWorker | undefined;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 10_000);
+  let deadlineReached = false;
+  const timer = setTimeout(() => { deadlineReached = true; controller.abort(); }, timeoutMs);
+  const failure = (code: string): NativeRuntimeProbe => {
+    const elapsed = Math.max(0, Math.round(performance.now() - started));
+    const phase = worker?.phase ?? "created";
+    const exit = code === "worker_exited" ? `; exit=${worker?.exitStatus() ?? "unknown"}` : "";
+    return {
+      ok: false,
+      failure_code: code,
+      elapsed_ms: elapsed,
+      message: `native runtime probe failed: ${code}; elapsed_ms=${elapsed}; phase=${phase}${exit}`,
+    };
+  };
   try {
+    worker = new EngineWorker(options.workerFactory ?? defaultWorker);
     const response = await worker.request({ op: "probe" }, controller.signal);
-    if (response.kind !== "probe") return { ok: false, message: "native runtime unavailable" };
+    if (response.kind !== "probe") return failure("worker_response_mismatch");
     const value = response.value;
+    if (!value.ok) return failure("native_unavailable");
     return {
       ok: value.ok,
       ...(value.backend === undefined ? {} : { backend: value.backend }),
       ...(value.gpu_offloading === undefined ? {} : { gpu_offloading: value.gpu_offloading }),
       ...(value.supported_backends === undefined ? {} : { supported_backends: value.supported_backends }),
-      ...(value.message === undefined ? {} : { message: value.message }),
     };
-  } catch {
-    return { ok: false, message: "native runtime unavailable or timed out" };
+  } catch (error) {
+    const allowed = new Set([
+      "worker_exited", "worker_failed", "worker_input_failed", "worker_output_failed",
+      "worker_pipes_unavailable", "worker_response_limit", "worker_response_invalid",
+      "worker_response_mismatch", "worker_request_limit", "worker_stopped", "worker_busy",
+    ]);
+    return failure(deadlineReached ? "probe_timeout" : error instanceof EngineUnavailableError && allowed.has(error.detail) ? error.detail : "worker_failed");
   } finally {
     clearTimeout(timer);
-    await worker.stop();
+    await worker?.stop();
   }
 }

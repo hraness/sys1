@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.1/hraness-sys1-0.8.1.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.2/hraness-sys1-0.8.2.tgz
 sys1 doctor
 ```
 
@@ -43,7 +43,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.8.1/hraness-sys1-0.8.1.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.2/hraness-sys1-0.8.2.tgz
 ```
 
 ```ts
@@ -488,8 +488,12 @@ bun run check
 
 The check runs strict TypeScript, deterministic tests with fake inference,
 distribution builds, and an isolated packed-artifact import/CLI smoke test.
-Large weights, live model downloads, and native inference are excluded from
-ordinary CI.
+CI then runs `bun run check:native` on Linux, macOS and Windows: it installs
+the packed candidate in a disposable prefix and checks real native runtime
+readiness before a release tag is needed. This does not rebuild the package
+or download model weights. Model inference and hosted calls remain excluded
+from ordinary CI; the release workflow still verifies its exact uploaded
+artifact on all three platforms.
 
 ## Needle process boundary
 

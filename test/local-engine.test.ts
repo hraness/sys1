@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { spawn, type ChildProcess } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { EngineUnavailableError, LlamaEngine } from "../src/local/engine.ts";
+import { EngineUnavailableError, LlamaEngine, probeNativeRuntime } from "../src/local/engine.ts";
 import { NativeLlamaEngine, runNativeProbe, type NativeGpuType } from "../src/local/engine-core.ts";
 import { LocalInputError } from "../src/local/input.ts";
 
@@ -188,6 +188,31 @@ describe("native worker context admission", () => {
 });
 
 describe("native runtime readiness", () => {
+  test.each([
+    { mode: "timeout", code: "probe_timeout" },
+    { mode: "exit", code: "worker_exited" },
+    { mode: "invalid", code: "worker_response_invalid" },
+    { mode: "unavailable", code: "native_unavailable" },
+  ])("classifies $mode without exposing worker output", async ({ mode, code }) => {
+    let closed = false;
+    const report = await probeNativeRuntime({
+      timeoutMs: mode === "timeout" ? 200 : 3_000,
+      workerFactory: () => {
+        const child = spawn(process.execPath, [fileURLToPath(new URL("./fixtures/engine-worker.ts", import.meta.url)), mode], { stdio: ["pipe", "pipe", "ignore"] });
+        child.once("close", () => { closed = true; });
+        return child;
+      },
+    });
+    expect(report.ok).toBe(false);
+    expect(report.failure_code).toBe(code);
+    expect(report.elapsed_ms).toBeGreaterThanOrEqual(0);
+    expect(report.message).toContain(`native runtime probe failed: ${code}; elapsed_ms=`);
+    expect(report.message).toContain("phase=");
+    expect(JSON.stringify(report)).not.toContain("private diagnostic");
+    if (mode === "exit") expect(report.message).toContain("exit=17");
+    expect(closed).toBe(true);
+  });
+
   test.each([
     { gpu: false as const, supported: [false] satisfies NativeGpuType[], expected: "cpu", names: ["cpu"] },
     { gpu: "metal" as const, supported: ["metal", false] satisfies NativeGpuType[], expected: "metal", names: ["metal", "cpu"] },
