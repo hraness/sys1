@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { spawn, type ChildProcess } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { EngineUnavailableError, LlamaEngine } from "../src/local/engine.ts";
-import { NativeLlamaEngine } from "../src/local/engine-core.ts";
+import { NativeLlamaEngine, runNativeProbe, type NativeGpuType } from "../src/local/engine-core.ts";
 import { LocalInputError } from "../src/local/input.ts";
 
 const engines: LlamaEngine[] = [];
@@ -133,7 +133,7 @@ function nativeHarness(tokenCount: number) {
   let nativeOptions: unknown;
   let evaluationOptions: { temperature?: number; yieldEogToken?: boolean } | undefined;
   const engine = new NativeLlamaEngine({ modelPath: "/unused", modelId: "mock", contextSize: 512, evalTimeoutMs: 1_000 }, async () => ({
-    async getLlamaGpuTypes() { return ["cpu"]; },
+    async getLlamaGpuTypes() { return [false]; },
     async getLlama(options) {
       nativeOptions = options;
       return {
@@ -184,5 +184,29 @@ describe("native worker context admission", () => {
     expect(options()).toEqual({ temperature: 0, yieldEogToken: true });
     expect(nativeOptions()).toEqual({ gpu: "auto", logLevel: "fatal", build: "never", skipDownload: true });
     await engine.dispose();
+  });
+});
+
+describe("native runtime readiness", () => {
+  test.each([
+    { gpu: false as const, supported: [false] satisfies NativeGpuType[], expected: "cpu", names: ["cpu"] },
+    { gpu: "metal" as const, supported: ["metal", false] satisfies NativeGpuType[], expected: "metal", names: ["metal", "cpu"] },
+  ])("normalizes native backend $expected to the public string contract", async ({ gpu, supported, expected, names }) => {
+    let disposed = false;
+    const report = await runNativeProbe(async () => ({
+      async getLlamaGpuTypes() { return supported; },
+      async getLlama(options) {
+        expect(options).toEqual({ gpu: "auto", logLevel: "fatal", build: "never", skipDownload: true });
+        return {
+          gpu,
+          supportsGpuOffloading: gpu !== false,
+          async loadModel() { throw new Error("readiness must not load a model"); },
+          async dispose() { disposed = true; },
+        };
+      },
+      resolveChatWrapper() { throw new Error("readiness must not render model input"); },
+    }));
+    expect(report).toEqual({ ok: true, backend: expected, gpu_offloading: gpu !== false, supported_backends: [...names] });
+    expect(disposed).toBe(true);
   });
 });

@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.0/hraness-sys1-0.8.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.1/hraness-sys1-0.8.1.tgz
 sys1 doctor
 ```
 
@@ -43,7 +43,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.8.0/hraness-sys1-0.8.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.8.1/hraness-sys1-0.8.1.tgz
 ```
 
 ```ts
