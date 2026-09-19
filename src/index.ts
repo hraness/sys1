@@ -64,3 +64,69 @@ export {
   writePidFile,
 } from "./daemon.ts";
 export type { DaemonState, DownResult, PidFile, UpResult } from "./daemon.ts";
+
+export {
+  DECIDE_LIMITS,
+  DECISION_LABELS,
+  aggregateMass,
+  answerLabels,
+  confidenceOf,
+  decisionPrompt,
+  outcomeFromMass,
+  toLocalAnswer,
+  toLocalResponse,
+} from "./local/decide.ts";
+export type {
+  LabelMass,
+  LocalAnswer,
+  LocalResponse,
+  QuestionOutcome,
+} from "./local/decide.ts";
+
+export { EngineUnavailableError, LlamaEngine } from "./local/engine.ts";
+export type {
+  DecisionEngine,
+  FirstTokenDistribution,
+  LlamaEngineOptions,
+} from "./local/engine.ts";
+
+export {
+  BUILTIN_PREFIX,
+  LocalRunner,
+  builtinCandidates,
+  builtinName,
+  defaultEngineFactory,
+} from "./local/runner.ts";
+export type {
+  BuiltinCandidate,
+  DecideResult,
+  EngineFactory,
+  RunnerOptions,
+} from "./local/runner.ts";
+
+export {
+  MODEL_LIMITS,
+  MODEL_REGISTRY,
+  findInstalled,
+  findRegistry,
+  installedModels,
+  loadManifest,
+  loadManifestChecked,
+  manifestPath,
+  modelFilePath,
+  modelsDir,
+  pullModel,
+  removeModel,
+  resolvePullTarget,
+  saveManifest,
+  storeBytes,
+  verifyModel,
+} from "./local/store.ts";
+export type {
+  InstalledModel,
+  Manifest,
+  ManifestLoadResult,
+  PullResult,
+  PullTarget,
+  RegistryEntry,
+} from "./local/store.ts";

@@ -23,6 +23,14 @@ import {
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
 import { SYSONE_VERSION, startGateway } from "./gateway.ts";
+import {
+  MODEL_REGISTRY,
+  installedModels,
+  pullModel,
+  removeModel,
+  storeBytes,
+  verifyModel,
+} from "./local/store.ts";
 
 const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5 } as const;
 
@@ -49,12 +57,19 @@ Daemon:
   serve [--port N]              Run the gateway in the foreground
   status [--json]               Daemon state and backend reachability
 
-Routing:
+Models:
+  pull [MODEL] [--json]         Download + verify a GGUF (default qwen3-0.6b)
+  pull --list [--json]          Show the curated model registry
+  model list [--json]           Show installed GGUF models
+  model verify MODEL [--json]   Recompute and verify a model's sha256
+  model remove MODEL            Remove an installed model
   models [--json]               List models across reachable backends
-  backend list [--json]         List configured local backends
+
+Routing:
+  backend list [--json]         List configured HTTP backends
   backend add --name N --url U --model M [--size-b N] [--cost-rank N]
-                                Register a local System One backend
-  backend remove --name N       Remove a local backend
+                                Register a System One HTTP backend
+  backend remove --name N       Remove an HTTP backend
   config path                   Print the config file location
   config get [--json]           Print the effective config
   config set <key> <value>      Set a config key (see list below)
@@ -117,6 +132,7 @@ const VALUE_FLAGS = new Set([
   "--size-b",
   "--cost-rank",
   "--file",
+  "--sha256",
 ]);
 
 function flagNumber(flags: Map<string, string | boolean>, name: string): number | undefined {
@@ -130,6 +146,13 @@ function flagNumber(flags: Map<string, string | boolean>, name: string): number 
 function flagString(flags: Map<string, string | boolean>, name: string): string | undefined {
   const raw = flags.get(name);
   return typeof raw === "string" ? raw : undefined;
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 ** 2) return `${(bytes / 1024).toFixed(1)} KiB`;
+  if (bytes < 1024 ** 3) return `${(bytes / 1024 ** 2).toFixed(1)} MiB`;
+  return `${(bytes / 1024 ** 3).toFixed(2)} GiB`;
 }
 
 function mustConfig(home: string): SysoneConfig {
@@ -176,6 +199,7 @@ async function cmdServe(
   const gateway = startGateway({
     config,
     env: process.env,
+    home,
     ...(port === undefined ? {} : { port }),
     reloadConfig: () => {
       const loaded = loadConfig(home);
@@ -187,10 +211,20 @@ async function cmdServe(
     writePidFile(home, process.pid, config.gateway.host, gateway.port);
   }
   err(`sysone ${SYSONE_VERSION} listening at ${gateway.url}`);
+  let shuttingDown = false;
   const shutdown = (): void => {
-    gateway.stop();
-    if (daemonChild) clearPidFile(home, process.pid);
-    process.exit(0);
+    if (shuttingDown) return;
+    shuttingDown = true;
+    void gateway
+      .stop()
+      .then(() => {
+        if (daemonChild) clearPidFile(home, process.pid);
+        process.exit(0);
+      })
+      .catch((error: unknown) => {
+        err(`sysone: shutdown failed: ${error instanceof Error ? error.message : "unknown error"}`);
+        process.exit(1);
+      });
   };
   process.on("SIGTERM", shutdown);
   process.on("SIGINT", shutdown);
@@ -200,12 +234,14 @@ async function cmdServe(
 async function cmdStatus(home: string, flags: Map<string, string | boolean>): Promise<void> {
   const config = mustConfig(home);
   const daemon = await daemonStatus(home, config);
-  const backends = runtimeBackends(config, process.env);
+  const backends = runtimeBackends(config, process.env, home);
   const probes = await probeAll(backends, config.gateway.probe_timeout_ms);
+  const localModels = installedModels(home);
   const report = {
     daemon,
     gateway: { host: config.gateway.host, port: config.gateway.port },
     routing: { policy: config.routing.policy },
+    local_store: { models: localModels.length, bytes: storeBytes(home) },
     backends: backends.map((backend) => ({
       name: backend.name,
       kind: backend.kind,
@@ -221,19 +257,20 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
   }
   out(`daemon: ${daemon.state}${daemon.state === "running" ? ` pid ${daemon.pid} http://${daemon.host}:${daemon.port}` : ""}`);
   out(`routing: ${config.routing.policy}`);
+  out(`local store: ${localModels.length} model${localModels.length === 1 ? "" : "s"}, ${formatBytes(report.local_store.bytes)}`);
   for (const backend of report.backends) {
     const marker = backend.available ? "up" : "down";
     const size = backend.size_b === null ? "" : ` ${backend.size_b}B`;
     out(`  ${backend.name} (${backend.kind})${size}: ${marker} — ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
-    out("  no backends configured; set TYPESAFE_API_KEY or `sysone backend add`");
+    out("  no backends configured; run `sysone pull`, set TYPESAFE_API_KEY, or `sysone backend add`");
   }
 }
 
 async function cmdModels(home: string, flags: Map<string, string | boolean>): Promise<void> {
   const config = mustConfig(home);
-  const backends = runtimeBackends(config, process.env);
+  const backends = runtimeBackends(config, process.env, home);
   await probeAll(backends, config.gateway.probe_timeout_ms);
   const rows = backends.flatMap((backend) =>
     backend.models.map((id) => ({
@@ -251,6 +288,92 @@ async function cmdModels(home: string, flags: Map<string, string | boolean>): Pr
   for (const row of rows) {
     out(`${row.id}\t${row.backend} (${row.kind}) ${row.available ? "up" : "down"}`);
   }
+}
+
+async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
+  if (args.flags.get("list") === true) {
+    const rows = MODEL_REGISTRY.map((entry) => ({
+      id: entry.id,
+      size_b: entry.size_b,
+      bytes: entry.bytes,
+      description: entry.description,
+      installed: installedModels(home).some((model) => model.id === entry.id),
+    }));
+    if (args.flags.get("json") === true) {
+      out(JSON.stringify({ object: "list", data: rows }, null, 2));
+      return;
+    }
+    for (const row of rows) {
+      out(`${row.id}\t${formatBytes(row.bytes)}\t${row.installed ? "installed" : "available"}\t${row.description}`);
+    }
+    return;
+  }
+
+  const ref = args.positional[1] ?? MODEL_REGISTRY[0]?.id;
+  if (ref === undefined) fail("model registry is empty", EXIT.backend);
+  const sha256 = flagString(args.flags, "sha256");
+  if (sha256 !== undefined && !/^[0-9a-f]{64}$/.test(sha256)) {
+    fail("--sha256 needs 64 lowercase hexadecimal characters", EXIT.usage);
+  }
+  const asJson = args.flags.get("json") === true;
+  let lastProgress = 0;
+  const result = await pullModel(home, ref, {
+    ...(sha256 === undefined ? {} : { sha256 }),
+    onProgress: (done, total) => {
+      if (asJson || Date.now() - lastProgress < 1_000) return;
+      lastProgress = Date.now();
+      const suffix = total === null ? "" : ` / ${formatBytes(total)}`;
+      err(`downloading ${ref}: ${formatBytes(done)}${suffix}`);
+    },
+  });
+  if (asJson) {
+    out(JSON.stringify(result, null, 2));
+  } else if (result.ok) {
+    out(`installed ${result.id} at ${result.path} (${formatBytes(result.bytes ?? 0)})`);
+  } else {
+    err(`sysone: ${result.message ?? "model download failed"}`);
+  }
+  if (!result.ok) process.exit(EXIT.backend);
+}
+
+async function cmdModel(home: string, args: ParsedArgs): Promise<void> {
+  const [sub, id] = args.positional.slice(1);
+  if (sub === "list") {
+    const models = installedModels(home);
+    if (args.flags.get("json") === true) {
+      out(JSON.stringify({ object: "list", data: models, bytes: storeBytes(home) }, null, 2));
+      return;
+    }
+    for (const model of models) {
+      const size = model.size_b === undefined ? "unknown" : `${model.size_b}B`;
+      out(`${model.id}\t${size}\t${formatBytes(model.bytes)}\t${model.source}`);
+    }
+    if (models.length === 0) out("no GGUF models installed; run `sysone pull`");
+    return;
+  }
+  if (sub === "verify") {
+    if (id === undefined) fail("usage: sysone model verify MODEL", EXIT.usage);
+    const result = await verifyModel(home, id);
+    if (args.flags.get("json") === true) {
+      out(JSON.stringify({ id, ...result }, null, 2));
+    } else {
+      out(result.ok ? `${id}: verified` : `${id}: ${result.message ?? "sha256 mismatch"}`);
+    }
+    if (!result.ok) process.exit(EXIT.backend);
+    return;
+  }
+  if (sub === "remove") {
+    if (id === undefined) fail("usage: sysone model remove MODEL", EXIT.usage);
+    const result = removeModel(home, id);
+    if (args.flags.get("json") === true) {
+      out(JSON.stringify({ id, ...result }, null, 2));
+    } else {
+      out(result.message);
+    }
+    if (!result.ok) process.exit(EXIT.backend);
+    return;
+  }
+  fail("usage: sysone model <list|verify|remove> [MODEL]", EXIT.usage);
 }
 
 async function cmdEval(home: string, flags: Map<string, string | boolean>): Promise<void> {
@@ -428,6 +551,12 @@ async function main(): Promise<void> {
       return;
     case "models":
       await cmdModels(home, args.flags);
+      return;
+    case "pull":
+      await cmdPull(home, args);
+      return;
+    case "model":
+      await cmdModel(home, args);
       return;
     case "eval":
       await cmdEval(home, args.flags);

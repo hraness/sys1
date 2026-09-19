@@ -1,5 +1,9 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { z } from "zod";
 import type { LocalBackendConfig, SysoneConfig } from "./config.ts";
+import { builtinCandidates } from "./local/runner.ts";
+import { modelsDir, type InstalledModel } from "./local/store.ts";
 import type { BackendCandidate } from "./router.ts";
 
 export const HOSTED_BACKEND_NAME = "typesafe";
@@ -9,6 +13,11 @@ export interface RuntimeBackend extends BackendCandidate {
   headers: Record<string, string>;
   /** Model id forwarded in the request body when the caller did not pin one. */
   default_model: string;
+  /**
+   * Present when this backend is a builtin local model served by the
+   * in-process runner rather than an HTTP endpoint. `base_url` is empty.
+   */
+  builtin?: { model: InstalledModel; path: string };
 }
 
 export interface ProbeResult {
@@ -42,10 +51,13 @@ export function extractModelIds(body: unknown): string[] {
  * Build the runtime backend list from config and environment. The hosted Jev
  * backend exists only when enabled and an API key is present in the configured
  * env var; keys are read from the environment, never from the config file.
+ * When `home` is given and `local.enabled` is on, every installed GGUF joins
+ * as a builtin `local-<id>` pseudo-backend served by the in-process runner.
  */
 export function runtimeBackends(
   config: SysoneConfig,
   env: NodeJS.ProcessEnv,
+  home?: string,
 ): RuntimeBackend[] {
   const backends: RuntimeBackend[] = [];
   if (config.hosted.enabled) {
@@ -67,6 +79,25 @@ export function runtimeBackends(
   for (const local of config.backends) {
     if (!local.enabled) continue;
     backends.push(localRuntimeBackend(local));
+  }
+  if (home !== undefined && config.local.enabled) {
+    for (const candidate of builtinCandidates(home, true)) {
+      backends.push({
+        name: candidate.name,
+        kind: "local",
+        available: candidate.available,
+        models: candidate.models,
+        size_b: candidate.size_b,
+        cost_rank: candidate.cost_rank,
+        base_url: "",
+        headers: {},
+        default_model: candidate.model.id,
+        builtin: {
+          model: candidate.model,
+          path: join(modelsDir(home), candidate.model.file),
+        },
+      });
+    }
   }
   return backends;
 }
@@ -90,6 +121,15 @@ export async function probeBackend(
   timeoutMs: number,
   fetchFn: typeof fetch = fetch,
 ): Promise<ProbeResult> {
+  if (backend.builtin !== undefined) {
+    const present = existsSync(backend.builtin.path);
+    return {
+      available: present,
+      models: backend.models,
+      latency_ms: 0,
+      detail: present ? null : "model file missing",
+    };
+  }
   const started = Date.now();
   try {
     const response = await fetchFn(`${backend.base_url}/v1/models`, {
