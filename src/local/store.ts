@@ -1,9 +1,13 @@
 import {
   chmodSync,
+  closeSync,
   createReadStream,
   existsSync,
+  lstatSync,
   mkdirSync,
+  openSync,
   readFileSync,
+  readSync,
   renameSync,
   rmSync,
   statSync,
@@ -25,6 +29,8 @@ export const MODEL_LIMITS = {
   maxManifestBytes: 65_536,
   maxModelBytes: 8_589_934_592,
   maxModels: 16,
+  maxGgufTensors: 1_000_000,
+  maxGgufMetadataEntries: 1_000_000,
   downloadTimeoutMs: 3_600_000,
 } as const;
 
@@ -36,7 +42,11 @@ export const modelIdSchema = z
 
 const installedModelSchema = z.object({
   id: modelIdSchema,
-  file: z.string().min(1).max(128),
+  file: z
+    .string()
+    .min(1)
+    .max(128)
+    .regex(/^[a-z0-9][a-z0-9.-]*\.gguf$/, "safe lowercase GGUF filename"),
   size_b: z.number().positive().max(10_000).optional(),
   source: z.string().min(1).max(512),
   sha256: z.string().regex(/^[0-9a-f]{64}$/),
@@ -108,11 +118,14 @@ export function loadManifestChecked(home: string): ManifestLoadResult {
   if (!existsSync(path)) return { ok: true, manifest: { version: 1, models: [] } };
   let parsed: unknown;
   try {
-    const raw = readFileSync(path, "utf8");
-    if (raw.length > MODEL_LIMITS.maxManifestBytes) {
+    const stats = lstatSync(path);
+    if (!stats.isFile() || stats.isSymbolicLink()) {
+      return { ok: false, message: "model manifest is not a regular file" };
+    }
+    if (stats.size > MODEL_LIMITS.maxManifestBytes) {
       return { ok: false, message: `model manifest exceeds ${MODEL_LIMITS.maxManifestBytes} bytes` };
     }
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(readFileSync(path, "utf8"));
   } catch {
     return { ok: false, message: `model manifest is not valid JSON: ${path}` };
   }
@@ -146,11 +159,67 @@ export function modelFilePath(home: string, model: InstalledModel): string {
   return join(modelsDir(home), model.file);
 }
 
+export type GgufInspection =
+  | {
+      ok: true;
+      version: number;
+      tensors: number;
+      metadata_entries: number;
+      bytes: number;
+    }
+  | { ok: false; message: string };
+
+export function inspectGgufFile(path: string): GgufInspection {
+  let descriptor: number | null = null;
+  try {
+    const stats = lstatSync(path);
+    if (!stats.isFile() || stats.isSymbolicLink()) {
+      return { ok: false, message: "model path is not a regular file" };
+    }
+    if (stats.size < 24) return { ok: false, message: "GGUF header is truncated" };
+    descriptor = openSync(path, "r");
+    const header = Buffer.alloc(24);
+    const bytesRead = readSync(descriptor, header, 0, header.length, 0);
+    if (bytesRead !== header.length) return { ok: false, message: "GGUF header is truncated" };
+    if (header.toString("ascii", 0, 4) !== "GGUF") {
+      return { ok: false, message: "file does not start with GGUF magic" };
+    }
+    const version = header.readUInt32LE(4);
+    if (version < 1 || version > 3) {
+      return { ok: false, message: `unsupported GGUF version ${version}` };
+    }
+    const tensors = header.readBigUInt64LE(8);
+    const metadata = header.readBigUInt64LE(16);
+    if (tensors > BigInt(MODEL_LIMITS.maxGgufTensors)) {
+      return { ok: false, message: "GGUF tensor count exceeds the admission limit" };
+    }
+    if (metadata > BigInt(MODEL_LIMITS.maxGgufMetadataEntries)) {
+      return { ok: false, message: "GGUF metadata count exceeds the admission limit" };
+    }
+    return {
+      ok: true,
+      version,
+      tensors: Number(tensors),
+      metadata_entries: Number(metadata),
+      bytes: stats.size,
+    };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "cannot inspect GGUF" };
+  } finally {
+    if (descriptor !== null) closeSync(descriptor);
+  }
+}
+
 /** Installed models whose files are actually present on disk. */
 export function installedModels(home: string): InstalledModel[] {
-  return loadManifest(home).models.filter((model) =>
-    existsSync(modelFilePath(home, model)),
-  );
+  return loadManifest(home).models.filter((model) => {
+    try {
+      const stats = lstatSync(modelFilePath(home, model));
+      return stats.isFile() && !stats.isSymbolicLink();
+    } catch {
+      return false;
+    }
+  });
 }
 
 export function findInstalled(home: string, id: string): InstalledModel | undefined {
@@ -207,11 +276,15 @@ export interface PullResult {
   message?: string;
 }
 
-async function fetchHfSha256(repo: string, file: string): Promise<string | null> {
+async function fetchHfSha256(
+  repo: string,
+  file: string,
+  fetchFn: typeof fetch,
+): Promise<string | null> {
   try {
     const dir = file.includes("/") ? file.slice(0, file.lastIndexOf("/")) : "";
     const treePath = dir.length > 0 ? `/${dir}` : "";
-    const response = await fetch(`https://huggingface.co/api/models/${repo}/tree/main${treePath}`, {
+    const response = await fetchFn(`https://huggingface.co/api/models/${repo}/tree/main${treePath}`, {
       signal: AbortSignal.timeout(15_000),
     });
     if (!response.ok) return null;
@@ -239,14 +312,21 @@ async function fetchHfSha256(repo: string, file: string): Promise<string | null>
  * writing, verifies against the expected sha256 (registry pin, caller flag,
  * or the publisher's LFS oid), then atomically renames + registers.
  */
+export interface PullOptions {
+  sha256?: string;
+  onProgress?: (done: number, total: number | null) => void;
+  fetchFn?: typeof fetch;
+}
+
 export async function pullModel(
   home: string,
   ref: string,
-  options: { sha256?: string; onProgress?: (done: number, total: number | null) => void } = {},
+  options: PullOptions = {},
 ): Promise<PullResult> {
   const target = resolvePullTarget(ref);
   if ("error" in target) return { ok: false, message: target.error };
 
+  const fetchFn = options.fetchFn ?? fetch;
   const id = target.kind === "registry" ? target.entry.id : target.id;
   const repo = target.kind === "registry" ? target.entry.repo : target.repo;
   const file = target.kind === "registry" ? target.entry.file : target.file;
@@ -270,7 +350,7 @@ export async function pullModel(
     expectedSha = target.entry.sha256;
     expectedBytes = target.entry.bytes;
   } else if (expectedSha === undefined) {
-    expectedSha = (await fetchHfSha256(repo, file)) ?? undefined;
+    expectedSha = (await fetchHfSha256(repo, file, fetchFn)) ?? undefined;
   }
   if (expectedSha === undefined) {
     return {
@@ -282,7 +362,7 @@ export async function pullModel(
   const url = `https://huggingface.co/${repo}/resolve/main/${file}`;
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetchFn(url, {
       redirect: "follow",
       signal: AbortSignal.timeout(MODEL_LIMITS.downloadTimeoutMs),
     });
@@ -366,6 +446,11 @@ export async function pullModel(
     rmSync(tmpPath, { force: true });
     return { ok: false, message: `size mismatch for ${file}: got ${received}, expected ${expectedBytes}` };
   }
+  const inspection = inspectGgufFile(tmpPath);
+  if (!inspection.ok) {
+    rmSync(tmpPath, { force: true });
+    return { ok: false, message: `invalid GGUF ${file}: ${inspection.message}` };
+  }
 
   renameSync(tmpPath, finalPath);
   chmodSync(finalPath, 0o600);
@@ -394,20 +479,41 @@ export function removeModel(home: string, id: string): { ok: boolean; message: s
   return { ok: true, message: `removed ${id}` };
 }
 
+export interface VerifyModelResult {
+  ok: boolean;
+  expected?: string;
+  actual?: string;
+  gguf?: Extract<GgufInspection, { ok: true }>;
+  message?: string;
+}
+
 export async function verifyModel(
   home: string,
   id: string,
-): Promise<{ ok: boolean; expected?: string; actual?: string; message?: string }> {
+): Promise<VerifyModelResult> {
   const model = findInstalled(home, id);
   if (model === undefined) return { ok: false, message: `no installed model named ${id}` };
+  const path = modelFilePath(home, model);
   const hash = createHash("sha256");
   try {
-    for await (const chunk of createReadStream(modelFilePath(home, model))) hash.update(chunk);
+    for await (const chunk of createReadStream(path)) hash.update(chunk);
   } catch (error) {
     return { ok: false, message: error instanceof Error ? error.message : "cannot read model" };
   }
   const actual = hash.digest("hex");
-  return { ok: actual === model.sha256, expected: model.sha256, actual };
+  if (actual !== model.sha256) {
+    return { ok: false, expected: model.sha256, actual, message: "sha256 mismatch" };
+  }
+  const gguf = inspectGgufFile(path);
+  if (!gguf.ok) {
+    return {
+      ok: false,
+      expected: model.sha256,
+      actual,
+      message: `invalid GGUF: ${gguf.message}`,
+    };
+  }
+  return { ok: true, expected: model.sha256, actual, gguf };
 }
 
 /** Disk bytes currently held by the store. */

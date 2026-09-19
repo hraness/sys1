@@ -22,6 +22,7 @@ import {
   writePidFile,
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
+import { runDoctor } from "./doctor.ts";
 import { SYSONE_VERSION, startGateway } from "./gateway.ts";
 import {
   MODEL_REGISTRY,
@@ -32,7 +33,7 @@ import {
   verifyModel,
 } from "./local/store.ts";
 
-const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5 } as const;
+const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5, doctor: 6 } as const;
 
 function out(text: string): void {
   process.stdout.write(`${text}\n`);
@@ -56,6 +57,7 @@ Daemon:
   down [--json]                 Stop the gateway daemon
   serve [--port N]              Run the gateway in the foreground
   status [--json]               Daemon state and backend reachability
+  doctor [--json]               Diagnose runtime, config, store, routing, daemon
 
 Models:
   pull [MODEL] [--json]         Download + verify a GGUF (default qwen3-0.6b)
@@ -266,6 +268,21 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
   if (report.backends.length === 0) {
     out("  no backends configured; run `sysone pull`, set TYPESAFE_API_KEY, or `sysone backend add`");
   }
+}
+
+async function cmdDoctor(home: string, flags: Map<string, string | boolean>): Promise<void> {
+  const report = await runDoctor({ home, env: process.env });
+  if (flags.get("json") === true) {
+    out(JSON.stringify(report, null, 2));
+  } else {
+    for (const check of report.checks) {
+      out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
+    }
+    out(
+      `doctor: ${report.ok ? "ready" : "not ready"} (${report.counts.pass} pass, ${report.counts.warn} warn, ${report.counts.fail} fail)`,
+    );
+  }
+  if (!report.ok) process.exit(EXIT.doctor);
 }
 
 async function cmdModels(home: string, flags: Map<string, string | boolean>): Promise<void> {
@@ -548,6 +565,9 @@ async function main(): Promise<void> {
       return;
     case "status":
       await cmdStatus(home, args.flags);
+      return;
+    case "doctor":
+      await cmdDoctor(home, args.flags);
       return;
     case "models":
       await cmdModels(home, args.flags);

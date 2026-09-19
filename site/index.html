@@ -31,8 +31,10 @@
         </p>
         <div class="terminal" aria-label="sysone local quickstart">
           <div class="terminal-bar"><span></span><span></span><span></span></div>
-          <pre><code><i>$</i> sysone pull
-<span>verified qwen3-0.6b · 365 MiB</span>
+          <pre><code><i>$</i> sysone doctor
+<span>ready · native runtime available</span>
+<i>$</i> sysone pull
+<span>sha256 + GGUF structure verified · 365 MiB</span>
 <i>$</i> sysone up
 <span>listening at http://127.0.0.1:13900</span></code></pre>
         </div>
@@ -70,10 +72,11 @@
         </article>
         <article>
           <div class="number">03</div>
-          <h2>Keep the boundary small</h2>
+          <h2>Know every boundary</h2>
           <p>
-            Loopback by default. Credentials stay in the environment. Request
-            state and answers never enter config, manifests, or daemon logs.
+            <code>sysone doctor</code> checks runtime, config, native backend,
+            model structure, routing, and daemon ownership with stable JSON and
+            closed exit codes.
           </p>
         </article>
       </section>
@@ -108,9 +111,10 @@
       </section>
 
       <section class="quickstart">
-        <div class="eyebrow">Three commands</div>
+        <div class="eyebrow">Four commands</div>
         <h2>Give every local agent a System One endpoint.</h2>
-        <pre><code>sysone pull
+        <pre><code>sysone doctor
+sysone pull
 sysone up
 sysone status --json</code></pre>
         <a class="primary" href="https://github.com/hraness/sysone">View source on GitHub</a>

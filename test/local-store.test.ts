@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   MODEL_REGISTRY,
   findInstalled,
+  inspectGgufFile,
   installedModels,
   loadManifest,
   loadManifestChecked,
@@ -22,6 +24,20 @@ function home(): string {
   const path = mkdtempSync(join(tmpdir(), "sysone-local-test-"));
   homes.push(path);
   return path;
+}
+
+function gguf(version = 3, tensors = 1n, metadata = 1n): Buffer {
+  const value = Buffer.alloc(32);
+  value.write("GGUF", 0, "ascii");
+  value.writeUInt32LE(version, 4);
+  value.writeBigUInt64LE(tensors, 8);
+  value.writeBigUInt64LE(metadata, 16);
+  value.write("fixture", 24, "ascii");
+  return value;
+}
+
+function sha256(value: Uint8Array): string {
+  return createHash("sha256").update(value).digest("hex");
 }
 
 afterEach(() => {
@@ -56,6 +72,24 @@ describe("local model store", () => {
     const pulled = await pullModel(dir, "qwen3-0.6b");
     expect(pulled.ok).toBe(false);
     expect(pulled.message).toContain("not valid JSON");
+    writeFileSync(
+      manifestPath(dir),
+      JSON.stringify({
+        version: 1,
+        models: [
+          {
+            id: "escape",
+            file: "../../escape.gguf",
+            source: "test",
+            sha256: "0".repeat(64),
+            bytes: 1,
+            context: 2048,
+            installed_at: "2026-01-01T00:00:00.000Z",
+          },
+        ],
+      }),
+    );
+    expect(loadManifestChecked(dir).ok).toBe(false);
   });
 
   test("only lists manifest entries whose files exist", async () => {
@@ -63,6 +97,7 @@ describe("local model store", () => {
     const entry = MODEL_REGISTRY[0];
     expect(entry).toBeDefined();
     if (entry === undefined) return;
+    const bytes = gguf();
     saveManifest(dir, {
       version: 1,
       models: [
@@ -71,19 +106,70 @@ describe("local model store", () => {
           file: `${entry.id}.gguf`,
           size_b: entry.size_b,
           source: `hf:${entry.repo}:${entry.file}`,
-          sha256: "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
-          bytes: 5,
+          sha256: sha256(bytes),
+          bytes: bytes.byteLength,
           context: 2048,
           installed_at: "2026-01-01T00:00:00.000Z",
         },
       ],
     });
     expect(installedModels(dir)).toEqual([]);
-    writeFileSync(join(modelsDir(dir), `${entry.id}.gguf`), "hello");
+    writeFileSync(join(modelsDir(dir), `${entry.id}.gguf`), bytes);
     expect(installedModels(dir)).toHaveLength(1);
     expect(findInstalled(dir, entry.id)?.id).toBe(entry.id);
-    expect((await verifyModel(dir, entry.id)).ok).toBe(true);
+    const verified = await verifyModel(dir, entry.id);
+    expect(verified.ok).toBe(true);
+    expect(verified.gguf?.version).toBe(3);
     writeFileSync(join(modelsDir(dir), `${entry.id}.gguf`), "changed");
     expect((await verifyModel(dir, entry.id)).ok).toBe(false);
+  });
+
+  test("bounds and validates the GGUF header", () => {
+    const dir = home();
+    const path = join(dir, "model.gguf");
+    writeFileSync(path, gguf(2, 42n, 7n));
+    expect(inspectGgufFile(path)).toEqual({
+      ok: true,
+      version: 2,
+      tensors: 42,
+      metadata_entries: 7,
+      bytes: 32,
+    });
+    writeFileSync(path, gguf(4));
+    expect(inspectGgufFile(path)).toEqual({ ok: false, message: "unsupported GGUF version 4" });
+    writeFileSync(path, "not a gguf");
+    expect(inspectGgufFile(path).ok).toBe(false);
+  });
+
+  test("admits a custom download only after hash and GGUF validation", async () => {
+    const dir = home();
+    const bytes = gguf();
+    const fetchFn = (async () =>
+      new Response(new Uint8Array(bytes), {
+        headers: { "content-length": String(bytes.byteLength) },
+      })) as unknown as typeof fetch;
+    const result = await pullModel(dir, "hf:owner/repo:model.gguf", {
+      sha256: sha256(bytes),
+      fetchFn,
+    });
+    expect(result.ok).toBe(true);
+    const installed = findInstalled(dir, "model");
+    expect(installed?.size_b).toBeUndefined();
+    expect(inspectGgufFile(join(modelsDir(dir), "model.gguf")).ok).toBe(true);
+  });
+
+  test("rejects and removes a hash-valid non-GGUF download", async () => {
+    const dir = home();
+    const bytes = Buffer.alloc(32, 1);
+    const fetchFn = (async () =>
+      new Response(new Uint8Array(bytes))) as unknown as typeof fetch;
+    const result = await pullModel(dir, "hf:owner/repo:bad.gguf", {
+      sha256: sha256(bytes),
+      fetchFn,
+    });
+    expect(result.ok).toBe(false);
+    expect(result.message).toContain("invalid GGUF");
+    expect(existsSync(join(modelsDir(dir), "bad.gguf"))).toBe(false);
+    expect(loadManifest(dir).models).toEqual([]);
   });
 });

@@ -54,7 +54,10 @@ async function buildDist(): Promise<void> {
 
   const cliPath = join(outdir, "cli.js");
   const cliSource = readFileSync(cliPath, "utf8");
-  writeFileSync(cliPath, `#!/usr/bin/env bun\n${cliSource}`, { mode: 0o755 });
+  const executable = cliSource.startsWith("#!/usr/bin/env bun\n")
+    ? cliSource
+    : `#!/usr/bin/env bun\n${cliSource}`;
+  writeFileSync(cliPath, executable, { mode: 0o755 });
   chmodSync(cliPath, 0o755);
   console.log("dist/: index.js, index.d.ts, cli.js");
 }

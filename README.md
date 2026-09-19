@@ -15,8 +15,18 @@ of which model answers.
 
 ## Install
 
-Requires Bun 1.3.14 or newer. `node-llama-cpp` installs a platform-specific
-llama.cpp binary for local GGUF inference.
+Requires Bun 1.3.14 or newer. The canonical package is the SHA-256-listed
+artifact on the immutable GitHub Release. The install grants postinstall only
+to the exact pinned native dependency; the resulting `sysone` executable runs
+with Bun.
+
+```sh
+npm install --global --allow-scripts=node-llama-cpp \
+  https://github.com/hraness/sysone/releases/download/v0.3.0/hraness-sysone-0.3.0.tgz
+sysone doctor
+```
+
+To build the current source instead:
 
 ```sh
 git clone https://github.com/hraness/sysone.git
@@ -71,8 +81,10 @@ The credential stays in the environment; sysone never writes it to disk.
 
 `sysone pull` manages GGUF files under `~/.sysone/models` (or
 `$SYSONE_HOME/models`). Downloads stream to a temporary file, enforce an 8 GiB
-ceiling, verify SHA-256, and only then atomically enter the model store. The
-daemon never downloads weights implicitly.
+ceiling, verify SHA-256, validate the bounded GGUF header/version/counts, and
+only then atomically enter the model store. Manifest filenames cannot escape
+the store, symbolic-link weights are not admitted, and the daemon never
+downloads weights implicitly.
 
 ```sh
 sysone pull --list
@@ -186,10 +198,26 @@ sysone backend add \
 These processes remain operator-owned. sysone bounds probes and forwarding but
 does not manage their credentials, weights, or lifecycle.
 
+## Diagnostics
+
+`sysone doctor` is a bounded, machine-readable readiness check. It verifies the
+Bun floor, state-directory access, config, native llama.cpp runtime/backend,
+manifest, every admitted GGUF header and byte count, stale/orphan store files,
+routing candidates, and daemon ownership. It does not hash entire model files;
+use `sysone model verify MODEL` for exact SHA-256 verification.
+
+```sh
+sysone doctor
+sysone doctor --json
+```
+
+Warnings do not fail readiness. Failed checks return exit code 6. JSON is
+versioned (`version: 1`) and check identifiers are stable and additive.
+
 ## Commands
 
 ```text
-sysone up|down|serve|status
+sysone up|down|serve|status|doctor
 sysone pull [MODEL]|pull --list
 sysone model list|verify|remove
 sysone models
@@ -208,8 +236,8 @@ and download progress go to stderr.
 the state directory. Settable keys:
 
 - `routing.policy`;
-- `gateway.host`, `gateway.port`, `gateway.request_timeout_ms`,
-  `gateway.probe_timeout_ms`;
+- `gateway.host` (loopback addresses only), `gateway.port`,
+  `gateway.request_timeout_ms`, `gateway.probe_timeout_ms`;
 - `hosted.enabled`, `hosted.base_url`, `hosted.model`, `hosted.api_key_env`;
 - `local.enabled`, `local.context_tokens`, `local.eval_timeout_ms`,
   `local.max_loaded_models`.
@@ -219,8 +247,16 @@ a restart. Already loaded GGUFs stay resident up to `local.max_loaded_models`
 (default one) and are released on eviction or daemon shutdown. Local inference
 is serialized per model to keep context state isolated and memory bounded.
 
-The gateway has no authentication and binds to loopback by default. Do not
-expose it on an untrusted network.
+The gateway has no authentication and accepts loopback binds only.
+
+## Releases
+
+An annotated `v<version>` tag at the exact current `main` head requests a
+release. The tag must match `package.json`. The release workflow reruns the
+complete gate, creates one npm-format tarball and `SHA256SUMS`, installs and
+executes those exact bytes with the native dependency and `doctor` on Ubuntu
+and macOS, then publishes them to a repository-enforced immutable GitHub
+Release. No npm registry package is claimed or required.
 
 ## Development
 
@@ -230,5 +266,6 @@ bun run check
 ```
 
 The check runs strict TypeScript, deterministic tests with fake inference,
-distribution builds, and a packed-package smoke test. Large weights and live
-model downloads are excluded from ordinary CI.
+distribution builds, and an isolated packed-artifact import/CLI smoke test.
+Large weights, live model downloads, and native inference are excluded from
+ordinary CI.
