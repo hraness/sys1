@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/hraness/design-kit",
+    "commit": "0e089bc18f9a0409f0e74b1fb7192f468956e386"
+  },
+  "files": {
+    "NebulaSans-Book.woff2": {
+      "path": "src/fonts/nebula-sans/NebulaSans-Book.woff2",
+      "sha256": "4d396c7c7f93b3f9d8e90d5a8c5e28b29266243946d4320783abc3628d9ef8df",
+      "bytes": 70652
+    },
+    "NebulaSans-Medium.woff2": {
+      "path": "src/fonts/nebula-sans/NebulaSans-Medium.woff2",
+      "sha256": "5d185acda0c62e1cc156a7508a98c37c56014690e79697c071b0fd2babcb00cb",
+      "bytes": 71036
+    },
+    "NebulaSans-Semibold.woff2": {
+      "path": "src/fonts/nebula-sans/NebulaSans-Semibold.woff2",
+      "sha256": "0e7cd15b1fea9ed847b48f8d53dca88f54f016c352aaa8f895731b3d44d8fc64",
+      "bytes": 72020
+    },
+    "LICENSE.txt": {
+      "path": "src/fonts/nebula-sans/LICENSE.txt",
+      "sha256": "ceab45a6fcb5cce75ffb7e2a4f49b59dd2daa6ede14fe4b07b9f8e58675f33b8",
+      "bytes": 4623
+    },
+    "PROVENANCE.md": {
+      "path": "src/fonts/nebula-sans/PROVENANCE.md",
+      "sha256": "33aae1e3c0f74fffe68a6ca40570ffc1262de747ac6260f6f88c754838cf3d27",
+      "bytes": 624
+    }
+  }
+}

@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-19T16:51:19.207459+00:00",
+  "title": "Design System: Sys1",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15.00% 0.21443 263.02)",
+          "oklch(26.43% 0.21443 263.02)",
+          "oklch(37.86% 0.21443 263.02)",
+          "oklch(49.29% 0.21443 263.02)",
+          "oklch(60.71% 0.21443 263.02)",
+          "oklch(72.14% 0.21443 263.02)",
+          "oklch(83.57% 0.21443 263.02)",
+          "oklch(95.00% 0.21443 263.02)"
+        ]
+      },
+      "primary-soft": {
+        "role": "primary",
+        "displayName": "Primary Soft",
+        "tonalRamp": [
+          "oklch(15.00% 0.02047 264.47)",
+          "oklch(26.43% 0.02047 264.47)",
+          "oklch(37.86% 0.02047 264.47)",
+          "oklch(49.29% 0.02047 264.47)",
+          "oklch(60.71% 0.02047 264.47)",
+          "oklch(72.14% 0.02047 264.47)",
+          "oklch(83.57% 0.02047 264.47)",
+          "oklch(95.00% 0.02047 264.47)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15.00% 0.21443 263.02)",
+          "oklch(26.43% 0.21443 263.02)",
+          "oklch(37.86% 0.21443 263.02)",
+          "oklch(49.29% 0.21443 263.02)",
+          "oklch(60.71% 0.21443 263.02)",
+          "oklch(72.14% 0.21443 263.02)",
+          "oklch(83.57% 0.21443 263.02)",
+          "oklch(95.00% 0.21443 263.02)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "tonalRamp": [
+          "oklch(15.00% 0.00412 91.45)",
+          "oklch(26.43% 0.00412 91.45)",
+          "oklch(37.86% 0.00412 91.45)",
+          "oklch(49.29% 0.00412 91.45)",
+          "oklch(60.71% 0.00412 91.45)",
+          "oklch(72.14% 0.00412 91.45)",
+          "oklch(83.57% 0.00412 91.45)",
+          "oklch(95.00% 0.00412 91.45)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Foreground",
+        "tonalRamp": [
+          "oklch(15.00% 0.00613 56.04)",
+          "oklch(26.43% 0.00613 56.04)",
+          "oklch(37.86% 0.00613 56.04)",
+          "oklch(49.29% 0.00613 56.04)",
+          "oklch(60.71% 0.00613 56.04)",
+          "oklch(72.14% 0.00613 56.04)",
+          "oklch(83.57% 0.00613 56.04)",
+          "oklch(95.00% 0.00613 56.04)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.01324 71.77)",
+          "oklch(26.43% 0.01324 71.77)",
+          "oklch(37.86% 0.01324 71.77)",
+          "oklch(49.29% 0.01324 71.77)",
+          "oklch(60.71% 0.01324 71.77)",
+          "oklch(72.14% 0.01324 71.77)",
+          "oklch(83.57% 0.01324 71.77)",
+          "oklch(95.00% 0.01324 71.77)"
+        ]
+      },
+      "grid": {
+        "role": "neutral",
+        "displayName": "Grid",
+        "tonalRamp": [
+          "oklch(15.00% 0.00876 84.57)",
+          "oklch(26.43% 0.00876 84.57)",
+          "oklch(37.86% 0.00876 84.57)",
+          "oklch(49.29% 0.00876 84.57)",
+          "oklch(60.71% 0.00876 84.57)",
+          "oklch(72.14% 0.00876 84.57)",
+          "oklch(83.57% 0.00876 84.57)",
+          "oklch(95.00% 0.00876 84.57)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15.00% 0.01315 75.34)",
+          "oklch(26.43% 0.01315 75.34)",
+          "oklch(37.86% 0.01315 75.34)",
+          "oklch(49.29% 0.01315 75.34)",
+          "oklch(60.71% 0.01315 75.34)",
+          "oklch(72.14% 0.01315 75.34)",
+          "oklch(83.57% 0.01315 75.34)",
+          "oklch(95.00% 0.01315 75.34)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.00537 95.10)",
+          "oklch(26.43% 0.00537 95.10)",
+          "oklch(37.86% 0.00537 95.10)",
+          "oklch(49.29% 0.00537 95.10)",
+          "oklch(60.71% 0.00537 95.10)",
+          "oklch(72.14% 0.00537 95.10)",
+          "oklch(83.57% 0.00537 95.10)",
+          "oklch(95.00% 0.00537 95.10)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Surface Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.00745 80.72)",
+          "oklch(26.43% 0.00745 80.72)",
+          "oklch(37.86% 0.00745 80.72)",
+          "oklch(49.29% 0.00745 80.72)",
+          "oklch(60.71% 0.00745 80.72)",
+          "oklch(72.14% 0.00745 80.72)",
+          "oklch(83.57% 0.00745 80.72)",
+          "oklch(95.00% 0.00745 80.72)"
+        ]
+      },
+      "action": {
+        "role": "neutral",
+        "displayName": "Action",
+        "tonalRamp": [
+          "oklch(15.00% 0.02414 243.76)",
+          "oklch(26.43% 0.02414 243.76)",
+          "oklch(37.86% 0.02414 243.76)",
+          "oklch(49.29% 0.02414 243.76)",
+          "oklch(60.71% 0.02414 243.76)",
+          "oklch(72.14% 0.02414 243.76)",
+          "oklch(83.57% 0.02414 243.76)",
+          "oklch(95.00% 0.02414 243.76)"
+        ]
+      },
+      "action-ink": {
+        "role": "neutral",
+        "displayName": "Action Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.00537 95.10)",
+          "oklch(26.43% 0.00537 95.10)",
+          "oklch(37.86% 0.00537 95.10)",
+          "oklch(49.29% 0.00537 95.10)",
+          "oklch(60.71% 0.00537 95.10)",
+          "oklch(72.14% 0.00537 95.10)",
+          "oklch(83.57% 0.00537 95.10)",
+          "oklch(95.00% 0.00537 95.10)"
+        ]
+      },
+      "action-hover": {
+        "role": "neutral",
+        "displayName": "Action Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.03526 245.64)",
+          "oklch(26.43% 0.03526 245.64)",
+          "oklch(37.86% 0.03526 245.64)",
+          "oklch(49.29% 0.03526 245.64)",
+          "oklch(60.71% 0.03526 245.64)",
+          "oklch(72.14% 0.03526 245.64)",
+          "oklch(83.57% 0.03526 245.64)",
+          "oklch(95.00% 0.03526 245.64)"
+        ]
+      },
+      "terminal-background": {
+        "role": "neutral",
+        "displayName": "Terminal Background",
+        "tonalRamp": [
+          "oklch(15.00% 0.00542 95.10)",
+          "oklch(26.43% 0.00542 95.10)",
+          "oklch(37.86% 0.00542 95.10)",
+          "oklch(49.29% 0.00542 95.10)",
+          "oklch(60.71% 0.00542 95.10)",
+          "oklch(72.14% 0.00542 95.10)",
+          "oklch(83.57% 0.00542 95.10)",
+          "oklch(95.00% 0.00542 95.10)"
+        ]
+      },
+      "terminal-ink": {
+        "role": "neutral",
+        "displayName": "Terminal Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.01163 128.94)",
+          "oklch(26.43% 0.01163 128.94)",
+          "oklch(37.86% 0.01163 128.94)",
+          "oklch(49.29% 0.01163 128.94)",
+          "oklch(60.71% 0.01163 128.94)",
+          "oklch(72.14% 0.01163 128.94)",
+          "oklch(83.57% 0.01163 128.94)",
+          "oklch(95.00% 0.01163 128.94)"
+        ]
+      },
+      "terminal-muted": {
+        "role": "neutral",
+        "displayName": "Terminal Muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.02360 129.02)",
+          "oklch(26.43% 0.02360 129.02)",
+          "oklch(37.86% 0.02360 129.02)",
+          "oklch(49.29% 0.02360 129.02)",
+          "oklch(60.71% 0.02360 129.02)",
+          "oklch(72.14% 0.02360 129.02)",
+          "oklch(83.57% 0.02360 129.02)",
+          "oklch(95.00% 0.02360 129.02)"
+        ]
+      },
+      "terminal-command": {
+        "role": "neutral",
+        "displayName": "Terminal Command",
+        "tonalRamp": [
+          "oklch(15.00% 0.05243 150.93)",
+          "oklch(26.43% 0.05243 150.93)",
+          "oklch(37.86% 0.05243 150.93)",
+          "oklch(49.29% 0.05243 150.93)",
+          "oklch(60.71% 0.05243 150.93)",
+          "oklch(72.14% 0.05243 150.93)",
+          "oklch(83.57% 0.05243 150.93)",
+          "oklch(95.00% 0.05243 150.93)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Primary editorial heading."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sans-serif content subheadings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "General reading and interface text."
+      },
+      "summary": {
+        "displayName": "Summary",
+        "purpose": "Hero summary; becomes 1rem on compact screens."
+      },
+      "action": {
+        "displayName": "Action",
+        "purpose": "Standard filled and secondary actions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Toolbar and appearance-control text."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Integration code; specimen and install code have documented local size variants."
+      }
+    },
+    "shadows": [
+      {
+        "name": "terminal-specimen",
+        "value": "inset 0 1px 0 light-dark(#ffffffb3, #ffffff1f), 0 2px 4px #00000014, 0 18px 40px -12px #00000040, 0 44px 80px -30px #00000052",
+        "purpose": "Featured illustrative request/answer specimen only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "action-background",
+        "value": "background-color 140ms ease-out",
+        "purpose": "Filled and secondary action hover feedback."
+      },
+      {
+        "name": "anchor-scroll",
+        "value": "smooth",
+        "purpose": "Document anchors; auto under prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "medium",
+        "value": "800px"
+      },
+      {
+        "name": "compact",
+        "value": "560px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Filled action with the implemented slate/pale theme pair.",
+      "html": "<button type=\"button\" class=\"ds-primary\">Get Sys1<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M5 12h14m-6-6 6 6-6 6\" /></svg></button>",
+      "css": ".ds-primary { display: inline-flex; justify-content: center; align-items: center; gap: .8rem; min-height: 2.875rem; padding: .6rem 1.2rem; border: 1px solid transparent; border-radius: .5rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); font-size: .95rem; font-weight: 500; line-height: 1.4; text-decoration: none; cursor: pointer; transition: background-color 140ms ease-out; background: light-dark(#28343e, #eceee6); color: light-dark(#fffefa, #20211f); } .ds-primary:hover { background: light-dark(#3a4c5c, #d6dace); } .ds-primary svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; } .ds-primary:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; }",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "description": "Transparent action with a structural Paper border.",
+      "html": "<button type=\"button\" class=\"ds-secondary\">Use it in your project</button>",
+      "css": ".ds-secondary { display: inline-flex; justify-content: center; align-items: center; gap: .8rem; min-height: 2.875rem; padding: .6rem 1.2rem; border: 1px solid transparent; border-radius: .5rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); font-size: .95rem; font-weight: 500; line-height: 1.4; text-decoration: none; cursor: pointer; transition: background-color 140ms ease-out; color: var(--foreground, light-dark(#1c1917, #f5f2ed)); background: transparent; border-color: var(--line, light-dark(#b9b3ab, #514a44)); } .ds-secondary:hover { background: var(--surface-hover, light-dark(#ebe8e3, #292522)); } .ds-secondary:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; }",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Copy control",
+      "kind": "button",
+      "description": "Compact copy-command control; the application supplies clipboard handling and status feedback.",
+      "html": "<button type=\"button\" class=\"ds-copy\">Copy commands</button>",
+      "css": ".ds-copy { border: 1px solid var(--line, light-dark(#b9b3ab, #514a44)); background: var(--surface, light-dark(#fffefa, #1d1a18)); color: var(--foreground, light-dark(#1c1917, #f5f2ed)); border-radius: .375rem; padding: .4rem .65rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); font-size: .75rem; line-height: 1.65; cursor: pointer; } .ds-copy:hover { background: var(--surface-hover, light-dark(#ebe8e3, #292522)); } .ds-copy:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; }",
+      "refersTo": "copy-button"
+    },
+    {
+      "name": "Appearance selector",
+      "kind": "input",
+      "description": "Native appearance control; application code applies and persists the chosen scheme.",
+      "html": "<select class=\"ds-appearance\" aria-label=\"Appearance\"><option>System</option><option>Light</option><option>Dark</option></select>",
+      "css": ".ds-appearance { background: var(--background, light-dark(#f8f7f4, #12100f)); color: var(--muted, light-dark(#6c665f, #aaa29a)); border: 1px solid var(--line, light-dark(#b9b3ab, #514a44)); border-radius: .5rem; padding: .55rem .45rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); font-size: .8rem; line-height: 1.65; min-height: 2.625rem; cursor: pointer; } .ds-appearance:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; }",
+      "refersTo": "appearance-select"
+    },
+    {
+      "name": "Header navigation",
+      "kind": "nav",
+      "description": "Quiet navigation links with the implemented compact-screen visibility rules.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Primary\"><a href=\"#how-it-works\">Features</a><a href=\"#ecosystem\">Ecosystem</a><a href=\"https://github.com/hraness/sys1#use-as-a-module\">Docs</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 1.5rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); line-height: 1.65; } .ds-nav a { color: var(--muted, light-dark(#6c665f, #aaa29a)); font-size: .9rem; text-decoration: none; } .ds-nav a:hover { color: var(--foreground, light-dark(#1c1917, #f5f2ed)); } .ds-nav a:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; } @media(max-width:800px) { .ds-nav { gap: 1rem; } .ds-nav a:first-child { display:none; } } @media(max-width:560px) { .ds-nav { display:none; } }"
+    },
+    {
+      "name": "Decision option labels",
+      "kind": "chip",
+      "description": "Noninteractive monospace labels for allowed answers.",
+      "html": "<div class=\"ds-options\"><span>repair</span><span>continue</span></div>",
+      "css": ".ds-options { display: flex; gap: .5rem; flex-wrap: wrap; color: var(--hraness-marketing-terminal-ink, light-dark(#262923, #e8eae5)); } .ds-options span { border: 1px solid var(--line, light-dark(#b9b3ab, #514a44)); border-radius: .375rem; padding: .2rem .6rem; font-family: var(--font-mono, ui-monospace, \"SFMono-Regular\", Menlo, Monaco, Consolas, monospace); font-size: .75rem; line-height: 1.65; }",
+      "refersTo": "option-chip"
+    },
+    {
+      "name": "Example type selector",
+      "kind": "custom",
+      "description": "Labelled pressed-button group. This snippet displays states; site.js updates the example content.",
+      "html": "<div class=\"ds-selector\" role=\"group\" aria-label=\"Example question type\"><button type=\"button\" aria-pressed=\"true\">Choice</button><button type=\"button\" aria-pressed=\"false\">Yes / no</button><button type=\"button\" aria-pressed=\"false\">Score</button></div>",
+      "css": ".ds-selector { display: flex; gap: .25rem; } .ds-selector button { border: 1px solid transparent; background: transparent; color: var(--hraness-marketing-terminal-muted, light-dark(#596052, #bfc6b6)); padding: .35rem .65rem; border-radius: .375rem; font-family: var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); font-size: .78rem; line-height: 1.65; min-height: 2rem; cursor: pointer; } .ds-selector button:hover { background: var(--surface-hover, light-dark(#ebe8e3, #292522)); } .ds-selector button[aria-pressed=\"true\"] { color: var(--foreground, light-dark(#1c1917, #f5f2ed)); background: var(--surface, light-dark(#fffefa, #1d1a18)); border-color: var(--line, light-dark(#b9b3ab, #514a44)); } .ds-selector button:focus-visible { outline: 2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset: 4px; } @media(max-width:560px) { .ds-selector { justify-content:space-between; } .ds-selector button { flex:1; min-height:2.75rem; } }"
+    },
+    {
+      "name": "Request path",
+      "kind": "card",
+      "description": "Flat routing sequence with a quiet border and a vertical mobile flow.",
+      "html": "<div class=\"ds-path\"><div><strong>Your application</strong><span>state + questions</span></div><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 12h16m-6-6 6 6-6 6\" /></svg><div><strong class=\"ds-router\">Sys1</strong><span>route + validate</span></div><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 12h16m-6-6 6 6-6 6\" /></svg><div><strong>Your selected backend</strong><span>local model or hosted service</span></div></div>",
+      "css": ".ds-path { display: flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1.8rem 2rem; background:var(--surface, light-dark(#fffefa, #1d1a18)); color:var(--foreground, light-dark(#1c1917, #f5f2ed)); border:1px solid var(--grid, light-dark(#dfdcd6, #302b27)); border-radius:.875rem; font-family:var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); line-height:1.65; } .ds-path > div { display:grid; gap:.15rem; } .ds-path strong { font-weight:500; } .ds-path span { color:var(--muted, light-dark(#6c665f, #aaa29a)); font-size:.8rem; } .ds-path .ds-router { color:var(--primary, light-dark(#1e5ae1, #8fb0ff)); } .ds-path > svg { width:1.2rem; height:1.2rem; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; color:var(--muted, light-dark(#6c665f, #aaa29a)); } @media(max-width:800px) { .ds-path { padding:1.5rem; gap:1rem; } } @media(max-width:560px) { .ds-path { flex-direction:column; align-items:flex-start; gap:.75rem; } .ds-path > svg { transform:rotate(90deg); } }",
+      "refersTo": "request-path"
+    },
+    {
+      "name": "Code frame",
+      "kind": "card",
+      "description": "Bordered code panel with the shared terminal chrome; the featured decision specimen adds the documented shadow.",
+      "html": "<div class=\"ds-frame\"><div class=\"ds-chrome\"><span>Inside your application</span><span>TypeScript</span></div><pre><code>const { response, metadata } = await sys1.evaluate(request);</code></pre></div>",
+      "css": ".ds-frame { overflow:hidden; background:var(--hraness-marketing-terminal-background, light-dark(#f3f2ee, #20211f)); color:var(--hraness-marketing-terminal-ink, light-dark(#262923, #e8eae5)); border:1px solid var(--line, light-dark(#b9b3ab, #514a44)); border-radius:.875rem; min-width:0; font-family:var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); line-height:1.65; } .ds-chrome { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.8rem 1.3rem; background:var(--hraness-marketing-terminal-chrome, linear-gradient(light-dark(#f8f7f3, #393b36), light-dark(#e7e6e0, #292b27))); color:var(--hraness-marketing-terminal-muted, light-dark(#596052, #bfc6b6)); font-size:.8rem; } .ds-frame pre { margin:0; padding:1.5rem; font-family:var(--font-mono, ui-monospace, \"SFMono-Regular\", Menlo, Monaco, Consolas, monospace); line-height:1.85; font-size:.75rem; white-space:pre-wrap; overflow-wrap:anywhere; tab-size:2; } .ds-frame code { font:inherit; } @media(max-width:560px) { .ds-frame pre { padding:1.2rem; } }",
+      "refersTo": "terminal-frame"
+    },
+    {
+      "name": "Question disclosure",
+      "kind": "custom",
+      "description": "Native details/summary with an inline SVG plus/minus indicator.",
+      "html": "<details class=\"ds-disclosure\"><summary>What is a typed decision?<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M5 12h14\" /><path class=\"ds-vertical\" d=\"M12 5v14\" /></svg></summary><p>A small judgment returned in a predictable shape. Your app decides how to use it.</p></details>",
+      "css": ".ds-disclosure { border-bottom:1px solid var(--grid, light-dark(#dfdcd6, #302b27)); font-family:var(--font-text, \"Nebula Sans\", ui-sans-serif, system-ui, sans-serif); line-height:1.65; color:var(--foreground, light-dark(#1c1917, #f5f2ed)); } .ds-disclosure summary { cursor:pointer; padding:1.2rem 1.8rem 1.2rem 0; font-size:1rem; font-weight:500; list-style:none; position:relative; } .ds-disclosure summary::-webkit-details-marker { display:none; } .ds-disclosure summary:focus-visible { outline:2px solid var(--focus, light-dark(#1e5ae1, #8fb0ff)); outline-offset:4px; } .ds-disclosure svg { position:absolute; right:.25rem; top:1.3rem; width:1.2rem; height:1.2rem; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; color:var(--muted, light-dark(#6c665f, #aaa29a)); } .ds-disclosure[open] .ds-vertical { display:none; } .ds-disclosure p { padding:0 1rem 1.25rem 0; margin:0; color:var(--muted, light-dark(#6c665f, #aaa29a)); font-size:.92rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Hraness Paper, as used by Peopleblade",
+    "overview": "Sys1 adopts the user-selected Hraness visual family through its actual shared\nPaper palette and editorial marketing preset. Warm paper, quiet dividing rules,\nregular serif headings, and plain sans-serif controls establish a calm reading\nsurface. Code and request/answer specimens give developer content a distinct,\nlegible material without turning every section into a card.\n\nThis file records the implemented visual system on 2026-09-19. Its source of\ntruth is `site/style.css` together with the pinned CSS and fonts under\n`site/vendor/`. `docs/DESIGN.md` remains the separate runtime architecture\ndocument. Page strategy and audience order belong in `PRODUCT.md` and\n`.impeccable/surfaces/site-index-html.md`.",
+    "keyCharacteristics": [
+      "Warm, paired light and dark Paper colors.",
+      "Instrument Serif headings with Nebula Sans reading and interface text.",
+      "Generous section spacing, quiet rules, and compact controls.",
+      "Muted terminal surfaces with restrained depth for the illustrative specimen.",
+      "Locally served, pinned shared assets and the Hraness attribution footer."
+    ],
+    "rules": [
+      {
+        "name": "The Paired Appearance Rule",
+        "body": "Keep every shared Paper color paired across light and dark appearances; inherit the selected color scheme instead of introducing a fixed-color island.",
+        "section": "colors"
+      },
+      {
+        "name": "The Real Font Rule",
+        "body": "Serve the pinned local font files: Instrument Serif regular 400 and Nebula Sans 400, 500, and 600. Keep editorial serif headings at 400 instead of synthesizing bold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Specimen Depth Rule",
+        "body": "Reserve the terminal shadow for the featured request/answer specimen; use borders and tonal separation for ordinary containers.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** inherit the paired Paper palette and test both appearances.",
+      "**Do** use the actual local fonts and regular Instrument Serif headings.",
+      "**Do** keep readable measures, quiet section rules, and wrapping code.",
+      "**Do** preserve native control semantics, visible keyboard focus, and status feedback.",
+      "**Do** retain pinned shared assets, source hashes, licenses, and the footer adapter provenance."
+    ],
+    "donts": [
+      "**Don't** turn unused vendor textures or tokens into a requirement for new surfaces.",
+      "**Don't** apply the specimen shadow to every section or frame.",
+      "**Don't** replace the shared footer's marks with text glyphs or product-local approximations.",
+      "**Don't** make JavaScript essential for reading the example, installation commands, or disclosures.",
+      "**Don't** edit immutable vendor snapshots for a product-local layout or copy change."
+    ]
+  }
+}

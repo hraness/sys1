@@ -1,0 +1,25 @@
+/* Sys1 selects three unmodified Nebula Sans cuts from the pinned shared font bundle. */
+
+@font-face {
+  font-family: "Nebula Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./NebulaSans-Book.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Nebula Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./NebulaSans-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Nebula Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./NebulaSans-Semibold.woff2") format("woff2");
+}
