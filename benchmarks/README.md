@@ -15,6 +15,10 @@ performance.
 
 ## Run
 
+Run from a repository checkout with Bun 1.3.14 after `bun install --frozen-lockfile`.
+Qwen measurements require the optional node-llama-cpp native runtime; the harness
+checks readiness before measurement.
+
 The harness accepts only this fixed public fixture. It does not read Sys1
 configuration or credentials, call hosted services, or download anything.
 Explicitly acquire the pinned models first into an isolated store:

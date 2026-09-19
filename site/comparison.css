@@ -28,9 +28,7 @@
 .evidence-block .evidence-origin { font-size: .8rem; }
 .evidence-block .source-line { font-size: .8rem; margin-bottom: 0; }
 .comparison-detail { border-top: 1px solid var(--grid); }
-.comparison-detail summary { padding-right: 1rem; }
-.comparison-detail summary::after { content: "+"; float: right; }
-.comparison-detail[open] summary::after { content: "−"; }
+.comparison-detail summary { padding-right: 2rem; }
 .detail-body { max-width: 72ch; padding-bottom: .75rem; }
 .detail-body p { padding-bottom: 1rem; }
 .accounting-list { margin: 0 0 2.5rem; }
@@ -60,3 +58,6 @@
 /* Grid children must be allowed to shrink around scrollable data tables. */
 .evidence-block > div, .cost-example > div { min-width: 0; }
 .results-table + .results-summary, .table-scroll + .results-summary { margin-top: 1.25rem; }
+
+.table-hint { color: var(--muted); font-size: .8rem; margin-bottom: 1rem; }
+@media (min-width: 801px) { .table-hint { display: none; } }
