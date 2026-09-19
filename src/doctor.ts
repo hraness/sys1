@@ -295,6 +295,9 @@ export async function runDoctor(options: DoctorOptions): Promise<DoctorReport> {
             detail: {
               gpu_offloading: native.gpu_offloading ?? false,
               supported_backends: native.supported_backends ?? [],
+              ...(native.elapsed_ms !== undefined && Number.isSafeInteger(native.elapsed_ms) && native.elapsed_ms >= 0
+                ? { native_probe_ms: native.elapsed_ms }
+                : {}),
             },
           }
         : {

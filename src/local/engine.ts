@@ -259,8 +259,8 @@ export class LlamaEngine implements DecisionEngine {
 /** Native capability discovery is also isolated and bounded; it loads no model. */
 export async function probeNativeRuntime(options: { workerFactory?: WorkerFactory; timeoutMs?: number } = {}): Promise<NativeRuntimeProbe> {
   const started = performance.now();
-  const timeoutMs = options.timeoutMs ?? 10_000;
-  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 10_000) {
+  const timeoutMs = options.timeoutMs ?? 30_000;
+  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 30_000) {
     return { ok: false, failure_code: "invalid_timeout", elapsed_ms: 0, message: "native runtime probe failed: invalid_timeout" };
   }
   let worker: EngineWorker | undefined;
@@ -286,6 +286,7 @@ export async function probeNativeRuntime(options: { workerFactory?: WorkerFactor
     if (!value.ok) return failure("native_unavailable");
     return {
       ok: value.ok,
+      elapsed_ms: Math.max(0, Math.round(performance.now() - started)),
       ...(value.backend === undefined ? {} : { backend: value.backend }),
       ...(value.gpu_offloading === undefined ? {} : { gpu_offloading: value.gpu_offloading }),
       ...(value.supported_backends === undefined ? {} : { supported_backends: value.supported_backends }),

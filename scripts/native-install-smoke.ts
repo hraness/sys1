@@ -37,10 +37,10 @@ export async function runNativeCheckCommand(command: string[], options: CommandO
     // against the exact spawned PID, including its descendants.
     detached: process.platform !== "win32",
   });
-  let failure: "timeout" | "output" | "io" | undefined;
+  let failure: "timeout" | "output" | "io" | "interrupted" | undefined;
   let stopping: Promise<void> | undefined;
   const collection = new AbortController();
-  const stop = (reason: "timeout" | "output" | "io"): Promise<void> => {
+  const stop = (reason: "timeout" | "output" | "io" | "interrupted"): Promise<void> => {
     failure ??= reason;
     stopping ??= (async () => {
       try {
@@ -73,6 +73,9 @@ export async function runNativeCheckCommand(command: string[], options: CommandO
     })();
     return stopping;
   };
+  const interrupted = (): void => { void stop("interrupted").catch(() => {}); };
+  const signals = ["SIGINT", "SIGTERM", "SIGHUP"] as const;
+  for (const signal of signals) process.once(signal, interrupted);
   const timer = setTimeout(() => { void stop("timeout").catch(() => {}); }, options.timeoutMs);
   const read = async (stream: ReadableStream<Uint8Array>): Promise<string> => {
     const reader = stream.getReader();
@@ -117,6 +120,7 @@ export async function runNativeCheckCommand(command: string[], options: CommandO
       throw new Error(failure === "timeout"
         ? `native check command timed out after ${options.timeoutMs}ms`
         : failure === "output" ? "native check command output exceeded its byte limit"
+          : failure === "interrupted" ? "native check command interrupted"
           : "native check could not collect command output");
     }
     if (exit.status !== "fulfilled" || stdout.status !== "fulfilled" || stderr.status !== "fulfilled") {
@@ -129,6 +133,7 @@ export async function runNativeCheckCommand(command: string[], options: CommandO
     return stdout.value;
   } finally {
     clearTimeout(timer);
+    for (const signal of signals) process.removeListener(signal, interrupted);
   }
 }
 
@@ -161,6 +166,16 @@ export async function nativeInstallSmoke(tarball: string): Promise<void> {
         !("ok" in doctor) || doctor.ok !== true ||
         !("version" in doctor) || doctor.version !== 1) {
       throw new Error("installed package doctor did not report ready");
+    }
+    const checks = "checks" in doctor && Array.isArray(doctor.checks) ? doctor.checks : [];
+    const native = checks.find((check: unknown): check is Record<string, unknown> =>
+      check !== null && typeof check === "object" && "id" in check && check.id === "native.runtime");
+    if (native?.["status"] !== "pass") throw new Error("installed package did not verify native readiness");
+    const detail: unknown = native["detail"];
+    if (detail !== null && typeof detail === "object" && "native_probe_ms" in detail &&
+        typeof detail.native_probe_ms === "number" && Number.isFinite(detail.native_probe_ms) &&
+        detail.native_probe_ms >= 0) {
+      console.log(`installed native readiness verified in ${Math.round(detail.native_probe_ms)}ms`);
     }
   } catch (error) {
     if (error instanceof NativeCheckCleanupError) {

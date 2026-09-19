@@ -188,6 +188,33 @@ describe("native worker context admission", () => {
 });
 
 describe("native runtime readiness", () => {
+  test.each([undefined, 30_000])("reports successful probe timing and collects its worker with budget %s", async (timeoutMs) => {
+    let closed = false;
+    const report = await probeNativeRuntime({
+      ...(timeoutMs === undefined ? {} : { timeoutMs }),
+      workerFactory: () => {
+        const child = spawn(process.execPath, [fileURLToPath(new URL("./fixtures/engine-worker.ts", import.meta.url))], { stdio: ["pipe", "pipe", "ignore"] });
+        child.once("close", () => { closed = true; });
+        return child;
+      },
+    });
+    expect(report.ok).toBe(true);
+    expect(report.backend).toBe("cpu");
+    expect(Number.isSafeInteger(report.elapsed_ms)).toBe(true);
+    expect(report.elapsed_ms).toBeGreaterThanOrEqual(0);
+    expect(report.failure_code).toBeUndefined();
+    expect(closed).toBe(true);
+  });
+
+  test("rejects a probe budget above 30 seconds before starting a worker", async () => {
+    const report = await probeNativeRuntime({
+      timeoutMs: 30_001,
+      workerFactory: () => { throw new Error("must not spawn"); },
+    });
+    expect(report.failure_code).toBe("invalid_timeout");
+    expect(report.elapsed_ms).toBe(0);
+  });
+
   test.each([
     { mode: "timeout", code: "probe_timeout" },
     { mode: "exit", code: "worker_exited" },
