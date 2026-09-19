@@ -11,6 +11,9 @@
   environment only), configured HTTP services, installed builtin candidates,
   bounded probing (including advisory `GET /v1/limits`), and request
   forwarding.
+- `src/providers.ts` owns pinned external-backend profiles and bounded
+  conformance qualification. Profiles may register operator-owned processes,
+  but must not install, start, stop, or mutate them.
 - `src/local/decide.ts` owns bounded generic-GGUF prompts and the pure mapping
   from vocabulary probability mass to System One answers.
 - `src/local/engine.ts` owns the lazy node-llama-cpp lifecycle and serialized
@@ -86,7 +89,10 @@
   honor published backend capability limits (`/v1/limits`) as advisory, and
   fail over-capability requests closed as `request_unsupported`.
 - Keep operator-registered HTTP runners separately owned; never mutate their
-  weights, credentials, or process lifecycle.
+  weights, credentials, or process lifecycle. Provider profiles must pin known
+  identities and safe routing caps, restrict unauthenticated local profiles to
+  loopback, and qualify discovery, limits, and response conformance without
+  exposing request or response bodies.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
   exact tarball/checksum identity, Ubuntu/macOS artifact execution, repository
   release immutability, and the no-npm-publication boundary.

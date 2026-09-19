@@ -40,6 +40,12 @@ export const localBackendSchema = z.object({
   model: z.string().min(1).max(128),
   size_b: z.number().positive().max(10_000).optional(),
   cost_rank: z.number().int().min(0).max(1_000).optional(),
+  capabilities: z
+    .object({
+      max_options: z.number().int().positive().max(255).optional(),
+      max_questions: z.number().int().positive().max(64).optional(),
+    })
+    .optional(),
   enabled: z.boolean().default(true),
 });
 

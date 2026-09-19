@@ -207,12 +207,13 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     writeFileSync(
       join(consumer, "smoke.mjs"),
       [
-        `import { DECISION_LABELS, isLoopbackHost, systemOneRequestSchema, systemOneResponseSchema } from "${PACKAGE_NAME}";`,
+        `import { BACKEND_PROFILE_IDS, DECISION_LABELS, isLoopbackHost, resolveBackendProfile, systemOneRequestSchema, systemOneResponseSchema } from "${PACKAGE_NAME}";`,
         `const parsed = systemOneRequestSchema.safeParse({ state: "x", questions: { q: { type: "noul" } } });`,
         `const response = systemOneResponseSchema.safeParse({ model: "smoke", answers: { q: { type: "noul", noul: 0.5 } }, usage: { input_tokens: 1, output_tokens: 0 } });`,
-        `if (!parsed.success || !response.success || DECISION_LABELS.length !== 35 || !isLoopbackHost("127.0.0.1"))`,
+        `const profile = resolveBackendProfile("nimble-local");`,
+        `if (!parsed.success || !response.success || !profile.ok || BACKEND_PROFILE_IDS.length !== 1 || DECISION_LABELS.length !== 35 || !isLoopbackHost("127.0.0.1"))`,
         `  throw new Error("packed public API failed");`,
-        `console.log(JSON.stringify({ labels: DECISION_LABELS.length, loopback: true }));`,
+        `console.log(JSON.stringify({ labels: DECISION_LABELS.length, loopback: true, profile: profile.backend.name }));`,
       ].join("\n"),
     );
 
@@ -238,6 +239,20 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     ) as unknown;
     if (!Array.isArray(record(models, "model list")["data"])) {
       throw new Error("packed CLI model list returned invalid JSON");
+    }
+    await run([process.execPath, installedCli, "backend", "add", "--profile", "nimble-local"], {
+      cwd: consumer,
+      env,
+    });
+    const backends = JSON.parse(
+      (await run([process.execPath, installedCli, "backend", "list", "--json"], { cwd: consumer, env })).trim(),
+    ) as unknown;
+    if (
+      !Array.isArray(backends) ||
+      record(backends[0], "nimble profile")["model"] !== "nimble-latest" ||
+      record(record(backends[0], "nimble profile")["capabilities"], "nimble capabilities")["max_options"] !== 26
+    ) {
+      throw new Error("packed CLI nimble-local profile is invalid");
     }
     console.log(`standalone package verified (${entries.length} files, Bun ${Bun.version})`);
   } finally {

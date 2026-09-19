@@ -89,6 +89,34 @@ describe("config", () => {
     expect(setConfigValue(DEFAULT_CONFIG, "gateway.host", "192.168.1.2").ok).toBe(false);
   });
 
+  test("backend capabilities are bounded and round-trip", () => {
+    const parsed = configSchema.parse({
+      version: 1,
+      backends: [
+        {
+          name: "nimble",
+          base_url: "http://127.0.0.1:8000",
+          model: "nimble-latest",
+          capabilities: { max_options: 26, max_questions: 64 },
+        },
+      ],
+    });
+    expect(parsed.backends[0]?.capabilities).toEqual({ max_options: 26, max_questions: 64 });
+    expect(
+      configSchema.safeParse({
+        version: 1,
+        backends: [
+          {
+            name: "unsafe",
+            base_url: "http://127.0.0.1:8000",
+            model: "x",
+            capabilities: { max_options: 256 },
+          },
+        ],
+      }).success,
+    ).toBe(false);
+  });
+
   test("SYSONE_HOME env overrides the state dir", () => {
     expect(sysoneHome({ SYSONE_HOME: "/tmp/custom" } as NodeJS.ProcessEnv)).toBe("/tmp/custom");
   });

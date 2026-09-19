@@ -384,4 +384,31 @@ describe("gateway builtin local backends", () => {
     const parsed = (await response.json()) as { error: { type: string } };
     expect(parsed.error.type).toBe("request_unsupported");
   });
+
+  test("configured caps remain active when limits probing is unavailable", async () => {
+    const config = testConfig({
+      backends: [
+        {
+          name: "openjev",
+          base_url: "http://127.0.0.1:18080",
+          model: "openjev-4b",
+          size_b: 4,
+          capabilities: { max_options: 26, max_questions: 64 },
+        },
+      ],
+    });
+    const handle = createFetchHandler({
+      config,
+      env: {} as NodeJS.ProcessEnv,
+      fetchFn: stubFetch({}),
+    });
+    const criteria: Record<string, null> = {};
+    for (let i = 0; i < 30; i += 1) criteria[`opt${i}`] = null;
+    const response = await handle(
+      post(JSON.stringify({ state: "x", questions: { pick: { type: "choice", criteria } } })),
+    );
+    expect(response.status).toBe(422);
+    const parsed = (await response.json()) as { error: { type: string } };
+    expect(parsed.error.type).toBe("request_unsupported");
+  });
 });

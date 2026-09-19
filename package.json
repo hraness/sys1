@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sysone",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Local System One gateway for coding agents — one Jev-compatible endpoint routed across hosted and local models.",
   "type": "module",
   "license": "MIT",
