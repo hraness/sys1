@@ -213,7 +213,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
   const config = structuredClone(loaded.config);
   config.local.enabled = true;
   config.local.model = recommendation.model;
-  if (config.routing.policy === "hosted-only") config.routing.policy = "auto";
+
   const existing = installedModels(home).find((model) => model.id === recommendation.model);
   let pull: PullResult | undefined;
   if (existing === undefined) {
@@ -288,12 +288,13 @@ function cmdJev(home: string, args: ParsedArgs): void {
     }
     const next = structuredClone(loaded.config);
     next.hosted.enabled = true;
-    next.routing.policy = "auto";
+    next.routing.policy = "hosted-only";
     const path = saveConfig(home, next);
-    const report = { enabled: true, active: true, model: next.hosted.model, config_path: path };
+    const report = { enabled: true, active: true, model: next.hosted.model, routing_policy: next.routing.policy, config_path: path };
     if (args.flags.get("json") === true) out(JSON.stringify(report, null, 2));
     else {
       out(`Jev enabled for ${next.hosted.model} (${path})`);
+      out("routing is hosted-only; local fallback requires an explicit policy change after evaluation");
       out("restart the gateway if it was started before the credential was exported");
     }
     return;
