@@ -116,3 +116,8 @@ ten immutable evidence links were verified against the published source tree.
 ## Benchmark protocol note — 2026-09-20
 
 Added a bounded link to the pinned System One Skills benchmark protocol at `f316c1cd7369fe5bdd2f18de4c815e7b4f6ba6c3`. The note describes the outcome-blind per-skill/provider paired-session design, all 11 task families, and staged discovery/confirmation gates. It explicitly says results are pending and makes no efficacy claim.
+
+
+## Relevant-session benchmark refinement — 2026-09-20
+
+The visible protocol note now says results are pending, explains that relevant task episodes are selected before comparison, freezes the skill/native workflow comparison, and reports Codex, Claude Code, and Devin separately. It links the merged harness documentation at `c4c9a40155ec952b5ac0640ded722901abf07555/docs/BENCHMARK-HARNESS.md`; no efficacy result is claimed.
