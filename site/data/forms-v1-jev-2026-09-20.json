@@ -1,0 +1,3355 @@
+{
+  "version": 1,
+  "benchmark": "forms-v1-hosted-jev",
+  "status": "complete",
+  "started_at": "2026-09-20T04:53:10.390Z",
+  "finished_at": "2026-09-20T04:53:38.165Z",
+  "requested_model_id": "jev-1.13.0",
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "client_region": "Client region not independently verified",
+  "source": {
+    "commit": "e7704839f24e6dc6c07098d32c4e5c21067a9645",
+    "relevant_worktree_modified": false,
+    "harness_sha256": "3beadfadfd44ed5cd20a4ac7448e89c4d47897b50d0c62cc4265d5783249a24c",
+    "shared_harness_sha256": "f083f9db78c43e4a0a88a5fbd259c212facaea87816d2a52d122a8b277c45e4b",
+    "fixture_sha256": "8e3073ac4ad1fb460fe574084b40631577ece6a49e190fca2d89659cee15604c",
+    "runtime_source_sha256": "02841e61a07ecd12bcec96829757a17300cffaa53414e807485882fffbaad7e3",
+    "lockfile_sha256": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178",
+    "package_sha256": "92f565d87cae5f7a6466d534aeb571d96ab8fd622c9c4104af9c452e790fbf4a"
+  },
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "os_release": "25.5.0",
+    "bun": "1.3.14",
+    "cpu_model": "Apple M5 Max",
+    "logical_cpus": 18,
+    "system_memory_bytes": 38654705664,
+    "region_evidence": "Operator-supplied client-region label, not provider region or verified geolocation.",
+    "server_environment": "Hosted server hardware, load, cache state and inference-only time are not exposed. The model version is provider-asserted, not an independently verified weight hash."
+  },
+  "methodology": {
+    "fixture": "forms-v1",
+    "unique_cases": 20,
+    "initial_client_calls": 3,
+    "warmups": 2,
+    "repetitions": 5,
+    "repeated_calls": 100,
+    "concurrency": 1,
+    "planned_calls": 105,
+    "request_timeout_ms": 60000,
+    "run_timeout_ms": 900000,
+    "retries": 0,
+    "stop_rule": "Stop after three consecutive invalid/error responses; valid incorrect answers reset this error counter.",
+    "latency_boundary": "Client wall time through the existing forwardToBackend transport, including DNS/TLS/HTTP, provider processing and complete bounded response body; excludes JSON/protocol validation and result persistence. Not directly equivalent to local inference or provider throughput.",
+    "throughput_boundary": "Serial repeated-phase wall time including validation and loop overhead; result-file persistence occurs outside this phase. Server-side caching is unknown and is not disabled or controlled.",
+    "initial_client_boundary": "First three sequential requests from this process, not independent cold connections or cold server starts. The same Bun fetch pool may reuse connections throughout.",
+    "percentile_method": "nearest rank, ceil(p*n)-1 in sorted elapsed times",
+    "quality_scope": "Twenty authored synthetic form-action cases. This small public sanity check does not establish general model quality.",
+    "raw_answers": "Only the fixed public synthetic fixture is sent. Stored answers passed protocol/request validation and the exact model pin. No credentials, headers, raw error bodies or transport exception text are stored.",
+    "usage_semantics": "Provider-reported input/output counters from valid responses; missing or invalid usage fails validation and remains unknown, never zero-filled.",
+    "input_usd_per_million": 0.042,
+    "output_usd_per_million": 0,
+    "price_source": "https://docs.typesafe.ai/models",
+    "price_verified_date": "2026-09-19",
+    "price_scope": "Published Jev input-token price; verify current price before using the estimate for spending decisions."
+  },
+  "samples": [
+    {
+      "phase": "initial_client",
+      "repetition": 0,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 959.532125,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "submit": 1,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "initial_client",
+      "repetition": 1,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 202.50079099999994,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "initial_client",
+      "repetition": 2,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 229.22512499999993,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "wait": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "warmup",
+      "repetition": 0,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 318.8812909999999,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 1,
+              "wait": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "warmup",
+      "repetition": 1,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 196.25749999999994,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 355.80716600000005,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "submit": 1,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 249.58899999999994,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-03",
+      "expected": "wait",
+      "elapsed_ms": 247.69212500000003,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "submit": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-04",
+      "expected": "submit",
+      "elapsed_ms": 213.47679199999993,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 1,
+              "correct": 0,
+              "wait": 0
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-05",
+      "expected": "correct",
+      "elapsed_ms": 311.51983299999984,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-06",
+      "expected": "wait",
+      "elapsed_ms": 184.33775000000014,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-07",
+      "expected": "submit",
+      "elapsed_ms": 191.84312499999987,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-08",
+      "expected": "correct",
+      "elapsed_ms": 246.1295829999999,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 344,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-09",
+      "expected": "wait",
+      "elapsed_ms": 214.8327500000005,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "correct": 0,
+              "wait": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-10",
+      "expected": "submit",
+      "elapsed_ms": 237.95095899999978,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "submit": 0.94,
+              "wait": 0.06
+            },
+            "confidence": 0.91
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-11",
+      "expected": "correct",
+      "elapsed_ms": 271.96179200000006,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-12",
+      "expected": "wait",
+      "elapsed_ms": 294.0147080000006,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-13",
+      "expected": "submit",
+      "elapsed_ms": 263.63666699999976,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 0.99,
+              "wait": 0.01,
+              "correct": 0
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-14",
+      "expected": "correct",
+      "elapsed_ms": 194.9489169999997,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0.01,
+              "wait": 0.02,
+              "correct": 0.97
+            },
+            "confidence": 0.95
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-15",
+      "expected": "wait",
+      "elapsed_ms": 205.2040419999994,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "correct": 0,
+              "wait": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-16",
+      "expected": "submit",
+      "elapsed_ms": 317.0356670000001,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "submit": 1,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 350,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-17",
+      "expected": "correct",
+      "elapsed_ms": 206.1996250000002,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-18",
+      "expected": "wait",
+      "elapsed_ms": 314.0548340000005,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "correct": 0,
+              "wait": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-19",
+      "expected": "submit",
+      "elapsed_ms": 253.97325,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 0,
+      "case_id": "form-20",
+      "expected": "correct",
+      "elapsed_ms": 269.6592920000003,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "submit": 0,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 342,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 236.93483300000025,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "submit": 1,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 287.6666669999995,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-03",
+      "expected": "wait",
+      "elapsed_ms": 229.28158299999996,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "correct": 0,
+              "wait": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-04",
+      "expected": "submit",
+      "elapsed_ms": 299.3598750000001,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-05",
+      "expected": "correct",
+      "elapsed_ms": 233.23454200000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-06",
+      "expected": "wait",
+      "elapsed_ms": 293.3305419999997,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-07",
+      "expected": "submit",
+      "elapsed_ms": 202.34375,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-08",
+      "expected": "correct",
+      "elapsed_ms": 314.52120899999863,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 344,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-09",
+      "expected": "wait",
+      "elapsed_ms": 220.19150000000081,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-10",
+      "expected": "submit",
+      "elapsed_ms": 307.60249999999905,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 0.93,
+              "correct": 0,
+              "wait": 0.07
+            },
+            "confidence": 0.89
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-11",
+      "expected": "correct",
+      "elapsed_ms": 272.8399590000008,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-12",
+      "expected": "wait",
+      "elapsed_ms": 246.6652920000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-13",
+      "expected": "submit",
+      "elapsed_ms": 234.19012499999917,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0.01,
+              "submit": 0.99,
+              "correct": 0
+            },
+            "confidence": 0.98
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-14",
+      "expected": "correct",
+      "elapsed_ms": 290.0383750000001,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0.02,
+              "correct": 0.96,
+              "submit": 0.02
+            },
+            "confidence": 0.95
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-15",
+      "expected": "wait",
+      "elapsed_ms": 189.22695899999962,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "submit": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-16",
+      "expected": "submit",
+      "elapsed_ms": 336.9087920000002,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 350,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-17",
+      "expected": "correct",
+      "elapsed_ms": 230.98475000000144,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "submit": 0,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-18",
+      "expected": "wait",
+      "elapsed_ms": 290.41983400000026,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-19",
+      "expected": "submit",
+      "elapsed_ms": 218.11741699999948,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "wait": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 1,
+      "case_id": "form-20",
+      "expected": "correct",
+      "elapsed_ms": 305.59720800000105,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "submit": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 342,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 192.47108399999888,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 183.20566699999836,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-03",
+      "expected": "wait",
+      "elapsed_ms": 326.7330839999995,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "correct": 0,
+              "wait": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-04",
+      "expected": "submit",
+      "elapsed_ms": 343.02837499999987,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-05",
+      "expected": "correct",
+      "elapsed_ms": 170.20624999999927,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-06",
+      "expected": "wait",
+      "elapsed_ms": 212.2117500000004,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-07",
+      "expected": "submit",
+      "elapsed_ms": 524.0043749999986,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 1,
+              "wait": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-08",
+      "expected": "correct",
+      "elapsed_ms": 381.20370899999944,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 344,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-09",
+      "expected": "wait",
+      "elapsed_ms": 290.33558399999856,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "submit": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-10",
+      "expected": "submit",
+      "elapsed_ms": 176.04733399999895,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0.07,
+              "submit": 0.93,
+              "correct": 0
+            },
+            "confidence": 0.89
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-11",
+      "expected": "correct",
+      "elapsed_ms": 185.69729200000074,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-12",
+      "expected": "wait",
+      "elapsed_ms": 189.9434170000004,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-13",
+      "expected": "submit",
+      "elapsed_ms": 175.92695900000035,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "wait": 0.01,
+              "submit": 0.99
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-14",
+      "expected": "correct",
+      "elapsed_ms": 314.3037080000013,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 0.96,
+              "wait": 0.02,
+              "submit": 0.02
+            },
+            "confidence": 0.94
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-15",
+      "expected": "wait",
+      "elapsed_ms": 240.2252499999995,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-16",
+      "expected": "submit",
+      "elapsed_ms": 288.88075000000026,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 350,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-17",
+      "expected": "correct",
+      "elapsed_ms": 279.9292080000014,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-18",
+      "expected": "wait",
+      "elapsed_ms": 243.6512920000023,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "submit": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-19",
+      "expected": "submit",
+      "elapsed_ms": 167.02979200000118,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 2,
+      "case_id": "form-20",
+      "expected": "correct",
+      "elapsed_ms": 356.29875000000175,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "submit": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 342,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 224.8215420000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 297.00437500000044,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-03",
+      "expected": "wait",
+      "elapsed_ms": 244.1820000000007,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-04",
+      "expected": "submit",
+      "elapsed_ms": 285.0716250000005,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "wait": 0,
+              "submit": 1
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-05",
+      "expected": "correct",
+      "elapsed_ms": 249.0990840000013,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "submit": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-06",
+      "expected": "wait",
+      "elapsed_ms": 271.2778330000001,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-07",
+      "expected": "submit",
+      "elapsed_ms": 190.5190419999999,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-08",
+      "expected": "correct",
+      "elapsed_ms": 331.67554200000086,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "correct": 1,
+              "wait": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 344,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-09",
+      "expected": "wait",
+      "elapsed_ms": 177.51062499999898,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-10",
+      "expected": "submit",
+      "elapsed_ms": 192.21575000000303,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0.1,
+              "correct": 0,
+              "submit": 0.9
+            },
+            "confidence": 0.84
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-11",
+      "expected": "correct",
+      "elapsed_ms": 182.46904200000063,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-12",
+      "expected": "wait",
+      "elapsed_ms": 190.32608299999993,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-13",
+      "expected": "submit",
+      "elapsed_ms": 305.8368750000009,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 0.99,
+              "correct": 0,
+              "wait": 0.01
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-14",
+      "expected": "correct",
+      "elapsed_ms": 212.41941700000098,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0.01,
+              "correct": 0.98,
+              "submit": 0.01
+            },
+            "confidence": 0.96
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-15",
+      "expected": "wait",
+      "elapsed_ms": 311.67112500000076,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-16",
+      "expected": "submit",
+      "elapsed_ms": 195.0800420000014,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 350,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-17",
+      "expected": "correct",
+      "elapsed_ms": 329.1860000000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-18",
+      "expected": "wait",
+      "elapsed_ms": 221.77504199999748,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-19",
+      "expected": "submit",
+      "elapsed_ms": 303.20633299999827,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "correct": 0,
+              "wait": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 3,
+      "case_id": "form-20",
+      "expected": "correct",
+      "elapsed_ms": 191.45991700000013,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 342,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-01",
+      "expected": "submit",
+      "elapsed_ms": 333.5453750000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-02",
+      "expected": "correct",
+      "elapsed_ms": 196.82695800000147,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-03",
+      "expected": "wait",
+      "elapsed_ms": 322.7000000000007,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-04",
+      "expected": "submit",
+      "elapsed_ms": 226.34466699999757,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-05",
+      "expected": "correct",
+      "elapsed_ms": 300.11575000000084,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "correct": 1,
+              "wait": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-06",
+      "expected": "wait",
+      "elapsed_ms": 223.47920800000065,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "correct": 0,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-07",
+      "expected": "submit",
+      "elapsed_ms": 302.47237499999756,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "submit": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-08",
+      "expected": "correct",
+      "elapsed_ms": 231.5820840000015,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "submit": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 344,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-09",
+      "expected": "wait",
+      "elapsed_ms": 288.32608400000026,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "wait": 1,
+              "submit": 0,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-10",
+      "expected": "submit",
+      "elapsed_ms": 213.40820800000074,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 0.91,
+              "wait": 0.09,
+              "correct": 0
+            },
+            "confidence": 0.85
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-11",
+      "expected": "correct",
+      "elapsed_ms": 311.8977500000001,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "correct": 1,
+              "submit": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-12",
+      "expected": "wait",
+      "elapsed_ms": 177.33812500000204,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-13",
+      "expected": "submit",
+      "elapsed_ms": 343.85512500000186,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "submit": 0.99,
+              "correct": 0,
+              "wait": 0.01
+            },
+            "confidence": 0.99
+          }
+        },
+        "usage": {
+          "input_tokens": 346,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-14",
+      "expected": "correct",
+      "elapsed_ms": 197.97783300000083,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0.01,
+              "correct": 0.98,
+              "wait": 0.01
+            },
+            "confidence": 0.96
+          }
+        },
+        "usage": {
+          "input_tokens": 347,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-15",
+      "expected": "wait",
+      "elapsed_ms": 329.01745799999844,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "correct": 0,
+              "wait": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 348,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-16",
+      "expected": "submit",
+      "elapsed_ms": 222.05508299999929,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 350,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-17",
+      "expected": "correct",
+      "elapsed_ms": 303.11508299999696,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "submit": 0,
+              "wait": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-18",
+      "expected": "wait",
+      "elapsed_ms": 216.20674999999756,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "wait",
+            "probabilities": {
+              "submit": 0,
+              "wait": 1,
+              "correct": 0
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 351,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-19",
+      "expected": "submit",
+      "elapsed_ms": 305.6643750000003,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "submit",
+            "probabilities": {
+              "wait": 0,
+              "correct": 0,
+              "submit": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 349,
+          "output_tokens": 38
+        }
+      }
+    },
+    {
+      "phase": "repeated",
+      "repetition": 4,
+      "case_id": "form-20",
+      "expected": "correct",
+      "elapsed_ms": 179.75191600000107,
+      "http_status": 200,
+      "schema_valid": true,
+      "correct": true,
+      "error": null,
+      "returned_model": "jev-1.13.0",
+      "response": {
+        "model": "jev-1.13.0",
+        "answers": {
+          "action": {
+            "type": "choice",
+            "choice": "correct",
+            "probabilities": {
+              "wait": 0,
+              "submit": 0,
+              "correct": 1
+            },
+            "confidence": 1
+          }
+        },
+        "usage": {
+          "input_tokens": 342,
+          "output_tokens": 38
+        }
+      }
+    }
+  ],
+  "summary": {
+    "initial_client_ms": [
+      959.532125,
+      202.50079099999994,
+      229.22512499999993
+    ],
+    "attempted_calls": 105,
+    "skipped_calls": 0,
+    "repeated_attempts": 100,
+    "repeated_valid": 100,
+    "repeated_failures": 0,
+    "repeated_correct": 100,
+    "unique_first_pass_cases": 20,
+    "unique_first_pass_correct": 20,
+    "accuracy_denominator": "Observed first-pass cases; failures count as incorrect. A complete pass has 20 cases; repeated calls are not independent quality examples.",
+    "p50_attempt_ms": 246.1295829999999,
+    "p95_attempt_ms": 343.02837499999987,
+    "p50_valid_ms": 246.1295829999999,
+    "p95_valid_ms": 343.02837499999987,
+    "repeated_total_elapsed_ms": 25674.937416,
+    "attempted_decisions_per_second": 3.8948488317514816,
+    "valid_decisions_per_second": 3.8948488317514816,
+    "repeated_reported_input_tokens": 34760,
+    "repeated_reported_output_tokens": 3800,
+    "all_calls_usage": {
+      "calls_with_validated_usage": 105,
+      "calls_without_validated_usage": 0,
+      "reported_input_tokens": 36510,
+      "reported_output_tokens": 3990
+    },
+    "repeated_usage": {
+      "calls_with_validated_usage": 100,
+      "calls_without_validated_usage": 0,
+      "reported_input_tokens": 34760,
+      "reported_output_tokens": 3800
+    },
+    "estimated_repeated_known_input_cost_usd": 0.00145992,
+    "estimated_known_input_cost_usd": 0.00153342,
+    "unknown_billing_calls": 0,
+    "cost_scope": "Estimate for validated reported input tokens across all attempted phases, including initial calls and warmups. Not an invoice; billing for calls without validated usage is unknown. Published output-token price is zero; output counts are still reported separately."
+  }
+}

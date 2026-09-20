@@ -1,9 +1,12 @@
 # Model comparison: evidence and measurement
 
-Checked **2026-09-19**. The upstream evidence below is separate from the [local Sys1 adapter
-measurements](https://sys1.io/compare#local-results). Different models, hardware, workloads, and timing
-boundaries answer different questions. Sys1 provides a common interface and
-routing policy; it does not make the underlying models equally fast or accurate.
+Upstream evidence checked **2026-09-19**; Jev pricing reconfirmed **2026-09-20**.
+The publisher results below are separate from our
+[September 19 local adapter](#local-sys1-result-snapshot) and
+[September 20 hosted Jev](#hosted-jev-result-snapshot) measurements. Different models, hardware,
+workloads, and timing boundaries answer different questions. Sys1 provides a
+common interface and routing policy; it does not make the underlying models
+equally fast or accurate.
 
 ## Jev: hosted decisions and input-token pricing
 
@@ -15,6 +18,9 @@ routing policy; it does not make the underlying models equally fast or accurate.
 | Workflow result | 67.8% reference agreement; approximately 0.4 s and $0.0004 per case | Rounded chart values, equally averaged across four workflows |
 
 Pricing and model identity come from [TypeSafe's model reference](https://docs.typesafe.ai/models).
+The $0.042 per million input tokens and free output rate was reconfirmed on
+September 20, 2026; the remaining upstream evidence retains its September 19
+check date.
 The [September 15 launch](https://typesafe.ai/blog/introducing-system-one-models-and-jev)
 says latency evaluations generally ran from West Coast laptops against its
 West Coast service. The [workflow evaluation](https://evals.typesafe.ai/) uses
@@ -122,8 +128,8 @@ cache state, token-count provenance, and sample size alongside every result.
 ## Local Sys1 result snapshot
 
 The [public raw report](../site/data/forms-v1-m5-max-2026-09-19.json) records
-100 repeated calls per adapter, on an Apple M5 Max with 36 GiB system RAM,
-Bun 1.3.14 and a Metal capability probe. Source `83ca299` was unmodified for
+the September 19, 2026 run: 100 repeated calls per adapter, on an Apple M5 Max
+with 36 GiB system RAM, Bun 1.3.14 and a Metal capability probe. Source `83ca299` was unmodified for
 all runtime/harness inputs. This is a shared development host, not isolated hardware.
 
 | Adapter | Correct / 20 authored cases | p50 / p95 adapter latency | Valid responses |
@@ -145,3 +151,75 @@ Both Qwen tiers report 12,960 input tokens over 100 calls (129.6 per call).
 CUA token throughput is inapplicable; Needle accounting is not exposed. The
 [methodology and harness](../benchmarks/README.md) disclose startup/cache
 boundaries, percentiles, timing exclusions, sample counts, and failure rules.
+
+## Hosted Jev result snapshot
+
+The [September 20, 2026 raw report](../site/data/forms-v1-jev-2026-09-20.json)
+records a completed live run against `jev-1.13.0`, using the same twenty
+synthetic cases as the local snapshot. The
+[exact hosted harness](https://github.com/hraness/sys1/blob/e7704839f24e6dc6c07098d32c4e5c21067a9645/scripts/benchmark-jev.ts)
+is from source `e7704839f24e6dc6c07098d32c4e5c21067a9645`, with relevant
+worktree inputs unmodified. This is distinct from local source `83ca299`.
+The client ran Bun 1.3.14 on an Apple M5 Max, macOS / Darwin 25.5.0.
+
+| Model | Correct / 20 first-pass cases | Valid / correct repeated calls | p50 / p95 client HTTP latency | Valid decisions / second |
+| --- | ---: | ---: | ---: | ---: |
+| Jev 1.13.0 | 20/20 | 100/100 valid; 100/100 correct | 246.1 / 343.0 ms | 3.89 |
+
+The run used concurrency one, three initial client calls, two warmups, and
+five passes over the twenty cases, with no retries, errors, or skipped calls.
+Repeated calls provide timing observations, not 100 independent quality
+examples. A perfect score on this tiny authored fixture does not establish
+general model quality, confidence calibration, or production readiness.
+
+Jev latency includes network, provider processing, and receipt of the complete
+HTTP body, excluding JSON/protocol validation. Local latency covers the
+adapter and excludes HTTP; neither measures isolated hosted inference time.
+Throughput includes repeated-phase validation and loop overhead. Client
+region was not independently verified; provider hardware, load, and cache
+behavior are unknown. The returned model identity is provider-asserted, not
+an independently checked weight hash. One question per request does not test
+Jev's shared-state fan-out advantage.
+
+| Phase | Provider-reported input tokens | Provider-reported output tokens | Estimated input cost |
+| --- | ---: | ---: | ---: |
+| 100 repeated calls | 34,760 | 3,800 | $0.00145992 |
+| All 105 calls, including initial calls and warmups | 36,510 | 3,990 | $0.00153342 |
+
+All 105 calls supplied validated usage. Output counts are nonzero; output is
+free under the [published pricing](https://docs.typesafe.ai/models), reconfirmed
+September 20. These counters do not independently identify the model's internal
+inference method. Costs use $0.042 per million reported input tokens and are
+estimates, not invoices. The immutable report retains the harness's September 19
+price-check date; the September 20 reconfirmation is separate publication evidence.
+
+## Local failure patterns and integration readiness
+
+The first measured pass shows systematic answer collapse. Qwen3 0.6B and
+Needle each select `submit` on 19 of 20 cases and `wait` once, never `correct`.
+CUA selects `correct` on 15 of 20 cases, `submit` three times and `wait` twice.
+All five passes preserve these choices. No label/index mapping defect was
+found in the inspected adapters; that does not prove the adapters are sound.
+The fixture holds option order fixed, so it cannot distinguish position bias
+from semantic failure. These are real failures of the shipped paths on this task.
+
+A confidence threshold would retain many errors: all twelve wrong first-pass
+Needle answers and ten of twelve wrong Qwen 0.6B answers report confidence at
+least 0.90. Confidence here is not an empirically calibrated success probability.
+
+At this source revision, [setup recommendations](../src/defaults.ts) choose
+Qwen 1.7B at 16 GiB system memory and above, or 0.6B below that threshold.
+[Unpinned routing](../src/router.ts) prefers the smallest model among eligible
+local candidates. With both Qwen tiers available, 0.6B is selected when policy
+chooses local execution; the `auto` policy prefers an available hosted backend. Specialists already
+require explicit selection. Installed, supported, and schema-valid do not mean
+application-qualified. Pin a model for application evaluation and retain
+application-owned deterministic fallback; broad automatic migration from Jev
+is not supported by the current evidence.
+
+Next decisive checks are all six option-order permutations, then fresh held-out
+cases and a same-weights comparison of Qwen's first-token readout against
+ordinary constrained generation. CUA also needs native TASK/FORM/ELEMENT cases
+and reference-forward parity; Needle needs native extraction controls. Preserve
+this published baseline when evaluating changes rather than replacing it with
+only the successful runs.
