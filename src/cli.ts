@@ -465,7 +465,7 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
     const rows = MODEL_REGISTRY.map((entry) => ({
       id: entry.id,
       kind: entry.kind,
-      experimental: entry.id === "qwen3-0.6b",
+      experimental: entry.experimental === true,
       size_b: entry.size_b,
       bytes: entry.bytes,
       description: entry.description,

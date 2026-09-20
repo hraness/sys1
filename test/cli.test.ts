@@ -128,7 +128,7 @@ describe("Jev CLI", () => {
       modelId: model.id,
       async firstTokenDistribution() {
         localCalls += 1;
-        return { entries: [["A", 1]], inputTokens: 1 };
+        return { entries: [["yes", 1] as [string, number]], inputTokens: 1 };
       },
       async dispose() {},
     }) });

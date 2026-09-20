@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  DECISIONS_FIXTURE_SHA256,
+  DECISIONS_FIXTURES,
   decisionsFixtureSchema,
   decisionRequest,
   gradeDecision,
@@ -11,6 +11,7 @@ import {
   parseDecisionOptions,
   permutations,
   summarizeDecisions,
+  type DecisionsFixtureId,
   type DecisionSample,
 } from "../scripts/benchmark-decisions.ts";
 import { decisionPrompt } from "../src/local/decide.ts";
@@ -53,13 +54,18 @@ function sample(expected: Expected, answer: Answer | undefined, overrides: Parti
   };
 }
 
-describe("frozen decisions-v2 benchmark", () => {
-  test("keeps the independently authored fixture fixed and balanced within request bounds", () => {
-    const fixture = loadDecisionsFixture();
-    const bytes = readFileSync(new URL("../benchmarks/decisions-v2.json", import.meta.url));
-    const frozenHash = "7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b";
+describe("frozen decisions benchmark", () => {
+  const pins = [
+    ['decisions-v2', '7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b'],
+    ['decisions-v3', '992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc'],
+  ] as const;
+  for (const [id, frozenHash] of pins) test(`keeps ${id} fixed and balanced within request bounds`, () => {
+    const fixture = loadDecisionsFixture(id);
+    const bytes = readFileSync(new URL(`../benchmarks/${id}.json`, import.meta.url));
     expect(createHash("sha256").update(bytes).digest("hex")).toBe(frozenHash);
-    expect(DECISIONS_FIXTURE_SHA256).toBe(frozenHash);
+    expect(DECISIONS_FIXTURES[id].sha256).toBe(frozenHash);
+    expect(fixture.id).toBe(id);
+    expect(fixture.version).toBe(DECISIONS_FIXTURES[id].version);
     expect(fixture.cases).toHaveLength(72);
     expect(fixture.families).toHaveLength(9);
     const typeCounts = { choice: 0, noul: 0, score: 0 };
@@ -94,6 +100,18 @@ describe("frozen decisions-v2 benchmark", () => {
     invalid.cases[0]!.state = "x".repeat(6001);
     expect(decisionsFixtureSchema.safeParse(invalid).success).toBe(false);
     expect(decisionsFixtureSchema.safeParse({ ...fixture, surprise: true }).success).toBe(false);
+    expect(decisionsFixtureSchema.safeParse({ ...fixture, version: fixture.version === 2 ? 3 : 2 }).success).toBe(false);
+  });
+
+  test("retains v2 as the default and rejects unknown fixtures without reading arbitrary paths", () => {
+    const v2 = loadDecisionsFixture();
+    const v3 = loadDecisionsFixture('decisions-v3');
+    expect(v2.id).toBe('decisions-v2');
+    const priorFamilies = new Set(v2.families.map(family => family.id));
+    const priorStates = new Set(v2.cases.map(item => JSON.stringify(item.state)));
+    expect(v3.families.every(family => !priorFamilies.has(family.id))).toBe(true);
+    expect(v3.cases.every(item => !priorStates.has(JSON.stringify(item.state)))).toBe(true);
+    for (const id of ['decisions-v4', '../forms-v1', '__proto__', 'constructor']) expect(() => loadDecisionsFixture(id as DecisionsFixtureId)).toThrow('unknown fixture');
   });
 
   test("reorders only choice criteria, without changing case content or family instructions", () => {
@@ -115,10 +133,13 @@ describe("frozen decisions-v2 benchmark", () => {
   });
 
   test("requires an explicit pinned model, output and local store, while rejecting unrelated options", () => {
-    expect(parseDecisionOptions(["--validate-only"])).toBeNull();
-    expect(parseDecisionOptions(["--model", "jev-1.13.0", "--output", "work/result.json"])).toEqual({ model: "jev-1.13.0", output: resolve("work/result.json"), home: undefined });
-    expect(parseDecisionOptions(["--model", "qwen3-1.7b", "--home", "work/models", "--output", "work/result.json"])).toEqual({ model: "qwen3-1.7b", output: resolve("work/result.json"), home: resolve("work/models") });
-    expect(parseDecisionOptions(["--output", "work/result.json", "--home", "work/models", "--model", "qwen3-0.6b"])!.model).toBe("qwen3-0.6b");
+    expect(parseDecisionOptions(["--validate-only"])).toEqual({ validateOnly: true, fixture: 'decisions-v2' });
+    expect(parseDecisionOptions(["--validate-only", "--fixture", "decisions-v3"])).toEqual({ validateOnly: true, fixture: 'decisions-v3' });
+    expect(parseDecisionOptions(["--fixture", "decisions-v2", "--validate-only"])).toEqual({ validateOnly: true, fixture: 'decisions-v2' });
+    expect(parseDecisionOptions(["--model", "jev-1.13.0", "--output", "work/result.json"])).toEqual({ validateOnly: false, fixture: 'decisions-v2', model: "jev-1.13.0", output: resolve("work/result.json"), home: undefined });
+    expect(parseDecisionOptions(["--model", "qwen3-1.7b", "--home", "work/models", "--output", "work/result.json"])).toEqual({ validateOnly: false, fixture: 'decisions-v2', model: "qwen3-1.7b", output: resolve("work/result.json"), home: resolve("work/models") });
+    expect(parseDecisionOptions(["--output", "work/result.json", "--home", "work/models", "--model", "qwen3-0.6b"])).toMatchObject({ model: "qwen3-0.6b" });
+    expect(parseDecisionOptions(["--fixture", "decisions-v3", "--model", "qwen3.5-4b", "--home", "work/models", "--output", "work/result.json"])).toEqual({ validateOnly: false, fixture: 'decisions-v3', model: "qwen3.5-4b", output: resolve("work/result.json"), home: resolve("work/models") });
     for (const args of [
       [], ["--model", "jev-latest", "--output", "x"], ["--model", "needle3", "--output", "x"],
       ["--model", "qwen3-1.7b", "--output", "x"], ["--model", "jev-1.13.0", "--home", "x", "--output", "y"],
@@ -127,6 +148,11 @@ describe("frozen decisions-v2 benchmark", () => {
       ["--model", "jev-1.13.0", "--output", "x", "--endpoint", "https://other.example"],
       ["--model", "jev-1.13.0", "--output", "x", "--api-key", "must-not-be-accepted"],
       ["--validate-only", "--model", "jev-1.13.0"], ["--model"],
+      ["--validate-only", "--validate-only"], ["--validate-only", "--output", "x"],
+      ["--validate-only", "--fixture", "decisions-v4"], ["--validate-only", "--fixture", "../decisions-v2"],
+      ["--validate-only", "--fixture", "__proto__"], ["--validate-only", "--fixture", "decisions-v2", "--fixture", "decisions-v3"],
+      ["--model", "qwen3.5-4b", "--output", "x"], ["--model", "qwen3.5-4b-latest", "--home", "x", "--output", "y"],
+      ["--model", "jev-1.13.0", "--output", "x", "--fixture", "decisions-v4"],
     ]) expect(() => parseDecisionOptions(args)).toThrow();
   });
 

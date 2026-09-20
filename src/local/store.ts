@@ -89,11 +89,12 @@ export interface RegistryEntry {
   bytes: number;
   context: number;
   description: string;
+  experimental?: boolean;
 }
 
 /**
  * Curated models, pinned to an immutable publisher revision and LFS SHA-256.
- * Setup and pull default to Qwen3 1.7B; the 0.6B model requires explicit selection.
+ * Setup and pull default to Qwen3 1.7B; other models require explicit selection.
  */
 export const MODEL_REGISTRY: RegistryEntry[] = [
   {
@@ -107,6 +108,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     bytes: 382_156_480,
     context: 2048,
     description: "Qwen3 0.6B Q4_0 — experimental diagnostic model (365 MiB)",
+    experimental: true,
   },
   {
     id: "qwen3-1.7b",
@@ -119,6 +121,19 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     bytes: 1_107_409_472,
     context: 2048,
     description: "Qwen3 1.7B Q4_K_M — default local model (1.0 GiB)",
+  },
+  {
+    id: "qwen3.5-4b",
+    kind: "gguf",
+    size_b: 4,
+    repo: "unsloth/Qwen3.5-4B-GGUF",
+    revision: "e87f176479d0855a907a41277aca2f8ee7a09523",
+    file: "Qwen3.5-4B-Q4_K_M.gguf",
+    sha256: "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+    bytes: 2_740_937_888,
+    context: 2048,
+    description: "Qwen3.5 4B Q4_K_M — experimental candidate awaiting qualification (2.6 GiB)",
+    experimental: true,
   },
 ];
 

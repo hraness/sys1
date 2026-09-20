@@ -15,10 +15,13 @@ import { probeNativeRuntime } from '../src/local/engine.ts';
 import { sha256, runtimeSourceDigest, loadFixture, requestFor } from './benchmark-local.ts';
 
 const ROOT = resolve(import.meta.dir, '..');
-const FIXTURE = join(ROOT, 'benchmarks/decisions-v2.json');
 const WARMUP_FIXTURE = join(ROOT, 'benchmarks/forms-v1.json');
-export const DECISIONS_FIXTURE_SHA256 = '7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b';
-const MODELS = ['jev-1.13.0', 'qwen3-0.6b', 'qwen3-1.7b'] as const;
+export const DECISIONS_FIXTURES = {
+  'decisions-v2': { version: 2, sha256: '7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b' },
+  'decisions-v3': { version: 3, sha256: '992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc' },
+} as const;
+export type DecisionsFixtureId = keyof typeof DECISIONS_FIXTURES;
+const MODELS = ['jev-1.13.0', 'qwen3-0.6b', 'qwen3-1.7b', 'qwen3.5-4b'] as const;
 const REQUEST_MS = 60_000;
 const RUN_MS = 20 * 60_000;
 const REPEATS = 3;
@@ -29,10 +32,10 @@ const expectedSchema = z.discriminatedUnion('type', [
   z.object({type:z.literal('score'),level:z.number().int().min(0).max(9)}).strict(),
 ]);
 export const decisionsFixtureSchema = z.object({
-  version:z.literal(2),id:z.literal('decisions-v2'),description:z.string().max(2048),
+  version:z.union([z.literal(2),z.literal(3)]),id:z.enum(['decisions-v2','decisions-v3']),description:z.string().max(2048),
   families:z.array(z.object({id:z.string().min(1).max(64),question:questionSchema}).strict()).length(9),
   cases:z.array(z.object({id:z.string().min(1).max(64),family:z.string().min(1).max(64),state:entrySchema.refine(value => (typeof value === "string" ? value : JSON.stringify(value)).length <= 6000, "state exceeds local bound"),expected:expectedSchema,rationale:z.string().min(1).max(2048),option_order:z.array(z.string()).length(3).optional()}).strict()).length(72),
-}).strict();
+}).strict().refine(f => f.version === DECISIONS_FIXTURES[f.id].version, 'fixture id/version mismatch');
 export type DecisionsFixture = z.infer<typeof decisionsFixtureSchema>;
 type Case = DecisionsFixture['cases'][number];
 
@@ -48,11 +51,14 @@ export function decisionRequest(fixture: DecisionsFixture, item: Case, model: st
   }
   return systemOneRequestSchema.parse({model,state:item.state,questions:{decision:question}});
 }
-export function loadDecisionsFixture():DecisionsFixture {
-  if(lstatSync(FIXTURE).size>128_000)throw Error('fixture too large');
-  const fixtureBytes = readFileSync(FIXTURE);
-  if (sha256(fixtureBytes) !== DECISIONS_FIXTURE_SHA256) throw Error('frozen fixture hash mismatch');
+export function loadDecisionsFixture(id: DecisionsFixtureId = 'decisions-v2'):DecisionsFixture {
+  if (!Object.hasOwn(DECISIONS_FIXTURES, id)) throw Error('unknown fixture');
+  const path = join(ROOT, 'benchmarks', `${id}.json`);
+  if(lstatSync(path).size>128_000)throw Error('fixture too large');
+  const fixtureBytes = readFileSync(path);
+  if (sha256(fixtureBytes) !== DECISIONS_FIXTURES[id].sha256) throw Error('frozen fixture hash mismatch');
   const f=decisionsFixtureSchema.parse(JSON.parse(fixtureBytes.toString('utf8')));
+  if (f.id !== id) throw Error('unexpected fixture id');
   if(new Set(f.cases.map(c=>c.id)).size!==72 || new Set(f.families.map(c=>c.id)).size!==9)throw Error('duplicate ids');
   const counts={choice:0,noul:0,score:0};
   for(const item of f.cases){
@@ -204,16 +210,36 @@ export function summarizeDecisions(samples: DecisionSample[], elapsed: number, h
   };
 }
 function git(...args:string[]){const r=spawnSync('git',args,{cwd:ROOT,encoding:'utf8',timeout:5000,maxBuffer:65536});if(r.status!==0)throw Error('git provenance failed');return r.stdout.trim();}
-export function parseDecisionOptions(args:string[]){
-  if(args.length===1&&args[0]==='--validate-only')return null;
-  const values=new Map<string,string>();for(let i=0;i<args.length;i+=2){const k=args[i],v=args[i+1];if(!k||!['--model','--home','--output'].includes(k)||!v||v.startsWith('--')||values.has(k))throw Error('invalid options');values.set(k,v);}
-  const model=values.get('--model'),output=values.get('--output'),home=values.get('--home');if(!MODELS.includes(model as typeof MODELS[number])||!output)throw Error('explicit model and output required');
-  if(model!=='jev-1.13.0'&&!home)throw Error('local requires explicit store');if(model==='jev-1.13.0'&&home)throw Error('hosted must not read store');
-  return {model:model as typeof MODELS[number],output:resolve(output),home:home?resolve(home):undefined};
+export function parseDecisionOptions(args: string[]) {
+  const values = new Map<string, string>();
+  let validateOnly = false;
+  for (let i = 0; i < args.length; i++) {
+    const key = args[i]!;
+    if (key === '--validate-only') {
+      if (validateOnly) throw Error('duplicate validation option');
+      validateOnly = true;
+      continue;
+    }
+    const value = args[++i];
+    if (!['--model', '--home', '--output', '--fixture'].includes(key) || !value || value.startsWith('--') || values.has(key)) throw Error('invalid options');
+    values.set(key, value);
+  }
+  const fixture = values.get('--fixture') ?? 'decisions-v2';
+  if (!Object.hasOwn(DECISIONS_FIXTURES, fixture)) throw Error('unknown fixture');
+  if (validateOnly) {
+    if ([...values.keys()].some(key => key !== '--fixture')) throw Error('validation must not include execution options');
+    return { validateOnly: true as const, fixture: fixture as DecisionsFixtureId };
+  }
+  const model = values.get('--model'), output = values.get('--output'), home = values.get('--home');
+  if (!MODELS.includes(model as typeof MODELS[number]) || !output) throw Error('explicit model and output required');
+  if (model !== 'jev-1.13.0' && !home) throw Error('local requires explicit store');
+  if (model === 'jev-1.13.0' && home) throw Error('hosted must not read store');
+  return { validateOnly: false as const, fixture: fixture as DecisionsFixtureId, model: model as typeof MODELS[number], output: resolve(output), home: home ? resolve(home) : undefined };
 }
 async function main(){
-  const opts=parseDecisionOptions(process.argv.slice(2));const fixture=loadDecisionsFixture();const warmupFixture=loadFixture();
-  if(!opts){console.log(JSON.stringify({ok:true,cases:72,types:3,choice_permutations:144,planned_calls_per_model:362,fixture_sha256:sha256(readFileSync(FIXTURE))}));return;}
+  const opts=parseDecisionOptions(process.argv.slice(2));const fixture=loadDecisionsFixture(opts.fixture);const warmupFixture=loadFixture();
+  const fixturePath=join(ROOT,'benchmarks',`${opts.fixture}.json`);
+  if(opts.validateOnly){console.log(JSON.stringify({ok:true,fixture:fixture.id,cases:72,types:3,choice_permutations:144,planned_calls_per_model:362,fixture_sha256:sha256(readFileSync(fixturePath))}));return;}
   const hosted=opts.model==='jev-1.13.0';let runner:LocalRunner|undefined;let backend:RuntimeBackend|undefined;let weight:unknown=null;let native:unknown=null;
   if(hosted){const key=process.env.TYPESAFE_API_KEY;if(!key||!key.trim()||/[\r\n]/.test(key))throw Error('missing key');backend={name:'typesafe',kind:'hosted',available:true,models:[opts.model],size_b:null,cost_rank:0,base_url:'https://api.typesafe.ai',default_model:opts.model,headers:{authorization:`Bearer ${key}`}};}
   else{
@@ -223,7 +249,7 @@ async function main(){
     native=await probeNativeRuntime();if(!(native as {ok:boolean}).ok)throw Error('native unavailable');
     weight={id:model.id,sha256:model.sha256,bytes:model.bytes};runner=new LocalRunner({home:opts.home!,maxLoadedModels:1,engineFactory:defaultEngineFactory(2048,REQUEST_MS)});
   }
-  const report={version:2,benchmark:'decisions-v2',status:'running',started_at:new Date().toISOString(),finished_at:null as string|null,model:opts.model,source:{commit:git('rev-parse','HEAD'),relevant_worktree_modified:git('status','--porcelain','--untracked-files=normal','--','src','scripts/benchmark-decisions.ts','scripts/benchmark-local.ts','benchmarks/decisions-v2.json','benchmarks/forms-v1.json','package.json','bun.lock').length>0,harness_sha256:sha256(readFileSync(import.meta.path)),shared_harness_sha256:sha256(readFileSync(join(ROOT,'scripts/benchmark-local.ts'))),fixture_sha256:sha256(readFileSync(FIXTURE)),warmup_fixture_sha256:sha256(readFileSync(WARMUP_FIXTURE)),package_sha256:sha256(readFileSync(join(ROOT,'package.json'))),runtime_source_sha256:runtimeSourceDigest(),lockfile_sha256:sha256(readFileSync(join(ROOT,'bun.lock')))},environment:{platform:process.platform,arch:process.arch,os:release(),bun:Bun.version,cpu:cpus()[0]?.model??'unknown',memory_bytes:totalmem(),native,weight,client_region:'Not independently verified',provider:hosted?'Hardware, load and caching unknown; model version provider-asserted':null},methodology:{unique_cases:72,cases_per_type:24,initial_calls:1,warmups:1,measured_repetitions:REPEATS,measured_calls:216,permutation_calls:144,planned_calls:362,concurrency:1,context_tokens:hosted?null:2048,percentile_method:'nearest rank, ceil(p*n)-1 in sorted elapsed times',request_timeout_ms:REQUEST_MS,run_timeout_ms:RUN_MS,stop_rule:'Stop after three consecutive invalid/error responses; no retries.',latency_boundary:hosted?'HTTP dispatch through complete bounded body, including network/provider; excludes validation':'LocalRunner through complete decision, including model/IPC; excludes HTTP and response validation',throughput_boundary:'Measured loop wall time including validation, excluding report persistence and permutations.',grading:'Choice exact label. Noul >0.5 is true, <0.5 false, tie incorrect. Score unique maximum-probability level; ties incorrect; weighted-score absolute error reported separately. Failures count as incorrect.',quality_scope:'72 authored synthetic cases in nine low-risk workflow families. Fixture and labels frozen before model execution. Not a production benchmark, calibration study or independent third-party evaluation. Repeats/permutations are not independent cases.',permutations:'All six orders for each of24 choice cases. Invariance requires six valid identical semantic choices; it does not mean correct.',initial_scope:'Initial and warmup use prior forms-v1 cases, not held-out v2 cases. One initial request, not an isolated cold-machine/server measurement. Weight verification primes filesystem caches.',usage:'Actual wrapped local prompt tokens or provider-reported counters. Missing usage fails validation. Local output zero means no generated answer text; not no computation.',input_usd_per_million:hosted?PRICE:null,output_usd_per_million:hosted?0:null,price_source:hosted?'https://docs.typesafe.ai/models':null,price_checked:'2026-09-20',cost_scope:'Known reported usage estimate, not invoice. All calls include warmups/permutations; unknown failed-call billing remains unknown.'},samples:[] as DecisionSample[],summary:null as ReturnType<typeof summarizeDecisions>|null};
+  const report={version:2,benchmark:fixture.id,status:'running',started_at:new Date().toISOString(),finished_at:null as string|null,model:opts.model,source:{commit:git('rev-parse','HEAD'),relevant_worktree_modified:git('status','--porcelain','--untracked-files=normal','--','src','scripts/benchmark-decisions.ts','scripts/benchmark-local.ts',`benchmarks/${opts.fixture}.json`,'benchmarks/forms-v1.json','package.json','bun.lock').length>0,harness_sha256:sha256(readFileSync(import.meta.path)),shared_harness_sha256:sha256(readFileSync(join(ROOT,'scripts/benchmark-local.ts'))),fixture_id:fixture.id,fixture_sha256:sha256(readFileSync(fixturePath)),warmup_fixture_sha256:sha256(readFileSync(WARMUP_FIXTURE)),package_sha256:sha256(readFileSync(join(ROOT,'package.json'))),runtime_source_sha256:runtimeSourceDigest(),lockfile_sha256:sha256(readFileSync(join(ROOT,'bun.lock')))},environment:{platform:process.platform,arch:process.arch,os:release(),bun:Bun.version,cpu:cpus()[0]?.model??'unknown',memory_bytes:totalmem(),native,weight,client_region:'Not independently verified',provider:hosted?'Hardware, load and caching unknown; model version provider-asserted':null},methodology:{unique_cases:72,cases_per_type:24,initial_calls:1,warmups:1,measured_repetitions:REPEATS,measured_calls:216,permutation_calls:144,planned_calls:362,concurrency:1,context_tokens:hosted?null:2048,percentile_method:'nearest rank, ceil(p*n)-1 in sorted elapsed times',request_timeout_ms:REQUEST_MS,run_timeout_ms:RUN_MS,stop_rule:'Stop after three consecutive invalid/error responses; no retries.',latency_boundary:hosted?'HTTP dispatch through complete bounded body, including network/provider; excludes validation':'LocalRunner through complete decision, including model/IPC; excludes HTTP and response validation',throughput_boundary:'Measured loop wall time including validation, excluding report persistence and permutations.',grading:'Choice exact label. Noul >0.5 is true, <0.5 false, tie incorrect. Score unique maximum-probability level; ties incorrect; weighted-score absolute error reported separately. Failures count as incorrect.',quality_scope:'72 authored synthetic cases in nine low-risk workflow families. Fixture and labels frozen before model execution. Not a production benchmark, calibration study or independent third-party evaluation. Repeats/permutations are not independent cases.',permutations:'All six orders for each of 24 choice cases. Invariance requires six valid identical semantic choices; it does not mean correct.',initial_scope:'Initial and warmup use prior forms-v1 cases, not cases from the selected qualification fixture. One initial request, not an isolated cold-machine/server measurement. Weight verification primes filesystem caches.',usage:'Actual wrapped local prompt tokens or provider-reported counters. Missing usage fails validation. Local output zero means no generated answer text; not no computation.',input_usd_per_million:hosted?PRICE:null,output_usd_per_million:hosted?0:null,price_source:hosted?'https://docs.typesafe.ai/models':null,price_checked:'2026-09-20',cost_scope:'Known reported usage estimate, not invoice. All calls include warmups/permutations; unknown failed-call billing remains unknown.'},samples:[] as DecisionSample[],summary:null as ReturnType<typeof summarizeDecisions>|null};
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),RUN_MS);const interrupt=()=>controller.abort();process.on('SIGINT',interrupt);process.on('SIGTERM',interrupt);
   let reserved=false;let measuredStart:number|null=null,measuredEnd:number|null=null;const save=()=>{const tmp=`${opts.output}.${randomUUID()}.tmp`;try{writeFileSync(tmp,JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});renameSync(tmp,opts.output);}finally{rmSync(tmp,{force:true});}};
   try{
@@ -255,6 +281,6 @@ async function main(){
     clearTimeout(timer);process.off('SIGINT',interrupt);process.off('SIGTERM',interrupt);await runner?.dispose();
     report.finished_at=new Date().toISOString();report.summary=summarizeDecisions(report.samples,measuredStart===null||measuredEnd===null?0:measuredEnd-measuredStart,hosted);if(reserved)save();
   }
-  console.log(JSON.stringify({status:report.status,model:opts.model,summary:report.summary}));if(report.status!=='complete')process.exitCode=1;
+  console.log(JSON.stringify({status:report.status,fixture:fixture.id,model:opts.model,summary:report.summary}));if(report.status!=='complete')process.exitCode=1;
 }
 if(import.meta.main)try{await main();}catch{console.error('Decision benchmark failed; verify explicit options, fixture, model store or environment key. No existing result is overwritten.');process.exitCode=1;}

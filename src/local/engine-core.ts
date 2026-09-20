@@ -162,7 +162,9 @@ export class NativeLlamaEngine {
           type: "system",
           text: "You are a precise decision engine. Follow the requested answer format exactly and do not explain.",
         },
-        { type: "user", text: `/no_think\n${prompt}` },
+        // Thinking control belongs to the model chat wrapper. Qwen3.5 does not
+        // support the older /no_think user-text switch.
+        { type: "user", text: prompt },
         { type: "model", response: [] },
       ],
     });

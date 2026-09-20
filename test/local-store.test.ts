@@ -243,7 +243,22 @@ describe("local model store", () => {
     for (const ref of ["cua-s1-forms", "needle3", "hf:owner/repo:weights.pt", "hf:owner/repo:weights.cact"]) {
       expect(resolvePullTarget(ref)).toHaveProperty("error");
     }
-    expect(MODEL_REGISTRY.map((entry) => entry.id).sort()).toEqual(["qwen3-0.6b", "qwen3-1.7b"]);
+    expect(MODEL_REGISTRY.map((entry) => entry.id).sort()).toEqual(["qwen3-0.6b", "qwen3-1.7b", "qwen3.5-4b"]);
+  });
+
+  test("Qwen3.5 candidate resolves to an immutable experimental artifact", () => {
+    expect(resolvePullTarget("qwen3.5-4b")).toMatchObject({
+      kind: "registry",
+      entry: {
+        id: "qwen3.5-4b",
+        experimental: true,
+        repo: "unsloth/Qwen3.5-4B-GGUF",
+        revision: "e87f176479d0855a907a41277aca2f8ee7a09523",
+        file: "Qwen3.5-4B-Q4_K_M.gguf",
+        bytes: 2_740_937_888,
+        sha256: "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+      },
+    });
   });
 
   test("legacy inventory blocks reads and mutations without changing any bytes", async () => {
