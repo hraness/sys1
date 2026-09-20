@@ -111,3 +111,8 @@ captures; the reviewer checked the label in source. No further visual iteration
 was needed. The owned preview tabs were closed and both servers collected.
 All 105 local links/anchors and structured metadata passed static validation;
 ten immutable evidence links were verified against the published source tree.
+
+
+## Benchmark protocol note — 2026-09-20
+
+Added a bounded link to the pinned System One Skills benchmark protocol at `f316c1cd7369fe5bdd2f18de4c815e7b4f6ba6c3`. The note describes the outcome-blind per-skill/provider paired-session design, all 11 task families, and staged discovery/confirmation gates. It explicitly says results are pending and makes no efficacy claim.
