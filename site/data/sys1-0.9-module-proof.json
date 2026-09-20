@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "kind": "sys1-packed-module-integration",
+  "generated_at": "2026-09-20T16:21:00.696Z",
+  "artifact": {
+    "name": "@hraness/sys1",
+    "version": "0.9.0",
+    "sha256": "3a0b46485724e85aed043c3bd6c73cf9dae0b0e0b1bd3ba7cd0e3c619d46f414"
+  },
+  "dependencies": {
+    "mode": "reuse-qualified-local-install",
+    "zod": "4.6.2",
+    "native": "3.20.0"
+  },
+  "model": {
+    "id": "qwen3-1.7b",
+    "manifest_sha256": "b139949c5bd74937ad8ed8c8cf3d9ffb1e99c866c823204dc42c0d91fa181897",
+    "bytes": 1107409472,
+    "experimental": true
+  },
+  "node_client_to_bun_gateway": {
+    "ok": true,
+    "node": "v24.20.0",
+    "elapsed_ms": 1494,
+    "metadata": {
+      "backend": "local-qwen3-1.7b",
+      "attempts": 1,
+      "local": {
+        "adapter": "generic-gguf",
+        "minCoverage": 1,
+        "minConcentration": 1
+      }
+    },
+    "preaborted_request_rejected": true
+  },
+  "bun_embedded_router": {
+    "ok": true,
+    "bun": "1.3.14",
+    "elapsed_ms": 1197,
+    "metadata": {
+      "backend": "local-qwen3-1.7b",
+      "attempts": 1,
+      "local": {
+        "adapter": "generic-gguf",
+        "minCoverage": 1,
+        "minConcentration": 1
+      }
+    },
+    "caller_abort_rejected": true,
+    "disposed_handler_status": 503,
+    "disposed_client_rejected": true
+  },
+  "scope": "Public synthetic request validates integration only; no semantic-quality claim, no hosted call, no model download.",
+  "cleanup": {
+    "owned_children_collected": true,
+    "server_stopped": true,
+    "routers_disposed": true,
+    "temporary_consumer_removed": true,
+    "store_unchanged": true
+  }
+}

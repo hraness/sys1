@@ -390,3 +390,55 @@ own deadlines, shutdown and cleanup. These are integration requirements, not
 capabilities Sys1 has already added. See the pinned
 [formatter](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/common.py#L60-L114)
 and [prediction path](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/agent.py#L173-L253).
+
+### Direct Laya decisions-v3 result (September 20)
+
+The [complete direct-candidate report](../site/data/decisions-v3-laya-2026-09-20.json)
+uses the same frozen 72 cases and 362-call schedule as the Qwen3.5 evaluation
+above. The [reproduction bundle](../benchmarks/laya/reproduction.md) preserves
+the exact supervisor, worker, schedule and input-preservation preflight.
+The report SHA-256 is
+`088df3c18fe05f4444f50cc253583d16b70ad088545104819f14f5e6a98e258d`.
+Every request passed an exact comparison between its full intended token
+sequence and Laya's prepared input before inference. All 362 preserved their
+instructions, options and state; the maximum was 166 tokens, with at most 18
+tokens per option, against the pinned checkpoint's 1,024-token context and
+256-token head budget. The checkpoint and formatter were unchanged.
+
+| Measure | Laya typed-decisions MLX FP16 |
+| --- | ---: |
+| Correct first-pass cases | 30/72 (41.7%) |
+| Choice / Noul / Score | 9/24 · 13/24 · 8/24 |
+| Constant-label reference | 27/72 |
+| Order-invariant choices | 20/24; nine always correct, eleven always wrong |
+| Correct reordered calls | 57/144 |
+| Valid / correct repeated calls | 216/216 valid; 90/216 correct |
+| p50 / p95 direct prediction latency | 9.74 / 15.32 ms |
+| Valid decisions / second, including IPC and validation | 89.62 |
+| Measured input / generated output tokens | 29,157 / 0 |
+| All-call input / generated output tokens | 48,860 / 0 |
+| Score expected-value MAE | 0.9349 over 24 cases |
+
+The run used an Apple M5 Max with 36 GiB memory, Python 3.12.14, MLX 0.32.2,
+GPU execution, FP16 and batch size one; compilation and prompt caching were
+disabled. Latency times synchronous `Agent.predict`, including tokenization
+and evaluated results, but excludes process IPC, normalization/validation,
+model loading and HTTP. The measured loop takes 2.410 seconds including IPC
+and validation. Qwen's latency includes its worker IPC, while Jev's includes
+network/provider time: these are different boundaries, not isolated inference
+speed ratios. No API charge is recorded; local compute is not cost-free.
+
+All 362 responses were valid, and grades, distributions, projection from raw
+answers, usage and provenance were independently checked. All three measured
+passes gave identical answers. The strong order-invariance count includes
+eleven consistently wrong choices, so it does not rescue decision quality.
+The upstream action probability was 1 on all 72 first-pass cases, including
+42 mistakes; it must not serve as application approval. These results support
+a fast experimental inference path, not a dependable general local substitute
+for Jev or a reason to enable automatic fallback.
+
+All responses completed before the worker acknowledged disposal, reporting
+zero cache bytes and 22 active bytes. The supervisor then sent SIGTERM before
+observing natural process exit and collected the worker. The raw report keeps
+that signal and a null exit code; it does not establish a clean natural exit.
+This direct experiment is not a shipped HTTP integration or an endurance test.

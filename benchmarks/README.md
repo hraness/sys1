@@ -129,3 +129,17 @@ and Needle adapters, use the
 with its instructions. The
 [original Jev source at e770483](https://github.com/hraness/sys1/tree/e7704839f24e6dc6c07098d32c4e5c21067a9645)
 also remains immutable. Those adapters are no longer included in Sys1 0.9.
+
+## Direct Laya MLX candidate study
+
+The [pinned reproduction kit](laya/reproduction.md) runs the same decisions-v3
+cases and grading directly through Laya's typed-decisions MLX checkpoint. It
+is a separate supervised research harness, not a bundled Sys1 backend. Exact
+input-token and marker equality excludes silent truncation for every scheduled
+request. The original response and normalized checkpoint identity are retained.
+See the [complete report](../site/data/decisions-v3-laya-2026-09-20.json).
+
+Direct Agent.predict latency excludes IPC and HTTP; measured-loop throughput
+includes IPC and validation. Keep those boundaries distinct from the Qwen
+runner. The candidate reached 30/72 correct despite its fast native inference.
+It is not generally qualified for application decisions.

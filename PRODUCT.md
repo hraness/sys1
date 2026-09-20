@@ -51,7 +51,8 @@ README.md, source, docs/DESIGN.md (runtime architecture), release workflows,
 and deterministic/native-install checks document implemented capabilities.
 The comparison page adds an opt-in public synthetic local adapter benchmark
 and primary-source upstream measurements, each with its own scope and limits.
-The broader frozen fixtures show poor Qwen quality; local inference remains
+The broader frozen fixtures show poor Qwen quality; a direct Laya MLX
+candidate study reached 30/72 and remains outside the shipped runtime; local inference remains
 experimental. Jev has a completed 20-case result; a broader attempt failed
 authentication and is not quality evidence. No customer adoption count or testimonial is supplied. Illustrative page
 examples must be labelled as such.

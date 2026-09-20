@@ -1,0 +1,128 @@
+{
+  "_id": "6aae9815e87e84474bc204f8",
+  "id": "aac6fef/laya-typed-decisions-mlx",
+  "private": false,
+  "pipeline_tag": "text-classification",
+  "library_name": "mlx",
+  "tags": [
+    "mlx",
+    "safetensors",
+    "laya",
+    "modernbert",
+    "apple-silicon",
+    "decision-model",
+    "text-classification",
+    "en",
+    "base_model:convaiinnovations/laya-typed-decisions",
+    "base_model:finetune:convaiinnovations/laya-typed-decisions",
+    "license:apache-2.0",
+    "region:us"
+  ],
+  "downloads": 0,
+  "likes": 0,
+  "modelId": "aac6fef/laya-typed-decisions-mlx",
+  "author": "aac6fef",
+  "sha": "28416e78cb26a239a4eabaa2e084904ec5e6cacb",
+  "lastModified": "2026-09-19T14:27:09.000Z",
+  "gated": false,
+  "disabled": false,
+  "widgetData": [
+    {
+      "text": "I like you. I love you"
+    }
+  ],
+  "model-index": null,
+  "config": {},
+  "cardData": {
+    "license": "apache-2.0",
+    "library_name": "mlx",
+    "pipeline_tag": "text-classification",
+    "base_model": "convaiinnovations/laya-typed-decisions",
+    "language": [
+      "en"
+    ],
+    "tags": [
+      "mlx",
+      "laya",
+      "modernbert",
+      "apple-silicon",
+      "decision-model"
+    ]
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "a6344aac8c09253b3b630fb776ae94478aa0275b",
+      "size": 1519
+    },
+    {
+      "rfilename": "LICENSE",
+      "blobId": "d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe",
+      "size": 10173
+    },
+    {
+      "rfilename": "NOTICE",
+      "blobId": "a41f006a83bff3f324dfbe8b3d9963f9b39063d6",
+      "size": 698
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "1f8767bd3e29593501ab7df82ed90f7b7d963ff8",
+      "size": 3699
+    },
+    {
+      "rfilename": "encoder/config.json",
+      "blobId": "d4be4829750fb04c0aa8b9897c3ea827f76c0109",
+      "size": 2084
+    },
+    {
+      "rfilename": "manifest.json",
+      "blobId": "363631152f707e5148462ec9a92b11a99051ba9a",
+      "size": 1778
+    },
+    {
+      "rfilename": "mlx_config.json",
+      "blobId": "47516cb633704ddc43a121566e00b925133c2669",
+      "size": 322
+    },
+    {
+      "rfilename": "model.safetensors",
+      "blobId": "3fc0e0d39471f168304c49ab30441a19a7ef9bb4",
+      "size": 842609225,
+      "lfs": {
+        "sha256": "804ef8802b4cac7a67913b0cfb8448659e934a50284aaa867b98d7d9a6e7d1e0",
+        "size": 842609225,
+        "pointerSize": 134
+      }
+    },
+    {
+      "rfilename": "rl_agent_config.json",
+      "blobId": "d0293fddc8b337c9bc651f2a7b95c0848fbbb488",
+      "size": 848
+    },
+    {
+      "rfilename": "tokenizer/tokenizer.json",
+      "blobId": "2f4d8583e507b7466d2490e2d6c045647a822698",
+      "size": 3583228
+    },
+    {
+      "rfilename": "tokenizer/tokenizer_config.json",
+      "blobId": "ed1ffabc2ce11120754705709569e365e46da71a",
+      "size": 337
+    },
+    {
+      "rfilename": "validation.json",
+      "blobId": "532e2fe0a7363f3d0ee5eec641e3db39500ac01c",
+      "size": 18275
+    }
+  ],
+  "spaces": [],
+  "createdAt": "2026-09-19T14:11:33.000Z",
+  "safetensors": {
+    "parameters": {
+      "F16": 421293830
+    },
+    "total": 421293830
+  },
+  "usedStorage": 842609225
+}

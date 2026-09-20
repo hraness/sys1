@@ -108,5 +108,17 @@ not a shipped mode. Jev's broader run was stopped by authentication; no
 quality result can be inferred from that attempt. Preserve all denominators,
 source pins, local-vs-HTTP timing boundaries and actual token semantics.
 
-Finish review for this revision is pending; earlier approvals above apply
-only to their recorded versions.
+The measured Laya study is separate from bundled routes: 30/72 correct,
+9.7 ms direct native p50, with different latency and throughput boundaries.
+Link its exact portable reproduction bundle and full raw responses. Trained
+heads, valid shapes and high action probabilities do not establish correctness.
+
+Final independent source and visual disposition: **ship**, no material fixes.
+The reviewer inspected `focus-compare-desktop-light.png`,
+`focus-compare-mobile-dark.png`, `focus-home-desktop-light.png`, and
+`focus-home-mobile-dark.png` under `.impeccable/review/` at 1280px and 390px.
+Paper typography, palette, table structure and small-screen stacking persist.
+The integration owner separately verified no document overflow, internally
+scrollable tables, disclosure expansion, calculator arithmetic ($0.21 for
+10,000 requests at 500 input tokens), and no browser console errors.
+Earlier approvals above apply only to their recorded versions.
