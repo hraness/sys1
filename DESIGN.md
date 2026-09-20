@@ -350,14 +350,14 @@ the visual anchors. Surface-specific evidence and interaction rules live in
 ## Agent skills guide
 
 `site/skills.html` extends the same Paper system in a reading layout, using
-`site/skills.css` for its left-aligned introduction, three-step explanation,
-two-column catalog and project relationship, and three-column evidence section.
-The shared header, appearance control, copy behavior, code frames, fonts, and
-pinned footer are reused unchanged. Evidence columns stack at the existing
-medium breakpoint (800px); the other reading patterns retain their established
-responsive rules. This extension introduces no new system tokens or assets.
-The eleven-skill catalog, evidence boundaries, source revision, and finish
-review are recorded in `.impeccable/surfaces/site-skills-html.md`.
+`site/skills.css` for three sections: benefit and bounded proof, fit and
+installation, then expandable evidence and catalog. A semantic description
+list presents two benefits, stacking at the existing compact breakpoint.
+Native disclosures keep detailed evidence available beneath the short reading
+path. The shared header, appearance control, copy behavior, code frames, fonts,
+and pinned footer are reused. Obsolete column layouts were removed; no system
+tokens or assets were added. Evidence boundaries, source revision, editorial
+ownership, and finish review live in `.impeccable/surfaces/site-skills-html.md`.
 
 ## Do's and Don'ts
 
