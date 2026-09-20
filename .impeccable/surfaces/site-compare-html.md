@@ -45,7 +45,7 @@ when JavaScript is unavailable. It neither calls a model nor bills a service.
 
 ## Evidence contract
 
-The local table reports the actual `forms-v1-local-adapter` benchmark in
+The measured table retains the actual `forms-v1-local-adapter` benchmark in
 `site/data/forms-v1-m5-max-2026-09-19.json`: 20 authored synthetic cases,
 100 repeated timing calls per adapter, concurrency one, Apple M5 Max with
 36 GiB system memory, and Bun 1.3.14. Source and harness revision `83ca299`
@@ -60,8 +60,12 @@ does not imply cold-machine timing; the Metal capability probe does not
 measure per-inference GPU activity. Memory capacity is not peak model memory.
 
 Publisher measurements stay in separate evidence rows with source links,
-hardware, runtime, workload, units, and disclosed limits. Hosted Jev and
-OpenJev were not measured in the local run. Shared response schemas do not
+hardware, runtime, workload, units, and disclosed limits. Hosted Jev was subsequently measured on the identical fixture on September 20
+at source `e770483`; its raw report is `site/data/forms-v1-jev-2026-09-20.json`.
+Keep its network-inclusive latency distinct from the local adapter boundary.
+Jev reached 20/20 with 100/100 valid repeated calls; output usage was reported
+and output pricing was free. Its region and server cache/hardware are unknown.
+OpenJev remains unmeasured. Shared response schemas do not
 establish interchangeable quality, calibration, speed, or cost. Detailed
 source notes live in `docs/model-comparison.md`.
 
@@ -73,3 +77,17 @@ desktop light/dark, mobile, 603px, and expanded-startup captures under
 Persistence, fidelity, and ceiling matched the direction; no material fixes
 were required. This was a visual/source review. Numerical revalidation and
 live browser checks remained the integration owner's separate validation.
+
+## Hosted result extension
+
+Preserve the existing Paper tables, disclosures, controls, and assets. Add Jev
+alongside local results with explicit timing labels, separate dated provenance,
+raw usage and estimated costs. State the poor 8/20 local performance plainly;
+interface validity must never imply decision quality or migration readiness.
+
+Independent visual review found no visual fixes at desktop light or mobile dark;
+page overflow was absent at 1280px and 390px, with fonts loaded and no console
+errors. Expanded failure and token disclosures were checked. The reviewer’s
+one source correction qualified size-first selection to eligible local routes;
+`auto` can prefer an available hosted backend. Original captures precede that
+small wording correction; the layout and existing design assets are unchanged.

@@ -141,9 +141,33 @@ reported usage, and source/fixture hashes. Incomplete runs are not completed
 comparisons.
 
 Cost estimates use the [published input rate](https://docs.typesafe.ai/models)
-of $0.042 per million tokens, checked September 19, 2026. Reported usage for
-warmups and initial calls belongs in total experiment cost, separately from the
+of $0.042 per million tokens, with output free. The harness records a September 19,
+2026 price check; this rate was separately reconfirmed for publication on
+September 20, 2026. Reported usage for warmups and initial calls belongs in
+total experiment cost, separately from the
 100-call measured phase. Failed calls can be billable even when no usable
 accounting is returned, so known-usage estimates are not invoices or guaranteed
 cost totals. This fixture has one short question per request and does not test
 Jev's shared-state advantage across multiple questions.
+
+### Published hosted result
+
+The [September 20, 2026 report](../site/data/forms-v1-jev-2026-09-20.json)
+completed all 105 calls at concurrency one. Jev 1.13.0 answered 20/20 first-pass
+cases correctly; all 100 repeated calls were valid and correct. Repeated-call
+p50/p95 client HTTP latency was 246.1/343.0 ms, with 3.89 valid decisions per
+second. The [immutable harness](https://github.com/hraness/sys1/blob/e7704839f24e6dc6c07098d32c4e5c21067a9645/scripts/benchmark-jev.ts)
+and unmodified relevant inputs are recorded at `e7704839f24e6dc6c07098d32c4e5c21067a9645`.
+The [September 19 local report](../site/data/forms-v1-m5-max-2026-09-19.json)
+uses source `83ca299`; both reports identify the same fixture hash.
+
+The repeated phase reported 34,760 input and 3,800 output tokens; all 105 calls
+reported 36,510 input and 3,990 output tokens. Estimated input costs are
+$0.00145992 and $0.00153342 respectively. The nonzero output counters are free
+at the published rate and do not establish the internal inference method.
+See the [hosted result snapshot](../docs/model-comparison.md#hosted-jev-result-snapshot)
+for the complete boundaries: HTTP latency includes network and the full body,
+local latency excludes HTTP, client region is unverified, provider hardware
+and caching are unknown, and model identity is provider-asserted. Twenty tiny
+cases and one question per request establish neither broad quality nor
+shared-state fan-out performance.
