@@ -2,90 +2,112 @@
 version: 1
 slug: "site-skills-html"
 primary_target: "site/skills.html"
-related_targets: ["site/skills.css", "site/index.html"]
+related_targets: ["site/skills.css"]
 ---
 
-# SYS1 agent skills guide
+# System One Skills guide
 
-Mode: Read. Audience: developers deciding whether to install System One Skills
-for known noisy checks, with a simple quickstart for local users. The user
-requested clearer impact and less visible technical detail while retaining
-the full evidence, catalog, and Peopleblade/Hraness Paper identity. This is a
-bounded reading revision within the committed visual system.
-Evidence source: `hraness/system-one-skills` at
-`bb0d91d0ca8e81e6c29a7f2c47a27aeb175de4e2`; installable runtime v0.4.0.
+Mode: Read. Developers deciding when the one shipped noisy-check skill is
+useful, and whether any proposed skills deserve their cost. The user asked
+for stronger per-skill justification and clarity about 82% versus 3.94%.
+Runtime is unchanged at v0.4.0; the page is an evidence and benefit refinement.
+Source evidence: `8489a3361ea192e94784c043eae53444aa908cf5` in
+`hraness/system-one-skills`, checked September 20, 2026.
 
 ## Direction contract
 
-THESIS: Make the benefit and installation decision clear first; keep the
-bounded result honest and detailed evidence readily available below.
+THESIS: Explain the useful workflow first, then compare like-for-like units
+and make the native alternative explicit for each unshipped proposal.
+OWN-WORLD: Preserve Hraness Paper, Instrument Serif, Nebula Sans, paired
+appearance, restrained rules, code frames, and the pinned shared footer.
+STORY: Understand the shipped skill and fit; inspect separate result-text and
+completed-diagnosis evidence; examine ten candidates; install only the
+qualified noisy-check instructions.
+FIRST VIEWPORT: Benefit heading, one-shipped/ten-research distinction,
+native-first advice, and anchored routes into fit, evidence, catalog, install.
+FORM: Reading surface with a description list, scoped comparison table and
+unboxed candidate rows. Every candidate names proposed payoff, current native
+alternative, and why it remains outside the install. Technical methods stay
+in native disclosures; essential limitations remain next to claims.
+FINISH: One batched desktop/mobile/intermediate review, one bounded final
+confirmation after source convergence, independent source and visual verdict.
 
-OWN-WORLD: Inherit the committed Hraness Paper colors, editorial serif headings, Nebula Sans, shared header, appearance control, code frames, and pinned Hraness footer. No new palette or assets.
+## Implemented surface and evidence
 
-STORY: Understand the benefit and initial measured result; check fit and
-install; expand the calculation, costs and limits, or eleven-skill catalog.
+The old 82% hero is replaced by a concrete run-once/result/full-log explanation.
+The table distinguishes 9,731→1,705 estimated text tokens over three successful
+historical Devin logs (774 counted overhead; 82.48%) from 49,803→47,840 recorded
+input+output tokens in one completed Codex diagnosis (3.94%). Both Codex answers
+scored 6/6; the skill used four reads versus three and took 9.3 seconds longer.
+Order/cache limitations, omitted failure locations, and failed setup usage
+remain disclosed. No universal billing, speed, reliability or savings claim.
 
-FIRST VIEWPORT: Left-aligned introduction, plain breadcrumb, serif benefit
-heading, bounded proof with its scope adjacent, install/source actions, and
-two practical benefits. Commands sit in the separate installation section.
+Native Bun --dots is a separate one-file synthetic-fixture measurement:
+466→55 output+invocation tokens, with the same 21 tests / 106 assertions observed.
+The ten candidate names are all visible; none becomes installable. The
+file-read screen's 1.09% figure is an optimistic deletion ceiling before costs
+and freshness, not measured savings or admission for another skill.
 
-FORM: A narrow documentation extension inside the user-pinned design system. No concept seed. Reuse the existing site script for appearance and copy behavior; content and links remain available without JavaScript.
+Existing Paper tokens/assets and site.js remain unchanged. The evidence table
+scrolls inside a labelled focusable region; rows stack at compact widths.
+Schema and visible text identify this as agent-authored analysis.
 
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+## September 20 benefits and evidence revision — admission
 
-## Implemented surface
+Reader job: decide whether the one shipped skill is useful for a known check,
+and understand what each of the ten unshipped proposals would add over native
+tools. The non-obvious answer is that compact output can save many result-text
+tokens while saving little across an actual diagnosis; native quiet output
+is the first choice when sufficient. A wrapper earns its place through a
+retained log and bounded capture contract, not a universal percentage promise.
 
-Three sections replace the long default reading path: benefit/proof, fit/install,
-and native expandable evidence/catalog. About 281 words are visible by default,
-down from 866. Two benefits use a semantic description list; they stack at
-560px. The earlier multi-column explanation, catalog, and evidence layouts
-were removed. Existing Paper colors, fonts, code frames, controls, and footer
-remain; no system tokens or assets were added and the sidecar is unchanged.
+Canonical owner: /skills on Sys1, linked from its separate developer router
+product. It owns the public installation decision and evidence comparison;
+System One Skills owns the source measurements and release. The nearest URLs
+are / (router integration), /compare (model decisions), and the upstream
+skills README (command reference). None owns this public per-skill admission
+comparison. Consolidate here rather than create ten candidate landing pages.
 
-Known output of at least 8 KiB and the exclusion of short or already quiet
-output remain visible beside installation. Runtime v0.4.0 installs only
-`system-one-verify`; all eleven names remain in the catalog disclosure, with
-ten clearly labelled research-only. Commands and native disclosures work
-without JavaScript. Copy and appearance reuse the site script. The Measurement
-notes fragment link opens its containing disclosure with click or Enter.
+Original contribution: a scoped evidence comparison and practical native
+alternatives tied to the project's measured workflow and research decisions.
+Admission **10/12**: utility 2, original evidence 1, factual confidence 2,
+host fit 1, voice 2, maintenance 2. Primary evidence is immutable upstream
+System One Skills documentation and experiment reports; checked September 20.
+Page owner: Sys1 maintainer. Evidence owner: System One Skills task.
+Lifecycle: revise existing public page. Reassess October 18 or next skills
+release, whichever comes first. Human review: none. Independent agent review:
+/root/comparison_finish_reviewer, Codex agent; final source/editorial/visual
+review passed with **ship**, no remaining material fixes.
 
-## Evidence contract
-
-Keep the 82% result adjacent to its scope: an initial replay of three successful
-Devin logs, including counted skill overhead. The measurement disclosure
-retains 9,731 raw text tokens versus 931 compact plus 774 overhead tokens:
-8,026 fewer, or 82.48% rounded to 82%, under `o200k_base`. These are three
-qualifying logs out of 24, not independent whole-task trials or billed savings.
-
-The lower disclosures retain ten preservation checks across 24 replays,
-25 runtime tests, and 41.82 ms median / 48.37 ms p95 overhead across 140
-synthetic pairs. These support scoped contracts, not better task outcomes or
-a speedup. All 14 unused-cohort replays were short; unnecessary use adds an
-estimated 3,612 first-use tokens. Discovery overhead on unused tasks remains
-unmeasured. The CI summary is precisely 128 status calls with no avoidable
-model polling established; do not repeat the incorrect 32-identities wording.
-
-Research admission retains unseen complete tasks, independent correctness,
-unused tasks, all overhead, and at least 30 audited task/session clusters per
-scope. Token savings cannot offset correctness failures or material latency
-regressions. Evidence links stay pinned to `bb0d91d`; runtime stays v0.4.0.
+Direction: retain Paper typography, controls, spacing, footer and code frames.
+Lead with the one useful shipped workflow and native-first fit. Then contrast
+result text versus completed-diagnosis measurements with their denominators
+and costs. Keep all 11 names visible; each research row must state its proposed
+payoff, native alternative and deferred/research status. Technical methods
+belong in disclosures; practical limits stay next to their claims.
 
 ## Finish evidence
 
-Fresh independent review by `skills_clarity_finish`: **ship**, all five
-contract sections accepted, no material fixes. Captures:
-`.impeccable/review/skills-clarity-{desktop-light,desktop-dark,user-603,mobile,mobile-expanded}.png`.
-The integration owner reported passing copy, light/dark, fragment click/Enter,
-and overflow checks at 1280px, 603px, and 390px, including expanded mobile.
-The source/voice reviewer and source owner passed the final text. These are
-surface and editorial checks, not additional runtime evidence.
+Independent disposition: **ship**. The reader can choose native output or the
+wrapper, compare the two distinct evidence scopes, and evaluate each proposed
+skill without mistaking it for an installed feature. This page connects the
+source reports to a public installation decision; the existing /skills URL
+remains justified. Version, installed count, candidate status and source pins
+are the claims to recheck on each release. No unsupported personal voice or
+human-review claim is present.
 
-## Editorial lifecycle
+Batched captures in `.impeccable/review/`:
+- `skills-benefits-desktop-light.png` (1280px)
+- `skills-benefits-mobile-dark.png` and `skills-benefits-mobile-expanded.png` (390px)
+- `skills-benefits-intermediate-dark.png` (603px)
+- `skills-benefits-final-desktop-light.png` and
+  `skills-benefits-final-mobile-dark.png` (final addendum confirmation)
 
-Reader outcome: decide whether to install for known noisy checks. Source
-owner: System One Skills; page owner: Sys1 maintainer. Source checked and
-reviewed 2026-09-19; source/voice reviewer: `/root/skills_distill_claims`, Codex
-agent. No human review is claimed. Admission: **10/12** (utility 2, original
-evidence 1, fact confidence 2, host fit 1, voice 2, maintenance 2). This bounded
-revision is separate from the router homepage and model comparison. Reassess
-on 2026-10-17 or the next skills release, whichever comes first.
+No document overflow at the three widths; the wide evidence table scrolls
+inside its focusable region. Fonts loaded, native mouse/keyboard disclosures
+worked, all ten candidate articles were present, and console errors were absent.
+The final source correction of evolve to “Internal research only” followed
+captures; the reviewer checked the label in source. No further visual iteration
+was needed. The owned preview tabs were closed and both servers collected.
+All 105 local links/anchors and structured metadata passed static validation;
+ten immutable evidence links were verified against the published source tree.

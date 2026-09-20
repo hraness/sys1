@@ -350,14 +350,17 @@ the visual anchors. Surface-specific evidence and interaction rules live in
 ## Agent skills guide
 
 `site/skills.html` extends the same Paper system in a reading layout, using
-`site/skills.css` for three sections: benefit and bounded proof, fit and
-installation, then expandable evidence and catalog. A semantic description
-list presents two benefits, stacking at the existing compact breakpoint.
-Native disclosures keep detailed evidence available beneath the short reading
-path. The shared header, appearance control, copy behavior, code frames, fonts,
-and pinned footer are reused. Obsolete column layouts were removed; no system
-tokens or assets were added. Evidence boundaries, source revision, editorial
-ownership, and finish review live in `.impeccable/surfaces/site-skills-html.md`.
+`site/skills.css` for the shipped workflow, scoped evidence comparison,
+research catalog, and installation. A description list explains before/after
+behavior. The evidence table keeps result-text replay and completed-diagnosis
+units separate, within a labelled keyboard-scrollable region. Ten unboxed
+research rows expose their status, proposed payoff, native alternative, and
+current evidence gap; they stack at compact widths. Native disclosures keep
+calculation and failure-cost detail below the primary decision path. The
+shared header, appearance control, copy behavior, code frames, fonts, and
+pinned footer are reused. No system tokens or assets were added. Evidence
+boundaries, source revision, editorial ownership, and finish review live in
+`.impeccable/surfaces/site-skills-html.md`.
 
 ## Do's and Don'ts
 
