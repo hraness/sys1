@@ -94,7 +94,8 @@ export interface RegistryEntry {
 
 /**
  * Curated models, pinned to an immutable publisher revision and LFS SHA-256.
- * Setup and pull default to Qwen3 1.7B; other models require explicit selection.
+ * All Qwen models are experimental for decisions. Setup and pull default to
+ * Qwen3 1.7B; other models require explicit selection.
  */
 export const MODEL_REGISTRY: RegistryEntry[] = [
   {
@@ -120,7 +121,8 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     sha256: "b139949c5bd74937ad8ed8c8cf3d9ffb1e99c866c823204dc42c0d91fa181897",
     bytes: 1_107_409_472,
     context: 2048,
-    description: "Qwen3 1.7B Q4_K_M — default local model (1.0 GiB)",
+    description: "Qwen3 1.7B Q4_K_M — experimental default local model (1.0 GiB)",
+    experimental: true,
   },
   {
     id: "qwen3.5-4b",
@@ -132,7 +134,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     sha256: "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
     bytes: 2_740_937_888,
     context: 2048,
-    description: "Qwen3.5 4B Q4_K_M — experimental candidate awaiting qualification (2.6 GiB)",
+    description: "Qwen3.5 4B Q4_K_M — experimental local decision model (2.6 GiB)",
     experimental: true,
   },
 ];

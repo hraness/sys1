@@ -40,6 +40,7 @@ import {
 } from "./local/store.ts";
 
 const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5, doctor: 6 } as const;
+const LOCAL_DECISION_NOTICE = "Local decisions are experimental. Review results and evaluate your task: https://sys1.io/compare";
 
 function out(text: string): void {
   process.stdout.write(`${text}\n`);
@@ -60,7 +61,7 @@ Usage: sys1 <command> [flags]
 
 Setup:
   setup [--tier compact|quality] [--dry-run] [--json]
-                                Configure and install the local default
+                                Configure and install the experimental local default
   jev status|enable|disable [--json]
                                 Manage explicit hosted Jev activation
 
@@ -72,7 +73,7 @@ Daemon:
   doctor [--json]               Diagnose runtime, config, store, routing, daemon
 
 Models:
-  pull [MODEL] [--json]         Download + verify a model (default qwen3-1.7b)
+  pull [MODEL] [--json]         Download + verify weights (experimental qwen3-1.7b default)
   pull --list [--json]          Show the curated model registry
   model list [--json]           Show installed models
   model verify MODEL [--json]   Recompute and verify a model's sha256
@@ -100,7 +101,8 @@ Flags:
   --version                     Print version
   --help                        This help
 
-Local tiers: quality (default Qwen3 1.7B), compact (experimental Qwen3 0.6B)
+Local tiers (both experimental): quality (default Qwen3 1.7B), compact (Qwen3 0.6B)
+${LOCAL_DECISION_NOTICE}
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
@@ -202,10 +204,12 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     else {
       out(`platform: ${recommendation.target} (${recommendation.acceleration})`);
       out(`default: ${recommendation.model} (${recommendation.tier}) — ${recommendation.reason}`);
+      out(LOCAL_DECISION_NOTICE);
     }
     return;
   }
 
+  if (flags.get("json") !== true) out(LOCAL_DECISION_NOTICE);
   const native = await probeNativeRuntime();
   if (!native.ok) fail(native.message ?? "local llama.cpp runtime is unavailable", EXIT.backend);
   const loaded = loadConfig(home);
@@ -256,7 +260,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
   else {
     out(`platform: ${recommendation.target} (${native.backend ?? "cpu"})`);
     out(`${recommendation.model}: ${existing === undefined ? "installed" : "already installed"}`);
-    out("local setup ready; run `sys1 up`");
+    out("experimental local setup complete; run `sys1 up`");
   }
 }
 
@@ -432,7 +436,7 @@ async function cmdDoctor(home: string, flags: Map<string, string | boolean>): Pr
       out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
     }
     out(
-      `doctor: ${report.ok ? "ready" : "not ready"} (${report.counts.pass} pass, ${report.counts.warn} warn, ${report.counts.fail} fail)`,
+      `doctor: runtime ${report.ok ? "ready" : "not ready"} (${report.counts.pass} pass, ${report.counts.warn} warn, ${report.counts.fail} fail)`,
     );
   }
   if (!report.ok) process.exit(EXIT.doctor);
@@ -692,7 +696,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
         for (const check of report.checks) {
           out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
         }
-        out(`backend ${backend.name}: ${report.ok ? "ready" : "not ready"}`);
+        out(`backend ${backend.name}: protocol checks ${report.ok ? "passed" : "failed"}`);
       }
       if (!report.ok) process.exit(EXIT.backend);
       return;

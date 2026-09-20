@@ -14,6 +14,8 @@ export interface PlatformRecommendation {
   acceleration: string;
   tier: LocalModelTier;
   model: string | null;
+  /** Model decision quality remains experimental, independent of runtime support. */
+  experimental?: boolean;
   reason: string;
 }
 
@@ -45,7 +47,7 @@ export function platformRecommendation(options: {
       acceleration: "unsupported",
       tier,
       model: null,
-      reason: `no qualified Bun + llama.cpp package target for ${target}`,
+      reason: `no supported Bun + llama.cpp package target for ${target}`,
     };
   }
   return {
@@ -56,9 +58,10 @@ export function platformRecommendation(options: {
     acceleration,
     tier,
     model: DEFAULT_LOCAL_MODELS[tier],
+    experimental: true,
     reason:
       tier === "compact"
         ? "operator selected the experimental 0.6B diagnostic model"
-        : "Qwen3 1.7B is the default local model",
+        : "Qwen3 1.7B is the experimental default local model",
   };
 }

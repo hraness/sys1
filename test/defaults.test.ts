@@ -5,7 +5,7 @@ import {
 } from "../src/defaults.ts";
 
 describe("platformRecommendation", () => {
-  test("qualifies the six packaged desktop targets", () => {
+  test("supports the six packaged desktop targets with an experimental model", () => {
     const expected = new Map([
       ["darwin-arm64", "Metal or CPU"],
       ["darwin-x64", "CPU"],
@@ -20,7 +20,7 @@ describe("platformRecommendation", () => {
       const arch = parts[1];
       if (platform === undefined || arch === undefined) throw new Error(`bad target ${target}`);
       const recommendation = platformRecommendation({ platform, arch });
-      expect(recommendation).toMatchObject({ target, supported: true, acceleration, tier: "quality", model: DEFAULT_LOCAL_MODELS.quality });
+      expect(recommendation).toMatchObject({ target, supported: true, acceleration, tier: "quality", model: DEFAULT_LOCAL_MODELS.quality, experimental: true });
     }
   });
 
@@ -31,7 +31,7 @@ describe("platformRecommendation", () => {
         arch: "x64",
         tier: "compact",
       }),
-    ).toMatchObject({ tier: "compact", model: "qwen3-0.6b", reason: "operator selected the experimental 0.6B diagnostic model" });
+    ).toMatchObject({ tier: "compact", model: "qwen3-0.6b", experimental: true, reason: "operator selected the experimental 0.6B diagnostic model" });
   });
 
   test("fails closed for an unqualified target", () => {

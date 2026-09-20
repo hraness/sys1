@@ -48,7 +48,7 @@ describe("setup CLI", () => {
     const dir = home();
     const result = await runCli(["setup", "--dry-run", "--json"], { home: dir });
     expect(result.code).toBe(0);
-    expect(JSON.parse(result.stdout)).toMatchObject({ recommendation: { model: "qwen3-1.7b", tier: "quality" } });
+    expect(JSON.parse(result.stdout)).toMatchObject({ recommendation: { model: "qwen3-1.7b", tier: "quality", experimental: true } });
     const selected = await runCli(["config", "set", "local.model", "qwen3-0.6b"], { home: dir });
     expect(selected.code).toBe(0);
     expect(loadConfig(dir)).toMatchObject({ ok: true, config: { local: { model: "qwen3-0.6b" } } });
@@ -70,6 +70,21 @@ describe("setup CLI", () => {
       dry_run: true,
       recommendation: { model: "qwen3-0.6b", tier: "compact", supported: true },
     });
+    expect(loadConfig(dir)).toMatchObject({ ok: true, existed: false });
+  });
+
+  test("setup preview and registry label every bundled Qwen as experimental", async () => {
+    const dir = home();
+    const preview = await runCli(["setup", "--dry-run"], { home: dir });
+    expect(preview.code).toBe(0);
+    expect(preview.stdout).toContain("Local decisions are experimental");
+    expect(preview.stdout).toContain("https://sys1.io/compare");
+    const registry = await runCli(["pull", "--list", "--json"], { home: dir });
+    expect(registry.code).toBe(0);
+    const data = (JSON.parse(registry.stdout) as { data: { id: string; experimental: boolean }[] }).data;
+    expect(data.filter((entry) => entry.id.startsWith("qwen")).map((entry) => [entry.id, entry.experimental])).toEqual([
+      ["qwen3-0.6b", true], ["qwen3-1.7b", true], ["qwen3.5-4b", true],
+    ]);
     expect(loadConfig(dir)).toMatchObject({ ok: true, existed: false });
   });
 });
