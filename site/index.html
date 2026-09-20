@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sys1 — one typed API for local models and Jev</title>
-    <meta name="description" content="Add yes/no decisions, choices, and scores to your app through one typed API. Sys1 validates answers and manages local models, with hosted Jev available when you enable it." />
+    <title>Sys1 — a typed decision layer for agents</title>
+    <meta name="description" content="Route yes/no, choice, and score decisions through one typed API. Embed Sys1 in your app, run local models, or enable hosted Jev explicitly." />
     <link rel="canonical" href="https://sys1.io/" />
-    <meta property="og:title" content="Sys1 — one typed API for local models and Jev" />
-    <meta property="og:description" content="Add typed decisions to your app through one request format. Run local models or enable hosted Jev; Sys1 handles routing, answer validation, and local model loading." />
+    <meta property="og:title" content="Sys1 — a typed decision layer for agents" />
+    <meta property="og:description" content="Route typed decisions through one request format. Embed Sys1, run local models, or enable hosted Jev explicitly." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/" />
     <meta name="theme-color" content="#f8f7f4" />
@@ -26,11 +26,11 @@
       <div class="header-inner">
         <a class="wordmark" href="/" aria-label="Sys1 home">sys1<span>.io</span></a>
         <nav aria-label="Primary">
-          <a href="#how-it-works">Features</a>
-          <a href="#ecosystem">Ecosystem</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#integrate">Integrate</a>
+          <a href="/docs">Docs</a>
           <a href="/compare">Compare</a>
           <a href="/skills">Skills</a>
-          <a href="https://github.com/hraness/sys1#use-as-a-module">Docs</a>
         </nav>
         <div class="header-actions">
           <a class="button button-small" href="#install">Get started</a>
@@ -42,13 +42,14 @@
     <main id="main">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-copy">
-          <h1 id="hero-heading">Jev or local Qwen.<br />One typed API.</h1>
-          <p class="summary">Give your agents yes/no decisions, choices, and scores. Connect hosted Jev or experiment with local Qwen. Keep one typed client, explicit model selection, validated response shapes, and managed local model loading.</p>
+          <p class="eyebrow">A decision layer for agent applications</p>
+          <h1 id="hero-heading">One typed API for<br />every small decision.</h1>
+          <p class="summary">Route the same request to hosted Jev or a local model. Sys1 gives your application explicit backend selection, validated answers, and one client you can embed or call over HTTP.</p>
           <div class="actions">
             <a class="button" href="#install">Get Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
             <a class="button button-secondary" href="#integrate">Use it in your project</a>
           </div>
-          <p class="hero-note">Open source · Node, Bun, or HTTP · <a href="/compare">Local quality is experimental</a></p>
+          <p class="hero-note">Open source · Node, Bun, or HTTP · <a href="/docs#getting-started">Hosted Jev is opt-in</a> · Local Qwen is experimental</p>
         </div>
 
         <div class="decision-demo" aria-label="Illustrative typed decision example">
@@ -87,13 +88,13 @@
 
       <section id="how-it-works" class="section story" aria-labelledby="features-heading">
         <div class="section-intro">
-          <h2 id="features-heading">Keep your code.<br />Choose your model.</h2>
-          <p>Every agent has small judgment calls: classify a message, pick the next task, check a condition. Put the model plumbing in one place, and keep your application focused on what the answer means.</p>
+          <h2 id="features-heading">Make the model<br />a replaceable detail.</h2>
+          <p>Every agent has small judgment calls: classify a message, pick the next task, check a condition. Sys1 keeps those calls behind one boundary so your application can focus on what the answer means.</p>
         </div>
         <div class="benefits">
-          <article><h3>Keep control of where requests go.</h3><p>Run locally, enable hosted Jev, or connect a compatible server. Set a routing policy or pin an exact backend and model. <code>local-only</code> keeps decision requests on your machine.</p></article>
-          <article><h3>Get answers your code can use.</h3><p>Get yes/no probabilities, named choices, and numeric scores. Sys1 validates each answer’s shape and model identity against your request, rejects malformed results, and carries cancellation through the request.</p></article>
-          <article><h3>Let Sys1 manage local models.</h3><p>Explicit model downloads, checksum verification, readiness checks, managed loading, and bounded worker cleanup come with the package. See the selected backend and adapter in response metadata.</p></article>
+          <article><h3>Route deliberately.</h3><p>Choose a local model, enable hosted Jev, or register a compatible server. Pin the backend and model in configuration; <code>local-only</code> keeps decision requests on your machine.</p></article>
+          <article><h3>Return answers your code can use.</h3><p>Ask for yes/no probabilities, named choices, or numeric scores. Sys1 validates the response shape and requested model, rejects malformed results, and carries cancellation through the request.</p></article>
+          <article><h3>Own the boundary.</h3><p>Use the typed client, embed the router, or expose a loopback endpoint. Local setup, model lifecycle, and adapter metadata stay explicit and inspectable.</p></article>
         </div>
         <div class="request-path" aria-label="Request flow">
           <div><strong>Your application</strong><span>state + questions</span></div>
@@ -107,7 +108,7 @@
 
       <section id="integrate" class="section integration" aria-labelledby="integration-heading">
         <div class="section-intro">
-          <h2 id="integration-heading">A module in your app.<br />An endpoint for your agents.</h2>
+          <h2 id="integration-heading">Start with one request.<br />Keep your options open.</h2>
           <p>Use the same contract in the environment you already have. Start with the client, own the router in-process, or call a local daemon from another language.</p>
         </div>
         <div class="integration-body">
@@ -136,51 +137,52 @@
 
 console.log(response.answers.next);
 console.log(metadata.backend);</code></pre>
-            <a class="code-doc-link" href="https://github.com/hraness/sys1#use-as-a-module">Read the module guide <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
+            <a class="code-doc-link" href="/docs#integration">Read the integration guide <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
           </div>
         </div>
-        <p class="section-footnote">Checked with real local inference: the packaged Node client and embedded Bun router both passed response validation, cancellation, and cleanup checks. This proves integration, not decision quality. <a href="/data/sys1-0.9-module-proof.json">Read the module proof</a>.</p>
+        <p class="section-footnote">The integration surface is covered by a reproducible module proof. It verifies wiring, validation, cancellation, and cleanup; it does not claim decision quality. <a href="/docs#integration">Read the implementation notes</a>.</p>
       </section>
 
       <section id="ecosystem" class="section ecosystem" aria-labelledby="ecosystem-heading">
         <div class="section-intro">
-          <h2 id="ecosystem-heading">Good models deserve<br />a shared interface.</h2>
-          <p>Sys1 is the routing and integration layer around models and services. Jev and Qwen are the supported starting points. Compatible servers remain available through explicit registration and model selection.</p>
+          <h2 id="ecosystem-heading">Keep the model layer<br />open and explicit.</h2>
+          <p>Sys1 is the interface layer around models and services. Jev and local Qwen are the supported starting points; compatible servers can be registered when your project needs them.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="Related projects and their relationship to Sys1">
           <div class="ecosystem-header" role="row"><span role="columnheader">Project</span><span role="columnheader">What it provides</span><span role="columnheader">How Sys1 uses it</span></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://docs.typesafe.ai/introduction">Jev <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Hosted provider</span></div><p role="cell">Typed decisions through the System One API.</p><p role="cell">An optional hosted backend. Enable it explicitly with your own credential; keep the same request shape as local calls.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://huggingface.co/Qwen/Qwen3-1.7B">Qwen3 1.7B</a><span class="project-kind">Local model</span></div><p role="cell">An experimental local option that runs on your hardware.</p><p role="cell">Sys1 installs verified GGUF weights and reads first-token probabilities. The configured local model stays selected even when you install another model.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://github.com/razorback16/openjev">OpenJev <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Self-hosted server</span></div><p role="cell">An open implementation of a Jev-compatible decision API.</p><p role="cell">Connect and qualify a server you operate. Sys1 uses its common decision interface; the OpenJev server and its extensions remain separate.</p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://github.com/mizorewww/laya-mlx">Laya MLX</a><span class="project-kind">Local candidate study</span></div><p role="cell">Trained decision heads running on Apple Silicon.</p><p role="cell">Evaluated directly, not bundled. Fast native calls did not establish reliable quality on our cases. <a href="/compare#laya">Read the measured study</a>.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="/docs/evaluations">Research candidates</a><span class="project-kind">Documented separately</span></div><p role="cell">OpenJev, Laya MLX, and other local routes we can measure.</p><p role="cell">Studies stay versioned in the docs so the homepage can describe the product without turning a snapshot into a promise.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://node-llama-cpp.withcat.ai/">llama.cpp <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Local GGUF runtime</span></div><p role="cell">Native inference for local language models, through node-llama-cpp.</p><p role="cell">Managed local loading and cancellation. Sys1 maps first-token probabilities to decision answers; setup selects Qwen3 1.7B.</p></div>
         </div>
-        <aside class="semantics"><h3>One answer format. Different model behavior.</h3><p>Schema compatibility makes integration simpler. It does not make models equally accurate or equally calibrated. Evaluate the model on your task before carrying over thresholds or changing defaults. Sys1 exposes adapter metadata so that distinction stays visible.</p><a href="https://github.com/hraness/sys1#generic-gguf-adapter">Read the adapter semantics <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a></aside>
+        <aside class="semantics"><h3>One answer format. Different model behavior.</h3><p>Schema compatibility makes integration simpler. It does not make models equally accurate or equally calibrated. Evaluate the model on your task before carrying over thresholds or changing defaults.</p><a href="/docs#backends">Read the backend notes</a></aside>
         <aside class="semantics"><h3>Keep noisy check logs out of agent context.</h3><p><a href="/skills">System One Skills</a> gives Devin, Claude Code, and Codex a focused skill for known noisy checks: run the check once, return a compact result, and keep the full log locally for diagnosis. It works independently of Sys1 and model backends.</p><a href="/skills">See when to use it and what we measured</a></aside>
       </section>
 
       <section class="section comparison-teaser" aria-labelledby="comparison-heading">
-        <div class="section-intro"><h2 id="comparison-heading">See what the models can actually do.</h2><p>Inspect the completed Jev comparison and broader local evaluations: correctness by question type, option-order stability, latency, token usage, and cost. The full reports include wrong answers.</p></div>
-        <a class="button button-secondary" href="/compare">Compare models, speed &amp; cost</a>
+        <div class="section-intro"><h2 id="comparison-heading">Evidence belongs in the docs.</h2><p>Read reproducible evaluations with their scope, dates, denominators, wrong answers, latency, token usage, and limitations. The interactive comparison remains available for a quick view; the docs hold the durable record.</p></div>
+        <div class="actions comparison-actions"><a class="button" href="/docs/evaluations">Read the evaluations</a><a class="button button-secondary" href="/compare">Open comparison</a></div>
       </section>
 
       <section id="install" class="section install" aria-labelledby="install-heading">
         <div class="section-intro">
-          <h2 id="install-heading">Start on your machine.</h2>
-          <p>Try experimental local decisions with Qwen3 1.7B. Setup downloads about 1.03 GiB of verified weights. Hosted Jev stays off until you enable it.</p>
+          <h2 id="install-heading">Run a first decision locally.</h2>
+          <p>Build the open source package, run the explicit setup step, and keep hosted Jev off until you choose it. The docs cover release installs, local weights, and the hosted pilot path.</p>
         </div>
         <div class="install-terminal">
           <div class="code-heading"><span>Local quickstart</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy commands</button></div>
-          <pre><code id="install-command">npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
-sys1 setup
-sys1 doctor
-sys1 up</code></pre>
+          <pre><code id="install-command">git clone https://github.com/hraness/sys1.git
+cd sys1
+bun install
+bun run build:dist
+ln -sf "$PWD/dist/cli.js" ~/.local/bin/sys1
+sys1 setup</code></pre>
         </div>
-        <p class="section-footnote">For an existing Jev application, start with a hosted pilot: export <code>TYPESAFE_API_KEY</code> privately, then run <code>sys1 jev enable</code>. <a href="https://github.com/hraness/sys1#add-hosted-jev">Hosted setup and routing policies</a>.</p>
-        <p class="install-requirements">Bun 1.3.14+ · macOS, Linux &amp; Windows · Setup downloads model weights</p>
+        <p class="section-footnote">For release installs, module consumers, and an existing Jev application, use the <a href="/docs#getting-started">getting started guide</a>. It keeps exact versions and provider setup in one maintained place.</p>
+        <p class="install-requirements">Bun 1.3.14+ · macOS, Linux &amp; Windows · setup downloads model weights</p>
         <p id="copy-status" class="copy-status" role="status"></p>
-        <div class="install-links"><a href="https://github.com/hraness/sys1#install">Installation guide</a><a href="https://github.com/hraness/sys1/releases/tag/v0.9.0">Release &amp; checksums</a><a href="https://github.com/hraness/sys1">View source</a></div>
+        <div class="install-links"><a href="/docs#getting-started">Getting started</a><a href="/docs#integration">Use it as a module</a><a href="https://github.com/hraness/sys1">View source</a></div>
       </section>
 
       <section class="section questions" aria-labelledby="questions-heading">
@@ -188,12 +190,12 @@ sys1 up</code></pre>
         <div class="question-list">
           <details><summary>What is a typed decision?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>A small judgment returned in a predictable shape: <code>noul</code> is a yes/no probability, <code>choice</code> selects one of your named options, and <code>score</code> returns a numeric result over your ordered criteria. Your app decides how to use it.</p></details>
           <details><summary>Can everything stay local?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Yes, for decision requests using local models and a <code>local-only</code> routing policy. Initial installation and explicit model setup download packages and weights. Hosted Jev is disabled by default.</p></details>
-          <details><summary>Can I replace my existing Jev client?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Use an explicit adapter and test your request sizes, question limits, cancellation, and fallback behavior. For the first pilot, pin <code>jev-1.13.0</code> and preserve your existing hosted behavior. Evaluate local Qwen separately before enabling fallback. Keep application permissions and quality thresholds in your project. <a href="https://github.com/hraness/sys1#adopting-sys1-in-an-existing-jev-application">Read the adoption guide</a>.</p></details>
+          <details><summary>Can I replace my existing Jev client?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Use an explicit adapter and test your request sizes, question limits, cancellation, and fallback behavior. Start with hosted Jev behavior unchanged, then evaluate local routes separately before enabling fallback. Keep application permissions and quality thresholds in your project. <a href="/docs#integration">Read the adoption guide</a>.</p></details>
           <details><summary>Does Sys1 pick the most accurate model?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>You select the model. Fresh setup uses Qwen3 1.7B; enabling Jev selects hosted-only operation. A hosted outage returns an error. Local fallback requires an explicit policy change after you evaluate it. Installing a smaller model does not change that selection. Sys1 does not estimate accuracy per request; evaluate the chosen model on your tasks.</p></details>
           <details><summary>What does it cost?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Sys1 is free, open-source software under the MIT license. Local inference uses your hardware. Hosted providers may charge separately under their own plans.</p></details>
         </div>
       </section>
-      <div class="closing"><p>The small decisions belong in your app.<br />The model plumbing can live here.</p><a class="button" href="#install">Get started with Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></div>
+      <div class="closing"><p>Your app owns the decision.<br />Sys1 owns the model boundary.</p><a class="button" href="/docs#getting-started">Read the getting started guide <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></div>
     </main>
     <footer aria-label="Hraness network" class="hraness-site-footer x1ktp55a x8d9m59 x96ybla x14z8vex x8c10za xdg0xw2 x1munjs5 xsctza4 xtq98z5 x1w6jg7m x3luoqq x1xgbxbt x9cmhvv x4sry57 xys6ka6 x1d4g2j8 x1sphz0r x19y8ktx x1h47zgc x1ghcxmq xe0js8b xiuoait x1g4142m xprmc4t xkpwil5 x12mkk0b" data-brand="visible" data-mailing-list="none" data-slot="hraness-site-footer" id="hraness-site-footer"><div class="hraness-site-footer__inner x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x12e8u3k x12h1iku x1n2onr6 xrvj5dj x182hbjg x196kgno x1rkzygb x1qs5i8y xv7uhgh xiuoait xzlj3eo x5vl0wm x1tec7hu xesnm00 xc26acl x6s0dn4 x1n78d84 x1lfezxm x1b1eqt9 x3so8kt x1gz0dqr x1np48w9 x1hhhz6w x9yvj25 x1bhgv95 xpcvst1 x1i0wikq xs8f16d"><a aria-label="Hraness home" class="hraness-site-footer__brand x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 x1pmbb8p xamitd3 xl56j7k xart1r9 xeuuy2l x6i6fhv x1d3i0y6 x1heor9g xxeg0yr x19s9jnd x130jcwj xo5v014 x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/" lang="en" dir="ltr"><svg aria-hidden="true" class="hraness-site-footer__mark x1c4vz4f x2lah0s xdl72j9 xif76xs x1wugil3" data-slot="hraness-mark" focusable="false" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z" fill="currentColor" fill-rule="evenodd"></path><path d="M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z" fill="currentColor"></path><path d="M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z" fill="currentColor" fill-rule="evenodd"></path><path d="M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z" fill="currentColor"></path><circle cx="166" cy="307" fill="currentColor" r="8"></circle></svg><span class="hraness-site-footer__brand-name xj5idha x1dcheo9 xk50ysn x1i21sxh xuxw1ft">by Hraness</span></a><nav aria-label="Hraness links" class="hraness-site-footer__links x78zum5 x6s0dn4 xt33hwp xgc5ccc x12h1iku xiuoait xesnm00 x13a6bvl xvc5jky"><ul class="hraness-site-footer__socials x78zum5 xesnm00 x13a6bvl x1enigpx x1ghz6dp x1717udv x3ct3a4 x43c9pm xnbnhf8"><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1lliihq"><a aria-label="Hraness on Substack" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://substack.com/@hraness" rel="me" title="Substack"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836ZM1.46 10.812v2.836h21.08v-2.836H1.46ZM22.54 16.218V24L12 18.11 1.46 24v-7.782h21.08ZM1.46 0v2.836h21.08V0H1.46Z" fill="currentColor"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xhzsqoz x6w72mi"><a aria-label="Hraness on X" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://x.com/hraness" rel="me" title="X"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg x18g50z5 x101cbvv"><a aria-label="Hraness on LinkedIn" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://www.linkedin.com/company/hraness" rel="me" title="LinkedIn"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M7.125 6.75H7M7.25 6.75C7.25 6.88807 7.13807 7 7 7C6.86193 7 6.75 6.88807 6.75 6.75C6.75 6.61193 6.86193 6.5 7 6.5C7.13807 6.5 7.25 6.61193 7.25 6.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3C16.2426 3 18.364 3 19.682 4.31802C21 5.63604 21 7.75736 21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xir82yx xwl02xf"><a aria-label="Hraness on GitHub" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://github.com/hraness" rel="me" title="GitHub"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li></ul></nav></div></footer>
 
