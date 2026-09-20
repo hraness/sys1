@@ -1,173 +1,131 @@
-# Public model benchmarks
+# Reproduce the decision evaluation
 
-`forms-v1.json` contains twenty authored, synthetic form-action examples. Each
-asks for one of three actions: submit a valid form, correct a missing or invalid
-field, or wait for an operation. Correct labels and their option positions are
-balanced 7/7/6. Every case fits the CUA-S1 Forms checkpoint's 224-byte combined
-state/instruction context and 96-byte option bounds.
+`decisions-v2.json` contains 72 public synthetic cases: 24 choices, 24 yes/no
+(`noul`) questions, and 24 ordered scores, across nine workflow families.
+The fixture and labels were frozen before any model run. Its SHA-256 is
+`7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b`.
 
-This is a small reproducible sanity check, not a general quality benchmark or
-evidence of calibration. These are narrative submit/correct/wait questions, unlike the CUA checkpoint's
-training format (TASK/FORM/ELEMENT contexts and fill/check/click/skip actions).
-This checks transfer into a common Sys1 request shape, not native specialist
-performance. It does not establish extraction, reasoning, safety, or production
-performance.
+A fresh candidate holdout, `decisions-v3.json`, was authored after v2 exposed
+poor general performance in Qwen3 0.6B and 1.7B. It uses nine new families with
+the same 72-case balance and fixed grading. Its SHA-256 is
+`992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc`.
+It was frozen before Qwen3.5 4B execution. Select it with
+`--fixture decisions-v3`; omission preserves v2 for reproduction. Scores across
+the two fixtures are not a controlled measure of improvement.
 
-## Run
-
-Run from a repository checkout with Bun 1.3.14 after `bun install --frozen-lockfile`.
-Qwen measurements require the optional node-llama-cpp native runtime; the harness
-checks readiness before measurement.
-
-The local harness accepts only this fixed public fixture. It does not read Sys1
-configuration or credentials, call hosted services, or download anything.
-Explicitly acquire the pinned models first into an isolated store:
+For the new candidate, explicitly pull `qwen3.5-4b` into the isolated store and
+run:
 
 ```sh
-SYS1_HOME="$PWD/work/benchmark-models" bun src/cli.ts pull qwen3-0.6b
-SYS1_HOME="$PWD/work/benchmark-models" bun src/cli.ts pull cua-s1-forms
-SYS1_HOME="$PWD/work/benchmark-models" bun src/cli.ts pull needle3
-bun scripts/benchmark-local.ts --validate-only
-bun scripts/benchmark-local.ts \
+bun scripts/benchmark-decisions.ts --fixture decisions-v3 \
+  --model qwen3.5-4b --home "$PWD/work/benchmark-models" \
+  --output "$PWD/work/decisions-v3-qwen35.json"
+```
+
+The same fixture flag applies to Jev. Qwen3.5 uses its actual embedded chat
+template with thinking disabled by the model wrapper. The older `/no_think`
+user-text switch was removed because the publisher does not support it for
+Qwen3.5. Historical v2 reports identify the earlier prompt/runtime source.
+
+Use a dedicated model store. The commands below explicitly download weights;
+the benchmark itself never downloads weights or reads your Sys1 configuration.
+
+```sh
+SYS1_HOME="$PWD/work/benchmark-models" bun src/cli.ts pull qwen3-1.7b
+bun scripts/benchmark-decisions.ts --validate-only
+bun scripts/benchmark-decisions.ts \
+  --model qwen3-1.7b \
   --home "$PWD/work/benchmark-models" \
-  --models qwen3-0.6b,cua-s1-forms,needle3 \
-  --output "$PWD/work/forms-v1-results.json"
+  --output "$PWD/work/decisions-v2-qwen17.json"
 ```
 
-Use a new output path for each experiment; existing results are never silently
-overwritten. Omitting `--models` selects only `qwen3-0.6b`. The four curated
-models are the only permitted selections, and no selection occurs implicitly
-from a user config. Qwen3 1.7B can be acquired and selected separately. Run
-through your host's compute scheduler when one is installed. Real inference is
-opt-in and is never part of the ordinary test suite.
+Qwen3 0.6B is an explicit diagnostic comparison: pull `qwen3-0.6b`, then pass
+that model ID. Run native inference through your host scheduler when installed.
+Real model calls remain outside ordinary tests and CI.
 
-The harness verifies installed file sizes, registry digest pins, model
-structure, and the platform Needle engine before measurement. GGUF runs also
-probe the native backend without loading a model. These steps are excluded
-from recorded inference latency.
-
-## Timing and quality
-
-Each model runs at concurrency one, with a 2,048-token GGUF context and one
-resident model. Each request has a 60-second cancellation deadline;
-the measured run has an overall 15-minute cancellation deadline. Interrupting
-the run disposes its owned runners and preserves a partial report. Do not use
-an interrupted or failed report as a completed comparison.
-Three consecutive invalid/error responses stop that model. Its report records
-the actual observations and skipped calls; valid but incorrect answers do not
-trigger this stop rule. A stopped model is not a completed 100-call measurement.
-Any stopped model makes the overall status `complete_with_model_failures` and
-the command exit nonzero, while preserving measurements from completed models.
-
-1. Three fresh `LocalRunner` instances each evaluate the first fixture case
-   and are disposed. Report all three times as **fresh-runner first calls**.
-2. Another runner evaluates two warmup cases, then the twenty cases in fixed
-   order five times, producing 100 repeated-call timing samples.
-3. Every raw result includes case ID, expected label, validated response,
-   correctness, sanitized failure code, diagnostics, reported usage and
-   elapsed time. First-pass accuracy uses twenty cases; repeats do not create
-   additional independent quality examples. Failures count as incorrect.
-4. p50 and p95 use nearest-rank percentiles. Both all-attempt and valid-response
-   latency are reported so failures cannot silently improve the chart.
-   Throughput divides attempt or valid-response count by total repeated-phase
-   wall time, including loop and response-validation overhead.
-
-Per-call time covers `LocalRunner.decide`: manifest lookup, prompt adaptation,
-native/TypeScript model work, and worker IPC. It excludes response validation,
-HTTP/gateway routing, acquisition, and digest verification. Fresh-runner time
-is **not cold-machine time**: the digest check reads weights into the OS file
-cache, and neither OS caches nor the parent runtime/JIT are reset. Needle
-starts a process on every request, so its repeated results never mean a warm
-resident native engine. Do not compare these measurements directly with an
-upstream server-side latency claim or a provider's unrelated dataset.
-
-The JSON records source commit and modified-worktree status, harness/fixture/
-registry/runtime-source/lockfile SHA-256 values, weight and engine SHA-256 values, Bun version,
-OS, CPU, total system memory and native backend. Memory is system capacity,
-not measured model RSS or GPU memory. Preserve the exact source and fixture
-with a published result; a Git SHA alone does not identify uncommitted edits.
-The runtime-source digest hashes each TypeScript path followed by a NUL, its
-bytes, and another NUL, traversing sorted directory entries beneath `src/`.
-
-## Token counters are adapter-specific
-
-| Adapter | Interpretation |
-| --- | --- |
-| Generic GGUF / Qwen | Actual tokenizer count for the fully wrapped prompt per question. Sys1 reads first-token probabilities and returns no generated text, so output usage is zero. |
-| CUA-S1 option scorer | UTF-8 byte scoring without autoregressive generation. Protocol usage is 0/0; generated-token throughput is not applicable. |
-| Needle | Current adapter does not expose native token accounting. Protocol usage is 0/0; actual token work is unreported. |
-
-Use latency per completed decision, valid decisions per second, correctness,
-and failure rate for cross-adapter comparisons. Do not turn zero counters into
-claims of zero model work or infinite token efficiency. Adapter probabilities
-and confidence also have different meanings; they are not calibrated against
-one another by this fixture.
-
-## Hosted Jev on the same cases
-
-The separate Jev harness sends the same public states, instructions, criteria,
-and option order to TypeSafe. It pins `jev-1.13.0` instead of a moving alias.
-It reads only `TYPESAFE_API_KEY` from the environment; it does not read a user
-configuration, change routing policy, or search for credentials. Configure the
-key privately before running; never put its value in a command or result file.
+For Jev, supply `TYPESAFE_API_KEY` privately in the process environment. Do not
+put the key in a command, fixture, config, or report. This sends only the public
+synthetic cases to TypeSafe; at most 362 API calls are made.
 
 ```sh
-bun scripts/benchmark-jev.ts --validate-only
-bun scripts/benchmark-jev.ts \
-  --region "your coarse client region" \
-  --output "$PWD/work/forms-v1-jev-results.json"
+bun scripts/benchmark-decisions.ts \
+  --model jev-1.13.0 \
+  --output "$PWD/work/decisions-v2-jev.json"
 ```
 
-A live run makes at most 105 API calls: three initial client calls, two warmups,
-and five passes over twenty cases. It uses concurrency one, a 60-second request
-deadline and a 15-minute overall deadline, with no automatic retries. Three
-consecutive invalid/error responses stop the run. Existing output files are
-never overwritten. The offline validation command needs no key and makes no
-API calls.
+Use a new output filename. The harness refuses to replace an existing report.
+Hosted runs cannot accept a local store; local runs require one explicitly.
+Only the four named model IDs are accepted. Local files must match the pinned
+registry's bytes and SHA-256 and pass structure/native-runtime checks.
 
-Jev latency covers dispatch through receipt of the complete HTTP body, before
-JSON and response validation. It includes network time. The local measurements
-cover the adapter and exclude HTTP. Put these boundaries beside any comparison;
-neither is isolated server inference time. Initial client calls do not reset
-provider models, caches, DNS, or connections. Repeated identical inputs may
-benefit from provider caching; that behavior is not measured.
+## Fixed protocol
 
-Only the first measured pass supplies the twenty-case correctness score.
-Repeated calls supply timing observations, not additional independent examples.
-Responses must satisfy the same Sys1 schema and match the pinned model. Missing
-usage is an invalid Sys1 response, not a fabricated zero-token measurement.
-Reports preserve sanitized failures, actual/skipped call counts, model identity,
-reported usage, and source/fixture hashes. Incomplete runs are not completed
-comparisons.
+Each run has concurrency one and 362 planned calls:
 
-Cost estimates use the [published input rate](https://docs.typesafe.ai/models)
-of $0.042 per million tokens, with output free. The harness records a September 19,
-2026 price check; this rate was separately reconfirmed for publication on
-September 20, 2026. Reported usage for warmups and initial calls belongs in
-total experiment cost, separately from the
-100-call measured phase. Failed calls can be billable even when no usable
-accounting is returned, so known-usage estimates are not invoices or guaranteed
-cost totals. This fixture has one short question per request and does not test
-Jev's shared-state advantage across multiple questions.
+1. One initial call and one warmup from the older `forms-v1` fixture.
+2. Three passes over the 72 held-out cases: 216 timing observations.
+3. All six option orders for each of 24 choice cases: 144 permutation calls.
 
-### Published hosted result
+Correctness uses only the first measured pass. Choice requires the exact label.
+Noul requires a probability strictly above 0.5 for true or below for false.
+Score requires a unique most-probable level matching the label; ties fail.
+The weighted-score mean absolute error is reported separately. Failures count
+as incorrect. Repeats and permutations are not independent quality examples.
 
-The [September 20, 2026 report](../site/data/forms-v1-jev-2026-09-20.json)
-completed all 105 calls at concurrency one. Jev 1.13.0 answered 20/20 first-pass
-cases correctly; all 100 repeated calls were valid and correct. Repeated-call
-p50/p95 client HTTP latency was 246.1/343.0 ms, with 3.89 valid decisions per
-second. The [immutable harness](https://github.com/hraness/sys1/blob/e7704839f24e6dc6c07098d32c4e5c21067a9645/scripts/benchmark-jev.ts)
-and unmodified relevant inputs are recorded at `e7704839f24e6dc6c07098d32c4e5c21067a9645`.
-The [September 19 local report](../site/data/forms-v1-m5-max-2026-09-19.json)
-uses source `83ca299`; both reports identify the same fixture hash.
+Permutation invariance requires six valid answers selecting the same semantic
+label. An invariant answer can still be wrong. Per-position correctness reveals
+whether the result changes when the expected answer appears first, second, or
+third. The benchmark is authored by the project, not an independent study or a
+calibration guarantee. It does not establish production safety or broad quality.
+Do not adjust prompts, labels, or cases to improve this held-out result.
 
-The repeated phase reported 34,760 input and 3,800 output tokens; all 105 calls
-reported 36,510 input and 3,990 output tokens. Estimated input costs are
-$0.00145992 and $0.00153342 respectively. The nonzero output counters are free
-at the published rate and do not establish the internal inference method.
-See the [hosted result snapshot](../docs/model-comparison.md#hosted-jev-result-snapshot)
-for the complete boundaries: HTTP latency includes network and the full body,
-local latency excludes HTTP, client region is unverified, provider hardware
-and caching are unknown, and model identity is provider-asserted. Twenty tiny
-cases and one question per request establish neither broad quality nor
-shared-state fan-out performance.
+Every request has a 60-second deadline; the run has a 20-minute deadline.
+Three consecutive invalid/error responses stop the run. There are no retries.
+Interruption disposes the owned runner and preserves a partial report. A
+partial run is not a completed comparison; inspect observed and skipped counts.
+
+## Timing, tokens, and provenance
+
+Local latency covers the complete `LocalRunner` call, including model work and
+worker IPC, but excludes HTTP. Jev latency covers HTTP dispatch through the
+complete response body, including network and provider time. Both exclude
+response validation. Throughput includes measured-loop validation and overhead,
+but excludes report persistence and permutation calls. Percentiles use nearest
+rank across all attempted calls, so failures cannot improve the chart by omission.
+
+The initial call is not a cold-machine/server result: model verification primes
+the filesystem cache; provider model state and caching are unknown. Repeated
+inputs may benefit from caching. The shared host is not isolated. Native backend
+probing does not measure GPU utilization. System memory is not peak model RSS.
+
+Qwen usage counts each fully wrapped prompt; output is zero because the adapter
+reads first-token probabilities without returning generated text. Jev usage is
+provider reported; missing counters invalidate a response. Tokenizers differ,
+so input counts are not a model-independent work measure. Cost uses the published
+Jev input price, $0.042 per million tokens with output free, checked September 20,
+2026. Known reported usage is an estimate, not an invoice; failed-call billing
+may be unknown. Initial, warmup, and permutation usage appears in the experiment
+total separately from the 216 measured calls.
+
+Reports record the exact Git commit, relevant dirty-worktree flag, runtime,
+harness, fixture, warmup fixture, and lockfile hashes, plus OS, CPU, Bun, native
+backend, and verified local weight pins. Hosted model identity is provider
+asserted; client region and provider hardware/caching are not independently
+verified. Preserve raw reports, wrong answers, and immutable source links.
+
+## Historical forms-v1 evaluation
+
+The original 20-case form-action evaluation remains available in
+[the local report](../site/data/forms-v1-m5-max-2026-09-19.json) and
+[the Jev report](../site/data/forms-v1-jev-2026-09-20.json).
+It used 100 repeated timing calls per model. Jev reached 20/20, Qwen3 1.7B 18/20,
+and Qwen3 0.6B, CUA-S1 Forms, and Needle each 8/20. These results prompted the
+narrower supported product and broader evaluation; they have not been removed.
+
+The current `benchmark-local.ts` runs this historical fixture on Qwen only;
+`benchmark-jev.ts` runs it on Jev. For exact reproduction of the removed CUA
+and Needle adapters, use the
+[original local source at 83ca299](https://github.com/hraness/sys1/tree/83ca299)
+with its instructions. The
+[original Jev source at e770483](https://github.com/hraness/sys1/tree/e7704839f24e6dc6c07098d32c4e5c21067a9645)
+also remains immutable. Those adapters are no longer included in Sys1 0.9.

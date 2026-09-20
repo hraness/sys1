@@ -1,0 +1,1052 @@
+{
+  "version": 1,
+  "kind": "exploratory-reason-then-score-feasibility",
+  "status": "complete",
+  "scope": "First four frozen decisions-v3 cases of each type, 12 total; previously evaluated exploratory material, not a fresh holdout or a public quality estimate. No generated reasoning text or token ids are retained.",
+  "plan": {
+    "ids": [
+      "image-layout-01",
+      "image-layout-02",
+      "image-layout-03",
+      "image-layout-04",
+      "demo-discount-01",
+      "demo-discount-02",
+      "demo-discount-03",
+      "demo-discount-04",
+      "mini-game-points-01",
+      "mini-game-points-02",
+      "mini-game-points-03",
+      "mini-game-points-04"
+    ],
+    "types": [
+      "choice",
+      "choice",
+      "choice",
+      "choice",
+      "noul",
+      "noul",
+      "noul",
+      "noul",
+      "score",
+      "score",
+      "score",
+      "score"
+    ],
+    "source_hashes": {
+      "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+      "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+      "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+      "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+      "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+    },
+    "prototype_sha256": "06217687e8040a99c21c30c42d81d5c6a9d7a3fe509f9272c1e2d9517f159e0f",
+    "model_bytes": 2740937888
+  },
+  "method": {
+    "context_tokens": 2048,
+    "maximum_reasoning_tokens_including_close": 512,
+    "per_case_process_timeout_seconds": 60,
+    "total_timeout_seconds": 600,
+    "sampling_temperature": 0,
+    "thinking": "Official Qwen3.5 thinking prefix via open thought segment; stop on the natural </think> special token. A yielded closing token is pending, so return the generation iterator, then evaluate [closing token, tokenizer(newline newline)] in the same sequence and read the first full next-token distribution. No forced closure at the token cap. Same original decision prompt and label-mass grading for both modes."
+  },
+  "cases": [
+    {
+      "id": "image-layout-01",
+      "type": "choice",
+      "expected": {
+        "type": "choice",
+        "choice": "landscape"
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2308.211375,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 203,
+        "coverage": 0.9964849958303761,
+        "label_probabilities": {
+          "1": 0.7630704939794639,
+          "2": 0.229694205933295,
+          "3": 0.007235300087241037
+        },
+        "answer": {
+          "type": "choice",
+          "choice": "landscape",
+          "probabilities": {
+            "landscape": 0.763,
+            "balanced": 0.23,
+            "portrait": 0.007
+          },
+          "confidence": 0.645
+        },
+        "grade": {
+          "correct": true,
+          "predicted": "landscape",
+          "score_absolute_error": null,
+          "confidence": 0.645,
+          "tie": false
+        },
+        "elapsed_ms": 493.7802919999999,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10153.480417,
+        "input_tokens": 201,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "image-layout-02",
+      "type": "choice",
+      "expected": {
+        "type": "choice",
+        "choice": "portrait"
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2239.161334,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 203,
+        "coverage": 0.9934249950315606,
+        "label_probabilities": {
+          "1": 0.2822992701715159,
+          "2": 0.26785429441844594,
+          "3": 0.44984643541003816
+        },
+        "answer": {
+          "type": "choice",
+          "choice": "landscape",
+          "probabilities": {
+            "balanced": 0.282,
+            "portrait": 0.268,
+            "landscape": 0.45
+          },
+          "confidence": 0.175
+        },
+        "grade": {
+          "correct": false,
+          "predicted": "landscape",
+          "score_absolute_error": null,
+          "confidence": 0.175,
+          "tie": false
+        },
+        "elapsed_ms": 462.3109589999999,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": true,
+        "input_tokens": 201,
+        "coverage": 0.9999904591907611,
+        "label_probabilities": {
+          "1": 6.7249523534417415e-06,
+          "2": 0.9999918210435408,
+          "3": 1.4540041057731862e-06
+        },
+        "answer": {
+          "type": "choice",
+          "choice": "portrait",
+          "probabilities": {
+            "balanced": 0,
+            "portrait": 1,
+            "landscape": 0
+          },
+          "confidence": 1
+        },
+        "grade": {
+          "correct": true,
+          "predicted": "portrait",
+          "score_absolute_error": null,
+          "confidence": 1,
+          "tie": false
+        },
+        "elapsed_ms": 8535.141458,
+        "generated_reasoning_tokens": 458,
+        "generated_control_tokens": 1,
+        "score_context_tokens": 661,
+        "thought_closed_naturally": true
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "image-layout-03",
+      "type": "choice",
+      "expected": {
+        "type": "choice",
+        "choice": "balanced"
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2413.9404170000003,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 203,
+        "coverage": 0.9976506157644829,
+        "label_probabilities": {
+          "1": 0.16247590547516755,
+          "2": 0.06077433180227574,
+          "3": 0.7767497627225567
+        },
+        "answer": {
+          "type": "choice",
+          "choice": "balanced",
+          "probabilities": {
+            "landscape": 0.162,
+            "portrait": 0.061,
+            "balanced": 0.777
+          },
+          "confidence": 0.665
+        },
+        "grade": {
+          "correct": true,
+          "predicted": "balanced",
+          "score_absolute_error": null,
+          "confidence": 0.665,
+          "tie": false
+        },
+        "elapsed_ms": 459.2616659999999,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 8930.225167,
+        "input_tokens": 201,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "image-layout-04",
+      "type": "choice",
+      "expected": {
+        "type": "choice",
+        "choice": "balanced"
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2975.751875,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 205,
+        "coverage": 0.9973845092460192,
+        "label_probabilities": {
+          "1": 0.2672921170062872,
+          "2": 0.7268566831710007,
+          "3": 0.005851199822712137
+        },
+        "answer": {
+          "type": "choice",
+          "choice": "landscape",
+          "probabilities": {
+            "balanced": 0.267,
+            "landscape": 0.727,
+            "portrait": 0.006
+          },
+          "confidence": 0.59
+        },
+        "grade": {
+          "correct": false,
+          "predicted": "landscape",
+          "score_absolute_error": null,
+          "confidence": 0.59,
+          "tie": false
+        },
+        "elapsed_ms": 490.269417,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 9553.089042,
+        "input_tokens": 203,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "demo-discount-01",
+      "type": "noul",
+      "expected": {
+        "type": "noul",
+        "noul": true
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2720.798667,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 201,
+        "coverage": 0.9997943407628834,
+        "label_probabilities": {
+          "yes": 0.9863791194573428,
+          "no": 0.01362088054265714
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 0.986
+        },
+        "grade": {
+          "correct": true,
+          "predicted": true,
+          "score_absolute_error": null,
+          "confidence": 0.986,
+          "tie": false
+        },
+        "elapsed_ms": 452.80499999999984,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9999929915596323,
+        "label_probabilities": {
+          "yes": 0.9999585962629584,
+          "no": 4.140373704168156e-05
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 1
+        },
+        "grade": {
+          "correct": true,
+          "predicted": true,
+          "score_absolute_error": null,
+          "confidence": 1,
+          "tie": false
+        },
+        "elapsed_ms": 9124.780291000001,
+        "generated_reasoning_tokens": 449,
+        "generated_control_tokens": 1,
+        "score_context_tokens": 650,
+        "thought_closed_naturally": true
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "demo-discount-02",
+      "type": "noul",
+      "expected": {
+        "type": "noul",
+        "noul": false
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2905.3322080000003,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 201,
+        "coverage": 0.9995700042139481,
+        "label_probabilities": {
+          "yes": 0.1682741214349907,
+          "no": 0.8317258785650092
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 0.168
+        },
+        "grade": {
+          "correct": true,
+          "predicted": false,
+          "score_absolute_error": null,
+          "confidence": 0.832,
+          "tie": false
+        },
+        "elapsed_ms": 496.4605840000004,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9999967169761911,
+        "label_probabilities": {
+          "yes": 4.806417343972902e-06,
+          "no": 0.999995193582656
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 0
+        },
+        "grade": {
+          "correct": true,
+          "predicted": false,
+          "score_absolute_error": null,
+          "confidence": 1,
+          "tie": false
+        },
+        "elapsed_ms": 9032.026,
+        "generated_reasoning_tokens": 474,
+        "generated_control_tokens": 1,
+        "score_context_tokens": 675,
+        "thought_closed_naturally": true
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "demo-discount-03",
+      "type": "noul",
+      "expected": {
+        "type": "noul",
+        "noul": true
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 2686.857709,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 201,
+        "coverage": 0.9998412655034049,
+        "label_probabilities": {
+          "yes": 0.9917506300991012,
+          "no": 0.008249369900898803
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 0.992
+        },
+        "grade": {
+          "correct": true,
+          "predicted": true,
+          "score_absolute_error": null,
+          "confidence": 0.992,
+          "tie": false
+        },
+        "elapsed_ms": 441.49474999999984,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10007.138417,
+        "input_tokens": 199,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "demo-discount-04",
+      "type": "noul",
+      "expected": {
+        "type": "noul",
+        "noul": false
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 3403.580625,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 201,
+        "coverage": 0.999692972698809,
+        "label_probabilities": {
+          "yes": 0.9516003720427328,
+          "no": 0.04839962795726711
+        },
+        "answer": {
+          "type": "noul",
+          "noul": 0.952
+        },
+        "grade": {
+          "correct": false,
+          "predicted": true,
+          "score_absolute_error": null,
+          "confidence": 0.952,
+          "tie": false
+        },
+        "elapsed_ms": 497.4919170000003,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10496.82275,
+        "input_tokens": 199,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "mini-game-points-01",
+      "type": "score",
+      "expected": {
+        "type": "score",
+        "level": 0
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 3062.625916,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9973678358273045,
+        "label_probabilities": {
+          "1": 0.7927697745325692,
+          "2": 0.18337514914038722,
+          "3": 0.009961490189510843,
+          "4": 0.01389358613753265
+        },
+        "answer": {
+          "type": "score",
+          "score": 0.245,
+          "legend": {
+            "0": "Final clamped points equal 0",
+            "1": "Final clamped points equal 1",
+            "2": "Final clamped points equal 2",
+            "3": "Final clamped points equal 3"
+          },
+          "probabilities": {
+            "0": 0.793,
+            "1": 0.183,
+            "2": 0.01,
+            "3": 0.014
+          },
+          "confidence": 0.724
+        },
+        "grade": {
+          "correct": true,
+          "predicted": 0,
+          "score_absolute_error": 0.245,
+          "confidence": 0.724,
+          "tie": false
+        },
+        "elapsed_ms": 549.8939169999999,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 9727.105042,
+        "input_tokens": 197,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "mini-game-points-02",
+      "type": "score",
+      "expected": {
+        "type": "score",
+        "level": 1
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 3513.516917,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9973307427060835,
+        "label_probabilities": {
+          "1": 0.1986722315940218,
+          "2": 0.6280688507282879,
+          "3": 0.1229053635732557,
+          "4": 0.05035355410443458
+        },
+        "answer": {
+          "type": "score",
+          "score": 1.025,
+          "legend": {
+            "0": "Final clamped points equal 0",
+            "1": "Final clamped points equal 1",
+            "2": "Final clamped points equal 2",
+            "3": "Final clamped points equal 3"
+          },
+          "probabilities": {
+            "0": 0.199,
+            "1": 0.628,
+            "2": 0.123,
+            "3": 0.05
+          },
+          "confidence": 0.504
+        },
+        "grade": {
+          "correct": true,
+          "predicted": 1,
+          "score_absolute_error": 0.02499999999999991,
+          "confidence": 0.504,
+          "tie": false
+        },
+        "elapsed_ms": 611.9866660000002,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10663.925541,
+        "input_tokens": 197,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "mini-game-points-03",
+      "type": "score",
+      "expected": {
+        "type": "score",
+        "level": 2
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 3393.080292,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9970538965457362,
+        "label_probabilities": {
+          "1": 0.3202846358722144,
+          "2": 0.5302087920857974,
+          "3": 0.10417454533803787,
+          "4": 0.04533202670395035
+        },
+        "answer": {
+          "type": "score",
+          "score": 0.875,
+          "legend": {
+            "0": "Final clamped points equal 0",
+            "1": "Final clamped points equal 1",
+            "2": "Final clamped points equal 2",
+            "3": "Final clamped points equal 3"
+          },
+          "probabilities": {
+            "0": 0.32,
+            "1": 0.53,
+            "2": 0.104,
+            "3": 0.045
+          },
+          "confidence": 0.374
+        },
+        "grade": {
+          "correct": false,
+          "predicted": 1,
+          "score_absolute_error": 1.125,
+          "confidence": 0.374,
+          "tie": false
+        },
+        "elapsed_ms": 562.3280410000002,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10765.375041,
+        "input_tokens": 197,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    },
+    {
+      "id": "mini-game-points-04",
+      "type": "score",
+      "expected": {
+        "type": "score",
+        "level": 3
+      },
+      "source_hashes": {
+        "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+        "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+        "scripts/benchmark-decisions.ts": "aedaf7e29b46ac0122f44233415d966eec0998a4b4fcf34bd8f32a8d8f21f515",
+        "benchmarks/decisions-v3.json": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "load_ms": 3128.647,
+      "runtime": {
+        "gpu": "metal",
+        "gpu_layers": 33,
+        "architecture": "qwen35",
+        "context_tokens": 2048
+      },
+      "nonthinking": {
+        "ok": true,
+        "input_tokens": 199,
+        "coverage": 0.9972859895893021,
+        "label_probabilities": {
+          "1": 0.183411775932242,
+          "2": 0.570949370164619,
+          "3": 0.17336287719115082,
+          "4": 0.07227597671198818
+        },
+        "answer": {
+          "type": "score",
+          "score": 1.135,
+          "legend": {
+            "0": "Final clamped points equal 0",
+            "1": "Final clamped points equal 1",
+            "2": "Final clamped points equal 2",
+            "3": "Final clamped points equal 3"
+          },
+          "probabilities": {
+            "0": 0.183,
+            "1": 0.571,
+            "2": 0.173,
+            "3": 0.072
+          },
+          "confidence": 0.428
+        },
+        "grade": {
+          "correct": false,
+          "predicted": 1,
+          "score_absolute_error": 1.865,
+          "confidence": 0.428,
+          "tie": false
+        },
+        "elapsed_ms": 510.81304199999977,
+        "generated_reasoning_tokens": 0
+      },
+      "thinking_wrapper": {
+        "name": "Qwen",
+        "variation": "3.5",
+        "thoughts": "auto",
+        "prefix_suffix": "<|im_start|>assistant\n<think>\n",
+        "closing_token_id": 248069,
+        "separator_tokens": 1
+      },
+      "reason_then_score": {
+        "ok": false,
+        "failure": "reasoning_token_limit",
+        "elapsed_ms": 10216.408875000001,
+        "input_tokens": 197,
+        "generated_reasoning_tokens": 512,
+        "thought_closed_naturally": false
+      },
+      "disposed": {
+        "context": true,
+        "model": true,
+        "llama": true
+      },
+      "source_unchanged": true
+    }
+  ],
+  "elapsed_seconds": 164.854161333,
+  "summary": {
+    "nonthinking": {
+      "correct": 7,
+      "valid": 12,
+      "attempted": 12,
+      "median_elapsed_ms": 495.12043800000015,
+      "failures": 0,
+      "input_tokens": 2414,
+      "generated_reasoning_tokens": 0,
+      "by_type": {
+        "choice": 2,
+        "noul": 3,
+        "score": 2
+      }
+    },
+    "reason_then_score": {
+      "correct": 3,
+      "valid": 3,
+      "attempted": 12,
+      "median_elapsed_ms": 9867.121729499999,
+      "failures": 9,
+      "input_tokens": 2390,
+      "generated_reasoning_tokens": 5989,
+      "by_type": {
+        "choice": 1,
+        "noul": 2,
+        "score": 0
+      }
+    },
+    "changed_to_correct": [
+      "image-layout-02"
+    ],
+    "changed_to_incorrect_or_failure": [
+      "image-layout-01",
+      "image-layout-03",
+      "demo-discount-03",
+      "mini-game-points-01",
+      "mini-game-points-02"
+    ]
+  },
+  "model_provenance": {
+    "id": "qwen3.5-4b",
+    "repo": "unsloth/Qwen3.5-4B-GGUF",
+    "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+    "file": "Qwen3.5-4B-Q4_K_M.gguf",
+    "verified_sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+    "bytes": 2740937888,
+    "prior_admission_probe_sha256": "6f04b14e7471fac1ae9d6115361a7cf96cb36371b882ca36fa92a62c6b119a38",
+    "verification_note": "Weights were verified in the preceding admission probe; this exploratory run checks size and loads that same isolated file."
+  },
+  "integrity": {
+    "all_sources_match_plan": true,
+    "all_sources_unchanged_within_case": true,
+    "all_native_resources_disposed": true,
+    "no_process_deadlines": true,
+    "all_cases_within_reasoning_token_cap": true
+  },
+  "conclusion": "No material gain under the predeclared 512-token cap: correct answers fell from 7/12 to 3/12 because nine cases did not close the thought within the bound. One baseline error became correct; five correct baseline answers became bounded failures. This previously evaluated sample is exploratory, not held-out quality evidence. No further prompt variants were attempted."
+}

@@ -1,5 +1,12 @@
 # Model comparison: evidence and measurement
 
+The two built-in paths in Sys1 0.9 are hosted Jev 1.13.0 and experimental
+local Qwen. Qwen3 1.7B remains the local setup selection; 0.6B and 3.5 4B
+require explicit selection. No local candidate is generally qualified. CUA and Needle
+adapters have been removed; their historical measurements remain below.
+See [the current comparison](https://sys1.io/compare) and
+[the reproducible evaluation method](../benchmarks/README.md).
+
 Upstream evidence checked **2026-09-19**; Jev pricing reconfirmed **2026-09-20**.
 The publisher results below are separate from our
 [September 19 local adapter](#local-sys1-result-snapshot) and
@@ -69,21 +76,24 @@ revision: `ca3ba65`, September 19, 2026.
 
 ## Local models: match the artifact and task
 
-Sys1's [model registry](../src/local/store.ts) pins exact downloads:
+The historical Sys1 0.8 registry pinned these downloads. The current
+[registry](../src/local/store.ts) includes only Qwen artifacts:
 
 | Builtin model | Artifact | Download size | Role |
 | --- | --- | ---: | --- |
-| Qwen3 0.6B | Q4_0 GGUF | 382,156,480 bytes | Compact general decision candidate |
-| Qwen3 1.7B | Q4_K_M GGUF | 1,107,409,472 bytes | Larger general decision candidate |
-| CUA-S1 forms | PyTorch checkpoint | 2,840,436 bytes | Form-action option scorer |
-| Needle 3 | `.cact`, plus platform engine | 35,335,380 bytes, plus engine | Structured extraction specialist |
+| Qwen3 0.6B | Q4_0 GGUF | 382,156,480 bytes | Explicit diagnostic option; not the default |
+| Qwen3 1.7B | Q4_K_M GGUF | 1,107,409,472 bytes | Default local experiment |
+| Qwen3.5 4B | Q4_K_M GGUF | 2,740,937,888 bytes | Explicit experimental candidate |
+| CUA-S1 forms | PyTorch checkpoint | 2,840,436 bytes | Removed in 0.9; historical measurement |
+| Needle 3 | `.cact`, plus platform engine | 35,335,380 bytes, plus engine | Removed in 0.9; historical measurement |
 
 Download size is not peak RAM. Published artifacts:
 [Qwen 0.6B](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/tree/50968a4468ef4233ed78cd7c3de230dd1d61a56b),
 [Qwen 1.7B](https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/tree/d7f544eead698dbd1f15126ef60b45a1e1933222),
 [CUA-S1](https://huggingface.co/cua-ai/cua-s1-forms/blob/f54adbf447f4ca6ec259f529ee3f2e3e09f8cc71/README.md),
 [Needle](https://huggingface.co/Cactus-Compute/needle3/tree/b009f8937124b2d0458f4ed040c10c41fd2a0dfc).
-CUA-S1 and Needle require explicit selection; see [specialist contracts](../README.md#specialists).
+CUA-S1 and Needle required explicit selection in 0.8; both adapters are removed
+in 0.9. These artifact links explain the historical measurements only.
 
 [Qwen's generation benchmark](https://qwen.readthedocs.io/en/latest/getting_started/speed_benchmark.html)
 reports 414.17 tokens/s for 0.6B and 227.80 for 1.7B: BF16, SGLang
@@ -207,9 +217,9 @@ A confidence threshold would retain many errors: all twelve wrong first-pass
 Needle answers and ten of twelve wrong Qwen 0.6B answers report confidence at
 least 0.90. Confidence here is not an empirically calibrated success probability.
 
-At this source revision, [setup recommendations](../src/defaults.ts) choose
+At the historical forms-v1 source revision, setup recommendations chose
 Qwen 1.7B at 16 GiB system memory and above, or 0.6B below that threshold.
-[Unpinned routing](../src/router.ts) prefers the smallest model among eligible
+Unpinned routing preferred the smallest model among eligible
 local candidates. With both Qwen tiers available, 0.6B is selected when policy
 chooses local execution; the `auto` policy prefers an available hosted backend. Specialists already
 require explicit selection. Installed, supported, and schema-valid do not mean
@@ -217,9 +227,166 @@ application-qualified. Pin a model for application evaluation and retain
 application-owned deterministic fallback; broad automatic migration from Jev
 is not supported by the current evidence.
 
-Next decisive checks are all six option-order permutations, then fresh held-out
+The next proposed checks at that point were all six option-order permutations, then fresh held-out
 cases and a same-weights comparison of Qwen's first-token readout against
 ordinary constrained generation. CUA also needs native TASK/FORM/ELEMENT cases
 and reference-forward parity; Needle needs native extraction controls. Preserve
 this published baseline when evaluating changes rather than replacing it with
 only the successful runs.
+
+## Broader frozen decisions-v2 result (September 20)
+
+The original forms-v1 result did not generalize. The new fixture was authored
+and frozen before execution, with 72 cases across nine workflow families and
+all three answer types. Both local runs completed 362 planned calls: two old
+form warmups, 216 measured calls, and 144 option-order permutations.
+
+| Model | First-pass correct | Choice | Noul | Score | Invariant choice cases |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Qwen3 1.7B | 32/72 | 12/24 | 13/24 | 7/24 | 7/24 |
+| Qwen3 0.6B | 25/72 | 8/24 | 12/24 | 5/24 | 0/24 |
+
+The best constant label per choice family plus constant Noul and Score answers
+gets 27/72. Qwen3 1.7B exceeded that reference by only five cases. It predicted
+true 23/24 times and score level 1 twenty times, never levels 0 or 3. Of 40
+wrong first-pass answers, 35 had confidence at least 0.90. Five invariant choice
+cases were always correct; two were always wrong. Its permutation correctness
+was 18/48, 31/48, and 17/48 when the expected option appeared first, second, or
+third. All three measured passes gave identical decisions. These results do
+not support confidence-based approval or dependable general local fallback.
+
+| Model | p50 / p95 | Valid decisions/s | Valid measured calls | Input / output tokens |
+| --- | ---: | ---: | ---: | ---: |
+| Qwen3 1.7B | 213.6 / 247.6 ms | 4.63 | 216/216 | 45,183 / 0 |
+| Qwen3 0.6B | 209.6 / 255.0 ms | 4.73 | 216/216 | 45,183 / 0 |
+
+These are local-runner timings, including model/IPC and excluding HTTP. Same
+Apple M5 Max, 36 GiB system memory, Darwin 25.5.0, Bun 1.3.14; Metal capability
+probe, without per-inference GPU instrumentation or memory measurement. Score
+weighted-value MAE on 24 valid first-pass cases was 0.92867 for 1.7B and 0.94992
+for 0.6B; a constant numeric prediction of 1.5 has MAE 1.0 on these labels.
+
+Raw reports: [1.7B](../site/data/decisions-v2-qwen17-2026-09-20.json),
+[0.6B](../site/data/decisions-v2-qwen06-2026-09-20.json). Fixture SHA-256 is
+`7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b`.
+The 1.7B run's relevant sources were clean at
+`b9e423dbb425e8dc5f09cafa44294cd0b72058c6`. The 0.6B run records the same HEAD
+with a dirty-source flag because the CLI-only hosted-policy correction was in
+progress. Its complete recorded runtime-source digest,
+`06a03e78d3c309e133badb7f3048a6192b1d57eaf3c9f63cef516da6df5d1550`,
+was independently matched to committed source `a1faf3f` before any later runtime
+edit. The inference engine, prompts, fixture, and harness were unchanged
+between these two runs. The original reports and dirty flag are preserved.
+
+The [new Jev attempt](../site/data/decisions-v2-jev-auth-incomplete-2026-09-20.json)
+received HTTP 401 three times and stopped with no valid answers. It is an
+incomplete authentication failure, not a new accuracy or speed measurement.
+The earlier completed 20-case Jev result remains separate.
+
+Product consequence: `sys1 jev enable` now selects hosted-only operation.
+Local substitution requires an explicit routing-policy change after the
+application evaluates the chosen model. Setup preserves a hosted-only policy.
+Neither a valid schema nor high reported confidence authorizes model switching.
+
+## Fresh decisions-v3 Qwen3.5 evaluation (September 20)
+
+The [complete Qwen3.5 report](../site/data/decisions-v3-qwen35-2026-09-20.json)
+uses 72 new cases, frozen before execution. The source was clean at
+`476a2a04140344c01d0797c0fc250823d394605b`; the fixture SHA-256 is
+`992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc`.
+The independently recomputed report SHA-256 is
+`0720e2796ddbadf5013a61fb9c506663d959ae1d75bb0f366a3836d9932a5e5c`.
+
+The pinned Q4_K_M candidate uses the model's Qwen3.5 chat template with thinking
+disabled by its wrapper. The old `/no_think` text is absent: Qwen3.5 does not
+support that Qwen3 soft switch. Native admission identified architecture
+`qwen35`, Metal, 33 GPU layers, and 2,048 context tokens.
+
+| Measure | Qwen3.5 4B |
+| --- | ---: |
+| Correct first-pass cases | 44/72 (61.1%) |
+| Choice / Noul / Score | 16/24 · 16/24 · 12/24 |
+| Constant-label reference | 27/72 |
+| Order-invariant choices | 13/24; ten always correct, three always wrong |
+| Correct reordered calls | 90/144 |
+| Valid / correct repeated calls | 216/216 valid; 132/216 correct |
+| p50 / p95 local adapter latency | 464.7 / 540.8 ms |
+| Valid decisions / second | 2.13 |
+| Measured input / generated output tokens | 44,604 / 0 |
+| All-call input / generated output tokens | 75,237 / 0 |
+| Score expected-value MAE | 0.7271 over 24 cases |
+
+Noul returned true on 20/24 cases and missed eight of twelve false cases.
+Score selected level 1 on 13/24. Identical repeated predictions establish
+repeatability, not correctness. All 362 responses passed request-matched
+validation; all grades, schedule entries and summary values were independently
+recomputed. No demonstrated label-mapping bug explains the failures. These
+results test Qwen through this one-token adapter, not its broader generative
+capabilities. Source and fixture changed from v2, so comparing their aggregate
+scores does not establish a same-benchmark improvement. Keep Qwen experimental.
+
+### Bounded reasoning feasibility
+
+A separate exploratory prototype took the first four cases of each question
+type from the already observed v3 fixture. It allowed up to 512 private
+reasoning tokens, waited for a natural thought close, then read label
+probabilities. No reasoning text was retained. This was one feasibility test,
+not a fresh holdout or a shipped mode.
+
+The [complete feasibility report](../site/data/qwen35-reason-score-2026-09-20.json)
+records 7/12 correct with the current path versus 3/12 with reason-then-score.
+Nine reasoning attempts reached the token cap before returning a valid answer.
+Median latency across attempts increased from 495 ms to 9,867 ms. The
+prototype was not adopted. A longer budget was not tested; these results do
+not establish that reasoning is generally ineffective.
+
+## Laya-MLX external-runner candidate
+
+Laya-MLX is a separate Python/MLX implementation for Apple Silicon, not bundled
+with Sys1. Its bidirectional encoder and trained decision heads directly
+produce named Choice probabilities, a zero-based Score distribution and
+expected value, and Noul's probability of true. A thin external runner could
+make these available through Sys1's existing explicitly pinned HTTP-backend
+interface without adding another model loader to the core package. That
+integration is a proposed fit, not a shipped feature.
+
+The source audit pinned `mizorewww/laya-mlx` at
+`fc1df62828a3fedf4d8229fdac1cbd85f1cdf337`. The selected experiment uses
+`aac6fef/laya-typed-decisions-mlx`, revision
+`28416e78cb26a239a4eabaa2e084904ec5e6cacb`, with weight SHA-256
+`804ef8802b4cac7a67913b0cfb8448659e934a50284aaa867b98d7d9a6e7d1e0`.
+The checkpoint's name does not imply general superiority: upstream describes
+specialization on four synthetic workflow families and keeps its automatic
+selection disabled by default. See the pinned
+[architecture](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/model.py#L201-L234),
+[published checkpoint pins](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/benchmarks/results/hub-publication.json),
+and [specialization caveat](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/router.py#L1-L32).
+
+Upstream's 378/378 answer agreement is **port fidelity**, comparing three
+checkpoints and two precisions against the original runtime on 63 questions.
+It does not mean those answers were correct. The published labeled sample
+contains 256 AG News test examples: 245 correct for English, 242 multilingual,
+and 247 typed-decisions; the recorded predictions independently reproduce
+those totals. AG News belongs to upstream's training-task mix. This narrow
+classification result does not establish accuracy on Sys1's boolean exceptions,
+arithmetic, rubric scoring or reordered options. Published millisecond timings
+are upstream M3 Max measurements with loading excluded, not measurements of
+a Sys1 runner. See the
+[parity results](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/benchmarks/results/validation.json),
+[labeled results and limitations](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/benchmarks/results/accuracy.json),
+and [timing method](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/BENCHMARKS.md).
+
+The typed checkpoint has a 1,024-token context including instructions, options
+and state, with a separate question-head budget. Upstream silently shortens
+options, instructions and state, and replaces literal mask-token strings.
+A Sys1 boundary must reject any changed or truncated evidence before inference;
+checking final context length alone is insufficient. Its raw model name is
+always `laya-rl-agent`, so a runner must supply the actual pinned checkpoint
+identity and project the supported answer fields. Input usage counts retained,
+unpadded tokens per question, including repeated state; zero output tokens
+means no generated text. Confidence is not proven calibration on these tasks.
+There is no native cancellation API: an independently supervised process must
+own deadlines, shutdown and cleanup. These are integration requirements, not
+capabilities Sys1 has already added. See the pinned
+[formatter](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/common.py#L60-L114)
+and [prediction path](https://github.com/mizorewww/laya-mlx/blob/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337/laya_mlx/agent.py#L173-L253).

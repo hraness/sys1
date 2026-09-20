@@ -91,3 +91,22 @@ errors. Expanded failure and token disclosures were checked. The reviewer’s
 one source correction qualified size-first selection to eligible local routes;
 `auto` can prefer an available hosted backend. Original captures precede that
 small wording correction; the layout and existing design assets are unchanged.
+
+## September 20 evidence and product revision
+
+Keep the Peopleblade/Paper visual system. Lead with route ownership and a
+completed hosted Jev comparison; then show frozen broader Qwen results and
+related candidate research. Clearly separate v2, v3 and historical forms-v1.
+Every local Qwen path is experimental. Enabling Jev selects hosted-only;
+local fallback must be deliberately enabled after task-specific evaluation.
+The old specialist adapters are removed in 0.9 and their original evidence
+lives at /compare-history. Failed and incomplete runs stay public.
+
+The new v3 Qwen result is 44/72 with 13/24 order-invariant choices. The
+bounded reasoning attempt failed its 512-token budget on 9/12 cases and is
+not a shipped mode. Jev's broader run was stopped by authentication; no
+quality result can be inferred from that attempt. Preserve all denominators,
+source pins, local-vs-HTTP timing boundaries and actual token semantics.
+
+Finish review for this revision is pending; earlier approvals above apply
+only to their recorded versions.

@@ -36,8 +36,7 @@ temporary paths for recovery instead of deleting potentially live files.
 - Keep the gateway loopback-only. Runtime network access is limited to
   configured backends; model network access occurs only during explicit pulls.
 - Log routing metadata only. Never persist request bodies, answers, or
-  credentials as durable state. Preserve the documented private Needle tools-file
-  exception and its request-lifetime cleanup.
+  credentials as durable state. Send GGUF worker input through private pipes.
 - Admit model files only after bounded streamed download, exact SHA-256, safe
   store-local filename, regular-file, and bounded GGUF structure verification.
   Never add weights to git, releases, packages, or ordinary CI.
@@ -45,14 +44,8 @@ temporary paths for recovery instead of deleting potentially live files.
   may re-dispatch, once, and never for pinned models.
 - Keep fake-engine tests deterministic. Put heavyweight live qualification
   outside the ordinary test gate.
+- Keep the default routes explicit: opt-in hosted Jev and the installed model
+  named by `local.model` (Qwen3 1.7B by default). Other installed models and
+  configured HTTP services require a request pin. A new download or registration
+  must not change automatic fallback behavior.
 - Keep `--json` additive-only and machine-readable.
-
-## Needle process boundary
-
-The explicitly pinned Needle specialist requires a private per-request tools
-file containing question instructions and criteria, deleted when the request
-settles. Its native CLI receives state as a process argument, visible to local
-process inspection. Abrupt host termination can leave the private temporary
-file behind. Do not use this adapter for inputs whose policy forbids that
-exposure. The GGUF worker uses private pipes; ordinary request bodies,
-credentials, answers, and prompts are not application logs or durable state.

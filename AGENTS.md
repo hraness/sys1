@@ -5,33 +5,25 @@
 - `src/config.ts` owns the `~/.sys1/config.json` schema, defaults, load/save,
   and the settable-key registry. `SYS1_HOME` overrides the state directory.
 - `src/router.ts` owns backend selection as a pure function over probed
-  candidates — policy order, model pinning, cheapest-smallest local order,
-  capability limits, and specialist exclusion from unpinned fallback.
+  candidates — policy order, model pinning, capability limits, and exclusion
+  of explicit-only candidates from unpinned fallback.
 - `src/backends.ts` owns runtime backends: hosted Jev (credential from the
   environment only), configured HTTP services, installed builtin candidates,
   bounded probing (including advisory `GET /v1/limits`), and request
   forwarding.
-- `src/defaults.ts` owns qualified platform targets and deterministic compact
-  versus quality local-model recommendations.
+- `src/defaults.ts` owns supported platform targets and experimental local
+  setup choices: Qwen3 1.7B by default, or explicitly selected Qwen3 0.6B.
 - `src/qualification.ts` owns bounded conformance checks for operator-configured
   System One HTTP backends.
 - `src/local/decide.ts` owns bounded generic-GGUF prompts and the pure mapping
   from vocabulary probability mass to System One answers.
 - `src/local/engine.ts` owns the lazy node-llama-cpp lifecycle and serialized
   first-token distribution evaluation.
-- `src/local/torchckpt.ts` owns the bounded ZIP reader, restricted pickle
-  interpreter, and tensor materialization for `torch.save` checkpoints.
-- `src/local/scorer.ts` owns the pure-TypeScript CUA-S1 tiny/tinyx option
-  scorer: checkpoint config validation and the forward pass.
-- `src/local/needle.ts` owns the bounded per-request Cactus Needle engine
-  process: tools/prompt bounds, telemetry disabled, validated JSON turns.
-- `src/local/adapt.ts` owns the System One ↔ scorer/Needle contract mappings
-  and the disclosed needle-extract probability approximation.
 - `src/local/store.ts` owns the curated model registry, the SHA-256-admitted
-  multi-kind store (`gguf`, `scorer`, `needle` + engine companion), manifest,
-  download limits, structural validation, verification, and removal.
-- `src/local/runner.ts` owns builtin candidate enumeration, engine/scorer
-  residency, per-kind dispatch, and local response assembly.
+  GGUF store, manifest, download limits, structural validation, verification,
+  and removal. Unsupported legacy inventories fail closed without mutation.
+- `src/local/runner.ts` owns builtin candidate enumeration, configured local
+  model selection, GGUF engine residency, and local response assembly.
 - `src/gateway.ts` owns the loopback HTTP surface (`POST /v1/systemone`,
   `GET /v1/models`, `GET /healthz`), request validation, and the bounded
   retry loop.
@@ -66,8 +58,7 @@
 - Read the hosted credential from the environment only. Never persist keys,
   log them, or put them in the config file, `--json` output, or error bodies.
 - Never log request `state`, `questions`, or answer bodies; log routing
-  metadata only. Keep the documented private Needle tools-file exception
-  bounded to its request lifecycle; other adapters use pipes, not request files.
+  metadata only. The GGUF worker uses private pipes, not request files.
 - Parse every foreign value from `unknown` through the protocol schemas.
   Bound every input: body bytes, state bytes, question counts, options,
   timeouts, probes, and retry count.
@@ -78,29 +69,31 @@
   stdout, diagnostics to stderr, closed exit codes.
 - Download weights only from explicit `sys1 setup` or `sys1 pull`; cap
   size, require a trusted SHA-256, stream to a temporary file, and admit only
-  after digest, size, per-kind bounded structure (GGUF header, restricted
-  torch checkpoint, `.cact` header/directory), safe filename, and regular-file
-  checks. Needle entries also verify their platform engine companion the same
-  way. Never put weights in git, release artifacts, or ordinary CI.
+  after digest, size, bounded GGUF header validation, safe filename, and
+  regular-file checks. Never put weights in git, release artifacts, or ordinary CI.
 - Treat generic-GGUF answers as an approximation, not calibrated Jev output.
-  Scorer and needle adapters disclose their contracts via `x-sys1-local-*`
-  adapter headers; needle probabilities are a confidence-derived
-  approximation, not per-option distributions. Keep Noul/Choice/Score answer
+  Disclose the adapter and quality signals via `x-sys1-local-*` headers.
+  Keep Noul/Choice/Score answer
   objects exactly Jev-compatible. Do not make stronger model-quality claims
   without checkpoint-specific qualification.
 - Keep local inference lazy, serialized, cancellation-bounded, and
-  residency-capped. Needle runs one bounded process per request with
-  telemetry disabled. Terminate and collect owned native worker processes on timeout, abort,
+  residency-capped. Terminate and collect owned native worker processes on timeout, abort,
   eviction, and shutdown. Never claim unsupported native AbortSignal semantics.
-- Specialist models (scorer, needle) never receive unpinned fallback traffic;
-  honor published backend capability limits (`/v1/limits`) as advisory, and
+- Only the installed model named by `local.model` receives unpinned local
+  traffic. It defaults to Qwen3 1.7B. Every bundled Qwen model is experimental;
+  Qwen3 0.6B and Qwen3.5 4B require explicit selection. Other installed models and configured HTTP services require a
+  request pin. Never promote them when the selected model is missing.
+- Honor published backend capability limits (`/v1/limits`) as advisory, and
   fail over-capability requests closed as `request_unsupported`.
 - Keep operator-registered HTTP runners separately owned; never mutate their
   weights, credentials, or process lifecycle. Qualify discovery, limits, and
   response conformance without exposing request or response bodies.
 - Fresh config is local-first: hosted Jev stays disabled even when its
   environment credential exists. Only `sys1 jev enable` activates it; the
-  credential remains environment-only.
+  credential remains environment-only. Hosted Jev defaults to `jev-1.13.0`;
+  enabling it selects `hosted-only`. Local fallback requires an explicit policy
+  change after application-specific quality evaluation. Setup must preserve an
+  existing hosted-only policy.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
   exact tarball/checksum identity, Ubuntu/macOS/Windows artifact execution,
   repository release immutability, and the no-npm-publication boundary.
@@ -121,14 +114,3 @@
 - When a CI or policy gate scans complete Git history, check out the exact governed SHA and fetch only the fully qualified governed refs before scanning. Preserve the complete-history gate and reject unexpected refs instead of importing unrelated concurrent heads.
 - At closeout, record applicable branch, PR, check, merge, release, deployment, and production evidence. Archive only conclusively finished tasks, never from silence alone, and reclaim only freshly revalidated clean merged worktrees through the guarded exact-path flow.
 <!-- oompa-local-efficiency:end -->
-
-
-## Needle process boundary
-
-The explicitly pinned Needle specialist requires a private per-request tools
-file containing question instructions and criteria, deleted when the request
-settles. Its native CLI receives state as a process argument, visible to local
-process inspection. Abrupt host termination can leave the private temporary
-file behind. Do not use this adapter for inputs whose policy forbids that
-exposure. The GGUF worker uses private pipes; ordinary request bodies,
-credentials, answers, and prompts are not application logs or durable state.

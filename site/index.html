@@ -42,13 +42,13 @@
     <main id="main">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-copy">
-          <h1 id="hero-heading">Local models or Jev.<br />One typed API.</h1>
-          <p class="summary">Add yes/no decisions, choices, and scores to your app. Sys1 gives supported backends one request format, validates their answers, and manages local model loading. Hosted Jev is opt-in.</p>
+          <h1 id="hero-heading">Jev or local Qwen.<br />One typed API.</h1>
+          <p class="summary">Give your agents yes/no decisions, choices, and scores. Connect hosted Jev or experiment with local Qwen. Keep one typed client, explicit model selection, validated response shapes, and managed local model loading.</p>
           <div class="actions">
             <a class="button" href="#install">Get Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
             <a class="button button-secondary" href="#integrate">Use it in your project</a>
           </div>
-          <p class="hero-note">Open source · Local by default · Node, Bun, or HTTP</p>
+          <p class="hero-note">Open source · Node, Bun, or HTTP · <a href="/compare">Local quality is experimental</a></p>
         </div>
 
         <div class="decision-demo" aria-label="Illustrative typed decision example">
@@ -87,12 +87,12 @@
 
       <section id="how-it-works" class="section story" aria-labelledby="features-heading">
         <div class="section-intro">
-          <h2 id="features-heading">Keep the decision.<br />Change the model.</h2>
+          <h2 id="features-heading">Keep your code.<br />Choose your model.</h2>
           <p>Every agent has small judgment calls: classify a message, pick the next task, check a condition. Put the model plumbing in one place, and keep your application focused on what the answer means.</p>
         </div>
         <div class="benefits">
           <article><h3>Keep control of where requests go.</h3><p>Run locally, enable hosted Jev, or connect a compatible server. Set a routing policy or pin an exact backend and model. <code>local-only</code> keeps decision requests on your machine.</p></article>
-          <article><h3>Get answers your code can use.</h3><p>Get yes/no probabilities, named choices, and numeric scores. Sys1 validates answers against the questions you asked, rejects malformed results, and carries cancellation through the request.</p></article>
+          <article><h3>Get answers your code can use.</h3><p>Get yes/no probabilities, named choices, and numeric scores. Sys1 validates each answer’s shape and model identity against your request, rejects malformed results, and carries cancellation through the request.</p></article>
           <article><h3>Let Sys1 manage local models.</h3><p>Explicit model downloads, checksum verification, readiness checks, managed loading, and bounded worker cleanup come with the package. See the selected backend and adapter in response metadata.</p></article>
         </div>
         <div class="request-path" aria-label="Request flow">
@@ -144,50 +144,50 @@ console.log(metadata.backend);</code></pre>
       <section id="ecosystem" class="section ecosystem" aria-labelledby="ecosystem-heading">
         <div class="section-intro">
           <h2 id="ecosystem-heading">Good models deserve<br />a shared interface.</h2>
-          <p>Sys1 is the routing and integration layer around models and services. These projects supply different capabilities; Sys1 brings their supported decision paths into one application contract.</p>
+          <p>Sys1 is the routing and integration layer around models and services. Jev and Qwen are the supported starting points. Compatible servers remain available through explicit registration and model selection.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="Related projects and their relationship to Sys1">
           <div class="ecosystem-header" role="row"><span role="columnheader">Project</span><span role="columnheader">What it provides</span><span role="columnheader">How Sys1 uses it</span></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://docs.typesafe.ai/introduction">Jev <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Hosted provider</span></div><p role="cell">Typed decisions through the System One API.</p><p role="cell">An optional hosted backend. Enable it explicitly with your own credential; keep the same request shape as local calls.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://huggingface.co/Qwen/Qwen3-1.7B">Qwen3 1.7B</a><span class="project-kind">Local model</span></div><p role="cell">An experimental local option that runs on your hardware.</p><p role="cell">Sys1 installs verified GGUF weights and reads first-token probabilities. The configured local model stays selected even when you install another model.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://github.com/razorback16/openjev">OpenJev <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Self-hosted server</span></div><p role="cell">An open implementation of a Jev-compatible decision API.</p><p role="cell">Connect and qualify a server you operate. Sys1 uses its common decision interface; the OpenJev server and its extensions remain separate.</p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://huggingface.co/cua-ai/cua-s1-forms">CUA-S1 forms <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Optional specialist</span></div><p role="cell">A compact checkpoint for choosing form actions.</p><p role="cell">Hash-pinned weights run in Sys1’s TypeScript scorer when explicitly selected. This is checkpoint support, not Cua’s browser-automation stack.</p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://node-llama-cpp.withcat.ai/">llama.cpp <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Local GGUF runtime</span></div><p role="cell">Native inference for local language models, through node-llama-cpp.</p><p role="cell">Managed local loading and cancellation. Sys1 maps first-token probabilities to decision answers; setup offers compact Qwen3 models.</p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://github.com/cactus-compute/needle">Cactus Needle <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Optional specialist</span></div><p role="cell">Local structured extraction through a native engine.</p><p role="cell">An explicitly selected adapter extracts answers using a bounded process. Confidence-derived probabilities are labelled as approximations.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://node-llama-cpp.withcat.ai/">llama.cpp <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a><span class="project-kind">Local GGUF runtime</span></div><p role="cell">Native inference for local language models, through node-llama-cpp.</p><p role="cell">Managed local loading and cancellation. Sys1 maps first-token probabilities to decision answers; setup selects Qwen3 1.7B.</p></div>
         </div>
         <aside class="semantics"><h3>One answer format. Different model behavior.</h3><p>Schema compatibility makes integration simpler. It does not make models equally accurate or equally calibrated. Evaluate the model on your task before carrying over thresholds or changing defaults. Sys1 exposes adapter metadata so that distinction stays visible.</p><a href="https://github.com/hraness/sys1#generic-gguf-adapter">Read the adapter semantics <svg class="external-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" /></svg></a></aside>
         <aside class="semantics"><h3>Keep noisy check logs out of agent context.</h3><p><a href="/skills">System One Skills</a> gives Devin, Claude Code, and Codex a focused skill for known noisy checks: run the check once, return a compact result, and keep the full log locally for diagnosis. It works independently of Sys1 and model backends.</p><a href="/skills">See when to use it and what we measured</a></aside>
       </section>
 
       <section class="section comparison-teaser" aria-labelledby="comparison-heading">
-        <div class="section-intro"><h2 id="comparison-heading">What does a decision cost?</h2><p>Compare Cactus Needle, Qwen, CUA-S1, and Jev with local measurements, published speed results, hardware requirements, and token accounting.</p></div>
+        <div class="section-intro"><h2 id="comparison-heading">See what the models can actually do.</h2><p>Inspect the completed Jev comparison and broader local evaluations: correctness by question type, option-order stability, latency, token usage, and cost. The full reports include wrong answers.</p></div>
         <a class="button button-secondary" href="/compare">Compare models, speed &amp; cost</a>
       </section>
 
       <section id="install" class="section install" aria-labelledby="install-heading">
         <div class="section-intro">
           <h2 id="install-heading">Start on your machine.</h2>
-          <p>Install Sys1, choose a local model, and start the gateway. Hosted Jev stays off until you enable it.</p>
+          <p>Try experimental local decisions with Qwen3 1.7B. Setup downloads about 1.03 GiB of verified weights. Hosted Jev stays off until you enable it.</p>
         </div>
         <div class="install-terminal">
           <div class="code-heading"><span>Local quickstart</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy commands</button></div>
           <pre><code id="install-command">npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
+  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
 sys1 setup
 sys1 doctor
 sys1 up</code></pre>
         </div>
+        <p class="section-footnote">For an existing Jev application, start with a hosted pilot: export <code>TYPESAFE_API_KEY</code> privately, then run <code>sys1 jev enable</code>. <a href="https://github.com/hraness/sys1#add-hosted-jev">Hosted setup and routing policies</a>.</p>
         <p class="install-requirements">Bun 1.3.14+ · macOS, Linux &amp; Windows · Setup downloads model weights</p>
         <p id="copy-status" class="copy-status" role="status"></p>
-        <div class="install-links"><a href="https://github.com/hraness/sys1#install">Installation guide</a><a href="https://github.com/hraness/sys1/releases/tag/v0.8.3">Release &amp; checksums</a><a href="https://github.com/hraness/sys1">View source</a></div>
+        <div class="install-links"><a href="https://github.com/hraness/sys1#install">Installation guide</a><a href="https://github.com/hraness/sys1/releases/tag/v0.9.0">Release &amp; checksums</a><a href="https://github.com/hraness/sys1">View source</a></div>
       </section>
 
       <section class="section questions" aria-labelledby="questions-heading">
         <h2 id="questions-heading">Before you begin.</h2>
         <div class="question-list">
           <details><summary>What is a typed decision?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>A small judgment returned in a predictable shape: <code>noul</code> is a yes/no probability, <code>choice</code> selects one of your named options, and <code>score</code> returns a numeric result over your ordered criteria. Your app decides how to use it.</p></details>
-          <details><summary>Can everything stay local?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Yes, for decision requests using local models and a <code>local-only</code> routing policy. Initial installation and explicit model setup download packages and weights. Hosted Jev is disabled by default. The optional Needle specialist also has a documented temporary-file and process-argument boundary; <a href="https://github.com/hraness/sys1#needle-process-boundary">review it for sensitive inputs</a>.</p></details>
-          <details><summary>Can I replace my existing Jev client?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Use an explicit adapter and test your request sizes, question limits, cancellation, and fallback behavior. Choose <code>auto</code> or omit the model to allow local selection; a hosted model pin stays a pin. Keep application permissions and quality thresholds in your project. <a href="https://github.com/hraness/sys1#adopting-sys1-in-an-existing-jev-application">Read the adoption guide</a>.</p></details>
-          <details><summary>Does Sys1 pick the most accurate model?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Sys1 selects eligible backends using your policy, availability, configured capabilities, model size, and cost rank. It does not run a quality benchmark per request. Pin a model when you need a specific backend, and evaluate its answers on your own tasks.</p></details>
+          <details><summary>Can everything stay local?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Yes, for decision requests using local models and a <code>local-only</code> routing policy. Initial installation and explicit model setup download packages and weights. Hosted Jev is disabled by default.</p></details>
+          <details><summary>Can I replace my existing Jev client?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Use an explicit adapter and test your request sizes, question limits, cancellation, and fallback behavior. For the first pilot, pin <code>jev-1.13.0</code> and preserve your existing hosted behavior. Evaluate local Qwen separately before enabling fallback. Keep application permissions and quality thresholds in your project. <a href="https://github.com/hraness/sys1#adopting-sys1-in-an-existing-jev-application">Read the adoption guide</a>.</p></details>
+          <details><summary>Does Sys1 pick the most accurate model?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>You select the model. Fresh setup uses Qwen3 1.7B; enabling Jev selects hosted-only operation. A hosted outage returns an error. Local fallback requires an explicit policy change after you evaluate it. Installing a smaller model does not change that selection. Sys1 does not estimate accuracy per request; evaluate the chosen model on your tasks.</p></details>
           <details><summary>What does it cost?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Sys1 is free, open-source software under the MIT license. Local inference uses your hardware. Hosted providers may charge separately under their own plans.</p></details>
         </div>
       </section>
