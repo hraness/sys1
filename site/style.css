@@ -39,6 +39,7 @@ pre code { font-size: inherit; }
 .button-small { min-height: 2.625rem; padding: .5rem .9rem; font-size: .85rem; }
 .hero { padding: 4rem 2rem 4.5rem; border-bottom: 1px solid var(--grid); background: light-dark(#f1f0eb, #191816); }
 .hero-copy { max-width: 43rem; margin: 0 auto; text-align: center; }
+.eyebrow { margin: 0 0 1rem; color: var(--primary); font-size: .72rem; font-weight: 600; letter-spacing: .11em; line-height: 1.4; text-transform: uppercase; }
 .summary { max-width: 36rem; margin: 0 auto 1.5rem; color: var(--muted); font-size: 1.1rem; line-height: 1.6; }
 .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem; }
 .hero-note { color: var(--muted); font-size: .8rem; margin: 1.1rem 0 2.75rem; }
@@ -62,6 +63,7 @@ pre code { font-size: inherit; }
 .demo-bottom { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 1.3rem; border-top: 1px solid var(--grid); font-size: .75rem; color: var(--hraness-marketing-terminal-muted); }
 #example-type { font-family: var(--font-mono); }
 .demo-caption { text-align: center; color: var(--muted); font-size: .75rem; margin: 1.1rem 0 0; }
+.comparison-actions { justify-content: flex-start; }
 .section { width: min(70rem, calc(100% - 4rem)); margin-inline: auto; padding-block: 5rem; border-bottom: 1px solid var(--grid); }
 .section-intro { max-width: 44rem; margin-bottom: 2.75rem; }
 .section-intro > p { color: var(--muted); max-width: 65ch; font-size: 1.0625rem; }
@@ -166,6 +168,8 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
   .ecosystem-row:first-of-type { border-top: 1px solid var(--line); }
   .code-example pre, .install-terminal pre { padding: 1.2rem; font-size: .75rem; }
   .install-links { gap: .75rem 1.25rem; }
+  .comparison-actions { justify-content: stretch; }
+  .comparison-actions .button { flex: 1 1 10rem; }
   .closing { padding-block: 3.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

@@ -58,3 +58,11 @@ responsive layout. The module proof uses actual packaged Node and Bun entry
 points with real local inference, while explicitly separating integration
 validity from decision quality. Laya is an unbundled measured candidate.
 The Paper system and existing design assets remain unchanged.
+
+## Evergreen homepage refocus — 2026-09-20
+
+The homepage now answers three questions in order: what Sys1 is, how it enters an application, and where to read evidence. The lead promise is “One typed API for every small decision,” supported by explicit routing, validated answer shapes, and an owned integration boundary. The request-and-answer specimen remains illustrative and makes no model call.
+
+Implementation and research details now point to `/docs`: getting started, integration modes, backend semantics, module proof, and dated evaluation reports live there. The homepage names Jev, local Qwen, compatible HTTP services, and the surrounding runtime without placing benchmark snapshots or release-specific install commands in the primary story. The local quickstart uses the evergreen source build path; exact release artifacts stay in the docs.
+
+The design remains the Hraness Paper system used by Peopleblade: warm paper surfaces, Instrument Serif display type, Nebula Sans body text, quiet rules, shared footer, and light/dark appearance control. Review target: desktop 1280px, mobile 390px, and intermediate widths with no horizontal overflow.
