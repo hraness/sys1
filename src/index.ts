@@ -74,7 +74,6 @@ export type { ForwardResult, ProbeResult, RuntimeBackend } from "./backends.ts";
 export {
   DEFAULT_LOCAL_MODELS,
   LOCAL_MODEL_TIERS,
-  QUALITY_MEMORY_THRESHOLD,
   platformRecommendation,
 } from "./defaults.ts";
 export type { LocalModelTier, PlatformRecommendation } from "./defaults.ts";
@@ -156,45 +155,20 @@ export type {
   RunnerOptions,
 } from "./local/runner.ts";
 
-export { SCORER_LIMITS, loadScorer } from "./local/scorer.ts";
-export type { OptionScorer, ScorerConfig } from "./local/scorer.ts";
-
-export { NEEDLE_LIMITS, NeedleEngineError, runNeedleTurn } from "./local/needle.ts";
-export type { NeedleCall, NeedleEngineOptions, NeedleTurn } from "./local/needle.ts";
-
-export {
-  SCORER_ADAPT_LIMITS,
-  needleAnswers,
-  needlePrompt,
-  needleTools,
-  scorerAnswer,
-  scorerInput,
-} from "./local/adapt.ts";
-
-export {
-  TORCH_LIMITS,
-  TorchCheckpointError,
-  loadTorchCheckpoint,
-} from "./local/torchckpt.ts";
-export type { TorchCheckpoint, TorchTensor } from "./local/torchckpt.ts";
-
 export {
   MODEL_KINDS,
   MODEL_LIMITS,
   MODEL_REGISTRY,
-  engineFilePath,
+  ModelStoreError,
   findInstalled,
   findRegistry,
-  inspectCactFile,
   inspectGgufFile,
-  inspectScorerFile,
   installedModels,
   loadManifest,
   loadManifestChecked,
   manifestPath,
   modelFilePath,
   modelsDir,
-  needlePlatformKey,
   pullModel,
   removeModel,
   resolvePullTarget,
@@ -203,8 +177,6 @@ export {
   verifyModel,
 } from "./local/store.ts";
 export type {
-  CactInspection,
-  RegistryEngine,
   GgufInspection,
   InstalledModel,
   Manifest,
@@ -214,7 +186,6 @@ export type {
   PullResult,
   PullTarget,
   RegistryEntry,
-  ScorerInspection,
   VerifyModelResult,
 } from "./local/store.ts";
 

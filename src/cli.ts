@@ -24,7 +24,7 @@ import {
   writePidFile,
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
-import { LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
+import { DEFAULT_LOCAL_MODELS, LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
 import { runDoctor } from "./doctor.ts";
 import { SYS1_VERSION, startGateway } from "./gateway.ts";
 import { probeNativeRuntime } from "./local/engine.ts";
@@ -40,6 +40,7 @@ import {
 } from "./local/store.ts";
 
 const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5, doctor: 6 } as const;
+const LOCAL_DECISION_NOTICE = "Local decisions are experimental. Review results and evaluate your task: https://sys1.io/compare";
 
 function out(text: string): void {
   process.stdout.write(`${text}\n`);
@@ -60,7 +61,7 @@ Usage: sys1 <command> [flags]
 
 Setup:
   setup [--tier compact|quality] [--dry-run] [--json]
-                                Configure and install the local default
+                                Configure and install the experimental local default
   jev status|enable|disable [--json]
                                 Manage explicit hosted Jev activation
 
@@ -72,7 +73,7 @@ Daemon:
   doctor [--json]               Diagnose runtime, config, store, routing, daemon
 
 Models:
-  pull [MODEL] [--json]         Download + verify a model (default qwen3-0.6b)
+  pull [MODEL] [--json]         Download + verify weights (experimental qwen3-1.7b default)
   pull --list [--json]          Show the curated model registry
   model list [--json]           Show installed models
   model verify MODEL [--json]   Recompute and verify a model's sha256
@@ -100,7 +101,8 @@ Flags:
   --version                     Print version
   --help                        This help
 
-Local tiers: ${LOCAL_MODEL_TIERS.join(", ")}
+Local tiers (both experimental): quality (default Qwen3 1.7B), compact (Qwen3 0.6B)
+${LOCAL_DECISION_NOTICE}
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
@@ -202,18 +204,19 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     else {
       out(`platform: ${recommendation.target} (${recommendation.acceleration})`);
       out(`default: ${recommendation.model} (${recommendation.tier}) — ${recommendation.reason}`);
+      out(LOCAL_DECISION_NOTICE);
     }
     return;
   }
 
+  if (flags.get("json") !== true) out(LOCAL_DECISION_NOTICE);
   const native = await probeNativeRuntime();
   if (!native.ok) fail(native.message ?? "local llama.cpp runtime is unavailable", EXIT.backend);
   const loaded = loadConfig(home);
   if (!loaded.ok) fail(loaded.message, EXIT.config);
   const config = structuredClone(loaded.config);
   config.local.enabled = true;
-  if (config.routing.policy === "hosted-only") config.routing.policy = "auto";
-  const path = saveConfig(home, config);
+  config.local.model = recommendation.model;
 
   const existing = installedModels(home).find((model) => model.id === recommendation.model);
   let pull: PullResult | undefined;
@@ -229,7 +232,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     });
     if (!pull.ok) {
       if (flags.get("json") === true) {
-        out(JSON.stringify({ ok: false, recommendation, config_path: path, pull }, null, 2));
+        out(JSON.stringify({ ok: false, recommendation, pull }, null, 2));
       } else {
         err(`sys1: ${pull.message ?? "default model download failed"}`);
       }
@@ -237,6 +240,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     }
   }
 
+  const path = saveConfig(home, config);
   const report = {
     ok: true,
     dry_run: false,
@@ -256,7 +260,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
   else {
     out(`platform: ${recommendation.target} (${native.backend ?? "cpu"})`);
     out(`${recommendation.model}: ${existing === undefined ? "installed" : "already installed"}`);
-    out("local setup ready; run `sys1 up`");
+    out("experimental local setup complete; run `sys1 up`");
   }
 }
 
@@ -288,12 +292,13 @@ function cmdJev(home: string, args: ParsedArgs): void {
     }
     const next = structuredClone(loaded.config);
     next.hosted.enabled = true;
-    next.routing.policy = "auto";
+    next.routing.policy = "hosted-only";
     const path = saveConfig(home, next);
-    const report = { enabled: true, active: true, model: next.hosted.model, config_path: path };
+    const report = { enabled: true, active: true, model: next.hosted.model, routing_policy: next.routing.policy, config_path: path };
     if (args.flags.get("json") === true) out(JSON.stringify(report, null, 2));
     else {
       out(`Jev enabled for ${next.hosted.model} (${path})`);
+      out("routing is hosted-only; local fallback requires an explicit policy change after evaluation");
       out("restart the gateway if it was started before the credential was exported");
     }
     return;
@@ -392,7 +397,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
   const report = {
     daemon,
     gateway: { host: config.gateway.host, port: config.gateway.port },
-    routing: { policy: config.routing.policy },
+    routing: { policy: config.routing.policy, local_model: config.local.model },
     local_store: { models: localModels.length, bytes: storeBytes(home) },
     backends: backends.map((backend) => ({
       name: backend.name,
@@ -400,6 +405,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
       available: backend.available,
       models: backend.models,
       size_b: backend.size_b,
+      explicit_only: backend.explicitOnly === true,
       capabilities: backend.capabilities ?? null,
       probe: probes.get(backend.name)?.detail ?? null,
     })),
@@ -409,12 +415,12 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
     return;
   }
   out(`daemon: ${daemon.state}${daemon.state === "running" ? ` pid ${daemon.pid} ${gatewayUrl(daemon.host, daemon.port)}` : ""}`);
-  out(`routing: ${config.routing.policy}`);
+  out(`routing: ${config.routing.policy}; selected local model: ${config.local.model}`);
   out(`local store: ${localModels.length} model${localModels.length === 1 ? "" : "s"}, ${formatBytes(report.local_store.bytes)}`);
   for (const backend of report.backends) {
     const marker = backend.available ? "up" : "down";
     const size = backend.size_b === null ? "" : ` ${backend.size_b}B`;
-    out(`  ${backend.name} (${backend.kind})${size}: ${marker} — ${backend.models.join(", ")}`);
+    out(`  ${backend.name} (${backend.kind}${backend.explicit_only ? ", explicit pin" : ""})${size}: ${marker} — ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
     out("  no backends configured; run `sys1 setup`, `sys1 jev enable`, or `sys1 backend add`");
@@ -430,7 +436,7 @@ async function cmdDoctor(home: string, flags: Map<string, string | boolean>): Pr
       out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
     }
     out(
-      `doctor: ${report.ok ? "ready" : "not ready"} (${report.counts.pass} pass, ${report.counts.warn} warn, ${report.counts.fail} fail)`,
+      `doctor: runtime ${report.ok ? "ready" : "not ready"} (${report.counts.pass} pass, ${report.counts.warn} warn, ${report.counts.fail} fail)`,
     );
   }
   if (!report.ok) process.exit(EXIT.doctor);
@@ -463,7 +469,7 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
     const rows = MODEL_REGISTRY.map((entry) => ({
       id: entry.id,
       kind: entry.kind,
-      specialist: entry.specialist === true,
+      experimental: entry.experimental === true,
       size_b: entry.size_b,
       bytes: entry.bytes,
       description: entry.description,
@@ -474,14 +480,13 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
       return;
     }
     for (const row of rows) {
-      const tag = row.specialist ? `${row.kind},pin-only` : row.kind;
+      const tag = row.experimental ? `${row.kind},experimental` : row.kind;
       out(`${row.id}\t${tag}\t${formatBytes(row.bytes)}\t${row.installed ? "installed" : "available"}\t${row.description}`);
     }
     return;
   }
 
-  const ref = args.positional[1] ?? MODEL_REGISTRY[0]?.id;
-  if (ref === undefined) fail("model registry is empty", EXIT.backend);
+  const ref = args.positional[1] ?? DEFAULT_LOCAL_MODELS.quality;
   const sha256 = flagString(args.flags, "sha256");
   if (sha256 !== undefined && !/^[0-9a-f]{64}$/.test(sha256)) {
     fail("--sha256 needs 64 lowercase hexadecimal characters", EXIT.usage);
@@ -691,7 +696,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
         for (const check of report.checks) {
           out(`${check.status.toUpperCase().padEnd(4)} ${check.id}: ${check.summary}`);
         }
-        out(`backend ${backend.name}: ${report.ok ? "ready" : "not ready"}`);
+        out(`backend ${backend.name}: protocol checks ${report.ok ? "passed" : "failed"}`);
       }
       if (!report.ok) process.exit(EXIT.backend);
       return;

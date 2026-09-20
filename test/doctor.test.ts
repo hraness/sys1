@@ -142,4 +142,13 @@ describe("runDoctor", () => {
     expect(routing?.status).toBe("fail");
     expect(routing?.summary).toContain("credential");
   });
+  test("explicit HTTP routes remain usable without an automatic local model", async () => {
+    const dir = home();
+    saveConfig(dir, configSchema.parse({ version: 1, routing: { policy: "local-only" },
+      backends: [{ name: "external", base_url: "http://127.0.0.1:18080", model: "custom" }] }));
+    const report = await runDoctor({ home: dir, env: {}, runtimeVersion: "1.3.14", nativeProbe: nativeOk, daemonProbe: daemonStopped });
+    expect(report.ok).toBe(true);
+    expect(report.checks.find((check) => check.id === "routing.candidates")).toMatchObject({ status: "warn", summary: expect.stringContaining("backend/model") });
+  });
+
 });

@@ -180,39 +180,39 @@ describe("capability-aware routing", () => {
   });
 });
 
-describe("specialist routing", () => {
-  const specialist: BackendCandidate = {
-    name: "local-cua-s1-forms",
+describe("explicit model routing", () => {
+  const explicitOnly: BackendCandidate = {
+    name: "local-qwen3-0.6b",
     kind: "local",
     available: true,
-    models: ["cua-s1-forms"],
-    size_b: 0.0007,
+    models: ["qwen3-0.6b"],
+    size_b: 0.6,
     cost_rank: 0,
-    specialist: true,
+    explicitOnly: true,
     capabilities: { maxOptions: 26 },
   };
 
-  test("unpinned requests never fall back to a specialist", () => {
-    const choice = chooseBackend("prefer-local", undefined, [specialist, localBig]);
+  test("unpinned requests never fall back to an unselected model", () => {
+    const choice = chooseBackend("prefer-local", undefined, [explicitOnly, localBig]);
     expect(choice).toMatchObject({ ok: true, backend: { name: "openjev" } });
   });
 
-  test("a specialist is still reachable by bare model name", () => {
-    const choice = chooseBackend("prefer-local", "cua-s1-forms", [specialist, localBig]);
-    expect(choice).toMatchObject({ ok: true, backend: { name: "local-cua-s1-forms" } });
+  test("an unselected model is still reachable by bare model name", () => {
+    const choice = chooseBackend("prefer-local", "qwen3-0.6b", [explicitOnly, localBig]);
+    expect(choice).toMatchObject({ ok: true, backend: { name: "local-qwen3-0.6b" } });
   });
 
-  test("a specialist is reachable by backend/model pin", () => {
-    const choice = chooseBackend("auto", "local-cua-s1-forms/cua-s1-forms", [hosted, specialist]);
+  test("an unselected model is reachable by backend/model pin", () => {
+    const choice = chooseBackend("auto", "local-qwen3-0.6b/qwen3-0.6b", [hosted, explicitOnly]);
     expect(choice).toMatchObject({
       ok: true,
-      backend: { name: "local-cua-s1-forms" },
+      backend: { name: "local-qwen3-0.6b" },
       reason: "pinned",
     });
   });
 
-  test("a specialist alone leaves unpinned requests with no backend", () => {
-    const choice = chooseBackend("local-only", undefined, [specialist]);
+  test("an unselected model alone leaves unpinned requests with no backend", () => {
+    const choice = chooseBackend("local-only", undefined, [explicitOnly]);
     expect(choice).toMatchObject({ ok: false, reason: "no_backend_available" });
   });
 });

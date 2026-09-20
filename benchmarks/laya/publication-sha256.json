@@ -1,0 +1,57 @@
+[
+  {
+    "file": "laya-artifacts.json",
+    "bytes": 2236,
+    "sha256": "4966a5bfa2c0ff55dbae3f6fbf2e1e2a9c68d5e255593e54dee11e844d788857"
+  },
+  {
+    "file": "laya-download.py",
+    "bytes": 1970,
+    "sha256": "97cf07976dced49c9308f420719eef5fb08ff1742d1c82f363ed0a2307b6ac84"
+  },
+  {
+    "file": "laya-export-schedule.ts",
+    "bytes": 2540,
+    "sha256": "bbe7e7868a620f2ea9c664f781d00167c5d86b0af5ce4d06f5904e9311732ecb"
+  },
+  {
+    "file": "laya-hf-metadata.json",
+    "bytes": 3120,
+    "sha256": "276f2b1195a1a85a3684dc2635a8b1487ba4300491c4026cbc265695a536a8ba"
+  },
+  {
+    "file": "laya-native-worker.py",
+    "bytes": 1708,
+    "sha256": "bde021779a6f6076d79ca963833847392fcea9726a623464f009b3d69f846c8f"
+  },
+  {
+    "file": "laya-preflight.py",
+    "bytes": 2700,
+    "sha256": "04e25639003af3c052879cf9eaf6bc24bb7250fe89b62e1754331e02af69ae74"
+  },
+  {
+    "file": "laya-runtime-requirements.txt",
+    "bytes": 14458,
+    "sha256": "f3b58b4fcd66e08daf5c0165dcccd169f93b31eb41042d137bf1f6f721030f52"
+  },
+  {
+    "file": "laya-v3-preflight.json",
+    "bytes": 84917,
+    "sha256": "b3de0522bc5892454b8902726e0775992f025f789347d9df927906c91bb03115"
+  },
+  {
+    "file": "laya-v3-run.ts",
+    "bytes": 11182,
+    "sha256": "d0b1336c62eb1dfcab80cc593c96bd170db4c29ad186e5bf47f84cc53dd69205"
+  },
+  {
+    "file": "laya-v3-schedule-exact.json",
+    "bytes": 466278,
+    "sha256": "919745861e9f02931e5e079395279449defe9b5baa8649cb02b231749fee4cd9"
+  },
+  {
+    "file": "reproduction.md",
+    "bytes": 5390,
+    "sha256": "da45686451e6b5a10902b70f1a5bc47e445e8c1010a27d34e97e19c79cb4e55e"
+  }
+]

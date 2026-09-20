@@ -131,6 +131,8 @@ describe("owned native-engine process", () => {
 function nativeHarness(tokenCount: number) {
   let evaluated = false;
   let nativeOptions: unknown;
+  let wrapperOptions: unknown;
+  let contextOptions: unknown;
   let evaluationOptions: { temperature?: number; yieldEogToken?: boolean } | undefined;
   const engine = new NativeLlamaEngine({ modelPath: "/unused", modelId: "mock", contextSize: 512, evalTimeoutMs: 1_000 }, async () => ({
     async getLlamaGpuTypes() { return [false]; },
@@ -163,14 +165,26 @@ function nativeHarness(tokenCount: number) {
         },
       };
     },
-    resolveChatWrapper() {
-      return { generateContextState() { return { contextText: { tokenize() { return Array.from({ length: tokenCount }, () => 1); } } }; } };
+    resolveChatWrapper(_model, options) {
+      wrapperOptions = options;
+      return { generateContextState(options) { contextOptions = options; return { contextText: { tokenize() { return Array.from({ length: tokenCount }, () => 1); } } }; } };
     },
   }));
-  return { engine, evaluated: () => evaluated, options: () => evaluationOptions, nativeOptions: () => nativeOptions };
+  return { engine, evaluated: () => evaluated, options: () => evaluationOptions, nativeOptions: () => nativeOptions, wrapperOptions: () => wrapperOptions, contextOptions: () => contextOptions };
 }
 
 describe("native worker context admission", () => {
+  test("leaves model-specific thinking syntax to the chat wrapper", async () => {
+    const { engine, wrapperOptions, contextOptions } = nativeHarness(3);
+    await engine.firstTokenDistribution("Read this unchanged prompt.");
+    expect(wrapperOptions()).toEqual({ customWrapperSettings: { qwen: { thoughts: "discourage" } } });
+    expect(contextOptions()).toMatchObject({ chatHistory: [
+      { type: "system", text: expect.any(String) },
+      { type: "user", text: "Read this unchanged prompt." },
+      { type: "model", response: [] },
+    ] });
+    await engine.dispose();
+  });
   test("rejects the actual context boundary before native context shifting can erase evidence", async () => {
     const { engine, evaluated } = nativeHarness(4);
     await expect(engine.firstTokenDistribution("bounded input")).rejects.toBeInstanceOf(LocalInputError);

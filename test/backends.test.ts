@@ -23,8 +23,11 @@ describe("backend HTTP boundaries", () => {
     expect(chooseBackend("local-only", "remote/remote-model", candidates)).toMatchObject({
       ok: false, reason: "policy_restricted",
     });
-    expect(chooseBackend("local-only", undefined, candidates)).toMatchObject({
+    expect(chooseBackend("local-only", "ipv6-local/local-model", candidates)).toMatchObject({
       ok: true, backend: { name: "ipv6-local" },
+    });
+    expect(chooseBackend("local-only", undefined, candidates)).toMatchObject({
+      ok: false, reason: "no_backend_available",
     });
   });
 

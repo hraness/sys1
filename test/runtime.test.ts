@@ -3,7 +3,7 @@ import { createRouter } from "../src/runtime.ts";
 import { configSchema } from "../src/config.ts";
 import { LocalRunner, defaultEngineFactory } from "../src/local/runner.ts";
 
-const input = { state: "private input", questions: { q: { type: "noul" as const } } };
+const input = { model: "local/small", state: "private input", questions: { q: { type: "noul" as const } } };
 const output = { model: "small", answers: { q: { type: "noul", noul: 0.75 } }, usage: { input_tokens: 1, output_tokens: 0 } };
 
 describe("embedded router", () => {

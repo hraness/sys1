@@ -9,8 +9,7 @@ import { systemOneRequestSchema, type SystemOneRequest, type SystemOneResponse }
 import { validateResponseForRequest } from "../src/response.ts";
 import { probeNativeRuntime, type NativeRuntimeProbe } from "../src/local/engine.ts";
 import { LocalRunner, defaultEngineFactory, type LocalAdapter } from "../src/local/runner.ts";
-import { MODEL_REGISTRY, findInstalled, modelFilePath, engineFilePath, verifyModel, type InstalledModel } from "../src/local/store.ts";
-import { scorerInput } from "../src/local/adapt.ts";
+import { MODEL_REGISTRY, findInstalled, modelFilePath, verifyModel, type InstalledModel } from "../src/local/store.ts";
 
 const ROOT = resolve(import.meta.dir, "..");
 const FIXTURE_PATH = join(ROOT, "benchmarks", "forms-v1.json");
@@ -111,9 +110,9 @@ export function loadFixture(): Fixture {
   for (const item of fixture.cases) {
     if (ids.has(item.id) || new Set(item.option_order).size !== 3) throw new Error("fixture has duplicate ids or options");
     ids.add(item.id);
-    const request = requestFor(fixture, item, "fixture-validation");
+    requestFor(fixture, item, "fixture-validation");
     // The same byte limits apply to all cases, including multi-byte text.
-    scorerInput(request.state, request.questions["action"]!, 224, 96);
+    if (Buffer.byteLength(`${item.state}\n${fixture.instructions}`) > 224 || Object.entries(fixture.criteria).some(([key, value]) => Buffer.byteLength(`${key}: ${value}`) > 96)) throw new Error("historical fixture byte bounds exceeded");
     const answerIndex = keySchema.options.indexOf(item.expected);
     const positionIndex = item.option_order.indexOf(item.expected);
     answerCounts[answerIndex] = (answerCounts[answerIndex] ?? 0) + 1;
@@ -132,16 +131,16 @@ function options(args: string[]): { home: string; models: string[]; output: stri
     const flag = args[i];
     const value = args[i + 1];
     if (flag === undefined || !["--home", "--models", "--output"].includes(flag) || value === undefined || value.startsWith("--") || values.has(flag)) {
-      throw new Error("usage: bun scripts/benchmark-local.ts --home DIR --output FILE [--models qwen3-0.6b,cua-s1-forms,needle3] | --validate-only");
+      throw new Error("usage: bun scripts/benchmark-local.ts --home DIR --output FILE [--models qwen3-1.7b,qwen3-0.6b] | --validate-only");
     }
     values.set(flag, value);
   }
   const home = values.get("--home");
   const output = values.get("--output");
-  const models = (values.get("--models") ?? "qwen3-0.6b").split(",");
+  const models = (values.get("--models") ?? "qwen3-1.7b").split(",");
   if (home === undefined || output === undefined) throw new Error("explicit --home and --output are required; no default user store is read");
-  if (models.length < 1 || models.length > 4 || new Set(models).size !== models.length || models.some((model) => !MODEL_IDS.includes(model))) {
-    throw new Error("--models must contain one through four unique curated model ids");
+  if (models.length < 1 || models.length > 2 || new Set(models).size !== models.length || models.some((model) => !MODEL_IDS.includes(model))) {
+    throw new Error("--models must contain one or two unique curated model ids");
   }
   return { home: resolve(home), output: resolve(output), models };
 }
@@ -187,17 +186,13 @@ function modelReport(model: InstalledModel): ModelReport {
   return {
     id: model.id,
     kind: model.kind,
-    adapter: model.kind === "gguf" ? "generic-gguf" : model.kind === "scorer" ? "option-scorer" : "needle-extract",
+    adapter: "generic-gguf",
     weight_sha256: model.sha256,
     weight_bytes: model.bytes,
-    engine_sha256: model.engine_sha256 ?? null,
-    engine_bytes: model.engine_bytes ?? null,
-    usage_semantics: model.kind === "gguf"
-      ? "Actual fully wrapped prompt tokens, separately evaluated per question; output_tokens=0 means no generated text returned, not no computation."
-      : model.kind === "scorer"
-        ? "UTF-8 byte option scoring without generation; protocol token counters are 0 and token throughput is not applicable."
-        : "Native token usage is not exposed by this adapter; protocol 0/0 counters do not mean zero token work.",
-    repeated_state: model.kind === "needle" ? "New engine process for every request; no resident-model warm result." : "Same runner and resident model after two warmups.",
+    engine_sha256: null,
+    engine_bytes: null,
+    usage_semantics: "Actual fully wrapped prompt tokens, separately evaluated per question; output_tokens=0 means no generated text returned, not no computation.",
+    repeated_state: "Same runner and resident model after two warmups.",
     status: "running",
     planned_calls: COLD_SAMPLES + WARMUPS + 20 * REPETITIONS,
     skipped_calls: 0,
@@ -213,13 +208,6 @@ async function admittedModel(home: string, id: string): Promise<InstalledModel> 
     throw new Error(`model ${id} is absent or does not match the curated pin; explicitly pull it before benchmarking`);
   }
   if (lstatSync(modelFilePath(home, installed)).size !== registry.bytes) throw new Error(`model ${id} has unexpected bytes`);
-  if (registry.kind === "needle") {
-    const engine = registry.engine?.[`${process.platform}-${process.arch}`];
-    const path = engineFilePath(home, installed);
-    if (engine === undefined || path === null || installed.engine_platform !== `${process.platform}-${process.arch}` || installed.engine_sha256 !== engine.sha256 || installed.engine_bytes !== engine.bytes || lstatSync(path).size !== engine.bytes) {
-      throw new Error(`model ${id} has no matching curated engine for this platform`);
-    }
-  }
   const verification = await verifyModel(home, id);
   if (!verification.ok || verification.actual !== registry.sha256) throw new Error(`model ${id} failed digest or structure verification`);
   return installed;
@@ -323,7 +311,7 @@ async function main(): Promise<void> {
   const interrupt = (): void => cancellation.abort();
   process.on("SIGINT", interrupt);
   process.on("SIGTERM", interrupt);
-  const newRunner = (): LocalRunner => new LocalRunner({ home: opts.home, maxLoadedModels: 1, engineFactory: defaultEngineFactory(2_048, REQUEST_TIMEOUT_MS), needleTimeoutMs: REQUEST_TIMEOUT_MS });
+  const newRunner = (): LocalRunner => new LocalRunner({ home: opts.home, maxLoadedModels: 1, engineFactory: defaultEngineFactory(2_048, REQUEST_TIMEOUT_MS) });
   try {
     for (const model of models) {
       const entry = modelReport(model);

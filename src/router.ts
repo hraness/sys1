@@ -25,10 +25,10 @@ export interface BackendCandidate {
   /** Operator-set cost ordering; lower is cheaper. */
   cost_rank: number;
   /**
-   * Specialist backends only serve requests that explicitly name them —
+   * Explicit-only backends only serve requests that explicitly name them —
    * they never receive unpinned policy-order fallback traffic.
    */
-  specialist?: boolean;
+  explicitOnly?: boolean;
   /** Probed or configured request limits. */
   capabilities?: BackendCapabilities;
 }
@@ -110,12 +110,13 @@ function ordered<T extends BackendCandidate>(policy: RoutingPolicy, candidates: 
  *
  * A request naming `backend/model` pins an exact backend. A bare model name
  * matches any backend listing it, in policy order. No model means policy
- * order among available backends: `auto` prefers hosted Jev and falls back to
- * the cheapest smallest local backend, `prefer-local` inverts that.
+ * order among automatic candidates: runtime configuration admits hosted Jev
+ * and the selected local model. `auto` prefers Jev; `prefer-local` reverses
+ * that order. Other installed models and HTTP backends need an explicit pin.
  *
  * `needs` makes selection capability-aware: a backend whose published limits
- * the request exceeds is never chosen, and specialists are skipped unless the
- * request explicitly names them.
+ * the request exceeds is never chosen. Explicit-only candidates are skipped
+ * unless the request names their model or backend/model.
  */
 export function chooseBackend<T extends BackendCandidate>(
   policy: RoutingPolicy,
@@ -200,7 +201,7 @@ export function chooseBackend<T extends BackendCandidate>(
 
   const viable = ordered(
     policy,
-    candidates.filter((c) => c.specialist !== true),
+    candidates.filter((c) => c.explicitOnly !== true),
   );
   const fallback = viable.find((c) => c.available && fits(c));
   if (fallback !== undefined) {

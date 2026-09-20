@@ -18,6 +18,11 @@ machine can use every backend the gateway has enabled, including hosted
 credentials. Embedded handlers have no network listener and rely on their
 owning application's admission policy.
 
+Local GGUF workers receive requests through private pipes. Request bodies,
+credentials, answers, and prompts are not application logs or durable state.
+Unsupported legacy model inventories fail closed without deleting files or
+rewriting the manifest.
+
 ## Reporting
 
 Open a private security advisory on the GitHub repository
@@ -26,13 +31,3 @@ the contact listed on the organization profile. Please include a minimal
 reproduction or test that demonstrates the issue where possible.
 
 Do not open a public issue for an unpatched vulnerability.
-
-## Needle process boundary
-
-The explicitly pinned Needle specialist requires a private per-request tools
-file containing question instructions and criteria, deleted when the request
-settles. Its native CLI receives state as a process argument, visible to local
-process inspection. Abrupt host termination can leave the private temporary
-file behind. Do not use this adapter for inputs whose policy forbids that
-exposure. The GGUF worker uses private pipes; ordinary request bodies,
-credentials, answers, and prompts are not application logs or durable state.

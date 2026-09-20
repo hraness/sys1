@@ -2,8 +2,9 @@
 
 Sys1 is the decision interface between an agent and its models. Use a small
 Node/Bun client, embed the router in a Bun application, or run one loopback
-daemon. The Jev-compatible `POST /v1/systemone` contract routes requests across
-hosted Jev, builtin local models, and operator-run System One HTTP backends.
+daemon. The Jev-compatible `POST /v1/systemone` contract gives applications two
+main paths: hosted Jev 1.13.0 and experimental local Qwen. Other installed GGUF models
+and operator-run System One HTTP backends remain available by explicit selection.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
 
@@ -15,10 +16,8 @@ of which model answers.
 
 Sys1 complements [OpenJev](https://github.com/razorback16/openjev) by routing
 its common System One decision API; OpenJev's image, chat, and advanced sampling
-extensions are outside Sys1's contract. The optional
-[CUA-S1 forms checkpoint](https://huggingface.co/cua-ai/cua-s1-forms) runs through
-Sys1's TypeScript scorer as a form-action specialist. This checkpoint adapter
-does not include Cua Driver or desktop execution.
+extensions are outside Sys1's contract. An operator-run server must be selected
+explicitly; adding one does not change the default decision route.
 
 ## System One skills
 
@@ -42,7 +41,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
+  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
 sys1 doctor
 ```
 
@@ -63,7 +62,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.8.3/hraness-sys1-0.8.3.tgz
+  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
 ```
 
 ```ts
@@ -125,8 +124,9 @@ thresholds in the application. Put endpoint configuration, transport, routing,
 response validation, and local engine lifecycle behind Sys1. Existing HTTP
 clients in other languages can use the same daemon without a JavaScript module.
 
-Use `model: "auto"` or omit `model` to allow local selection. A hardcoded
-`jev-latest` remains a model pin and cannot select an unrelated local model.
+Use `model: "auto"` or omit `model` to use the configured routing policy and
+selected local model. A hardcoded `jev-1.13.0` remains a model pin and cannot
+select an unrelated local model.
 Local calls need no hosted API key; hosted activation stays explicit. A remote
 server's loopback address points to that server. A browser running on the user's
 machine can address local services, so Sys1's network listener rejects browser
@@ -136,28 +136,35 @@ and accepts decision POSTs only as `application/json`.
 Start with an opt-in, non-authoritative pilot. Compare decisions on the
 application's representative fixtures and record backend/adapter identity,
 latency, errors, abstentions, and disagreement with the current decision path.
-Do not reuse Jev probability thresholds for generic GGUF or Needle output
+Do not reuse Jev probability thresholds for generic GGUF output
 without model-specific evidence. A local-only policy also constrains explicit
 pins; a pin never bypasses the policy. Broad production adoption requires the
 consumer's own quality and operational acceptance, not just wire compatibility.
 
-## Quickstart: entirely local
+## Quickstart: experimental local decisions
 
 ```sh
-sys1 setup      # verifies the native runtime and installs the platform default
+sys1 setup      # verifies the native runtime, installs and selects Qwen3 1.7B
 sys1 up         # starts the gateway on 127.0.0.1:13900
 sys1 status
 ```
 
-`setup` is the explicit weight-download boundary. It recommends Qwen3 1.7B on
-machines with at least 16 GiB of system memory and Qwen3 0.6B below that. Inspect
-without changing anything, or override the tier:
+Local Qwen is an experimental adapter, not a qualified substitute for Jev.
+The broader tests found 32/72 correct decisions for Qwen3 1.7B and 44/72 for
+Qwen3.5 4B on a different fresh fixture. [Read the evidence](https://sys1.io/compare)
+before using local decisions to drive actions.
+
+`setup` is the explicit weight-download boundary. It installs Qwen3 1.7B and
+persists that choice as `local.model`, regardless of system memory. Inspect
+without changing anything:
 
 ```sh
 sys1 setup --dry-run --json
-sys1 setup --tier compact
-sys1 setup --tier quality
 ```
+
+`sys1 setup --tier compact` explicitly installs and selects the experimental
+Qwen3 0.6B diagnostic model. It is not an automatic low-memory fallback.
+`sys1 setup --tier quality` returns the selection to Qwen3 1.7B.
 
 The pinned llama.cpp runtime selects the best available backend automatically:
 
@@ -209,7 +216,7 @@ sys1 jev status
 ```
 
 `jev enable` requires the credential to be present, stores only
-`hosted.enabled: true`, and sets routing to `auto`. The key remains in the
+`hosted.enabled: true`, and sets routing to `hosted-only`. The key remains in the
 environment and is never written to disk or printed. Restart a gateway that was
 started before the key was exported. To return to local-only operation:
 
@@ -217,67 +224,52 @@ started before the key was exported. To return to local-only operation:
 sys1 jev disable
 ```
 
-With Jev enabled, `auto` prefers reachable hosted Jev and falls back to the
-installed local model. With Jev disabled or its credential absent, the same
-endpoint continues entirely locally.
+Enabling Jev selects `hosted-only`: a hosted outage or missing credential returns
+an error without substituting Qwen. To experiment with local fallback after
+measuring its quality on your application, explicitly run
+`sys1 config set routing.policy auto`. That policy prefers reachable Jev, then
+the installed model named by `local.model`. Disabling Jev returns a hosted-only
+configuration to `auto` for the selected local model. Installing additional
+models does not change the selection. If no eligible route is available, Sys1
+reports an error instead of silently choosing another installed model.
 
 ## Local models
 
 `sys1 setup` and `sys1 pull` manage model artifacts under
 `~/.sys1/models` (or `$SYS1_HOME/models`). Downloads stream to a temporary
-file, enforce an 8 GiB ceiling, verify SHA-256, run a per-kind structural
+file, enforce an 8 GiB ceiling, verify SHA-256, run bounded GGUF structural
 validation, and only then atomically enter the model store. Manifest filenames
 cannot escape the store, symbolic-link weights are not admitted, and the daemon
 never downloads weights implicitly.
 
 ```sh
 sys1 pull --list
-sys1 pull qwen3-0.6b
-sys1 pull cua-s1-forms
-sys1 pull needle3
+sys1 pull qwen3-1.7b
 sys1 model list
-sys1 model verify qwen3-0.6b
+sys1 model verify qwen3-1.7b
 ```
 
-The curated registry contains three artifact kinds:
+The curated registry contains three experimental GGUF models:
 
 | Model | Kind | Download | Role |
 | --- | --- | ---: | --- |
-| `qwen3-0.6b` | `gguf` | 365 MiB | compact default below 16 GiB RAM |
-| `qwen3-1.7b` | `gguf` | 1.03 GiB | quality default at 16 GiB RAM or above |
-| `cua-s1-forms` | `scorer` | 2.8 MiB | CUA-S1 form-action option scorer (specialist) |
-| `needle3` | `needle` | 34 MiB + engine | Cactus Needle extraction model (specialist) |
+| `qwen3-1.7b` | `gguf` | 1.03 GiB | default local experiment |
+| `qwen3-0.6b` | `gguf` | 365 MiB | diagnostic model; explicit selection only |
+| `qwen3.5-4b` | `gguf` | 2.55 GiB | larger candidate; explicit selection only |
 
 All entries are pinned to the publisher's Hugging Face LFS SHA-256. Weight
 licenses and terms remain those of their publishers; weights are not included
 in the Sys1 package.
 
-### Specialists
+`sys1 pull` defaults to Qwen3 1.7B and only installs an artifact; it does not
+change `local.model`. To change the local route, install the model first, then
+select its installed ID with `sys1 config set local.model MODEL`. Other
+installed models require a request-level model pin. This keeps a new download
+from becoming an unintended fallback.
 
-`scorer` and `needle` models are **specialists**: they never absorb unpinned
-fallback traffic. Only `gguf` models serve `auto`/`prefer-local` requests.
-To use a specialist, pin it explicitly:
-
-```json
-{ "model": "local-cua-s1-forms/cua-s1-forms", "state": "...", "questions": { ... } }
-```
-
-Each kind runs through a different adapter, disclosed in the
-`x-sys1-local-adapter` response header:
-
-- `generic-gguf` — llama.cpp first-token scoring (below);
-- `option-scorer` — the 706K-parameter CUA-S1 checkpoint, ported to pure
-  TypeScript. A byte-level option-attention transformer scores up to 26
-  options per question in a single forward pass — real per-option
-  distributions, ~3 MB resident, no native runtime. Its training domain is
-  web-form actions (`fill`/`check`/`click`/`skip`), so pin it for
-  form-shaped state→action decisions;
-- `needle-extract` — the Cactus Needle `.cact` blob plus a platform engine
-  binary, spawned as one bounded process per request with telemetry
-  disabled. Questions become arguments of one `evaluate` tool call. Needle
-  returns values plus model-reported turn confidence rather than per-option
-  probabilities, so `probabilities` are a disclosed approximation
-  (confidence on the pick, the remainder split uniformly).
+Older inventories containing removed CUA-S1 or Needle artifacts fail closed.
+Sys1 preserves those files and the manifest; use a new `SYS1_HOME` for the
+current GGUF store.
 
 ### Generic GGUF adapter
 
@@ -287,7 +279,8 @@ probability mass over constrained answer labels. Choice and score use unique
 one-character labels to avoid ambiguous multi-token option names. Builtin
 inference supports up to 35 options per question; hosted and external
 backends retain the protocol's 255-option limit. Builtin answers use the
-official Jev wire shapes:
+official Jev wire shapes and disclose `generic-gguf` in the
+`x-sys1-local-adapter` response header:
 
 - Noul returns only `type` and probability-of-yes `noul`;
 - Choice returns `choice`, keyed `probabilities`, and `confidence`;
@@ -297,9 +290,7 @@ official Jev wire shapes:
 Adapter input bounds fail closed: Sys1 never silently truncates state,
 instructions, or criteria. Generic GGUF accepts up to 6,000 state characters,
 2,000 instruction characters, 96 characters per option name/criterion, and
-16,000 characters for the complete rendered prompt. The bundled scorer has
-224 bytes of combined state/instructions and 96 bytes per rendered option.
-Needle also checks its prompt and tool bounds. An input beyond an adapter's
+16,000 characters for the complete rendered prompt. An input beyond the adapter's
 bounds returns an error without being sent to a different backend.
 
 Adapter quality signals stay outside those answer objects:
@@ -307,8 +298,8 @@ Adapter quality signals stay outside those answer objects:
 allowed labels, and `x-sys1-local-min-concentration` is the least
 distribution concentration in the batch. Low coverage means the model did not
 cleanly follow the decision instruction. These are useful local signals, not
-a calibration guarantee. Use hosted Jev or a qualified System One-specific
-backend where calibrated semantics are required.
+a calibration guarantee. Use hosted Jev or a task-qualified System One-specific
+backend when its behavior has been evaluated for your task.
 
 An unlisted public Hugging Face GGUF can be installed explicitly:
 
@@ -360,25 +351,29 @@ package exports request and response schemas for boundary validation.
 
 ## Routing
 
-`routing.policy` controls candidate order:
+For unpinned requests (`model: "auto"` or omitted), `routing.policy` controls
+the order of enabled hosted Jev and the installed model named by `local.model`:
 
 | Policy | Order |
 | --- | --- |
-| `auto` (default) | hosted backends, then local smallest-first |
-| `prefer-local` | local smallest-first, then hosted Jev |
-| `prefer-hosted` | hosted Jev, then local |
-| `local-only` | local only |
-| `hosted-only` | hosted backends only |
+| `auto` (default) | hosted Jev, then the selected local model |
+| `prefer-local` | selected local model, then hosted Jev |
+| `prefer-hosted` | hosted Jev, then the selected local model |
+| `local-only` | selected local model only |
+| `hosted-only` | hosted Jev only |
 
-Local candidates sort by parameter count, then operator `cost_rank`, then
-backend name. Registered HTTP services are local only when their URL uses a
+Other installed models and all registered HTTP services require an explicit
+request model or backend/model pin. They never receive unpinned fallback
+traffic. A missing selected model does not promote another installed model.
+Registered HTTP services are local only when their URL uses a
 loopback host; off-machine URLs count as hosted. Redirects are never followed.
 `local-only` decisions neither probe nor dispatch to hosted endpoints. Explicit
 model discovery and doctor may probe all configured backends. Backend names must
 be unique; `typesafe` and `local-*` are reserved for managed candidates. Requests can pin either a model id or an exact backend/model:
 
-- `"model": "qwen3-0.6b"` selects any backend serving that id;
-- `"model": "local-qwen3-0.6b/qwen3-0.6b"` pins the builtin runner;
+- `"model": "jev-1.13.0"` selects a backend serving that hosted model;
+- `"model": "local-qwen3-1.7b/qwen3-1.7b"` pins the builtin Qwen runner;
+- `"model": "local-qwen3-0.6b/qwen3-0.6b"` explicitly selects the experimental model;
 - `"model": "openjev/openjev-latest"` pins a registered HTTP backend that advertises that alias.
 
 Selection is capability-aware. Each request's needs — its largest option
@@ -386,8 +381,7 @@ count and total question count — are compared against the backend's published
 limits. A backend the request exceeds is skipped; when no configured backend
 can serve the request at all the gateway answers `422 request_unsupported`
 rather than dispatching a request that would fail downstream. Builtin
-backends publish their adapter limits (`generic-gguf` 35 options,
-`option-scorer` 26 options, `needle-extract` 64 questions); remote backends
+backends publish their adapter limit (`generic-gguf` 35 options); remote backends
 are probed at `GET /v1/limits` (openjev-style `max_answers_per_question` and
 `max_questions`). A backend that publishes nothing has unknown capacity; Sys1 can enforce only
 its configured limits and the common protocol envelope. Missing limits never
@@ -415,6 +409,9 @@ and all three answer shapes:
 sys1 backend check --name openjev
 ```
 
+Select it in a request with `"model": "openjev/openjev-latest"`. Registration
+and qualification do not add an HTTP service to automatic routing.
+
 The check makes bounded calls to `/v1/models`, `/v1/limits`, and
 `/v1/systemone`; validates the official response schema, probability
 normalization, and Score arithmetic; and never prints or persists request or
@@ -427,8 +424,7 @@ weights, mutate credentials, or own their lifecycle.
 
 `sys1 doctor` is a bounded, machine-readable readiness check. It verifies the
 Bun floor, state-directory access, config, native llama.cpp runtime/backend,
-manifest, every admitted artifact (GGUF header, scorer checkpoint structure,
-`.cact` header, engine companion presence/byte count), stale/orphan store
+manifest, every admitted artifact's GGUF header, stale/orphan store
 files, routing candidates, and daemon ownership. It does not hash entire model
 files; use `sys1 model verify MODEL` for exact SHA-256 verification.
 
@@ -468,10 +464,11 @@ the state directory. Settable keys:
   `gateway.request_timeout_ms`, `gateway.probe_timeout_ms`;
 - `hosted.base_url`, `hosted.model`, `hosted.api_key_env` (activation uses
   `sys1 jev`);
-- `local.enabled`, `local.context_tokens`, `local.eval_timeout_ms`,
+- `local.enabled`, `local.model`, `local.context_tokens`, `local.eval_timeout_ms`,
   `local.max_loaded_models`.
 
-Fresh config uses `routing.policy: auto`, `local.enabled: true`, and
+Fresh config uses `routing.policy: auto`, `local.enabled: true`,
+`local.model: qwen3-1.7b`, `hosted.model: jev-1.13.0`, and
 `hosted.enabled: false`. The daemon reads config per request, so routing and
 backend changes do not need a restart. Restart after changing local runtime
 context, timeout, or residency settings. Environment variables are inherited when
@@ -517,16 +514,16 @@ or download model weights. Model inference and hosted calls remain excluded
 from ordinary CI; the release workflow still verifies its exact uploaded
 artifact on all three platforms.
 
-## Needle process boundary
-
-The explicitly pinned Needle specialist requires a private per-request tools
-file containing question instructions and criteria, deleted when the request
-settles. Its native CLI receives state as a process argument, visible to local
-process inspection. Abrupt host termination can leave the private temporary
-file behind. Do not use this adapter for inputs whose policy forbids that
-exposure. The GGUF worker uses private pipes; ordinary request bodies,
-credentials, answers, and prompts are not application logs or durable state.
-
 ## Comparing models
 
-See [the model comparison](https://sys1.io/compare) for download footprints, local and hosted Jev measurements, upstream benchmarks, and token/cost semantics. The [evidence appendix](docs/model-comparison.md) records source conditions, and the [opt-in benchmarks](benchmarks/README.md) run the same public synthetic cases through explicitly pinned local models or hosted Jev. The hosted command requires your environment-provided API key. The published same-case snapshot has Jev at 20/20 correct, Qwen3 1.7B at 18/20, and the three smaller local routes at 8/20. Those weaker routes are not recommended for this task; this small synthetic test does not establish general model quality or justify a broad automatic migration.
+See [the model comparison](https://sys1.io/compare) for local and hosted Jev
+measurements and token/cost semantics. The [evidence appendix](docs/model-comparison.md)
+records source conditions; the [opt-in benchmarks](benchmarks/README.md) describe
+reproduction, including the environment-provided API key required for hosted
+calls. The current broader results keep every failure: Qwen3 1.7B reached
+32/72 on decisions-v2; Qwen3.5 4B reached 44/72 on decisions-v3. Different
+fixtures are not a measured improvement. Neither qualifies a general local
+replacement for Jev. The historical 20-case snapshot remains available: Jev scored 20/20,
+Qwen3 1.7B scored 18/20, and Qwen3 0.6B, CUA-S1, and Needle each scored 8/20.
+CUA-S1 and Needle are no longer supported runtime routes. Historical results do
+not establish general model quality or justify an automatic application migration.

@@ -1,0 +1,4 @@
+# Frozen fixture and public evidence hashes must survive Windows checkout.
+/benchmarks/*.json text eol=lf
+/site/data/*.json text eol=lf
+/benchmarks/laya/** text eol=lf

@@ -1,13 +1,6 @@
 import { LocalInputError } from "./input.ts";
-import { lstatSync, readFileSync } from "node:fs";
+import { DEFAULT_LOCAL_MODELS } from "../defaults.ts";
 import type { SystemOneRequest } from "../protocol.ts";
-import {
-  needleAnswers,
-  needlePrompt,
-  needleTools,
-  scorerAnswer,
-  scorerInput,
-} from "./adapt.ts";
 import {
   DECIDE_LIMITS,
   aggregateMass,
@@ -23,15 +16,6 @@ import {
 } from "./decide.ts";
 import { EngineUnavailableError, LlamaEngine, type DecisionEngine } from "./engine.ts";
 import {
-  NEEDLE_LIMITS,
-  NeedleEngineError,
-  runNeedleTurn,
-  type NeedleTurn,
-} from "./needle.ts";
-import { SCORER_LIMITS, loadScorer, type OptionScorer } from "./scorer.ts";
-import {
-  MODEL_LIMITS,
-  engineFilePath,
   findInstalled,
   installedModels,
   modelFilePath,
@@ -41,10 +25,7 @@ import {
 /**
  * The builtin local backend. Each installed model registers as a
  * pseudo-backend named `local-<id>`; the runner lazily loads weights on first
- * use, serializes work per model, and caps residency. `gguf` models run
- * through the llama.cpp engine; `scorer` checkpoints run in-process through
- * the option scorer; `needle` models spawn one bounded engine process per
- * request with telemetry disabled.
+ * use, serializes requests, and caps GGUF residency in the llama.cpp engine.
  */
 
 export const BUILTIN_PREFIX = "local-";
@@ -58,7 +39,7 @@ export interface BuiltinCandidate {
   models: string[];
   size_b: number | null;
   cost_rank: number;
-  specialist: boolean;
+  explicitOnly: boolean;
   capabilities: { maxOptions?: number; maxQuestions?: number };
 }
 
@@ -67,7 +48,11 @@ export function builtinName(modelId: string): string {
 }
 
 /** Installed models as router candidates — one pseudo-backend per model. */
-export function builtinCandidates(home: string, enabled: boolean): BuiltinCandidate[] {
+export function builtinCandidates(
+  home: string,
+  enabled: boolean,
+  selectedModel: string = DEFAULT_LOCAL_MODELS.quality,
+): BuiltinCandidate[] {
   if (!enabled) return [];
   return installedModels(home).map((model) => ({
     name: builtinName(model.id),
@@ -78,15 +63,8 @@ export function builtinCandidates(home: string, enabled: boolean): BuiltinCandid
     models: [model.id],
     size_b: model.size_b ?? null,
     cost_rank: 0,
-    // Only generic GGUF models may absorb unpinned fallback traffic; scorer
-    // and needle checkpoints are specialists that serve named requests only.
-    specialist: model.kind !== "gguf",
-    capabilities:
-      model.kind === "scorer"
-        ? { maxOptions: SCORER_LIMITS.maxOptions }
-        : model.kind === "needle"
-          ? { maxQuestions: NEEDLE_LIMITS.maxArguments }
-          : { maxOptions: DECIDE_LIMITS.maxLabels },
+    explicitOnly: model.id !== selectedModel,
+    capabilities: { maxOptions: DECIDE_LIMITS.maxLabels },
   }));
 }
 
@@ -109,13 +87,9 @@ export interface RunnerOptions {
   home: string;
   maxLoadedModels: number;
   engineFactory: EngineFactory;
-  /** Per-request spawn bound for needle engine processes. */
-  needleTimeoutMs?: number;
-  /** Injectable process spawn for needle turns (tests only). */
-  needleSpawnFn?: typeof Bun.spawn;
 }
 
-export type LocalAdapter = "generic-gguf" | "option-scorer" | "needle-extract";
+export type LocalAdapter = "generic-gguf";
 
 export interface LocalQuestionDiagnostic {
   coverage: number;
@@ -133,7 +107,6 @@ export interface DecideResult {
 export class LocalRunner {
   private readonly options: RunnerOptions;
   private readonly engines = new Map<string, { engine: DecisionEngine; touched: number }>();
-  private readonly scorers = new Map<string, { scorer: OptionScorer; touched: number }>();
   private readonly shutdownController = new AbortController();
   private requestQueue: Promise<unknown> = Promise.resolve();
 
@@ -143,33 +116,22 @@ export class LocalRunner {
 
   /** Loaded model ids, for status reporting. */
   loadedModels(): string[] {
-    return [...this.engines.keys(), ...this.scorers.keys()];
+    return [...this.engines.keys()];
   }
 
   private residentCount(): number {
-    return this.engines.size + this.scorers.size;
+    return this.engines.size;
   }
 
   private async evictOldest(): Promise<void> {
-    let oldest: { map: "engine" | "scorer"; id: string; touched: number } | null = null;
+    let oldest: { id: string; touched: number } | null = null;
     for (const [id, entry] of this.engines) {
-      if (oldest === null || entry.touched < oldest.touched) {
-        oldest = { map: "engine", id, touched: entry.touched };
-      }
-    }
-    for (const [id, entry] of this.scorers) {
-      if (oldest === null || entry.touched < oldest.touched) {
-        oldest = { map: "scorer", id, touched: entry.touched };
-      }
+      if (oldest === null || entry.touched < oldest.touched) oldest = { id, touched: entry.touched };
     }
     if (oldest === null) return;
-    if (oldest.map === "engine") {
-      const stale = this.engines.get(oldest.id);
-      this.engines.delete(oldest.id);
-      if (stale !== undefined) await stale.engine.dispose().catch(() => {});
-    } else {
-      this.scorers.delete(oldest.id);
-    }
+    const stale = this.engines.get(oldest.id);
+    this.engines.delete(oldest.id);
+    if (stale !== undefined) await stale.engine.dispose().catch(() => {});
   }
 
   private async engineFor(model: InstalledModel): Promise<DecisionEngine> {
@@ -184,24 +146,6 @@ export class LocalRunner {
     const engine = this.options.engineFactory(model, modelFilePath(this.options.home, model));
     this.engines.set(model.id, { engine, touched: Date.now() });
     return engine;
-  }
-
-  private async scorerFor(model: InstalledModel): Promise<OptionScorer> {
-    const cached = this.scorers.get(model.id);
-    if (cached !== undefined) {
-      cached.touched = Date.now();
-      return cached.scorer;
-    }
-    if (this.residentCount() >= this.options.maxLoadedModels) {
-      await this.evictOldest();
-    }
-    const path = modelFilePath(this.options.home, model);
-    if (lstatSync(path).size > MODEL_LIMITS.maxScorerBytes) {
-      throw new Error("scorer checkpoint exceeds the 256 MiB bound");
-    }
-    const scorer = loadScorer(new Uint8Array(readFileSync(path)));
-    this.scorers.set(model.id, { scorer, touched: Date.now() });
-    return scorer;
   }
 
   /**
@@ -244,172 +188,7 @@ export class LocalRunner {
         error: { type: "unknown_model", message: `no installed model named ${modelId}` },
       };
     }
-    if (model.kind === "scorer") return this.decideScorer(request, model, signal);
-    if (model.kind === "needle") return this.decideNeedle(request, model, signal);
     return this.decideGguf(request, model, signal);
-  }
-
-  private async decideScorer(
-    request: SystemOneRequest,
-    model: InstalledModel,
-    signal?: AbortSignal,
-  ): Promise<DecideResult> {
-    const questions = questionEntries(request);
-    const unsupported = questions.find(([, question]) => {
-      if (question.type === "choice" && Object.keys(question.criteria).length > SCORER_LIMITS.maxOptions) {
-        return true;
-      }
-      return question.type === "score" && question.criteria.length > SCORER_LIMITS.maxOptions;
-    });
-    if (unsupported !== undefined) {
-      return {
-        ok: false,
-        error: {
-          type: "local_question_unsupported",
-          message: `option-scorer checkpoints support at most ${SCORER_LIMITS.maxOptions} options per question`,
-        },
-      };
-    }
-    let scorer: OptionScorer;
-    try {
-      scorer = await this.scorerFor(model);
-    } catch (error) {
-      return {
-        ok: false,
-        error: {
-          type: "engine_unavailable",
-          message: error instanceof Error ? error.message : "scorer checkpoint failed to load",
-        },
-      };
-    }
-    const answers: Record<string, LocalAnswer> = {};
-    const diagnostics: Record<string, LocalQuestionDiagnostic> = {};
-    try {
-      for (const [name, question] of questions) {
-        signal?.throwIfAborted();
-        const input = scorerInput(
-          request.state,
-          question,
-          scorer.config.contextTokens,
-          scorer.config.optionTokens,
-        );
-        const distribution = scorer.score(input.context, input.options);
-        answers[name] = scorerAnswer(question, input.keys, distribution);
-        diagnostics[name] = {
-          coverage: 1,
-          concentration: Math.round(confidenceOf(distribution) * 1000) / 1000,
-        };
-      }
-    } catch (error) {
-      return {
-        ok: false,
-        error: {
-          type: error instanceof LocalInputError ? "local_question_unsupported" : signal?.aborted === true ? "inference_timeout" : "inference_failed",
-          message: error instanceof Error ? error.message : "scorer inference failed",
-        },
-      };
-    }
-    return {
-      ok: true,
-      adapter: "option-scorer",
-      response: toLocalResponse(model.id, answers, { input_tokens: 0, output_tokens: 0 }),
-      diagnostics,
-    };
-  }
-
-  private async decideNeedle(
-    request: SystemOneRequest,
-    model: InstalledModel,
-    signal?: AbortSignal,
-  ): Promise<DecideResult> {
-    if (Object.keys(request.questions).length > NEEDLE_LIMITS.maxArguments) {
-      return {
-        ok: false,
-        error: {
-          type: "local_question_unsupported",
-          message: `needle adapters support at most ${NEEDLE_LIMITS.maxArguments} questions per request`,
-        },
-      };
-    }
-    const enginePath = engineFilePath(this.options.home, model);
-    if (enginePath === null) {
-      return {
-        ok: false,
-        error: { type: "engine_unavailable", message: `no needle engine for ${model.id}` },
-      };
-    }
-    const { toolsJson } = needleTools(request);
-    const prompt = needlePrompt(request.state);
-    let turn: NeedleTurn;
-    try {
-      turn = await runNeedleTurn(
-        {
-          enginePath,
-          weightsPath: modelFilePath(this.options.home, model),
-          home: this.options.home,
-          timeoutMs: this.options.needleTimeoutMs ?? 60_000,
-          ...(this.options.needleSpawnFn === undefined
-            ? {}
-            : { spawnFn: this.options.needleSpawnFn }),
-        },
-        toolsJson,
-        prompt,
-        signal,
-      );
-    } catch (error) {
-      return {
-        ok: false,
-        error: {
-          type:
-            error instanceof LocalInputError ? "local_question_unsupported" : signal?.aborted === true
-              ? "inference_timeout"
-              : error instanceof NeedleEngineError
-                ? "engine_unavailable"
-                : "inference_failed",
-          message: error instanceof Error ? error.message : "needle turn failed",
-        },
-      };
-    }
-    const call = turn.calls.find((candidate) => candidate.name === "evaluate");
-    if (call === undefined) {
-      return {
-        ok: false,
-        error: {
-          type: "inference_unreadable",
-          message:
-            turn.suppressed.length > 0
-              ? "needle withheld its call below the grounding floor"
-              : "needle produced no evaluate call",
-        },
-      };
-    }
-    const { answers, missing } = needleAnswers(request, call.arguments, turn.confidence);
-    if (missing.length > 0) {
-      return {
-        ok: false,
-        error: {
-          type: "inference_unreadable",
-          message: `needle returned no usable value for ${missing.join(", ")}`,
-        },
-      };
-    }
-    const confidence = turn.confidence ?? 0;
-    const diagnostics: Record<string, LocalQuestionDiagnostic> = {};
-    for (const [name, answer] of Object.entries(answers)) {
-      diagnostics[name] = {
-        coverage: 1,
-        concentration:
-          answer.type === "noul"
-            ? Math.round(Math.max(answer.noul, 1 - answer.noul) * 1000) / 1000
-            : Math.round(confidence * 1000) / 1000,
-      };
-    }
-    return {
-      ok: true,
-      adapter: "needle-extract",
-      response: toLocalResponse(model.id, answers, { input_tokens: 0, output_tokens: 0 }),
-      diagnostics,
-    };
   }
 
   private async decideGguf(
@@ -505,7 +284,6 @@ export class LocalRunner {
     await this.requestQueue.catch(() => {});
     const engines = [...this.engines.values()];
     this.engines.clear();
-    this.scorers.clear();
     await Promise.all(engines.map((entry) => entry.engine.dispose().catch(() => {})));
   }
 }

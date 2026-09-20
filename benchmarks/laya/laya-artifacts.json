@@ -1,0 +1,68 @@
+[
+  {
+    "file": "LICENSE",
+    "bytes": 10173,
+    "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+    "git_blob_sha1": "d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe"
+  },
+  {
+    "file": "NOTICE",
+    "bytes": 698,
+    "sha256": "f23ae8ae701f5a43e186182e387aeef00b666daed18a946fc7c9ea827b00a8fa",
+    "git_blob_sha1": "a41f006a83bff3f324dfbe8b3d9963f9b39063d6"
+  },
+  {
+    "file": "README.md",
+    "bytes": 3699,
+    "sha256": "3e462f1cd9a711f2d10cf7508b5cf98737eda70c4833fd168c993501420679ef",
+    "git_blob_sha1": "1f8767bd3e29593501ab7df82ed90f7b7d963ff8"
+  },
+  {
+    "file": "encoder/config.json",
+    "bytes": 2084,
+    "sha256": "5268d24ad3b77c8151de5dcb0762ba4391619aad9ab0bda33e36fb083cfeae6d",
+    "git_blob_sha1": "d4be4829750fb04c0aa8b9897c3ea827f76c0109"
+  },
+  {
+    "file": "manifest.json",
+    "bytes": 1778,
+    "sha256": "3cba9de548ccbfd05dde36365ec2ffdafce9e79b68b1b435d41343ef1afd7d70",
+    "git_blob_sha1": "363631152f707e5148462ec9a92b11a99051ba9a"
+  },
+  {
+    "file": "mlx_config.json",
+    "bytes": 322,
+    "sha256": "fe0d126c46e70e28e47767801b15e3219280484ce298cab6aadcd339ca242cae",
+    "git_blob_sha1": "47516cb633704ddc43a121566e00b925133c2669"
+  },
+  {
+    "file": "rl_agent_config.json",
+    "bytes": 848,
+    "sha256": "d99c800b818cb1a60734adba961c27abeaff2d142bb9fc473edb34b7de32fde9",
+    "git_blob_sha1": "d0293fddc8b337c9bc651f2a7b95c0848fbbb488"
+  },
+  {
+    "file": "tokenizer/tokenizer.json",
+    "bytes": 3583228,
+    "sha256": "6c8aaa9a542084f2457eab775d4eeb51f92a70c0fd9de28d5edb0ddec3c08d30",
+    "git_blob_sha1": "2f4d8583e507b7466d2490e2d6c045647a822698"
+  },
+  {
+    "file": "tokenizer/tokenizer_config.json",
+    "bytes": 337,
+    "sha256": "08d4cf3ac4dca381759441b85b91a6d40e688471dcd33d15d6649eb0a9a854d1",
+    "git_blob_sha1": "ed1ffabc2ce11120754705709569e365e46da71a"
+  },
+  {
+    "file": "validation.json",
+    "bytes": 18275,
+    "sha256": "3b3c53564fd89f431252518733b4f70b856c1b911bcdf3a271d8ca1ec7a1b60c",
+    "git_blob_sha1": "532e2fe0a7363f3d0ee5eec641e3db39500ac01c"
+  },
+  {
+    "file": "model.safetensors",
+    "bytes": 842609225,
+    "sha256": "804ef8802b4cac7a67913b0cfb8448659e934a50284aaa867b98d7d9a6e7d1e0",
+    "lfs_verified": true
+  }
+]

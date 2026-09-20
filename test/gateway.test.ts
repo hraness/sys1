@@ -1,13 +1,12 @@
 import { describe, expect, test, afterEach } from "bun:test";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { configSchema, type Sys1Config } from "../src/config.ts";
 import { createFetchHandler, startGateway } from "../src/gateway.ts";
 import type { DecisionEngine, FirstTokenDistribution } from "../src/local/engine.ts";
 import { LocalRunner } from "../src/local/runner.ts";
-import { modelsDir, saveManifest } from "../src/local/store.ts";
-import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
+import { loadManifest, manifestPath, modelsDir, saveManifest } from "../src/local/store.ts";
 
 const VALID_BODY = JSON.stringify({
   state: "Help! My payouts have been failing for 3 days.",
@@ -112,18 +111,17 @@ describe("gateway /v1/systemone", () => {
     expect(body.answers.urgent.noul).toBe(0.91);
   });
 
-  test("falls back to the local backend when hosted is down", async () => {
+  test("does not use an unselected HTTP backend when hosted is down", async () => {
     const handle = handler(testConfig(), { hostedUp: false });
     const response = await handle(post(VALID_BODY));
-    expect(response.status).toBe(200);
-    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
+    expect(response.status).toBe(503);
   });
 
-  test("prefer-local routes to the local backend first", async () => {
-    const config = testConfig({ routing: { policy: "prefer-local" } });
+  test("prefer-local does not implicitly opt into a registered HTTP backend", async () => {
+    const config = testConfig({ local: { model: "tiny" }, routing: { policy: "prefer-local" } });
     const handle = handler(config, {});
     const response = await handle(post(VALID_BODY));
-    expect(response.headers.get("x-sys1-backend")).toBe("openjev");
+    expect(response.headers.get("x-sys1-backend")).toBe("typesafe");
   });
 
   test("bare model routes to its backend", async () => {
@@ -260,7 +258,7 @@ describe("gateway cancellation and redispatch boundaries", () => {
     expect(await response.text()).not.toContain("private backend output");
   });
 
-  test("only a failure before response headers may dispatch a second time", async () => {
+  test("a transport failure cannot activate an unselected HTTP backend", async () => {
     let posts = 0;
     const fetchFn = recordingFetch(async () => {
       posts += 1;
@@ -269,9 +267,9 @@ describe("gateway cancellation and redispatch boundaries", () => {
     });
     const handle = createFetchHandler({ config: testConfig(), env: ENV, fetchFn });
     const response = await handle(post(VALID_BODY));
-    expect(response.status).toBe(200);
-    expect(response.headers.get("x-sys1-attempts")).toBe("2");
-    expect(posts).toBe(2);
+    expect(response.status).toBe(503);
+
+    expect(posts).toBe(1);
   });
 
   test("a successful HTTP response with the wrong answer keys is a definitive 502", async () => {
@@ -459,40 +457,8 @@ describe("gateway builtin local backends", () => {
     return home;
   }
 
-  function homeWithScorer(): string {
-    const home = mkdtempSync(join(tmpdir(), "sys1-gw-test-"));
-    homes.push(home);
-    const ckpt = buildScorerCheckpoint({
-      encoder: "tinyx",
-      width: 8,
-      rank: 8,
-      layers: 1,
-      heads: 2,
-      context_tokens: 256,
-      option_tokens: 32,
-    });
-    mkdirSync(modelsDir(home), { recursive: true });
-    writeFileSync(join(modelsDir(home), "ckpt.pt"), ckpt);
-    saveManifest(home, {
-      version: 1,
-      models: [
-        {
-          id: "ckpt",
-          kind: "scorer",
-          file: "ckpt.pt",
-          source: "test",
-          sha256: "0".repeat(64),
-          bytes: ckpt.byteLength,
-          context: 256,
-          installed_at: "2026-01-01T00:00:00.000Z",
-        },
-      ],
-    });
-    return home;
-  }
-
   function localOnlyConfig(): Sys1Config {
-    return configSchema.parse({ version: 1, backends: [], hosted: { enabled: false } });
+    return configSchema.parse({ version: 1, local: { model: "tiny" }, backends: [], hosted: { enabled: false } });
   }
 
   test("a builtin gguf answer carries generic-gguf adapter headers", async () => {
@@ -532,7 +498,7 @@ describe("gateway builtin local backends", () => {
       return discovery(input, init);
     }) as unknown as typeof fetch;
     const handle = createFetchHandler({
-      config: testConfig({ routing: { policy: "prefer-local" } }),
+      config: testConfig({ local: { model: "tiny" }, routing: { policy: "prefer-local" } }),
       env: ENV, home, localRunner: runner, fetchFn,
     });
     const response = await handle(post(VALID_BODY));
@@ -543,52 +509,79 @@ describe("gateway builtin local backends", () => {
     await runner.dispose();
   });
 
-  test("a pinned specialist scorer answers with the option-scorer adapter", async () => {
-    const home = homeWithScorer();
-    const runner = new LocalRunner({
-      home,
-      maxLoadedModels: 1,
-      engineFactory: (model) => new FakeEngine(model.id),
-    });
-    const handle = createFetchHandler({
-      config: localOnlyConfig(),
-      env: {} as NodeJS.ProcessEnv,
-      fetchFn: stubFetch({}),
-      home,
-      localRunner: runner,
-    });
-    const body = JSON.parse(VALID_BODY) as Record<string, unknown>;
-    body["model"] = "local-ckpt/ckpt";
-    const response = await handle(post(JSON.stringify(body)));
-    expect(response.status).toBe(200);
-    expect(response.headers.get("x-sys1-backend")).toBe("local-ckpt");
-    expect(response.headers.get("x-sys1-local-adapter")).toBe("option-scorer");
-    const parsed = (await response.json()) as {
-      answers: { urgent: { type: string; noul: number } };
-    };
-    expect(parsed.answers.urgent.type).toBe("noul");
-    await runner.dispose();
+
+
+
+
+  test("installed smaller models cannot override the selected local model", async () => {
+    const home = homeWithGguf();
+    const manifest = loadManifest(home);
+    const base = manifest.models[0]!;
+    manifest.models = [
+      { ...base, id: "qwen3-0.6b", file: "qwen3-0.6b.gguf", size_b: 0.6 },
+      { ...base, id: "qwen3-1.7b", file: "qwen3-1.7b.gguf", size_b: 1.7 },
+    ];
+    saveManifest(home, manifest);
+    for (const model of manifest.models) writeFileSync(join(modelsDir(home), model.file), "x");
+    const runner = new LocalRunner({ home, maxLoadedModels: 1, engineFactory: (model) => new FakeEngine(model.id) });
+    const config = configSchema.parse({ version: 1, routing: { policy: "local-only" } });
+    const handle = createFetchHandler({ config, env: {}, home, localRunner: runner });
+    try {
+      const automatic = await handle(post(VALID_BODY));
+      expect(automatic.status).toBe(200);
+      expect(automatic.headers.get("x-sys1-backend")).toBe("local-qwen3-1.7b");
+      const explicit = await handle(post(JSON.stringify({ ...JSON.parse(VALID_BODY), model: "qwen3-0.6b" })));
+      expect(explicit.status).toBe(200);
+      expect(explicit.headers.get("x-sys1-backend")).toBe("local-qwen3-0.6b");
+      config.local.model = "qwen3-0.6b";
+      expect((await handle(post(VALID_BODY))).headers.get("x-sys1-backend")).toBe("local-qwen3-0.6b");
+      config.local.model = "missing";
+      expect((await handle(post(VALID_BODY))).status).toBe(503);
+    } finally { await runner.dispose(); }
   });
 
-  test("specialists never absorb unpinned fallback traffic", async () => {
-    const home = homeWithScorer();
-    const runner = new LocalRunner({
-      home,
-      maxLoadedModels: 1,
-      engineFactory: (model) => new FakeEngine(model.id),
-    });
-    const handle = createFetchHandler({
-      config: localOnlyConfig(),
-      env: {} as NodeJS.ProcessEnv,
-      fetchFn: stubFetch({}),
-      home,
-      localRunner: runner,
-    });
+  test("a hosted transport failure can fall back only to the selected local model", async () => {
+    const home = homeWithGguf();
+    const runner = new LocalRunner({ home, maxLoadedModels: 1, engineFactory: (model) => new FakeEngine(model.id) });
+    const discovery = stubFetch({});
+    let posts = 0;
+    const fetchFn = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (init?.method === "POST") { posts++; throw new TypeError("connection failed"); }
+      return discovery(input, init);
+    }) as typeof fetch;
+    const handle = createFetchHandler({ config: testConfig({ local: { model: "tiny" } }), env: ENV, home, localRunner: runner, fetchFn });
+    try {
+      const response = await handle(post(VALID_BODY));
+      expect(response.status).toBe(200);
+      expect(response.headers.get("x-sys1-backend")).toBe("local-tiny");
+      expect(response.headers.get("x-sys1-attempts")).toBe("2");
+      expect(posts).toBe(1);
+    } finally { await runner.dispose(); }
+  });
+
+  test("legacy inventory produces actionable errors without reading or sending weights", async () => {
+    const home = homeWithGguf();
+    writeFileSync(manifestPath(home), JSON.stringify({ version: 1, models: [{ id: "old", kind: "needle", file: "old.cact" }] }));
+    let calls = 0;
+    const handle = createFetchHandler({ config: localOnlyConfig(), env: {}, home,
+      fetchFn: (async () => { calls++; throw new Error("unexpected network"); }) as unknown as typeof fetch });
+    for (const request of [post(VALID_BODY), new Request("http://localhost/v1/models")]) {
+      const response = await handle(request);
+      expect(response.status).toBe(503);
+      expect(await response.json()).toMatchObject({ error: { type: "model_store_invalid", message: expect.stringContaining("new SYS1_HOME") } });
+    }
+    expect(calls).toBe(0);
+  });
+
+  test("hosted-only serves Jev without inspecting a legacy local inventory", async () => {
+    const home = homeWithGguf();
+    writeFileSync(manifestPath(home), JSON.stringify({ version: 1, models: [{ id: "old", kind: "needle", file: "old.cact" }] }));
+    const handle = createFetchHandler({ config: testConfig({ routing: { policy: "hosted-only" } }), env: ENV, home, fetchFn: stubFetch({}) });
     const response = await handle(post(VALID_BODY));
-    expect(response.status).toBe(503);
-    const parsed = (await response.json()) as { error: { type: string } };
-    expect(parsed.error.type).toBe("no_backend_available");
-    await runner.dispose();
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-sys1-backend")).toBe("typesafe");
+    const listed = await handle(new Request("http://localhost/v1/models"));
+    expect(listed.status).toBe(200);
   });
 
   test("a request over every published cap answers 422 request_unsupported", async () => {
@@ -602,6 +595,7 @@ describe("gateway builtin local backends", () => {
     const response = await handle(
       post(
         JSON.stringify({
+          model: "openjev/openjev-4b",
           state: "x",
           questions: { pick: { type: "choice", criteria } },
         }),
@@ -632,7 +626,7 @@ describe("gateway builtin local backends", () => {
     const criteria: Record<string, null> = {};
     for (let i = 0; i < 30; i += 1) criteria[`opt${i}`] = null;
     const response = await handle(
-      post(JSON.stringify({ state: "x", questions: { pick: { type: "choice", criteria } } })),
+      post(JSON.stringify({ model: "openjev/openjev-4b", state: "x", questions: { pick: { type: "choice", criteria } } })),
     );
     expect(response.status).toBe(422);
     const parsed = (await response.json()) as { error: { type: string } };

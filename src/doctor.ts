@@ -2,7 +2,6 @@ import {
   accessSync,
   constants,
   existsSync,
-  lstatSync,
   readdirSync,
   statSync,
 } from "node:fs";
@@ -10,15 +9,13 @@ import { dirname } from "node:path";
 import {
   DEFAULT_CONFIG,
   loadConfig,
+  isLoopbackHost,
   type Sys1Config,
 } from "./config.ts";
 import { daemonStatus, type DaemonState } from "./daemon.ts";
 import { probeNativeRuntime, type NativeRuntimeProbe } from "./local/engine.ts";
 import {
-  engineFilePath,
-  inspectCactFile,
   inspectGgufFile,
-  inspectScorerFile,
   loadManifestChecked,
   modelFilePath,
   modelsDir,
@@ -91,38 +88,20 @@ function stateDirectoryCheck(home: string): DoctorCheck {
   }
 }
 
-/** Per-kind structural check used by the models.files check. */
+/** Structural check used by the models.files check. */
 function inspectModelFile(
   home: string,
   model: Manifest["models"][number],
 ): { ok: boolean; bytes?: number; message?: string } {
   const path = modelFilePath(home, model);
-  if (model.kind === "scorer") return inspectScorerFile(path);
-  if (model.kind === "needle") return inspectCactFile(path);
   return inspectGgufFile(path);
-}
-
-/** Engine companion check for needle models; null means healthy. */
-function inspectEngineFile(home: string, model: Manifest["models"][number]): string | null {
-  const path = engineFilePath(home, model);
-  if (path === null) return null;
-  try {
-    const stats = lstatSync(path);
-    if (!stats.isFile() || stats.isSymbolicLink()) return "engine binary is not a regular file";
-    if (model.engine_bytes !== undefined && stats.size !== model.engine_bytes) {
-      return "engine byte count differs from the admitted manifest";
-    }
-    return null;
-  } catch {
-    return "engine binary is missing";
-  }
 }
 
 function modelChecks(home: string): {
   manifest: DoctorCheck;
   files: DoctorCheck;
   inventory: DoctorCheck;
-  modelCount: number;
+  validModelIds: string[];
 } {
   const loaded = loadManifestChecked(home);
   if (!loaded.ok) {
@@ -135,7 +114,7 @@ function modelChecks(home: string): {
       },
       files: { id: "models.files", status: "fail", summary: "model files cannot be evaluated" },
       inventory: { id: "models.inventory", status: "warn", summary: "model inventory cannot be reconciled" },
-      modelCount: 0,
+      validModelIds: [],
     };
   }
 
@@ -147,9 +126,6 @@ function modelChecks(home: string): {
       problems.push({ id: model.id, issue: boundedDetail(inspection.message ?? "inspection failed", home) });
     } else if (inspection.bytes !== model.bytes) {
       problems.push({ id: model.id, issue: "byte count differs from the admitted manifest" });
-    } else {
-      const engine = inspectEngineFile(home, model);
-      if (engine !== null) problems.push({ id: model.id, issue: engine });
     }
   }
 
@@ -163,9 +139,7 @@ function modelChecks(home: string): {
     try {
       const entries = readdirSync(directory, { withFileTypes: true }).slice(0, 257);
       const admitted = new Set(
-        manifest.models.flatMap((model) =>
-          model.engine_file === undefined ? [model.file] : [model.file, model.engine_file],
-        ),
+        manifest.models.map((model) => model.file),
       );
       const stale = entries.filter((entry) => entry.name.endsWith(".download") || entry.name.endsWith(".tmp")).length;
       const orphaned = entries.filter(
@@ -214,27 +188,38 @@ function modelChecks(home: string): {
             detail: problems,
           },
     inventory,
-    modelCount: manifest.models.length - problems.length,
+    validModelIds: manifest.models.filter((model) => !problems.some((problem) => problem.id === model.id)).map((model) => model.id),
   };
 }
 
 function routingCheck(
   config: Sys1Config,
   env: NodeJS.ProcessEnv,
-  validModels: number,
+  validModelIds: string[],
 ): DoctorCheck {
   const hosted =
     config.hosted.enabled &&
     (env[config.hosted.api_key_env]?.length ?? 0) > 0;
-  const local = validModels + config.backends.filter((backend) => backend.enabled).length;
+  const local = config.local.enabled && validModelIds.includes(config.local.model);
+  const explicit = config.backends.filter((backend) => {
+    if (!backend.enabled) return false;
+    const hostname = new URL(backend.base_url).hostname.replace(/^\[|\]$/g, "");
+    const onMachine = isLoopbackHost(hostname);
+    return config.routing.policy === "local-only" ? onMachine
+      : config.routing.policy === "hosted-only" ? !onMachine : true;
+  }).length;
+  if (explicit > 0 && (config.routing.policy === "hosted-only" ? !hosted
+      : config.routing.policy === "local-only" ? !local : !hosted && !local)) {
+    return { id: "routing.candidates", status: "warn", summary: "only explicit HTTP routes are configured; name a backend/model in each request" };
+  }
   if (config.routing.policy === "hosted-only" && !hosted) {
     return { id: "routing.candidates", status: "fail", summary: "hosted-only has no configured credential" };
   }
-  if (config.routing.policy === "local-only" && local === 0) {
-    return { id: "routing.candidates", status: "fail", summary: "local-only has no local candidate" };
+  if (config.routing.policy === "local-only" && !local) {
+    return { id: "routing.candidates", status: "fail", summary: `selected local model ${config.local.model} is unavailable; run sys1 setup or explicitly pin another backend` };
   }
-  if (!hosted && local === 0) {
-    return { id: "routing.candidates", status: "warn", summary: "no backend candidate is configured" };
+  if (!hosted && !local) {
+    return { id: "routing.candidates", status: "warn", summary: `no automatic route is available; selected local model ${config.local.model} is not installed or enabled` };
   }
   return {
     id: "routing.candidates",
@@ -315,7 +300,7 @@ export async function runDoctor(options: DoctorOptions): Promise<DoctorReport> {
   checks.push(models.manifest, models.files, models.inventory);
   checks.push(
     loadedConfig.ok
-      ? routingCheck(config, env, models.modelCount)
+      ? routingCheck(config, env, models.validModelIds)
       : { id: "routing.candidates", status: "fail", summary: "routing cannot be evaluated until config is fixed" },
   );
 

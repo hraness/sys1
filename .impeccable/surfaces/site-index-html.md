@@ -39,3 +39,22 @@ to Sys1 routing or promise better diagnosis, billed savings, or faster tasks.
 The evidence-owner task reviewed the exact claims. This is a text and metadata
 refinement: structure, design tokens, demo behavior, links, installation and
 footer are preserved.
+
+## September 20 supported routes
+
+Headline: Jev or local Qwen, one typed API. Lead with the reusable client,
+explicit model selection, validated response shapes and owned local lifecycle.
+All Qwen decisions are experimental; say so beside the hero and local
+quickstart. Enabling Jev selects hosted-only. Keep a hosted module pilot
+distinct from automatic local migration. CUA and Needle are historical
+evidence rather than supported runtime routes in 0.9.
+
+
+Final September 20 source and visual disposition: **ship**, no material fixes.
+The same four desktop-light/mobile-dark captures named in the comparison
+surface were independently reviewed. Integration checks confirmed the
+illustrative decision controls, appearance selector, migration disclosure and
+responsive layout. The module proof uses actual packaged Node and Bun entry
+points with real local inference, while explicitly separating integration
+validity from decision quality. Laya is an unbundled measured candidate.
+The Paper system and existing design assets remain unchanged.

@@ -1,0 +1,3634 @@
+{
+  "ok": true,
+  "model_loaded": false,
+  "inference_calls": 0,
+  "schedule_sha256": "919745861e9f02931e5e079395279449defe9b5baa8649cb02b231749fee4cd9",
+  "max_len": 1024,
+  "head_max_len": 256,
+  "checked": 362,
+  "failures": [],
+  "max_untruncated_tokens": 166,
+  "max_option_tokens": 18,
+  "all_results": [
+    {
+      "index": 0,
+      "case_id": "warmup-form-01",
+      "phase": "initial",
+      "tokens_expected": 59,
+      "tokens_actual": 59,
+      "marker_count": 3,
+      "max_option_tokens": 8,
+      "issues": []
+    },
+    {
+      "index": 1,
+      "case_id": "warmup-form-02",
+      "phase": "warmup",
+      "tokens_expected": 54,
+      "tokens_actual": 54,
+      "marker_count": 3,
+      "max_option_tokens": 8,
+      "issues": []
+    },
+    {
+      "index": 2,
+      "case_id": "image-layout-01",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 3,
+      "case_id": "image-layout-02",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 4,
+      "case_id": "image-layout-03",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 5,
+      "case_id": "image-layout-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 6,
+      "case_id": "image-layout-05",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 7,
+      "case_id": "image-layout-06",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 8,
+      "case_id": "image-layout-07",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 9,
+      "case_id": "image-layout-08",
+      "phase": "measured",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 10,
+      "case_id": "notification-delivery-01",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 11,
+      "case_id": "notification-delivery-02",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 12,
+      "case_id": "notification-delivery-03",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 13,
+      "case_id": "notification-delivery-04",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 14,
+      "case_id": "notification-delivery-05",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 15,
+      "case_id": "notification-delivery-06",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 16,
+      "case_id": "notification-delivery-07",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 17,
+      "case_id": "notification-delivery-08",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 18,
+      "case_id": "release-note-group-01",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 19,
+      "case_id": "release-note-group-02",
+      "phase": "measured",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 20,
+      "case_id": "release-note-group-03",
+      "phase": "measured",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 21,
+      "case_id": "release-note-group-04",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 22,
+      "case_id": "release-note-group-05",
+      "phase": "measured",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 23,
+      "case_id": "release-note-group-06",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 24,
+      "case_id": "release-note-group-07",
+      "phase": "measured",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 25,
+      "case_id": "release-note-group-08",
+      "phase": "measured",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 26,
+      "case_id": "demo-discount-01",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 27,
+      "case_id": "demo-discount-02",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 28,
+      "case_id": "demo-discount-03",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 29,
+      "case_id": "demo-discount-04",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 30,
+      "case_id": "demo-discount-05",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 31,
+      "case_id": "demo-discount-06",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 32,
+      "case_id": "demo-discount-07",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 33,
+      "case_id": "demo-discount-08",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 34,
+      "case_id": "overnight-counter-01",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 35,
+      "case_id": "overnight-counter-02",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 36,
+      "case_id": "overnight-counter-03",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 37,
+      "case_id": "overnight-counter-04",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 38,
+      "case_id": "overnight-counter-05",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 39,
+      "case_id": "overnight-counter-06",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 40,
+      "case_id": "overnight-counter-07",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 41,
+      "case_id": "overnight-counter-08",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 42,
+      "case_id": "tag-filter-01",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 43,
+      "case_id": "tag-filter-02",
+      "phase": "measured",
+      "tokens_expected": 121,
+      "tokens_actual": 121,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 44,
+      "case_id": "tag-filter-03",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 45,
+      "case_id": "tag-filter-04",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 46,
+      "case_id": "tag-filter-05",
+      "phase": "measured",
+      "tokens_expected": 116,
+      "tokens_actual": 116,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 47,
+      "case_id": "tag-filter-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 48,
+      "case_id": "tag-filter-07",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 49,
+      "case_id": "tag-filter-08",
+      "phase": "measured",
+      "tokens_expected": 134,
+      "tokens_actual": 134,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 50,
+      "case_id": "mini-game-points-01",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 51,
+      "case_id": "mini-game-points-02",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 52,
+      "case_id": "mini-game-points-03",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 53,
+      "case_id": "mini-game-points-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 54,
+      "case_id": "mini-game-points-05",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 55,
+      "case_id": "mini-game-points-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 56,
+      "case_id": "mini-game-points-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 57,
+      "case_id": "mini-game-points-08",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 58,
+      "case_id": "display-detail-01",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 59,
+      "case_id": "display-detail-02",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 60,
+      "case_id": "display-detail-03",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 61,
+      "case_id": "display-detail-04",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 62,
+      "case_id": "display-detail-05",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 63,
+      "case_id": "display-detail-06",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 64,
+      "case_id": "display-detail-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 65,
+      "case_id": "display-detail-08",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 66,
+      "case_id": "glossary-strength-01",
+      "phase": "measured",
+      "tokens_expected": 155,
+      "tokens_actual": 155,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 67,
+      "case_id": "glossary-strength-02",
+      "phase": "measured",
+      "tokens_expected": 161,
+      "tokens_actual": 161,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 68,
+      "case_id": "glossary-strength-03",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 69,
+      "case_id": "glossary-strength-04",
+      "phase": "measured",
+      "tokens_expected": 163,
+      "tokens_actual": 163,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 70,
+      "case_id": "glossary-strength-05",
+      "phase": "measured",
+      "tokens_expected": 164,
+      "tokens_actual": 164,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 71,
+      "case_id": "glossary-strength-06",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 72,
+      "case_id": "glossary-strength-07",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 73,
+      "case_id": "glossary-strength-08",
+      "phase": "measured",
+      "tokens_expected": 166,
+      "tokens_actual": 166,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 74,
+      "case_id": "image-layout-01",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 75,
+      "case_id": "image-layout-02",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 76,
+      "case_id": "image-layout-03",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 77,
+      "case_id": "image-layout-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 78,
+      "case_id": "image-layout-05",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 79,
+      "case_id": "image-layout-06",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 80,
+      "case_id": "image-layout-07",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 81,
+      "case_id": "image-layout-08",
+      "phase": "measured",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 82,
+      "case_id": "notification-delivery-01",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 83,
+      "case_id": "notification-delivery-02",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 84,
+      "case_id": "notification-delivery-03",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 85,
+      "case_id": "notification-delivery-04",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 86,
+      "case_id": "notification-delivery-05",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 87,
+      "case_id": "notification-delivery-06",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 88,
+      "case_id": "notification-delivery-07",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 89,
+      "case_id": "notification-delivery-08",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 90,
+      "case_id": "release-note-group-01",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 91,
+      "case_id": "release-note-group-02",
+      "phase": "measured",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 92,
+      "case_id": "release-note-group-03",
+      "phase": "measured",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 93,
+      "case_id": "release-note-group-04",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 94,
+      "case_id": "release-note-group-05",
+      "phase": "measured",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 95,
+      "case_id": "release-note-group-06",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 96,
+      "case_id": "release-note-group-07",
+      "phase": "measured",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 97,
+      "case_id": "release-note-group-08",
+      "phase": "measured",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 98,
+      "case_id": "demo-discount-01",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 99,
+      "case_id": "demo-discount-02",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 100,
+      "case_id": "demo-discount-03",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 101,
+      "case_id": "demo-discount-04",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 102,
+      "case_id": "demo-discount-05",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 103,
+      "case_id": "demo-discount-06",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 104,
+      "case_id": "demo-discount-07",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 105,
+      "case_id": "demo-discount-08",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 106,
+      "case_id": "overnight-counter-01",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 107,
+      "case_id": "overnight-counter-02",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 108,
+      "case_id": "overnight-counter-03",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 109,
+      "case_id": "overnight-counter-04",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 110,
+      "case_id": "overnight-counter-05",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 111,
+      "case_id": "overnight-counter-06",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 112,
+      "case_id": "overnight-counter-07",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 113,
+      "case_id": "overnight-counter-08",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 114,
+      "case_id": "tag-filter-01",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 115,
+      "case_id": "tag-filter-02",
+      "phase": "measured",
+      "tokens_expected": 121,
+      "tokens_actual": 121,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 116,
+      "case_id": "tag-filter-03",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 117,
+      "case_id": "tag-filter-04",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 118,
+      "case_id": "tag-filter-05",
+      "phase": "measured",
+      "tokens_expected": 116,
+      "tokens_actual": 116,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 119,
+      "case_id": "tag-filter-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 120,
+      "case_id": "tag-filter-07",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 121,
+      "case_id": "tag-filter-08",
+      "phase": "measured",
+      "tokens_expected": 134,
+      "tokens_actual": 134,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 122,
+      "case_id": "mini-game-points-01",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 123,
+      "case_id": "mini-game-points-02",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 124,
+      "case_id": "mini-game-points-03",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 125,
+      "case_id": "mini-game-points-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 126,
+      "case_id": "mini-game-points-05",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 127,
+      "case_id": "mini-game-points-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 128,
+      "case_id": "mini-game-points-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 129,
+      "case_id": "mini-game-points-08",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 130,
+      "case_id": "display-detail-01",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 131,
+      "case_id": "display-detail-02",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 132,
+      "case_id": "display-detail-03",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 133,
+      "case_id": "display-detail-04",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 134,
+      "case_id": "display-detail-05",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 135,
+      "case_id": "display-detail-06",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 136,
+      "case_id": "display-detail-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 137,
+      "case_id": "display-detail-08",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 138,
+      "case_id": "glossary-strength-01",
+      "phase": "measured",
+      "tokens_expected": 155,
+      "tokens_actual": 155,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 139,
+      "case_id": "glossary-strength-02",
+      "phase": "measured",
+      "tokens_expected": 161,
+      "tokens_actual": 161,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 140,
+      "case_id": "glossary-strength-03",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 141,
+      "case_id": "glossary-strength-04",
+      "phase": "measured",
+      "tokens_expected": 163,
+      "tokens_actual": 163,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 142,
+      "case_id": "glossary-strength-05",
+      "phase": "measured",
+      "tokens_expected": 164,
+      "tokens_actual": 164,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 143,
+      "case_id": "glossary-strength-06",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 144,
+      "case_id": "glossary-strength-07",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 145,
+      "case_id": "glossary-strength-08",
+      "phase": "measured",
+      "tokens_expected": 166,
+      "tokens_actual": 166,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 146,
+      "case_id": "image-layout-01",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 147,
+      "case_id": "image-layout-02",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 148,
+      "case_id": "image-layout-03",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 149,
+      "case_id": "image-layout-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 150,
+      "case_id": "image-layout-05",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 151,
+      "case_id": "image-layout-06",
+      "phase": "measured",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 152,
+      "case_id": "image-layout-07",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 153,
+      "case_id": "image-layout-08",
+      "phase": "measured",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 154,
+      "case_id": "notification-delivery-01",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 155,
+      "case_id": "notification-delivery-02",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 156,
+      "case_id": "notification-delivery-03",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 157,
+      "case_id": "notification-delivery-04",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 158,
+      "case_id": "notification-delivery-05",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 159,
+      "case_id": "notification-delivery-06",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 160,
+      "case_id": "notification-delivery-07",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 161,
+      "case_id": "notification-delivery-08",
+      "phase": "measured",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 162,
+      "case_id": "release-note-group-01",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 163,
+      "case_id": "release-note-group-02",
+      "phase": "measured",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 164,
+      "case_id": "release-note-group-03",
+      "phase": "measured",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 165,
+      "case_id": "release-note-group-04",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 166,
+      "case_id": "release-note-group-05",
+      "phase": "measured",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 167,
+      "case_id": "release-note-group-06",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 168,
+      "case_id": "release-note-group-07",
+      "phase": "measured",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 169,
+      "case_id": "release-note-group-08",
+      "phase": "measured",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 170,
+      "case_id": "demo-discount-01",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 171,
+      "case_id": "demo-discount-02",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 172,
+      "case_id": "demo-discount-03",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 173,
+      "case_id": "demo-discount-04",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 174,
+      "case_id": "demo-discount-05",
+      "phase": "measured",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 175,
+      "case_id": "demo-discount-06",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 176,
+      "case_id": "demo-discount-07",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 177,
+      "case_id": "demo-discount-08",
+      "phase": "measured",
+      "tokens_expected": 146,
+      "tokens_actual": 146,
+      "marker_count": 2,
+      "max_option_tokens": 18,
+      "issues": []
+    },
+    {
+      "index": 178,
+      "case_id": "overnight-counter-01",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 179,
+      "case_id": "overnight-counter-02",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 180,
+      "case_id": "overnight-counter-03",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 181,
+      "case_id": "overnight-counter-04",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 182,
+      "case_id": "overnight-counter-05",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 183,
+      "case_id": "overnight-counter-06",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 184,
+      "case_id": "overnight-counter-07",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 185,
+      "case_id": "overnight-counter-08",
+      "phase": "measured",
+      "tokens_expected": 112,
+      "tokens_actual": 112,
+      "marker_count": 2,
+      "max_option_tokens": 17,
+      "issues": []
+    },
+    {
+      "index": 186,
+      "case_id": "tag-filter-01",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 187,
+      "case_id": "tag-filter-02",
+      "phase": "measured",
+      "tokens_expected": 121,
+      "tokens_actual": 121,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 188,
+      "case_id": "tag-filter-03",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 189,
+      "case_id": "tag-filter-04",
+      "phase": "measured",
+      "tokens_expected": 126,
+      "tokens_actual": 126,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 190,
+      "case_id": "tag-filter-05",
+      "phase": "measured",
+      "tokens_expected": 116,
+      "tokens_actual": 116,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 191,
+      "case_id": "tag-filter-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 192,
+      "case_id": "tag-filter-07",
+      "phase": "measured",
+      "tokens_expected": 127,
+      "tokens_actual": 127,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 193,
+      "case_id": "tag-filter-08",
+      "phase": "measured",
+      "tokens_expected": 134,
+      "tokens_actual": 134,
+      "marker_count": 2,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 194,
+      "case_id": "mini-game-points-01",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 195,
+      "case_id": "mini-game-points-02",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 196,
+      "case_id": "mini-game-points-03",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 197,
+      "case_id": "mini-game-points-04",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 198,
+      "case_id": "mini-game-points-05",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 199,
+      "case_id": "mini-game-points-06",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 200,
+      "case_id": "mini-game-points-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 201,
+      "case_id": "mini-game-points-08",
+      "phase": "measured",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 4,
+      "max_option_tokens": 9,
+      "issues": []
+    },
+    {
+      "index": 202,
+      "case_id": "display-detail-01",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 203,
+      "case_id": "display-detail-02",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 204,
+      "case_id": "display-detail-03",
+      "phase": "measured",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 205,
+      "case_id": "display-detail-04",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 206,
+      "case_id": "display-detail-05",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 207,
+      "case_id": "display-detail-06",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 208,
+      "case_id": "display-detail-07",
+      "phase": "measured",
+      "tokens_expected": 135,
+      "tokens_actual": 135,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 209,
+      "case_id": "display-detail-08",
+      "phase": "measured",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 4,
+      "max_option_tokens": 7,
+      "issues": []
+    },
+    {
+      "index": 210,
+      "case_id": "glossary-strength-01",
+      "phase": "measured",
+      "tokens_expected": 155,
+      "tokens_actual": 155,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 211,
+      "case_id": "glossary-strength-02",
+      "phase": "measured",
+      "tokens_expected": 161,
+      "tokens_actual": 161,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 212,
+      "case_id": "glossary-strength-03",
+      "phase": "measured",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 213,
+      "case_id": "glossary-strength-04",
+      "phase": "measured",
+      "tokens_expected": 163,
+      "tokens_actual": 163,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 214,
+      "case_id": "glossary-strength-05",
+      "phase": "measured",
+      "tokens_expected": 164,
+      "tokens_actual": 164,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 215,
+      "case_id": "glossary-strength-06",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 216,
+      "case_id": "glossary-strength-07",
+      "phase": "measured",
+      "tokens_expected": 165,
+      "tokens_actual": 165,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 217,
+      "case_id": "glossary-strength-08",
+      "phase": "measured",
+      "tokens_expected": 166,
+      "tokens_actual": 166,
+      "marker_count": 4,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 218,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 219,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 220,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 221,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 222,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 223,
+      "case_id": "image-layout-01",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 224,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 225,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 226,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 227,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 228,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 229,
+      "case_id": "image-layout-02",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 230,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 231,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 232,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 233,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 234,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 235,
+      "case_id": "image-layout-03",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 236,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 237,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 238,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 239,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 240,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 241,
+      "case_id": "image-layout-04",
+      "phase": "permutation",
+      "tokens_expected": 124,
+      "tokens_actual": 124,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 242,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 243,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 244,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 245,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 246,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 247,
+      "case_id": "image-layout-05",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 248,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 249,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 250,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 251,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 252,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 253,
+      "case_id": "image-layout-06",
+      "phase": "permutation",
+      "tokens_expected": 123,
+      "tokens_actual": 123,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 254,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 255,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 256,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 257,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 258,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 259,
+      "case_id": "image-layout-07",
+      "phase": "permutation",
+      "tokens_expected": 136,
+      "tokens_actual": 136,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 260,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 261,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 262,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 263,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 264,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 265,
+      "case_id": "image-layout-08",
+      "phase": "permutation",
+      "tokens_expected": 122,
+      "tokens_actual": 122,
+      "marker_count": 3,
+      "max_option_tokens": 13,
+      "issues": []
+    },
+    {
+      "index": 266,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 267,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 268,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 269,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 270,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 271,
+      "case_id": "notification-delivery-01",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 272,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 273,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 274,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 275,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 276,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 277,
+      "case_id": "notification-delivery-02",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 278,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 279,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 280,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 281,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 282,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 283,
+      "case_id": "notification-delivery-03",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 284,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 285,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 286,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 287,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 288,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 289,
+      "case_id": "notification-delivery-04",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 290,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 291,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 292,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 293,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 294,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 295,
+      "case_id": "notification-delivery-05",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 296,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 297,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 298,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 299,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 300,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 301,
+      "case_id": "notification-delivery-06",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 302,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 303,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 304,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 305,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 306,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 307,
+      "case_id": "notification-delivery-07",
+      "phase": "permutation",
+      "tokens_expected": 154,
+      "tokens_actual": 154,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 308,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 309,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 310,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 311,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 312,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 313,
+      "case_id": "notification-delivery-08",
+      "phase": "permutation",
+      "tokens_expected": 139,
+      "tokens_actual": 139,
+      "marker_count": 3,
+      "max_option_tokens": 16,
+      "issues": []
+    },
+    {
+      "index": 314,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 315,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 316,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 317,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 318,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 319,
+      "case_id": "release-note-group-01",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 320,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 321,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 322,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 323,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 324,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 325,
+      "case_id": "release-note-group-02",
+      "phase": "permutation",
+      "tokens_expected": 140,
+      "tokens_actual": 140,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 326,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 327,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 328,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 329,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 330,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 331,
+      "case_id": "release-note-group-03",
+      "phase": "permutation",
+      "tokens_expected": 137,
+      "tokens_actual": 137,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 332,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 333,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 334,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 335,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 336,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 337,
+      "case_id": "release-note-group-04",
+      "phase": "permutation",
+      "tokens_expected": 145,
+      "tokens_actual": 145,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 338,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 339,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 340,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 341,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 342,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 343,
+      "case_id": "release-note-group-05",
+      "phase": "permutation",
+      "tokens_expected": 143,
+      "tokens_actual": 143,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 344,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 345,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 346,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 347,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 348,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 349,
+      "case_id": "release-note-group-06",
+      "phase": "permutation",
+      "tokens_expected": 148,
+      "tokens_actual": 148,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 350,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 351,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 352,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 353,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 354,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 355,
+      "case_id": "release-note-group-07",
+      "phase": "permutation",
+      "tokens_expected": 142,
+      "tokens_actual": 142,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 356,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 357,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 358,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 359,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 360,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    },
+    {
+      "index": 361,
+      "case_id": "release-note-group-08",
+      "phase": "permutation",
+      "tokens_expected": 138,
+      "tokens_actual": 138,
+      "marker_count": 3,
+      "max_option_tokens": 12,
+      "issues": []
+    }
+  ]
+}

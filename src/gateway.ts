@@ -21,9 +21,10 @@ import {
   type SystemOneRequest,
 } from "./protocol.ts";
 import { chooseBackend, requestNeeds } from "./router.ts";
+import { ModelStoreError } from "./local/store.ts";
 import { validateResponseForRequest } from "./response.ts";
 
-export const SYS1_VERSION = "0.8.3";
+export const SYS1_VERSION = "0.9.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -98,7 +99,6 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
           config.local.context_tokens,
           config.local.eval_timeout_ms,
         ),
-        needleTimeoutMs: config.gateway.request_timeout_ms,
       });
     }
     return runner;
@@ -151,6 +151,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         kind: backend.kind,
         available: backend.available,
         capabilities: backend.capabilities ?? null,
+        explicit_only: backend.explicitOnly === true,
       })),
     );
     return json({ object: "list", data });
@@ -353,12 +354,15 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
       try {
         signal.throwIfAborted();
         return await (models ? handleModels(config, signal) : handleSystemOne(request, config, signal));
-      } catch {
+      } catch (error) {
         if (request.signal.aborted) {
           return json(errorBody("request_cancelled", "caller cancelled the request"), 499);
         }
         if (signal.aborted) {
           return json(errorBody("inference_timeout", "request deadline exceeded"), 504);
+        }
+        if (error instanceof ModelStoreError) {
+          return json(errorBody("model_store_invalid", "local model inventory is invalid; run `sys1 doctor`. Legacy scorer/Needle inventories require a new SYS1_HOME; existing files were not changed."), 503);
         }
         return json(errorBody("gateway_unavailable", "gateway could not process the request"), 503);
       } finally {
@@ -436,7 +440,6 @@ export function startGateway(deps: GatewayDeps & { port?: number }): RunningGate
             config.local.context_tokens,
             config.local.eval_timeout_ms,
           ),
-          needleTimeoutMs: config.gateway.request_timeout_ms,
         }));
   const handler = createNetworkFetchHandler({ ...deps, config, ...(localRunner === undefined ? {} : { localRunner }) });
   const server = Bun.serve({

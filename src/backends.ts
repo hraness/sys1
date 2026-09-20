@@ -110,6 +110,8 @@ function constrainedCapabilities(
  * env var; keys are read from the environment, never from the config file.
  * When `home` is given and `local.enabled` is on, every installed GGUF joins
  * as a builtin `local-<id>` pseudo-backend served by the in-process runner.
+ * Only config.local.model is eligible for automatic local routing. Other
+ * installed models and URL-registered backends require an explicit request pin.
  */
 export function runtimeBackends(
   config: Sys1Config,
@@ -137,8 +139,8 @@ export function runtimeBackends(
     if (!local.enabled) continue;
     backends.push(localRuntimeBackend(local));
   }
-  if (home !== undefined && config.local.enabled) {
-    for (const candidate of builtinCandidates(home, true)) {
+  if (home !== undefined && config.local.enabled && config.routing.policy !== "hosted-only") {
+    for (const candidate of builtinCandidates(home, true, config.local.model)) {
       backends.push({
         name: candidate.name,
         kind: "local",
@@ -146,7 +148,7 @@ export function runtimeBackends(
         models: candidate.models,
         size_b: candidate.size_b,
         cost_rank: candidate.cost_rank,
-        specialist: candidate.specialist,
+        explicitOnly: candidate.explicitOnly,
         capabilities: candidate.capabilities,
         base_url: "",
         headers: {},
@@ -166,6 +168,7 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
   const host = hostname.startsWith("[") ? hostname.slice(1, -1) : hostname;
   return {
     name: local.name,
+    explicitOnly: true,
     // Operator ownership does not make an off-machine service local. Policy
     // boundaries follow where the request goes, not how it was registered.
     kind: isLoopbackHost(host) ? "local" : "hosted",
