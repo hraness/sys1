@@ -1,27 +1,23 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   MODEL_REGISTRY,
-  engineFilePath,
   findInstalled,
   inspectGgufFile,
-  inspectScorerFile,
   installedModels,
   loadManifest,
   loadManifestChecked,
   manifestPath,
   modelsDir,
-  needlePlatformKey,
   pullModel,
+  removeModel,
   resolvePullTarget,
   saveManifest,
   verifyModel,
 } from "../src/local/store.ts";
-import { buildCactBlob } from "./fixtures/cact.ts";
-import { buildScorerCheckpoint } from "./fixtures/torchckpt.ts";
 
 const homes: string[] = [];
 
@@ -73,7 +69,7 @@ describe("local model store", () => {
     const dir = home();
     saveManifest(dir, { version: 1, models: [] });
     writeFileSync(manifestPath(dir), "not-json");
-    expect(loadManifest(dir)).toEqual({ version: 1, models: [] });
+    expect(() => loadManifest(dir)).toThrow("not valid JSON");
     expect(loadManifestChecked(dir).ok).toBe(false);
     const pulled = await pullModel(dir, "qwen3-0.6b");
     expect(pulled.ok).toBe(false);
@@ -183,169 +179,35 @@ describe("local model store", () => {
     expect(loadManifest(dir).models).toEqual([]);
   });
 
-  test("admits a .pt pull as a scorer after the real loader validates it", async () => {
+  test("curated pulls use an immutable revision for GGUF weights", async () => {
     const dir = home();
-    const bytes = buildScorerCheckpoint({
-      encoder: "tinyx",
-      width: 8,
-      rank: 8,
-      layers: 1,
-      heads: 2,
-      context_tokens: 16,
-      option_tokens: 8,
-    });
-    const fetchFn = (async () =>
-      new Response(new Uint8Array(bytes), {
-        headers: { "content-length": String(bytes.byteLength) },
-      })) as unknown as typeof fetch;
-    const target = resolvePullTarget("hf:owner/repo:ckpt.pt");
-    expect(target).toMatchObject({ modelKind: "scorer" });
-    const result = await pullModel(dir, "hf:owner/repo:ckpt.pt", {
-      sha256: sha256(bytes),
-      fetchFn,
-    });
-    expect(result.ok).toBe(true);
-    const installed = findInstalled(dir, "ckpt");
-    expect(installed?.kind).toBe("scorer");
-    expect(installed?.file).toBe("ckpt.pt");
-    const inspection = inspectScorerFile(join(modelsDir(dir), "ckpt.pt"));
-    expect(inspection).toMatchObject({ ok: true, encoder: "tinyx" });
-    const verified = await verifyModel(dir, "ckpt");
-    expect(verified.ok).toBe(true);
-    expect(verified.scorer?.encoder).toBe("tinyx");
-  });
-
-  test("rejects a hash-valid non-checkpoint .pt", async () => {
-    const dir = home();
-    const bytes = Buffer.alloc(256, 7);
-    const fetchFn = (async () =>
-      new Response(new Uint8Array(bytes))) as unknown as typeof fetch;
-    const result = await pullModel(dir, "hf:owner/repo:fake.pt", {
-      sha256: sha256(bytes),
-      fetchFn,
-    });
-    expect(result.ok).toBe(false);
-    expect(result.message).toContain("invalid scorer checkpoint");
-    expect(existsSync(join(modelsDir(dir), "fake.pt"))).toBe(false);
-  });
-
-  test("needle manifest entries require and verify the engine companion", async () => {
-    const dir = home();
-    const cact = buildCactBlob();
-    const engine = Buffer.alloc(1_024, 9);
-    // Missing all engine fields → schema rejects on load.
-    mkdirSync(modelsDir(dir), { recursive: true });
-    writeFileSync(
-      manifestPath(dir),
-      JSON.stringify({
-        version: 1,
-        models: [
-          {
-            id: "n3",
-            kind: "needle",
-            file: "n3.cact",
-            source: "test",
-            sha256: sha256(cact),
-            bytes: cact.byteLength,
-            context: 2048,
-            installed_at: "2026-01-01T00:00:00.000Z",
-          },
-        ],
-      }),
-    );
-    expect(loadManifestChecked(dir).ok).toBe(false);
-
-    saveManifest(dir, {
-      version: 1,
-      models: [
-        {
-          id: "n3",
-          kind: "needle",
-          file: "n3.cact",
-          source: "test",
-          sha256: sha256(cact),
-          bytes: cact.byteLength,
-          context: 2048,
-          engine_file: "n3.engine",
-          engine_sha256: sha256(engine),
-          engine_bytes: engine.byteLength,
-          engine_platform: needlePlatformKey(),
-          installed_at: "2026-01-01T00:00:00.000Z",
-        },
-      ],
-    });
-    expect(loadManifestChecked(dir).ok).toBe(true);
-    // Weights present but engine missing → not an installed candidate.
-    writeFileSync(join(modelsDir(dir), "n3.cact"), cact);
-    expect(installedModels(dir)).toEqual([]);
-    writeFileSync(join(modelsDir(dir), "n3.engine"), engine);
-    const installed = findInstalled(dir, "n3");
-    expect(installed?.kind).toBe("needle");
-    expect(engineFilePath(dir, installed as NonNullable<typeof installed>)).toContain("n3.engine");
-    const verified = await verifyModel(dir, "n3");
-    expect(verified.ok).toBe(true);
-    expect(verified.engine?.ok).toBe(true);
-    // Engine tamper → verify fails.
-    writeFileSync(join(modelsDir(dir), "n3.engine"), Buffer.alloc(1_024, 4));
-    const tampered = await verifyModel(dir, "n3");
-    expect(tampered.ok).toBe(false);
-    expect(tampered.engine?.ok).toBe(false);
-  });
-
-  test("a needle registry pull rejects wrong engine bytes after sha check", async () => {
-    const dir = home();
-    const cact = buildCactBlob();
-    const entry = MODEL_REGISTRY.find((candidate) => candidate.id === "needle3");
-    expect(entry?.kind).toBe("needle");
-    const fetchFn = (async () => {
-      // Serve real-size-mismatched bytes: the cact sha pin fails first.
-      return new Response(new Uint8Array(cact));
-    }) as unknown as typeof fetch;
-    const result = await pullModel(dir, "needle3", { fetchFn });
-    expect(result.ok).toBe(false);
-    expect(result.message).toContain("sha256 mismatch");
-  });
-
-  test("curated pulls use one immutable revision for weights and the platform engine", async () => {
-    const dir = home();
-    const weights = buildCactBlob();
-    const engine = Buffer.alloc(1_024, 9);
+    const weights = gguf();
     const revision = "a".repeat(40);
     const fixture = {
-      id: "needle-revision-fixture",
-      kind: "needle" as const,
+      id: "qwen-revision-fixture",
+      kind: "gguf" as const,
       size_b: 0.12,
       repo: "owner/revision-fixture",
       revision,
-      file: "model.cact",
+      file: "model.gguf",
       sha256: sha256(weights),
       bytes: weights.byteLength,
       context: 2048,
       description: "revision fixture",
-      specialist: true,
-      engine: {
-        [needlePlatformKey()]: {
-          file: "platform/needle",
-          sha256: sha256(engine),
-          bytes: engine.byteLength,
-        },
-      },
     };
-    const weightsUrl = `https://huggingface.co/${fixture.repo}/resolve/${revision}/model.cact`;
-    const engineUrl = `https://huggingface.co/${fixture.repo}/resolve/${revision}/platform/needle`;
+    const weightsUrl = `https://huggingface.co/${fixture.repo}/resolve/${revision}/model.gguf`;
     const requested: string[] = [];
     const fetchFn = (async (input: RequestInfo | URL) => {
       const url = String(input);
       requested.push(url);
       if (url === weightsUrl) return new Response(new Uint8Array(weights));
-      if (url === engineUrl) return new Response(new Uint8Array(engine));
       return new Response("not found", { status: 404 });
     }) as unknown as typeof fetch;
     MODEL_REGISTRY.push(fixture);
     try {
       const result = await pullModel(dir, fixture.id, { fetchFn });
       expect(result.ok).toBe(true);
-      expect(requested).toEqual([weightsUrl, engineUrl]);
+      expect(requested).toEqual([weightsUrl]);
       expect((await verifyModel(dir, fixture.id)).ok).toBe(true);
     } finally {
       MODEL_REGISTRY.splice(MODEL_REGISTRY.indexOf(fixture), 1);
@@ -376,18 +238,35 @@ describe("local model store", () => {
     }
   });
 
-  test("scorer and needle registry entries are pinned specialists", () => {
-    const scorer = MODEL_REGISTRY.find((entry) => entry.id === "cua-s1-forms");
-    expect(scorer).toMatchObject({ kind: "scorer", specialist: true });
-    const needle = MODEL_REGISTRY.find((entry) => entry.id === "needle3");
-    expect(needle).toMatchObject({ kind: "needle", specialist: true });
-    expect(Object.keys(needle?.engine ?? {}).length).toBeGreaterThan(3);
-    // Every declared engine has a pinned hash and size.
-    for (const [platform, engine] of Object.entries(needle?.engine ?? {})) {
-      expect(engine.sha256).toMatch(/^[0-9a-f]{64}$/);
-      expect(engine.bytes).toBeGreaterThan(100_000);
-      expect(engine.file.length).toBeGreaterThan(3);
-      expect(platform).toMatch(/^(darwin|linux|win32)-/);
+
+  test("removed model formats and registry ids fail before downloading", () => {
+    for (const ref of ["cua-s1-forms", "needle3", "hf:owner/repo:weights.pt", "hf:owner/repo:weights.cact"]) {
+      expect(resolvePullTarget(ref)).toHaveProperty("error");
+    }
+    expect(MODEL_REGISTRY.map((entry) => entry.id).sort()).toEqual(["qwen3-0.6b", "qwen3-1.7b"]);
+  });
+
+  test("legacy inventory blocks reads and mutations without changing any bytes", async () => {
+    for (const kind of ["scorer", "needle"]) {
+      const dir = home();
+      mkdirSync(modelsDir(dir), { recursive: true });
+      const filename = kind === "scorer" ? "old.pt" : "old.cact";
+      const weights = Buffer.from("keep existing weights");
+      const manifest = JSON.stringify({ version: 1, models: [{ id: "old", kind, file: filename }] });
+      writeFileSync(manifestPath(dir), manifest);
+      writeFileSync(join(modelsDir(dir), filename), weights);
+      let fetches = 0;
+      const fetchFn = (async () => { fetches++; throw new Error("unexpected network"); }) as unknown as typeof fetch;
+      expect(loadManifestChecked(dir)).toMatchObject({ ok: false, message: expect.stringContaining("new SYS1_HOME") });
+      expect(() => installedModels(dir)).toThrow("legacy");
+      expect((await pullModel(dir, "qwen3-1.7b", { fetchFn })).ok).toBe(false);
+      expect(removeModel(dir, "old").ok).toBe(false);
+      expect((await verifyModel(dir, "old")).ok).toBe(false);
+      expect(() => saveManifest(dir, { version: 1, models: [] })).toThrow("legacy");
+      expect(fetches).toBe(0);
+      expect(readFileSync(manifestPath(dir), "utf8")).toBe(manifest);
+      expect(readFileSync(join(modelsDir(dir), filename))).toEqual(weights);
     }
   });
+
 });

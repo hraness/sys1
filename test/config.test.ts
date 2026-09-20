@@ -38,6 +38,8 @@ describe("config", () => {
       expect(loaded.config.hosted.enabled).toBe(false);
       expect(loaded.config.routing.policy).toBe("auto");
       expect(loaded.config.local.enabled).toBe(true);
+      expect(loaded.config.local.model).toBe("qwen3-1.7b");
+      expect(loaded.config.hosted.model).toBe("jev-1.13.0");
     }
   });
 

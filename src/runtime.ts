@@ -32,7 +32,6 @@ export function createRouter(options: RouterOptions): EmbeddedRouter {
     home: options.home,
     maxLoadedModels: config.local.max_loaded_models,
     engineFactory: defaultEngineFactory(config.local.context_tokens, config.local.eval_timeout_ms),
-    needleTimeoutMs: config.gateway.request_timeout_ms,
   }));
   const handler = createFetchHandler({
     config, env: { ...options.env },

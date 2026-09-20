@@ -1,5 +1,3 @@
-import { totalmem } from "node:os";
-
 export const LOCAL_MODEL_TIERS = ["compact", "quality"] as const;
 export type LocalModelTier = (typeof LOCAL_MODEL_TIERS)[number];
 
@@ -7,8 +5,6 @@ export const DEFAULT_LOCAL_MODELS: Record<LocalModelTier, string> = {
   compact: "qwen3-0.6b",
   quality: "qwen3-1.7b",
 };
-
-export const QUALITY_MEMORY_THRESHOLD = 16 * 1024 ** 3;
 
 export interface PlatformRecommendation {
   platform: string;
@@ -33,15 +29,13 @@ const PLATFORM_TARGETS: Record<string, string> = {
 export function platformRecommendation(options: {
   platform?: string;
   arch?: string;
-  memoryBytes?: number;
   tier?: LocalModelTier;
 } = {}): PlatformRecommendation {
   const platform = options.platform ?? process.platform;
   const arch = options.arch ?? process.arch;
-  const memoryBytes = options.memoryBytes ?? totalmem();
   const target = `${platform}-${arch}`;
   const acceleration = PLATFORM_TARGETS[target];
-  const tier = options.tier ?? (memoryBytes >= QUALITY_MEMORY_THRESHOLD ? "quality" : "compact");
+  const tier = options.tier ?? "quality";
   if (acceleration === undefined) {
     return {
       platform,
@@ -63,10 +57,8 @@ export function platformRecommendation(options: {
     tier,
     model: DEFAULT_LOCAL_MODELS[tier],
     reason:
-      options.tier === undefined
-        ? tier === "quality"
-          ? "system memory is at least 16 GiB"
-          : "system memory is below 16 GiB"
-        : `operator selected the ${tier} tier`,
+      tier === "compact"
+        ? "operator selected the experimental 0.6B diagnostic model"
+        : "Qwen3 1.7B is the default local model",
   };
 }

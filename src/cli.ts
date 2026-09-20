@@ -24,7 +24,7 @@ import {
   writePidFile,
 } from "./daemon.ts";
 import { probeAll, runtimeBackends } from "./backends.ts";
-import { LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
+import { DEFAULT_LOCAL_MODELS, LOCAL_MODEL_TIERS, platformRecommendation, type LocalModelTier } from "./defaults.ts";
 import { runDoctor } from "./doctor.ts";
 import { SYS1_VERSION, startGateway } from "./gateway.ts";
 import { probeNativeRuntime } from "./local/engine.ts";
@@ -72,7 +72,7 @@ Daemon:
   doctor [--json]               Diagnose runtime, config, store, routing, daemon
 
 Models:
-  pull [MODEL] [--json]         Download + verify a model (default qwen3-0.6b)
+  pull [MODEL] [--json]         Download + verify a model (default qwen3-1.7b)
   pull --list [--json]          Show the curated model registry
   model list [--json]           Show installed models
   model verify MODEL [--json]   Recompute and verify a model's sha256
@@ -100,7 +100,7 @@ Flags:
   --version                     Print version
   --help                        This help
 
-Local tiers: ${LOCAL_MODEL_TIERS.join(", ")}
+Local tiers: quality (default Qwen3 1.7B), compact (experimental Qwen3 0.6B)
 Config keys: ${Object.keys(SETTABLE_KEYS).join(", ")}
 
 Environment:
@@ -212,9 +212,8 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
   if (!loaded.ok) fail(loaded.message, EXIT.config);
   const config = structuredClone(loaded.config);
   config.local.enabled = true;
+  config.local.model = recommendation.model;
   if (config.routing.policy === "hosted-only") config.routing.policy = "auto";
-  const path = saveConfig(home, config);
-
   const existing = installedModels(home).find((model) => model.id === recommendation.model);
   let pull: PullResult | undefined;
   if (existing === undefined) {
@@ -229,7 +228,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     });
     if (!pull.ok) {
       if (flags.get("json") === true) {
-        out(JSON.stringify({ ok: false, recommendation, config_path: path, pull }, null, 2));
+        out(JSON.stringify({ ok: false, recommendation, pull }, null, 2));
       } else {
         err(`sys1: ${pull.message ?? "default model download failed"}`);
       }
@@ -237,6 +236,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     }
   }
 
+  const path = saveConfig(home, config);
   const report = {
     ok: true,
     dry_run: false,
@@ -392,7 +392,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
   const report = {
     daemon,
     gateway: { host: config.gateway.host, port: config.gateway.port },
-    routing: { policy: config.routing.policy },
+    routing: { policy: config.routing.policy, local_model: config.local.model },
     local_store: { models: localModels.length, bytes: storeBytes(home) },
     backends: backends.map((backend) => ({
       name: backend.name,
@@ -400,6 +400,7 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
       available: backend.available,
       models: backend.models,
       size_b: backend.size_b,
+      explicit_only: backend.explicitOnly === true,
       capabilities: backend.capabilities ?? null,
       probe: probes.get(backend.name)?.detail ?? null,
     })),
@@ -409,12 +410,12 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
     return;
   }
   out(`daemon: ${daemon.state}${daemon.state === "running" ? ` pid ${daemon.pid} ${gatewayUrl(daemon.host, daemon.port)}` : ""}`);
-  out(`routing: ${config.routing.policy}`);
+  out(`routing: ${config.routing.policy}; selected local model: ${config.local.model}`);
   out(`local store: ${localModels.length} model${localModels.length === 1 ? "" : "s"}, ${formatBytes(report.local_store.bytes)}`);
   for (const backend of report.backends) {
     const marker = backend.available ? "up" : "down";
     const size = backend.size_b === null ? "" : ` ${backend.size_b}B`;
-    out(`  ${backend.name} (${backend.kind})${size}: ${marker} — ${backend.models.join(", ")}`);
+    out(`  ${backend.name} (${backend.kind}${backend.explicit_only ? ", explicit pin" : ""})${size}: ${marker} — ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
     out("  no backends configured; run `sys1 setup`, `sys1 jev enable`, or `sys1 backend add`");
@@ -463,7 +464,7 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
     const rows = MODEL_REGISTRY.map((entry) => ({
       id: entry.id,
       kind: entry.kind,
-      specialist: entry.specialist === true,
+      experimental: entry.id === "qwen3-0.6b",
       size_b: entry.size_b,
       bytes: entry.bytes,
       description: entry.description,
@@ -474,14 +475,13 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
       return;
     }
     for (const row of rows) {
-      const tag = row.specialist ? `${row.kind},pin-only` : row.kind;
+      const tag = row.experimental ? `${row.kind},experimental` : row.kind;
       out(`${row.id}\t${tag}\t${formatBytes(row.bytes)}\t${row.installed ? "installed" : "available"}\t${row.description}`);
     }
     return;
   }
 
-  const ref = args.positional[1] ?? MODEL_REGISTRY[0]?.id;
-  if (ref === undefined) fail("model registry is empty", EXIT.backend);
+  const ref = args.positional[1] ?? DEFAULT_LOCAL_MODELS.quality;
   const sha256 = flagString(args.flags, "sha256");
   if (sha256 !== undefined && !/^[0-9a-f]{64}$/.test(sha256)) {
     fail("--sha256 needs 64 lowercase hexadecimal characters", EXIT.usage);

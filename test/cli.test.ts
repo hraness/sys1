@@ -41,6 +41,16 @@ afterEach(() => {
 });
 
 describe("setup CLI", () => {
+  test("dry-run defaults to Qwen 1.7B and config can persist explicit selection", async () => {
+    const dir = home();
+    const result = await runCli(["setup", "--dry-run", "--json"], { home: dir });
+    expect(result.code).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({ recommendation: { model: "qwen3-1.7b", tier: "quality" } });
+    const selected = await runCli(["config", "set", "local.model", "qwen3-0.6b"], { home: dir });
+    expect(selected.code).toBe(0);
+    expect(loadConfig(dir)).toMatchObject({ ok: true, config: { local: { model: "qwen3-0.6b" } } });
+  });
+
   test("dry-run reports an explicit compact recommendation without downloading", async () => {
     const dir = home();
     const result = await runCli(["setup", "--dry-run", "--tier", "compact", "--json"], {
