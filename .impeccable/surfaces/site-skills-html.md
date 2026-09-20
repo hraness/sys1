@@ -12,7 +12,7 @@ for known noisy checks, with a simple quickstart for local users. The user
 requested clearer impact and less visible technical detail while retaining
 the full evidence, catalog, and Peopleblade/Hraness Paper identity. This is a
 bounded reading revision within the committed visual system.
-Evidence source: `0thernet/system-one-skills` at
+Evidence source: `hraness/system-one-skills` at
 `bb0d91d0ca8e81e6c29a7f2c47a27aeb175de4e2`; installable runtime v0.4.0.
 
 ## Direction contract

@@ -22,7 +22,7 @@ does not include Cua Driver or desktop execution.
 
 ## System One skills
 
-[system-one-skills](https://github.com/0thernet/system-one-skills) provides
+[system-one-skills](https://github.com/hraness/system-one-skills) provides
 `system-one-verify`, a focused skill for Devin, Claude Code, and Codex. It runs
 a known noisy test or build command once, returns its exit status and compact
 evidence, and keeps the full log locally for inspection.
