@@ -22,7 +22,7 @@ Sys1 now refers to the pinned [JevBench v1.2.6 snapshot](https://github.com/fsta
 | Laya · 421M | 70.1 | 5 | Local CPU |
 | OpenJev · DiffusionGemma 26B | 67.7 | 8 | GPU server |
 
-The score is a 25:25:25:25 geometric mean of intelligence, calibration, serial p50/p95 speed, and dollars per 1,000 decisions over 534 decisions (72 easy, 96 standard, 146 judge, 220 hard). The hard tier has 111 public and 109 held-out cases, frozen and hashed before evaluation. JevBench reports native probability distributions separately from verbalized JSON paths, preserves per-task outcomes, and applies no retries or repair.
+The table selects the leading rows plus the DiffusionGemma GPU reference; it is not a complete ranking. The score is a 25:25:25:25 geometric mean of intelligence, calibration, serial p50/p95 speed, and dollars per 1,000 decisions over 534 decisions (72 easy, 96 standard, 146 judge, 220 hard). The hard tier has 111 public and 109 held-out cases, frozen and hashed before evaluation. JevBench reports native probability distributions separately from verbalized JSON paths, preserves per-task outcomes, and applies no retries or repair.
 
 These are point estimates from one serial run, not confidence intervals or a seed sweep. This is external evidence, not Sys1 qualification. djev is a hosted Maisa DiffusionGemma implementation, while the OpenJev DiffusionGemma row is a separate GPU server. Self-hosted latency receives an explicit ×2 + 0.15 s adjustment; it is an assumption. The suite is English, partly LLM-authored/reviewed, the held-out cases are sent to evaluated services, and cost can be estimated for unbilled/local runs.
 
