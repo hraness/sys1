@@ -77,6 +77,12 @@ sys1 status</code></pre>
 sys1 jev enable
 sys1 up</code></pre>
               </div>
+              <div class="docs-route">
+                <div><h3>Install the pinned release</h3><p>Use the immutable GitHub Release artifact when you want the CLI without building from source. The native runtime is granted only for the named optional dependency.</p></div>
+                <pre><code>npm install --global --allow-scripts=node-llama-cpp \
+  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
+sys1 doctor</code></pre>
+              </div>
             </div>
             <p class="docs-footnote">Use <code>sys1 setup --dry-run --json</code> to inspect the local recommendation before downloading weights. Use <code>sys1 doctor</code> to inspect runtime, model store, routing, and daemon state.</p>
           </section>
@@ -85,7 +91,8 @@ sys1 up</code></pre>
             <h2 id="integration-title">Integration modes</h2>
             <p class="docs-intro">The request and response contract stays the same while the lifecycle belongs to the mode you choose.</p>
             <div class="docs-mode-list">
-              <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
+              <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre><code>npm install --omit=optional \
+  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz</code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Embedded Bun router</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Embedded guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Loopback HTTP</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="https://github.com/hraness/sys1#the-endpoint">HTTP reference <span aria-hidden="true">↗</span></a></div>
             </div>
