@@ -1,4 +1,4 @@
-# Public local adapter benchmark
+# Public model benchmarks
 
 `forms-v1.json` contains twenty authored, synthetic form-action examples. Each
 asks for one of three actions: submit a valid form, correct a missing or invalid
@@ -19,7 +19,7 @@ Run from a repository checkout with Bun 1.3.14 after `bun install --frozen-lockf
 Qwen measurements require the optional node-llama-cpp native runtime; the harness
 checks readiness before measurement.
 
-The harness accepts only this fixed public fixture. It does not read Sys1
+The local harness accepts only this fixed public fixture. It does not read Sys1
 configuration or credentials, call hosted services, or download anything.
 Explicitly acquire the pinned models first into an isolated store:
 
@@ -102,3 +102,48 @@ and failure rate for cross-adapter comparisons. Do not turn zero counters into
 claims of zero model work or infinite token efficiency. Adapter probabilities
 and confidence also have different meanings; they are not calibrated against
 one another by this fixture.
+
+## Hosted Jev on the same cases
+
+The separate Jev harness sends the same public states, instructions, criteria,
+and option order to TypeSafe. It pins `jev-1.13.0` instead of a moving alias.
+It reads only `TYPESAFE_API_KEY` from the environment; it does not read a user
+configuration, change routing policy, or search for credentials. Configure the
+key privately before running; never put its value in a command or result file.
+
+```sh
+bun scripts/benchmark-jev.ts --validate-only
+bun scripts/benchmark-jev.ts \
+  --region "your coarse client region" \
+  --output "$PWD/work/forms-v1-jev-results.json"
+```
+
+A live run makes at most 105 API calls: three initial client calls, two warmups,
+and five passes over twenty cases. It uses concurrency one, a 60-second request
+deadline and a 15-minute overall deadline, with no automatic retries. Three
+consecutive invalid/error responses stop the run. Existing output files are
+never overwritten. The offline validation command needs no key and makes no
+API calls.
+
+Jev latency covers dispatch through receipt of the complete HTTP body, before
+JSON and response validation. It includes network time. The local measurements
+cover the adapter and exclude HTTP. Put these boundaries beside any comparison;
+neither is isolated server inference time. Initial client calls do not reset
+provider models, caches, DNS, or connections. Repeated identical inputs may
+benefit from provider caching; that behavior is not measured.
+
+Only the first measured pass supplies the twenty-case correctness score.
+Repeated calls supply timing observations, not additional independent examples.
+Responses must satisfy the same Sys1 schema and match the pinned model. Missing
+usage is an invalid Sys1 response, not a fabricated zero-token measurement.
+Reports preserve sanitized failures, actual/skipped call counts, model identity,
+reported usage, and source/fixture hashes. Incomplete runs are not completed
+comparisons.
+
+Cost estimates use the [published input rate](https://docs.typesafe.ai/models)
+of $0.042 per million tokens, checked September 19, 2026. Reported usage for
+warmups and initial calls belongs in total experiment cost, separately from the
+100-call measured phase. Failed calls can be billable even when no usable
+accounting is returned, so known-usage estimates are not invoices or guaranteed
+cost totals. This fixture has one short question per request and does not test
+Jev's shared-state advantage across multiple questions.

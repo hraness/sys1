@@ -529,4 +529,4 @@ credentials, answers, and prompts are not application logs or durable state.
 
 ## Comparing models
 
-See [the model comparison](https://sys1.io/compare) for download footprints, local adapter measurements, upstream benchmarks, and token/cost semantics. The [evidence appendix](docs/model-comparison.md) records source conditions, and the [opt-in benchmark](benchmarks/README.md) runs the same public synthetic cases through explicitly pinned local models. Small synthetic results do not establish general model quality.
+See [the model comparison](https://sys1.io/compare) for download footprints, local adapter measurements, upstream benchmarks, and token/cost semantics. The [evidence appendix](docs/model-comparison.md) records source conditions, and the [opt-in benchmarks](benchmarks/README.md) run the same public synthetic cases through explicitly pinned local models or hosted Jev. The hosted command requires your environment-provided API key; its availability is not a claim that hosted results have been collected. Small synthetic results do not establish general model quality.

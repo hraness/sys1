@@ -68,11 +68,11 @@ interface ModelReport {
   summary: ReturnType<typeof summarize> | null;
 }
 
-function sha256(value: string | Uint8Array): string {
+export function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function runtimeSourceDigest(): string {
+export function runtimeSourceDigest(): string {
   const hash = createHash("sha256");
   const visit = (relative: string): void => {
     const directory = join(ROOT, "src", relative);
@@ -88,7 +88,7 @@ function runtimeSourceDigest(): string {
   return hash.digest("hex");
 }
 
-function requestFor(fixture: Fixture, item: Case, model: string): SystemOneRequest {
+export function requestFor(fixture: Fixture, item: Case, model: string): SystemOneRequest {
   return systemOneRequestSchema.parse({
     model,
     state: item.state,
@@ -102,7 +102,7 @@ function requestFor(fixture: Fixture, item: Case, model: string): SystemOneReque
   });
 }
 
-function loadFixture(): Fixture {
+export function loadFixture(): Fixture {
   if (lstatSync(FIXTURE_PATH).size > 32_768) throw new Error("fixture exceeds 32 KiB");
   const fixture = fixtureSchema.parse(JSON.parse(readFileSync(FIXTURE_PATH, "utf8")) as unknown);
   const ids = new Set<string>();
