@@ -22,3 +22,20 @@ FIRST VIEWPORT: A compact shared-style header, centered serif statement and shor
 FORM: User-pinned Hraness/Peopleblade visual system, adapted to a developer product. No random concept seed: the visual authority is explicit. Use the existing reference and reusable code assets, with responsive desktop and mobile verification.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+
+
+## Benefit clarity refinement — 2026-09-19
+
+Lead with “Local models or Jev. One typed API.” The supporting copy connects
+that interface to yes/no decisions, choices, scores, response validation, and
+local model loading, with hosted Jev explicitly opt-in. Feature headings name
+request control, usable answers, and model lifecycle management. Existing
+schema-versus-quality and adapter limitations remain nearby.
+
+The System One Skills link names its separate practical benefit: keeping known
+noisy check logs out of agent context while executing the original command once
+and retaining a full local log. It does not attribute the skills replay result
+to Sys1 routing or promise better diagnosis, billed savings, or faster tasks.
+The evidence-owner task reviewed the exact claims. This is a text and metadata
+refinement: structure, design tokens, demo behavior, links, installation and
+footer are preserved.
