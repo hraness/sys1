@@ -1,5 +1,7 @@
 # Reproduce the decision evaluation
 
+For cross-model Jev-class comparisons, use the pinned external [JevBench v1.2.6](https://github.com/fstandhartinger/jevbench/tree/v1.2.6) scorecard and its [immutable result artifact](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/results/v1.2/jevbench-v1.2-results.json). This repository's fixtures answer a narrower question: whether a specific Sys1 adapter, model pin, and local/hosted transport behave as expected. They are not a replacement leaderboard and their scores must not be blended with JevBench.
+
 `decisions-v2.json` contains 72 public synthetic cases: 24 choices, 24 yes/no
 (`noul`) questions, and 24 ordered scores, across nine workflow families.
 The fixture and labels were frozen before any model run. Its SHA-256 is

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Compare models — Sys1</title>
-    <meta name="description" content="Measured Jev and local Qwen decisions, plus a direct Laya MLX study: correctness, option-order stability, latency, token usage, cost, and reproducible raw evidence." />
+    <meta name="description" content="Measured Jev and local Qwen decisions, a direct Laya MLX study, and the external JevBench v1.2.6 scorecard: correctness, latency, token usage, cost, and reproducible raw evidence." />
     <link rel="canonical" href="https://sys1.io/compare" />
     <meta property="og:title" content="Compare models — Sys1" />
     <meta property="og:description" content="Decision latency, token accounting, footprint, and evidence for choosing your model." />
@@ -59,6 +59,7 @@
         <div class="section-intro"><h2 id="jev-heading">Jev is measured, too.</h2><p>The completed hosted run uses the earlier forms-v1 test. Its 20/20 result is encouraging for that small task; it is not a score on the broader 72-case evaluation.</p></div>
 <div class="table-scroll" role="region" aria-label="forms-v1 · same 20 cases across models · 100 repeated timing calls each" tabindex="0"><table class="comparison-table results-table"><caption>forms-v1 · same 20 cases across models · 100 repeated timing calls each</caption><thead><tr><th scope="col">Route</th><th scope="col">Correct cases</th><th scope="col">p50</th><th scope="col">p95</th><th scope="col">Valid responses</th></tr></thead><tbody><tr><th scope="row">Jev 1.13.0 · HTTP</th><td>20/20</td><td>246.1 ms</td><td>343.0 ms</td><td>100/100</td></tr><tr><th scope="row">Qwen3 1.7B · local adapter</th><td>18/20</td><td>258.3 ms</td><td>271.4 ms</td><td>100/100</td></tr><tr><th scope="row">Qwen3 0.6B · local adapter</th><td>8/20</td><td>206.6 ms</td><td>225.1 ms</td><td>100/100</td></tr></tbody></table></div>
         <p class="results-summary">Jev timing includes the network round trip, provider processing, and the full response body. Local timing excludes HTTP. These boundaries do not measure isolated model speed. Provider hardware, caching, and client region are unverified.</p>
+        <p class="results-summary"><strong>For cross-model context:</strong> the pinned <a href="/docs/evaluations#jevbench">JevBench v1.2.6 scorecard</a> compares Jev-class systems with a separate 534-decision methodology. Its external scores do not qualify a Sys1 adapter or replace the measurements on this page.</p>
         <p class="results-summary"><strong>The broader hosted run is incomplete.</strong> Authentication was rejected with HTTP 401; the harness stopped after three attempts, with no valid answer. It supplies no new quality or speed result. The completed forms-v1 report remains separate.</p>
         <div class="results-links"><a href="/data/forms-v1-jev-2026-09-20.json">Completed Jev report</a><a href="/data/decisions-v2-jev-auth-incomplete-2026-09-20.json">Incomplete v2 attempt</a><a href="/compare-history">Original full comparison</a></div>
       </section>

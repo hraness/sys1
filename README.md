@@ -516,10 +516,12 @@ artifact on all three platforms.
 
 ## Comparing models
 
-See [the model comparison](https://sys1.io/compare) for local and hosted Jev
-measurements and token/cost semantics. The [evidence appendix](docs/model-comparison.md)
-records source conditions; the [opt-in benchmarks](benchmarks/README.md) describe
-reproduction, including the environment-provided API key required for hosted
+See [the model comparison](https://sys1.io/compare) for Sys1's local and hosted
+adapter evidence and token/cost semantics. For cross-model Jev-class comparisons,
+use the pinned external [JevBench v1.2.6 scorecard](https://github.com/fstandhartinger/jevbench/tree/v1.2.6);
+its methodology and limits are recorded in the [evidence appendix](docs/model-comparison.md).
+The [opt-in Sys1 benchmarks](benchmarks/README.md) remain for adapter qualification
+and reproduction, including the environment-provided API key required for hosted
 calls. The current broader results keep every failure: Qwen3 1.7B reached
 32/72 on decisions-v2; Qwen3.5 4B reached 44/72 on decisions-v3. Different
 fixtures are not a measured improvement. Neither qualifies a general local

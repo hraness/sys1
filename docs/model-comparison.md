@@ -7,7 +7,27 @@ adapters have been removed; their historical measurements remain below.
 See [the current comparison](https://sys1.io/compare) and
 [the reproducible evaluation method](../benchmarks/README.md).
 
-Upstream evidence checked **2026-09-19**; Jev pricing reconfirmed **2026-09-20**.
+Upstream evidence checked **2026-09-20**; Jev pricing reconfirmed **2026-09-20**.
+
+## JevBench v1.2.6: external cross-model reference
+
+Sys1 now refers to the pinned [JevBench v1.2.6 snapshot](https://github.com/fstandhartinger/jevbench/tree/v1.2.6) for the external Jev-class leaderboard rather than duplicating its full suite. This is an explicit snapshot, so later JevBench revisions are not silently mixed into these numbers. The [results and methodology](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/RESULTS-v1.2.md) and [reproducible JSON artifact](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/results/v1.2/jevbench-v1.2-results.json) are pinned to commit `275763201a29d6083d4ee1431d709c296ef81281` (tag `v1.2.6`). The [implementation rules](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/IMPLEMENTATION.md) and [hard-tier notes](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/datasets/HARD-TIER.md) are the audit trail.
+
+| System | JevBench Score | Rank | Run condition |
+| --- | ---: | ---: | --- |
+| Jev 1.13.0 | 75.4 | 1 | Hosted API |
+| SemIf · Qwen3.5 4B | 74.7 | 2 | GPU endpoint |
+| djev · DiffusionGemma | 74.3 | 3 | Hosted API, free preview |
+| openJev Verdict 1.4 | 72.5 | 4 | Local CPU |
+| Laya · 421M | 70.1 | 5 | Local CPU |
+| OpenJev · DiffusionGemma 26B | 67.7 | 8 | GPU server |
+
+The score is a 25:25:25:25 geometric mean of intelligence, calibration, serial p50/p95 speed, and dollars per 1,000 decisions over 534 decisions (72 easy, 96 standard, 146 judge, 220 hard). The hard tier has 111 public and 109 held-out cases, frozen and hashed before evaluation. JevBench reports native probability distributions separately from verbalized JSON paths, preserves per-task outcomes, and applies no retries or repair.
+
+These are point estimates from one serial run, not confidence intervals or a seed sweep. This is external evidence, not Sys1 qualification. djev is a hosted Maisa DiffusionGemma implementation, while the OpenJev DiffusionGemma row is a separate GPU server. Self-hosted latency receives an explicit ×2 + 0.15 s adjustment; it is an assumption. The suite is English, partly LLM-authored/reviewed, the held-out cases are sent to evaluated services, and cost can be estimated for unbilled/local runs.
+
+For local follow-up, the most practical JevBench candidates are openJev Verdict 1.4, Laya, jeff, open-jev-deberta-v3-large, and GLiNER2. The Jev-compatible [OpenJev DiffusionGemma server](https://github.com/razorback16/openjev) is the clearest local GPU path (NVIDIA 24 GB or more, native probabilities, `/v1/systemone`), but its vLLM branch and server quality still need qualification. DiffusionGemma is a 26B block-diffusion model intended for GPU runtimes; an experimental Apple Silicon adapter exists, but it has no held-out Sys1 quality or calibration result. Any local run should pin its adapter, checkpoint, hardware, probability source, and exact JevBench revision.
+
 The publisher results below are separate from our
 [September 19 local adapter](#local-sys1-result-snapshot) and
 [September 20 hosted Jev](#hosted-jev-result-snapshot) measurements. Different models, hardware,
