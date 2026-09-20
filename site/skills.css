@@ -50,3 +50,11 @@
   .skills-command .code-heading { flex-wrap: wrap; gap: .3rem 1rem; }
   .skills-contents { gap: .8rem 1.25rem; }
 }
+
+.scorecard-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; max-width: 70rem; margin: 2.25rem 0 .75rem; }
+.scorecard-card { border-top: 1px solid var(--line); padding-top: 1rem; }
+.scorecard-label { margin: 0 0 .55rem; color: var(--muted); font-size: .8rem; }
+.scorecard-value { display: block; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.045em; font-weight: 400; }
+.scorecard-card p:last-child { margin: .7rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.45; }
+@media (max-width: 800px) { .scorecard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .scorecard-grid { grid-template-columns: 1fr; gap: 1.25rem; } }

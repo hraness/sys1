@@ -121,3 +121,7 @@ Added a bounded link to the pinned System One Skills benchmark protocol at `f316
 ## Relevant-session benchmark refinement — 2026-09-20
 
 The visible protocol note now says results are pending, explains that relevant task episodes are selected before comparison, freezes the skill/native workflow comparison, and reports Codex, Claude Code, and Devin separately. It links the merged harness documentation at `c4c9a40155ec952b5ac0640ded722901abf07555/docs/BENCHMARK-HARNESS.md`; no efficacy result is claimed.
+
+## Provider-scoped scorecard refinement — 2026-09-20
+
+The public evidence section now leads with the merged `system-one-skills` scorecard at `d73fd063c605745cf576f9e8faeacee881094d68`: **35.20% less presented UTF-8 validation text** across 563 outputs (Codex 32.65% / 356, Devin 38.90% / 207, Claude Code no result), 90.61% on the 28 compacted outputs, 535 short outputs unchanged, and zero preservation invariant failures. The scorecard is explicitly scoped to tool-result text bytes; it does not claim provider-native token reduction, billed savings, or whole-task usage. The ten other catalog names are marked No numeric result / research-only. Earlier 82% and 3.94% figures remain inside a historical disclosure only. The page links the immutable `docs/SCORECARD.md` and `research/verify-current-report.json` sources.
