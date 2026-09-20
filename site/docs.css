@@ -20,6 +20,7 @@
 .docs-route { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, .8fr); gap: 2rem; align-items: start; padding: 1.5rem 0; border-bottom: 1px solid var(--grid); }
 .docs-route h3, .docs-mode h3 { margin-bottom: .35rem; }
 .docs-route p, .docs-mode p { color: var(--muted); font-size: .92rem; margin: 0; }
+.docs-mode pre { margin-top: 1rem; padding: .85rem .9rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .72rem; line-height: 1.7; }
 .docs-route pre { padding: .95rem 1rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .76rem; line-height: 1.8; }
 .docs-footnote { color: var(--muted); font-size: .8rem; margin: 1rem 0 0; }
 .docs-mode-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; border-top: 0; }
