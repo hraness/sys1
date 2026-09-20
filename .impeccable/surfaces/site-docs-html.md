@@ -39,4 +39,8 @@ client is portable to Node 24 and Bun; the embedded router requires Bun; the
 daemon exposes loopback HTTP. Compatible HTTP services require explicit
 registration and selection. Evaluation pages are copied complete from the
 existing comparison surfaces, preserving dated numbers, raw-report links,
-and caveats while using `/docs/evaluations*` canonicals.
+and caveats while using `/docs/evaluations*` canonicals. The current
+evaluations page may link to a pinned external benchmark such as JevBench, but
+it must label that evidence as external cross-model context and keep it
+separate from Sys1 adapter results; never turn a provider or self-hosted row
+into a Sys1 quality claim.
