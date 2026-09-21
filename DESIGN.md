@@ -237,8 +237,8 @@ At 800px and below, gutters become 1.25rem and section padding becomes
 3.75rem. Integration and questions stack; the integration modes temporarily
 form three columns. The header hides its first navigation link.
 
-At 560px and below, navigation links are hidden while the brand, start action,
-and appearance control remain. Benefits, integration modes, comparison rows,
+At 640px and below, navigation links are hidden while the brand, start action,
+and appearance control remain. At 560px, benefits, integration modes, comparison rows,
 and the request/answer specimen stack. Request-path arrows rotate with the
 vertical flow, the comparison header is hidden, and the example controls
 grow to a 2.75rem minimum height. Code wraps with `white-space: pre-wrap` and
@@ -419,3 +419,6 @@ the shared two-tone palette on black. Every page declares the same icon set.
 See `brand/README.md` for regeneration, sizes and review expectations. The
 Hraness project grid uses the same mark and padded illustration. These are
 original paths, with no runtime emoji, font or image-model dependency.
+Collapse header navigation at 640px so the added mark leaves room for the
+start action and coarse-pointer appearance control. Keep the start label on
+one line. Other content retains its existing responsive breakpoints.

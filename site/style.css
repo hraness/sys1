@@ -133,13 +133,15 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
   .questions { grid-template-columns: 1fr; gap: 1.5rem; }
   .request-path { padding: 1.5rem; gap: 1rem; }
 }
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   html { scroll-padding-top: 5.5rem; }
   .header-inner { gap: .6rem; min-height: 4.25rem; }
   .header-inner nav { display: none; }
   .wordmark { font-size: 1.3rem; }
   .header-actions { gap: .5rem; }
   .button-small { padding-inline: .7rem; }
+}
+@media (max-width: 560px) {
   .hero-copy .summary { font-size: 1rem; }
   .hero-note { font-size: .75rem; margin-bottom: 2rem; }
   .actions { gap: .6rem; }
@@ -177,3 +179,4 @@ html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
 
 .brand-mark { display: block; width: 2rem; height: 2rem; flex: 0 0 auto; }
 .wordmark .brand-name { color: inherit; font-weight: inherit; }
+.header-actions .button { white-space: nowrap; }
