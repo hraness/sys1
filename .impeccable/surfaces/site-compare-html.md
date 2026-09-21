@@ -71,3 +71,10 @@ One detector pass completed; inherited typography/theme findings were checked
 against the required shared design. The visual pass confirmed readable bars,
 labels, form controls, and estimate panels. The unrelated theme/footer upgrade
 is owned by the parallel shared-controls change.
+
+## Shared controls — 2026-09-20
+
+Adopts the canonical design-kit appearance icon/menu with the existing saved
+preference key, sticky shared marketing header, and pinned sticky Hraness
+footer. See DESIGN.md and the vendor provenance for the common contract.
+Page content and evidence claims are unchanged by this adoption.

@@ -29,11 +29,11 @@
       "mailingList": {
         "kind": "none"
       },
-      "placement": "flow"
+      "placement": "sticky"
     },
     "output": {
-      "sha256": "4a76718c3372a46e9d68942029cbdf1e67f331de5771bcb728c7d809ed419699",
-      "bytes": 7947
+      "sha256": "ff56556557f50e973f06d60e4b45bfdcde2c7b49dcbab0490d00b3fdbb897aa4",
+      "bytes": 7978
     },
     "adapter": {
       "path": "adapt-static-footer.mjs",

@@ -1,0 +1,246 @@
+@layer components.hraness-design-kit.legacy {
+/*
+ * Framework-neutral fallback for the standards-only browser controller.
+ * React ThemeToggle marks its root and owns the same presentation with StyleX,
+ * including its portalled popover.
+ */
+.hraness-design-theme-toggle[data-hraness-appearance-menu][data-presentation="menu"]:not([data-hraness-theme-toggle-stylex]) {
+  --hraness-appearance-control-background:
+    var(--ui-background, Canvas);
+  --hraness-appearance-control-foreground:
+    var(--ui-foreground, CanvasText);
+  --hraness-appearance-control-border:
+    var(--ui-input, GrayText);
+  --hraness-appearance-popover-background:
+    var(--ui-popover, Canvas);
+  --hraness-appearance-popover-foreground:
+    var(--ui-popover-foreground, CanvasText);
+  --hraness-appearance-accent:
+    var(--ui-accent, ButtonFace);
+  --hraness-appearance-accent-foreground:
+    var(--ui-accent-foreground, ButtonText);
+  --hraness-appearance-focus:
+    var(--ui-ring, Highlight);
+  position: relative;
+  display: inline-flex;
+  min-inline-size: 0;
+  color: var(--hraness-appearance-control-foreground);
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])[data-ready="false"] {
+  opacity: 0.64;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger {
+  display: inline-grid;
+  inline-size: 2rem;
+  min-inline-size: 2rem;
+  min-block-size: 2rem;
+  padding: 0;
+  border: 1px solid var(
+    --hraness-appearance-control-border,
+    var(--ui-input, GrayText)
+  );
+  border-radius: var(--radius-md, 0.5rem);
+  outline: none;
+  background: var(
+    --hraness-appearance-control-background,
+    var(--ui-background, Canvas)
+  );
+  color: var(
+    --hraness-appearance-control-foreground,
+    var(--ui-foreground, CanvasText)
+  );
+  font: inherit;
+  place-items: center;
+  touch-action: manipulation;
+  transition:
+    background-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    color 120ms cubic-bezier(0.2, 0, 0, 1),
+    transform 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger:not(:disabled) {
+  cursor: pointer;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger:where([data-hovered], :hover) {
+  background: var(--hraness-appearance-accent, var(--ui-accent, ButtonFace));
+  color: var(
+    --hraness-appearance-accent-foreground,
+    var(--ui-accent-foreground, ButtonText)
+  );
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger:where([data-pressed], :active) {
+  transform: translateY(1px);
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger:where([data-focus-visible], :focus-visible) {
+  outline: 2px solid var(--hraness-appearance-focus, var(--ui-ring, Highlight));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(
+    in oklch,
+    var(--hraness-appearance-focus, var(--ui-ring, Highlight)) 24%,
+    transparent
+  );
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-appearance-icon,
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-icon,
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item .hraness-appearance-icon,
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item .hraness-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__popover {
+  z-index: var(--z-tooltip, 3000);
+  inline-size: min(12rem, calc(100vw - 2rem));
+  max-inline-size: calc(100vw - 2rem);
+  overflow: hidden;
+  border: 1px solid var(
+    --hraness-appearance-control-border,
+    var(--ui-input, GrayText)
+  );
+  border-radius: var(--radius-lg, 0.75rem);
+  outline: none;
+  background: var(
+    --hraness-appearance-popover-background,
+    var(--ui-popover, Canvas)
+  );
+  color: var(
+    --hraness-appearance-popover-foreground,
+    var(--ui-popover-foreground, CanvasText)
+  );
+  box-shadow: var(
+    --elevation-overlay,
+    0 18px 48px -18px rgb(0 0 0 / 32%)
+  );
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  > .hraness-design-theme-toggle__popover {
+  position: absolute;
+  inset-block-start: calc(100% + 0.375rem);
+  inset-inline-end: 0;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__popover[hidden] {
+  display: none;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__menu {
+  display: grid;
+  max-block-size: min(24rem, 70vh);
+  padding: 0.25rem;
+  overflow: auto;
+  outline: none;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item {
+  display: grid;
+  min-block-size: 2.5rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md, 0.5rem);
+  outline: none;
+  color: var(
+    --hraness-appearance-popover-foreground,
+    var(--ui-popover-foreground, CanvasText)
+  );
+  cursor: default;
+  font-size: var(--text-label, 0.875rem);
+  line-height: 1.25;
+  user-select: none;
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item:where(
+  [data-focused],
+  [data-hovered],
+  :focus-visible,
+  :hover
+) {
+  background: var(--hraness-appearance-accent, var(--ui-accent, ButtonFace));
+  color: var(
+    --hraness-appearance-accent-foreground,
+    var(--ui-accent-foreground, ButtonText)
+  );
+}
+
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item[data-selected] {
+  font-weight: var(--font-weight-medium, 550);
+}
+
+@media (pointer: coarse) {
+  .hraness-design-theme-toggle[data-hraness-appearance-menu][data-presentation="menu"]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__trigger {
+    inline-size: 3rem;
+    min-inline-size: 3rem;
+    min-block-size: 3rem;
+  }
+
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__item {
+    min-block-size: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__trigger {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__trigger,
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__popover {
+    border-color: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__trigger:where(
+    [data-focus-visible],
+    :focus-visible
+  ) {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+
+  .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+    .hraness-design-theme-toggle__item[data-selected] {
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+}

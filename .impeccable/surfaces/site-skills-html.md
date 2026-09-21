@@ -125,3 +125,10 @@ The visible protocol note now says results are pending, explains that relevant t
 ## Provider-scoped scorecard refinement — 2026-09-20
 
 The public evidence section now leads with the merged `system-one-skills` scorecard at `d73fd063c605745cf576f9e8faeacee881094d68`: **35.20% less presented UTF-8 validation text** across 563 outputs (Codex 32.65% / 356, Devin 38.90% / 207, Claude Code no result), 90.61% on the 28 compacted outputs, 535 short outputs unchanged, and zero preservation invariant failures. The scorecard is explicitly scoped to tool-result text bytes; it does not claim provider-native token reduction, billed savings, or whole-task usage. The ten other catalog names are marked No numeric result / research-only. Earlier 82% and 3.94% figures remain inside a historical disclosure only. The page links the immutable `docs/SCORECARD.md` and `research/verify-current-report.json` sources.
+
+## Shared controls — 2026-09-20
+
+Adopts the canonical design-kit appearance icon/menu with the existing saved
+preference key, sticky shared marketing header, and pinned sticky Hraness
+footer. See DESIGN.md and the vendor provenance for the common contract.
+Page content and evidence claims are unchanged by this adoption.
