@@ -4,8 +4,10 @@ The two built-in paths in Sys1 0.9 are hosted Jev 1.13.0 and experimental
 local Qwen. Qwen3 1.7B remains the local setup selection; 0.6B and 3.5 4B
 require explicit selection. No local candidate is generally qualified. CUA and Needle
 adapters have been removed; their historical measurements remain below.
-See [the current comparison](https://sys1.io/compare) and
-[the reproducible evaluation method](../benchmarks/README.md).
+Use [the current comparison](https://sys1.io/compare) to choose a supported
+route using the external JevBench reference and a workload cost estimate.
+The [evaluation appendix](https://sys1.io/docs/evaluations) preserves Sys1
+adapter studies, failed experiments, and [reproduction instructions](../benchmarks/README.md).
 
 Upstream evidence checked **2026-09-20**; Jev pricing reconfirmed **2026-09-20**.
 
@@ -13,20 +15,59 @@ Upstream evidence checked **2026-09-20**; Jev pricing reconfirmed **2026-09-20**
 
 Sys1 now refers to the pinned [JevBench v1.2.6 snapshot](https://github.com/fstandhartinger/jevbench/tree/v1.2.6) for the external Jev-class leaderboard rather than duplicating its full suite. This is an explicit snapshot, so later JevBench revisions are not silently mixed into these numbers. The [results and methodology](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/RESULTS-v1.2.md) and [reproducible JSON artifact](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/results/v1.2/jevbench-v1.2-results.json) are pinned to commit `275763201a29d6083d4ee1431d709c296ef81281` (tag `v1.2.6`). The [implementation rules](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/IMPLEMENTATION.md) and [hard-tier notes](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/datasets/HARD-TIER.md) are the audit trail.
 
-| System | JevBench Score | Rank | Run condition |
-| --- | ---: | ---: | --- |
-| Jev 1.13.0 | 75.4 | 1 | Hosted API |
-| SemIf · Qwen3.5 4B | 74.7 | 2 | GPU endpoint |
-| djev · DiffusionGemma | 74.3 | 3 | Hosted API, free preview |
-| openJev Verdict 1.4 | 72.5 | 4 | Local CPU |
-| Laya · 421M | 70.1 | 5 | Local CPU |
-| OpenJev · DiffusionGemma 26B | 67.7 | 8 | GPU server |
+The main comparison filters the benchmark to the hosted Jev route and the
+operator-registered OpenJev HTTP route. It leads with **hard-tier accuracy**,
+which is separate from the composite JevBench Score. The bundled local Qwen
+route has no matching JevBench result.
 
-The table selects the leading rows plus the DiffusionGemma GPU reference; it is not a complete ranking. The score is a 25:25:25:25 geometric mean of intelligence, calibration, serial p50/p95 speed, and dollars per 1,000 decisions over 534 decisions (72 easy, 96 standard, 146 judge, 220 hard). The hard tier has 111 public and 109 held-out cases, frozen and hashed before evaluation. JevBench reports native probability distributions separately from verbalized JSON paths, preserves per-task outcomes, and applies no retries or repair.
+| Sys1 route | JevBench deployment | Hard-tier correct / 220 | Hard-tier accuracy | JevBench Score |
+| --- | --- | ---: | ---: | ---: |
+| Hosted Jev 1.13.0 | TypeSafe production API | 163/220 | 74.1% | 75.4 |
+| Operator-owned OpenJev DiffusionGemma | NVFP4 on RunPod RTX PRO 4500 Blackwell 32 GB | 144/220 | 65.5% | 67.7 |
+| Built-in local Qwen | No matching adapter/checkpoint run | — | Not measured | Not measured |
 
-These are point estimates from one serial run, not confidence intervals or a seed sweep. This is external evidence, not Sys1 qualification. djev is a hosted Maisa DiffusionGemma implementation, while the OpenJev DiffusionGemma row is a separate GPU server. Self-hosted latency receives an explicit ×2 + 0.15 s adjustment; it is an assumption. The suite is English, partly LLM-authored/reviewed, the held-out cases are sent to evaluated services, and cost can be estimated for unbilled/local runs.
+The OpenJev result is an external GPU deployment, not a Sys1-mediated run or
+an Apple MLX result. Protocol compatibility allows an operator to register a
+server; it does not qualify the deployment or imply equivalent accuracy.
+SemIf's Qwen3.5 4B result uses its own adapter and a BF16 GPU checkpoint.
+Sys1's bundled Qwen3.5 4B uses a Q4_K_M GGUF and the
+[first-token probability adapter](../src/local/decide.ts), so it cannot inherit
+SemIf's score. djev, Verdict, Laya, and the other JevBench rows remain
+[external ecosystem context](https://sys1.io/docs/evaluations#jevbench), not
+additional bundled Sys1 routes.
 
-For local follow-up, the most practical JevBench candidates are openJev Verdict 1.4, Laya, jeff, open-jev-deberta-v3-large, and GLiNER2. The Jev-compatible [OpenJev DiffusionGemma server](https://github.com/razorback16/openjev) is the clearest local GPU path (NVIDIA 24 GB or more, native probabilities, `/v1/systemone`), but its vLLM branch and server quality still need qualification. DiffusionGemma is a 26B block-diffusion model intended for GPU runtimes; an experimental Apple Silicon adapter exists, but it has no held-out Sys1 quality or calibration result. Any local run should pin its adapter, checkpoint, hardware, probability source, and exact JevBench revision.
+| Benchmark axis / 100 | Jev 1.13.0 | OpenJev DiffusionGemma |
+| --- | ---: | ---: |
+| Intelligence | 90.4 | 86.0 |
+| Calibration | 82.7 | 64.8 |
+| Speed | 83.3 | 83.2 |
+| Cost | 52.0 | 45.5 |
+
+The composite is the geometric mean of these four axes, weighted equally;
+it is not accuracy. Intelligence combines 72 easy, 96 standard, 146 judge,
+and 220 hard decisions. Calibration uses the hard tier. The hard tier has
+111 public and 109 held-out cases, frozen and hashed before evaluation.
+JevBench distinguishes native probability distributions from verbalized JSON
+paths, preserves per-task outcomes, and applies no retries or repair.
+
+| Raw latency boundary | Jev p50 / p95 | OpenJev p50 / p95 |
+| --- | ---: | ---: |
+| Serial standard + judge, 242 decisions | 652.4 / 722.2 ms | 241.3 / 305.3 ms |
+| Serial hard tier, 220 decisions | 671.7 / 829.5 ms | 273.7 / 595.1 ms |
+
+These measurements include the network from JevBench's Germany client.
+OpenJev's model was loaded before timing. Its speed axis uses adjusted
+standard/judge latency of 632.5 / 760.5 ms (raw ×2 + 150 ms), an assumed
+production-load correction; Jev's production API receives no adjustment.
+The raw measurements and adjusted score are not interchangeable.
+
+These are point estimates from one serial run, not confidence intervals or a
+seed sweep. This is external evidence, not Sys1 qualification. The suite is
+English, partly LLM-authored/reviewed, its held-out cases are sent to evaluated
+services, and costs can be estimated for unbilled/local runs. Any reproduction
+must pin its adapter, checkpoint, hardware, probability source, and JevBench
+revision. The original Sys1 fixtures remain useful for integration diagnostics;
+their scores are never blended with JevBench.
 
 The publisher results below are separate from our
 [September 19 local adapter](#local-sys1-result-snapshot) and
@@ -54,12 +95,17 @@ West Coast service. The [workflow evaluation](https://evals.typesafe.ai/) uses
 frontier-model consensus as its reference, not human ground truth. These
 figures do not establish accuracy on your application's decisions.
 
-## OpenJev: throughput changes with concurrency
+## OpenJev: operator-owned NVIDIA and Apple routes
 
-This is [razorback16/OpenJev](https://github.com/razorback16/openjev/blob/91d5005effcf8cc0ecccaa9538ceabbb130fef59/README.md),
-a DiffusionGemma 26B-A4B NVFP4 server using vLLM. Its published test uses an
-RTX PRO 6000, reports “38% of the GPU,” and sends three questions per request
-with cache-busted states.
+[razorback16/OpenJev](https://github.com/razorback16/openjev/blob/febf02e889892747ced5497f2a17323731621ccd/README.md)
+serves DiffusionGemma through NVIDIA vLLM (at least 24 GB) or Apple MLX
+(about 16 GB free, 4-bit weights, serial reads). Both expose `/v1/systemone`.
+Sys1 forwards the common decision contract to an explicitly registered server;
+it does not install or own that server. MLX support does not transfer the
+JevBench GPU score to a Mac. OpenJev extensions remain outside Sys1's contract.
+
+The publisher's NVIDIA throughput test uses an RTX PRO 6000, three questions
+per request, and cache-busted states:
 
 | Concurrent requests | Requests / second | p50 latency | p95 latency |
 | ---: | ---: | ---: | ---: |
@@ -71,7 +117,7 @@ with cache-busted states.
 More concurrency increased aggregate throughput and individual waiting time.
 The table does not disclose sample count, input-token distribution, or an
 accuracy result. It is not evidence that OpenJev outperforms Jev or a laptop
-model. Source revision: `91d5005`, September 18, 2026.
+model. Source revision: `febf02e889892747ced5497f2a17323731621ccd`.
 
 ## SemIf: direct scores versus generated answers
 
@@ -91,7 +137,8 @@ not prove equal semantic quality. See the [raw results](https://github.com/TheoL
 
 Its [evaluation method](https://github.com/TheoLeeCJ/SemIf/blob/ca3ba65f142967030ecb453346e94d6f476a69df/docs/METHOD.md)
 excludes model loading from warm timing. Published quality results concern
-native BF16 checkpoints, not Sys1's Qwen3 0.6B or 1.7B GGUF artifacts. Source
+native BF16 checkpoints, not Sys1's Qwen3 0.6B, 1.7B, or Qwen3.5 4B GGUF
+artifacts and adapter. Source
 revision: `ca3ba65`, September 19, 2026.
 
 ## Local models: match the artifact and task

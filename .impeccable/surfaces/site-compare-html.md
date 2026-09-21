@@ -2,123 +2,72 @@
 version: 1
 slug: "site-compare-html"
 primary_target: "site/compare.html"
-related_targets: ["site/comparison.css", "site/comparison.js", "site/data/forms-v1-m5-max-2026-09-19.json", "docs/model-comparison.md"]
+related_targets: ["site/comparison.css", "site/compare.js", "site/compare-math.js", "docs/model-comparison.md"]
 ---
 
 # Model comparison
 
-Mode: Read. Developers choosing the local or hosted model behind Sys1.
-User requested detailed Cactus/Needle/Jev/Qwen results, speed, token use,
-and performance. Extend the existing Hraness Paper/Peopleblade design.
+Mode: Read, with an inline cost tool. Developers choose a decision route using
+external evidence, setup constraints, and their workload. Preserve Hraness
+Paper/Peopleblade: Instrument Serif, Nebula Sans, paired colors, quiet rules,
+shared header, appearance control, and footer.
 
 ## Direction contract
 
-THESIS: Tie every number to its workload, runtime, hardware, and evidence class.
-OWN-WORLD: Existing shared Paper palette, editorial serif, Nebula Sans, quiet
-rules, small controls and shared footer. Preserve DESIGN.md and its sidecar.
-STORY: Choose by task, inspect local results, compare upstream context, understand
-token accounting, estimate API cost, reproduce an evaluation.
-FIRST VIEWPORT: Plain introduction, in-page navigation, and the start of the
-capability table. Detailed numbers have captions, units, and nearby conditions.
-FORM: Reading surface with semantic tables and keyboard-scrollable wide data;
-stack contextual evidence on small screens. No universal speed leaderboard.
-FINISH: One desktop/mobile inspection batch, independent finish review,
-corrections as required, and documentation of the preserved system.
-
-## Implemented surface
-
-The page inherits the pinned Paper palette, Instrument Serif, Nebula Sans,
-shared header and appearance selection, and Hraness footer. Its local
-stylesheet adds captioned semantic tables with tabular numeric figures,
-two-column evidence rows, token-accounting descriptions, and the estimator.
-Tables remain horizontally scrollable inside labelled focusable regions;
-the small-screen hint explains this behavior. Evidence, accounting, and
-calculator columns stack at the incumbent compact breakpoint. No new system
-tokens or visual assets are introduced; DESIGN.md frontmatter and the design
-sidecar remain unchanged.
-
-Native disclosures reveal startup/token detail and related output-path
-research without JavaScript. The cost calculator uses labelled number fields,
-field limits, and a polite live output. It updates an arithmetic Jev estimate
-from the published input-token rate, with a static default and an explanation
-when JavaScript is unavailable. It neither calls a model nor bills a service.
+THESIS: Lead with JevBench quality for available Sys1 routes; make cost easy to
+explore; put the original project studies in documentation.
+STORY: Hard-tier accuracy → available routes → workload cost → evidence sources.
+FIRST VIEWPORT: The purpose and benchmark are visible without the legacy
+forms-v1/Qwen/Laya research tables. This is a model comparison, not a study log.
+FORM: Horizontal bars with textual values and explicit unscored routes, simple
+route rows, labelled calculator fields and one estimate panel. No new assets.
+FINISH: Batched desktop/mobile light/dark and interaction checks, independent
+source/logic review, one correction round, repository gate, live readback.
 
 ## Evidence contract
 
-The measured table retains the actual `forms-v1-local-adapter` benchmark in
-`site/data/forms-v1-m5-max-2026-09-19.json`: 20 authored synthetic cases,
-100 repeated timing calls per adapter, concurrency one, Apple M5 Max with
-36 GiB system memory, and Bun 1.3.14. Source and harness revision `83ca299`
-is linked along with the fixture and complete raw results. Keep correctness,
-valid response counts, adapter latency, and throughput separately labelled.
-Repeated timing observations are not additional independent quality cases.
+JevBench v1.2.6 is pinned to commit
+`275763201a29d6083d4ee1431d709c296ef81281`. Hard-tier accuracy is 163/220 (74.1%)
+for Jev and 144/220 (65.5%) for razorback16 OpenJev DiffusionGemma NVFP4.
+Intelligence, calibration, and the overall geometric composite are separate
+scores out of 100, never labelled accuracy percentages. All chart axes start
+at zero. The source is external and the GPU result does not qualify Apple MLX
+or a Sys1 deployment.
 
-CUA's narrative task transfer and Needle's extraction-to-choice adaptation
-must remain explicit. Qwen's reported input tokens, CUA's byte scoring, and
-Needle's unreported token usage have distinct meanings. Fresh-runner timing
-does not imply cold-machine timing; the Metal capability probe does not
-measure per-inference GPU activity. Memory capacity is not peak model memory.
+Filter by route identity, not shared weights. Jev is built-in hosted; OpenJev
+is operator-run via the documented HTTP interface. Bundled Qwen3 0.6B/1.7B and
+Qwen3.5 4B have no matching JevBench score and remain visible as unscored.
+SemIf's different Qwen adapter cannot supply their score. Other JevBench rows
+remain in the evidence appendix. Preserve old raw reports and studies in
+`/docs/evaluations` and `/docs/evaluations-history`.
 
-Publisher measurements stay in separate evidence rows with source links,
-hardware, runtime, workload, units, and disclosed limits. Hosted Jev was subsequently measured on the identical fixture on September 20
-at source `e770483`; its raw report is `site/data/forms-v1-jev-2026-09-20.json`.
-Keep its network-inclusive latency distinct from the local adapter boundary.
-Jev reached 20/20 with 100/100 valid repeated calls; output usage was reported
-and output pricing was free. Its region and server cache/hardware are unknown.
-OpenJev remains unmeasured. Shared response schemas do not
-establish interchangeable quality, calibration, speed, or cost. Detailed
-source notes live in `docs/model-comparison.md`.
+## Calculator contract
 
-## Finish evidence
+Model selection covers Jev, all three bundled Qwen options, an OpenJev server,
+and custom compatible service pricing. Jev uses $0.042/M input tokens with
+output free (TypeSafe source checked 2026-09-20). Monthly volume presets and
+input fields retain user control. Custom service rates include input/output.
+Local machine estimates use user-provided hourly cost and allocated hours;
+blank values never mean free, and capacity is not inferred. Unit costs are
+per 1,000 requests, not questions or correct decisions. Keep retries, taxation,
+price changes, and idle/allocated machine time clear beside the estimate.
 
-Independent finish-review disposition: **ship**. The reviewer inspected the
-desktop light/dark, mobile, 603px, and expanded-startup captures under
-`.impeccable/review/compare-final-*.png`, together with the HTML, CSS, and script.
-Persistence, fidelity, and ceiling matched the direction; no material fixes
-were required. This was a visual/source review. Numerical revalidation and
-live browser checks remained the integration owner's separate validation.
+Progressive enhancement: the accuracy chart, sources, route guidance, and
+static Jev example remain readable without JavaScript. Chart controls and
+volume presets appear with JS. The archival pages retain comparison.js;
+compare.js and compare-math.js serve only the redesigned comparison route.
 
-## Hosted result extension
+## Verification — 2026-09-20
 
-Preserve the existing Paper tables, disclosures, controls, and assets. Add Jev
-alongside local results with explicit timing labels, separate dated provenance,
-raw usage and estimated costs. State the poor 8/20 local performance plainly;
-interface validity must never imply decision quality or migration readiness.
+Independent source and calculator review passed; 16 focused tests cover 99
+assertions. Browser verification used the actual CSP at 1280×1000 and 390×844
+in light and dark. No horizontal overflow or console errors occurred. Checked
+metric switching, volume presets, hosted/custom token arithmetic, machine
+allocation, explicit zero costs, zero request volume, and cleared inputs.
+Missing inputs correctly remove the numeric estimate. Appearance was restored
+to System and the temporary viewport and preview process were closed.
 
-Independent visual review found no visual fixes at desktop light or mobile dark;
-page overflow was absent at 1280px and 390px, with fonts loaded and no console
-errors. Expanded failure and token disclosures were checked. The reviewer’s
-one source correction qualified size-first selection to eligible local routes;
-`auto` can prefer an available hosted backend. Original captures precede that
-small wording correction; the layout and existing design assets are unchanged.
-
-## September 20 evidence and product revision
-
-Keep the Peopleblade/Paper visual system. Lead with route ownership and a
-completed hosted Jev comparison; then show frozen broader Qwen results and
-related candidate research. Clearly separate v2, v3 and historical forms-v1.
-Every local Qwen path is experimental. Enabling Jev selects hosted-only;
-local fallback must be deliberately enabled after task-specific evaluation.
-The old specialist adapters are removed in 0.9 and their original evidence
-lives at /compare-history. Failed and incomplete runs stay public.
-
-The new v3 Qwen result is 44/72 with 13/24 order-invariant choices. The
-bounded reasoning attempt failed its 512-token budget on 9/12 cases and is
-not a shipped mode. Jev's broader run was stopped by authentication; no
-quality result can be inferred from that attempt. Preserve all denominators,
-source pins, local-vs-HTTP timing boundaries and actual token semantics.
-
-The measured Laya study is separate from bundled routes: 30/72 correct,
-9.7 ms direct native p50, with different latency and throughput boundaries.
-Link its exact portable reproduction bundle and full raw responses. Trained
-heads, valid shapes and high action probabilities do not establish correctness.
-
-Final independent source and visual disposition: **ship**, no material fixes.
-The reviewer inspected `focus-compare-desktop-light.png`,
-`focus-compare-mobile-dark.png`, `focus-home-desktop-light.png`, and
-`focus-home-mobile-dark.png` under `.impeccable/review/` at 1280px and 390px.
-Paper typography, palette, table structure and small-screen stacking persist.
-The integration owner separately verified no document overflow, internally
-scrollable tables, disclosure expansion, calculator arithmetic ($0.21 for
-10,000 requests at 500 input tokens), and no browser console errors.
-Earlier approvals above apply only to their recorded versions.
+One detector pass completed; inherited typography/theme findings were checked
+against the required shared design. The visual pass confirmed readable bars,
+labels, form controls, and estimate panels. The unrelated theme/footer upgrade
+is owned by the parallel shared-controls change.

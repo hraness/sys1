@@ -151,7 +151,7 @@ sys1 status
 
 Local Qwen is an experimental adapter, not a qualified substitute for Jev.
 The broader tests found 32/72 correct decisions for Qwen3 1.7B and 44/72 for
-Qwen3.5 4B on a different fresh fixture. [Read the evidence](https://sys1.io/compare)
+Qwen3.5 4B on a different fresh fixture. [Read the evidence](https://sys1.io/docs/evaluations)
 before using local decisions to drive actions.
 
 `setup` is the explicit weight-download boundary. It installs Qwen3 1.7B and
@@ -516,16 +516,19 @@ artifact on all three platforms.
 
 ## Comparing models
 
-See [the model comparison](https://sys1.io/compare) for Sys1's local and hosted
-adapter evidence and token/cost semantics. For cross-model Jev-class comparisons,
-use the pinned external [JevBench v1.2.6 scorecard](https://github.com/fstandhartinger/jevbench/tree/v1.2.6);
+Use [the model comparison](https://sys1.io/compare) for external JevBench
+accuracy on the hosted Jev and operator-registered OpenJev routes, route
+availability, and a workload cost calculator. It uses the pinned
+[JevBench v1.2.6 snapshot](https://github.com/fstandhartinger/jevbench/tree/v1.2.6);
 its methodology and limits are recorded in the [evidence appendix](docs/model-comparison.md).
-The [opt-in Sys1 benchmarks](benchmarks/README.md) remain for adapter qualification
-and reproduction, including the environment-provided API key required for hosted
-calls. The current broader results keep every failure: Qwen3 1.7B reached
-32/72 on decisions-v2; Qwen3.5 4B reached 44/72 on decisions-v3. Different
-fixtures are not a measured improvement. Neither qualifies a general local
-replacement for Jev. The historical 20-case snapshot remains available: Jev scored 20/20,
-Qwen3 1.7B scored 18/20, and Qwen3 0.6B, CUA-S1, and Needle each scored 8/20.
-CUA-S1 and Needle are no longer supported runtime routes. Historical results do
-not establish general model quality or justify an automatic application migration.
+Built-in Qwen has no matching JevBench result: SemIf's Qwen3.5 4B uses a
+different adapter and BF16 checkpoint, so its score does not apply to Sys1's
+GGUF path. An external OpenJev GPU score likewise does not establish Mac MLX
+quality or qualify a Sys1 deployment.
+
+[Sys1's original evaluation studies](https://sys1.io/docs/evaluations) remain
+available with raw reports, failure analysis, and token-accounting details.
+The [opt-in Sys1 benchmarks](benchmarks/README.md) support adapter qualification
+and reproduction; they are not the cross-model leaderboard. No local candidate
+is generally qualified, and the original fixtures do not justify an automatic
+application migration.
