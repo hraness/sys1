@@ -36,30 +36,65 @@ function matchesRequest(request: SystemOneRequest, response: SystemOneResponse):
   });
 }
 
+interface ProbabilityBounds {
+  lower: number;
+  upper: number;
+}
+
+/** Extreme mean attainable inside the rounding intervals while totaling one. */
+function scoreEndpoint(bounds: ProbabilityBounds[], lowerTotal: number, maximum: boolean): number {
+  let expected = bounds.reduce((sum, bound, level) => sum + level * bound.lower, 0);
+  let remaining = Math.max(0, 1 - lowerTotal);
+  // Starting at every lower bound, assign remaining mass to the least or most
+  // valuable level first. Score keys are validated as contiguous from zero.
+  for (let position = 0; position < bounds.length && remaining > 0; position++) {
+    const level = maximum ? bounds.length - 1 - position : position;
+    const bound = bounds[level]!;
+    const added = Math.min(remaining, bound.upper - bound.lower);
+    expected += level * added;
+    remaining -= added;
+  }
+  return expected;
+}
+
 /**
  * Validate the wire shape and its relationship to the original questions.
- * Local adapters round to three decimal places: allow 0.0005 rounding per
- * probability, plus 0.0005 for the score. This is arithmetic consistency,
- * not an assessment of a model's calibration or accuracy.
+ * Three decimal places remain the default. A protocol adapter may explicitly
+ * select two decimal places for a backend that publishes that precision.
+ * Require a normalized distribution inside the half-unit rounding intervals,
+ * and a compatible expected score within its own half-unit interval.
+ * This is arithmetic consistency, not an assessment of calibration or accuracy.
  */
-export function validateResponseForRequest(request: SystemOneRequest, value: unknown): SystemOneResponse {
+export function validateResponseForRequest(
+  request: SystemOneRequest,
+  value: unknown,
+  roundingDecimals: 2 | 3 = 3,
+): SystemOneResponse {
   try {
+    if (roundingDecimals !== 2 && roundingDecimals !== 3) throw new Error();
+    const rounding = 0.5 * 10 ** -roundingDecimals;
     const response = systemOneResponseSchema.parse(value);
     if (!matchesRequest(request, response)) throw new Error();
     for (const answer of Object.values(response.answers)) {
       if (answer.type === "noul") continue;
       const values = Object.values(answer.probabilities);
       const total = values.reduce((sum, probability) => sum + probability, 0);
-      if (Math.abs(total - 1) > values.length * 0.0005 + 1e-9) throw new Error();
+      const bounds = values.map((probability) => ({
+        lower: Math.max(0, probability - rounding),
+        upper: Math.min(1, probability + rounding),
+      }));
+      const lowerTotal = bounds.reduce((sum, bound) => sum + bound.lower, 0);
+      const upperTotal = bounds.reduce((sum, bound) => sum + bound.upper, 0);
+      if (total <= 0 || lowerTotal > 1 + 1e-9 || upperTotal < 1 - 1e-9) throw new Error();
       if (answer.type === "choice") {
         // A rounded tie is allowed; a strictly lower probability is not.
         if (answer.probabilities[answer.choice]! + 1e-9 < Math.max(...values)) throw new Error();
       } else {
-        const expected = Object.entries(answer.probabilities).reduce(
-          (sum, [level, probability]) => sum + Number(level) * probability, 0,
-        );
-        const weightedRounding = values.length * (values.length - 1) / 2 * 0.0005;
-        if (Math.abs(answer.score - expected) > weightedRounding + 0.0005 + 1e-9) throw new Error();
+        const minimum = scoreEndpoint(bounds, lowerTotal, false);
+        const maximum = scoreEndpoint(bounds, lowerTotal, true);
+        if (answer.score + rounding < minimum - 1e-9 || answer.score - rounding > maximum + 1e-9) {
+          throw new Error();
+        }
       }
     }
     return response;

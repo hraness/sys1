@@ -24,6 +24,7 @@ function boundedSignal(timeoutMs: number, signal?: AbortSignal): AbortSignal {
 }
 
 export interface RuntimeBackend extends BackendCandidate {
+  adapter?: "systemone" | "kev";
   base_url: string;
   headers: Record<string, string>;
   /** Model id forwarded in the request body when the caller did not pin one. */
@@ -191,6 +192,7 @@ function localRuntimeBackend(local: LocalBackendConfig): RuntimeBackend {
     base_url: trimTrailingSlashes(local.base_url),
     headers: {},
     default_model: local.model,
+    ...(local.adapter === undefined ? {} : { adapter: local.adapter }),
   };
 }
 

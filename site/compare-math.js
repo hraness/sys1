@@ -1,6 +1,6 @@
 // Cost assumptions are explicit inputs. Missing machine prices never mean zero.
 export const JEV_INPUT_RATE = 0.042;
-export const LOCAL_ROUTES = ["qwen06", "qwen17", "qwen35", "openjev"];
+export const LOCAL_ROUTES = ["qwen06", "qwen17", "qwen35", "openjev", "kev"];
 
 export function boundedNumber(value, max, integer = false) {
   if (value === null || value === undefined || String(value).trim() === "") return null;

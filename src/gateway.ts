@@ -23,8 +23,9 @@ import {
 import { chooseBackend, requestNeeds } from "./router.ts";
 import { ModelStoreError } from "./local/store.ts";
 import { validateResponseForRequest } from "./response.ts";
+import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
 
-export const SYS1_VERSION = "0.9.0";
+export const SYS1_VERSION = "0.10.0";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
@@ -152,6 +153,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         available: backend.available,
         capabilities: backend.capabilities ?? null,
         explicit_only: backend.explicitOnly === true,
+        ...(backend.adapter === undefined ? {} : { adapter: backend.adapter }),
       })),
     );
     return json({ object: "list", data });
@@ -227,6 +229,11 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         return json(errorBody(choice.reason, choice.detail), status);
       }
       const backend = choice.backend;
+      const hopRequest = { ...body, model: forwardModel(body.model, backend) ?? backend.default_model };
+      const forwardedBody = backend.adapter === "kev" ? JSON.stringify(adaptKevRequest(hopRequest)) : rawBody;
+      if (new TextEncoder().encode(forwardedBody).byteLength > PROTOCOL_LIMITS.maxBodyBytes) {
+        return json(errorBody("request_too_large", "adapted request body exceeds 1 MiB"), 413);
+      }
       attempts += 1;
       let result;
       if (backend.builtin !== undefined) {
@@ -271,7 +278,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
       } else {
         result = await forwardToBackend(
           backend,
-          rawBody,
+          forwardedBody,
           forwardModel(body.model, backend),
           config.gateway.request_timeout_ms,
           fetchFn,
@@ -286,7 +293,10 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         if (status >= 200 && status < 300) {
           contentType = "application/json";
           try {
-            responseBody = JSON.stringify(validateResponseForRequest(body, JSON.parse(responseBody ?? "") as unknown));
+            const value: unknown = JSON.parse(responseBody ?? "");
+            responseBody = JSON.stringify(backend.adapter === "kev"
+              ? adaptKevResponse(hopRequest, value)
+              : validateResponseForRequest(body, value));
           } catch {
             status = 502;
             responseBody = JSON.stringify(errorBody(
@@ -300,6 +310,8 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
             "content-type": contentType,
             "x-sys1-backend": backend.name,
             "x-sys1-attempts": String(attempt + 1),
+            ...(backend.adapter === "kev" && status >= 200 && status < 300
+              ? { "x-sys1-adapter": "kev", "x-sys1-probability-decimals": "2" } : {}),
             ...("extra_headers" in result ? result.extra_headers : {}),
           },
         });

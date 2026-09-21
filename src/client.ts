@@ -1,5 +1,6 @@
 import { HttpBodyLimitError, readBoundedText } from "./http.ts";
 import { validateResponseForRequest } from "./response.ts";
+import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
 import {
   PROTOCOL_LIMITS,
   systemOneRequestSchema,
@@ -45,6 +46,8 @@ export class Sys1ClientError extends Error {
 }
 
 export interface ClientOptions {
+  /** Use only for a direct Kev endpoint. Sys1 gateways declare their own adapter. */
+  adapter?: "systemone" | "kev";
   /** An explicit HTTP(S) endpoint root; /v1/systemone is appended. */
   baseUrl?: string;
   /** Explicit headers, including Authorization if needed. Never read from env. */
@@ -60,6 +63,9 @@ export interface EvaluationOptions {
 }
 
 export interface RouteMetadata {
+  /** Native Kev probabilities retain their published two-decimal precision. */
+  adapter?: "kev";
+  probabilityDecimals?: 2;
   backend?: string;
   attempts?: number;
   local?: {
@@ -83,6 +89,13 @@ export interface Sys1Client {
 
 function metadata(headers: Headers): RouteMetadata {
   const result: RouteMetadata = {};
+  const adapter = headers.get("x-sys1-adapter");
+  const decimals = headers.get("x-sys1-probability-decimals");
+  if (adapter !== null || decimals !== null) {
+    if (adapter !== "kev" || decimals !== "2") throw new Sys1ClientError("invalid_response");
+    result.adapter = "kev";
+    result.probabilityDecimals = 2;
+  }
   const name = (key: string): string | undefined => {
     const value = headers.get(key);
     if (value === null) return undefined;
@@ -96,9 +109,9 @@ function metadata(headers: Headers): RouteMetadata {
     if (!/^[1-9]\d{0,5}$/.test(attempts)) throw new Sys1ClientError("invalid_response");
     result.attempts = Number(attempts);
   }
-  const adapter = name("x-sys1-local-adapter");
-  if (adapter !== undefined) {
-    result.local = { adapter };
+  const localAdapter = name("x-sys1-local-adapter");
+  if (localAdapter !== undefined) {
+    result.local = { adapter: localAdapter };
     for (const [header, key] of [
       ["x-sys1-local-min-coverage", "minCoverage"],
       ["x-sys1-local-min-concentration", "minConcentration"],
@@ -143,7 +156,9 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
   let headers: Headers;
   const timeoutMs = options.timeoutMs ?? 30_000;
   const fetchFn = options.fetch ?? globalThis.fetch;
+  const adapter = options.adapter ?? "systemone";
   try {
+    if (adapter !== "systemone" && adapter !== "kev") throw new Error();
     const base = options.baseUrl ?? DEFAULT_BASE_URL;
     if (base.length > 2_048) throw new Error();
     const url = new URL(base);
@@ -175,7 +190,8 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
         request = systemOneRequestSchema.parse(JSON.parse(serialized) as unknown);
         const state = typeof request.state === "string" ? request.state : JSON.stringify(request.state);
         if (new TextEncoder().encode(state).byteLength > PROTOCOL_LIMITS.maxStateBytes) throw new Error();
-        body = JSON.stringify(request);
+        body = JSON.stringify(adapter === "kev" ? adaptKevRequest(request) : request);
+        if (new TextEncoder().encode(body).byteLength > PROTOCOL_LIMITS.maxBodyBytes) throw new Error();
       } catch {
         throw new Sys1ClientError("invalid_request");
       }
@@ -199,12 +215,21 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
         }
         const text = await readBoundedText(response, MAX_RESPONSE_BYTES, controller.signal);
         let parsed: SystemOneResponse;
+        let route: RouteMetadata;
         try {
-          parsed = validateResponseForRequest(request, JSON.parse(text) as unknown);
+          route = metadata(response.headers);
+          const value: unknown = JSON.parse(text);
+          if (adapter === "kev") {
+            parsed = adaptKevResponse(request, value);
+            route.adapter = "kev";
+            route.probabilityDecimals = 2;
+          } else {
+            parsed = validateResponseForRequest(request, value, route.probabilityDecimals ?? 3);
+          }
         } catch {
           throw new Sys1ClientError("invalid_response");
         }
-        return { response: parsed, metadata: metadata(response.headers) };
+        return { response: parsed, metadata: route };
       } catch (error) {
         if (controller.signal.aborted) throw new Sys1ClientError(timedOut ? "timeout" : "aborted");
         if (error instanceof Sys1ClientError) throw error;
@@ -224,3 +249,8 @@ export {
   noulAnswerSchema, choiceAnswerSchema, scoreAnswerSchema,
   systemOneRequestSchema, systemOneResponseSchema,
 } from "./protocol.ts";
+
+export { createProfile, Sys1ProfileError } from "./profile.ts";
+export type {
+  DecisionProfile, ProfileDefinition, ReadonlyProfileDefinition, ProfileErrorCode,
+} from "./profile.ts";

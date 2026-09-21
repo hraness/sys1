@@ -29,6 +29,7 @@ import { runDoctor } from "./doctor.ts";
 import { SYS1_VERSION, startGateway } from "./gateway.ts";
 import { probeNativeRuntime } from "./local/engine.ts";
 import { qualifyBackend } from "./qualification.ts";
+import { createProfile } from "./profile.ts";
 import {
   MODEL_REGISTRY,
   installedModels,
@@ -82,7 +83,7 @@ Models:
 
 Routing:
   backend list [--json]         List configured HTTP backends
-  backend add --name N --url U --model M [--size-b N] [--cost-rank N]
+  backend add --name N --url U --model M [--adapter systemone|kev] [--size-b N] [--cost-rank N]
                                 Register a System One HTTP backend
   backend check --name N [--json]
                                 Qualify discovery, limits, and all answer types
@@ -95,6 +96,8 @@ Routing:
 Evaluate:
   eval [--file path|-] [--json] Send a System One request through the gateway
                                 (reads the JSON request from --file or stdin)
+  eval --profile path [--file path|-] [--json]
+                                Apply a versioned profile to JSON {"state": ...}
 
 Flags:
   --json                        Machine-readable output on supporting commands
@@ -148,6 +151,8 @@ const VALUE_FLAGS = new Set([
   "--name",
   "--url",
   "--model",
+  "--adapter",
+  "--profile",
   "--size-b",
   "--cost-rank",
   "--tier",
@@ -562,6 +567,20 @@ async function cmdEval(home: string, flags: Map<string, string | boolean>): Prom
     if (!existsSync(file)) fail(`no such file: ${file}`, EXIT.usage);
     raw = await readBoundedText({ body: Bun.file(file).stream() }, 1_048_576);
   }
+  const profileFile = flagString(flags, "profile");
+  if (flags.has("profile") && profileFile === undefined) fail("--profile requires a file path", EXIT.usage);
+  if (profileFile !== undefined) {
+    try {
+      const profileText = await readBoundedText({ body: Bun.file(profileFile).stream() }, 1_048_576);
+      const profile = createProfile(JSON.parse(profileText) as unknown);
+      const input: unknown = JSON.parse(raw);
+      if (input === null || typeof input !== "object" || Array.isArray(input) ||
+          Object.keys(input).length !== 1 || !Object.hasOwn(input, "state")) throw new Error();
+      raw = JSON.stringify(profile.request((input as { state: unknown }).state));
+    } catch {
+      fail("invalid profile or input; --profile needs a valid profile file and JSON containing only state", EXIT.usage);
+    }
+  }
   const record = readPidFile(home);
   const host = record?.host ?? config.gateway.host;
   const port = record?.port ?? config.gateway.port;
@@ -663,10 +682,13 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
       }
       const size = flagNumber(args.flags, "size-b");
       const costRank = flagNumber(args.flags, "cost-rank");
+      const adapter = flagString(args.flags, "adapter");
+      if (args.flags.has("adapter") && adapter === undefined) fail("--adapter requires systemone or kev", EXIT.usage);
       const parsed = localBackendSchema.safeParse({
         name,
         base_url: url,
         model,
+        ...(adapter === undefined ? {} : { adapter }),
         ...(size === undefined ? {} : { size_b: size }),
         ...(costRank === undefined ? {} : { cost_rank: costRank }),
         enabled: true,

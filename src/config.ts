@@ -48,6 +48,8 @@ export const localBackendSchema = z.object({
     .refine((name) => name !== "typesafe" && !name.startsWith("local-"), "typesafe and local-* names are reserved"),
   base_url: backendUrlSchema,
   model: z.string().min(1).max(128),
+  /** Explicit wire adapter; omitted keeps the standard System One contract. */
+  adapter: z.enum(["systemone", "kev"]).optional(),
   size_b: z.number().positive().max(10_000).optional(),
   cost_rank: z.number().int().min(0).max(1_000).optional(),
   capabilities: z
