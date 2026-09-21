@@ -25,8 +25,8 @@ pre code { font-size: inherit; }
 .skip-link:focus { transform: translateY(0); }
 .site-header { position: sticky; top: 0; z-index: 40; border-bottom: 1px solid var(--grid); }
 .header-inner { width: min(76rem, calc(100% - 4rem)); min-height: 4.5rem; margin-inline: auto; display: flex; align-items: center; gap: 2rem; }
-.wordmark { color: var(--foreground); text-decoration: none; font-size: 1.4rem; font-weight: 600; letter-spacing: -.03em; margin-right: auto; }
-.wordmark span { color: var(--muted); font-weight: 400; }
+.wordmark { display: inline-flex; align-items: center; gap: .55rem; color: var(--foreground); text-decoration: none; font-size: 1.4rem; font-weight: 600; letter-spacing: -.03em; margin-right: auto; }
+.wordmark .brand-name > span { color: var(--muted); font-weight: 400; }
 .header-inner nav { display: flex; gap: 1.5rem; }
 .header-inner nav a { color: var(--muted); font-size: .9rem; text-decoration: none; }
 .header-inner nav a:hover { color: var(--foreground); }
@@ -174,3 +174,6 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
 @media (forced-colors: active) { .decision-demo { border: 1px solid CanvasText; } .button { border: 1px solid ButtonText; } }
 
 html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
+
+.brand-mark { display: block; width: 2rem; height: 2rem; flex: 0 0 auto; }
+.wordmark .brand-name { color: inherit; font-weight: inherit; }
