@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "ticket-triage",
+  "revision": "1",
+  "model": "kev/kev-latest",
+  "questions": {
+    "team": {
+      "type": "choice",
+      "instructions": "Choose the team responsible for resolving the primary issue.",
+      "criteria": {
+        "billing": "Payments, charges, and refunds",
+        "shipping": "Delivery status and lost parcels",
+        "access": "Sign-in and account access"
+      }
+    }
+  }
+}

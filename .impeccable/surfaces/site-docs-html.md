@@ -33,7 +33,7 @@ root owns homepage/navigation redirects and any browser review.
 ## Source contract
 
 Product truth comes from PRODUCT.md, README.md, src/cli.ts, src/client.ts,
-src/runtime.ts, src/protocol.ts, and the 0.9.0 release metadata. Local Qwen
+src/runtime.ts, src/protocol.ts, and the 0.10.0 release metadata. Local Qwen
 remains experimental; hosted Jev activation is explicit and hosted-only. The
 client is portable to Node 24 and Bun; the embedded router requires Bun; the
 daemon exposes loopback HTTP. Compatible HTTP services require explicit
@@ -51,3 +51,12 @@ Adopts the canonical design-kit appearance icon/menu with the existing saved
 preference key, sticky shared marketing header, and pinned sticky Hraness
 footer. See DESIGN.md and the vendor provenance for the common contract.
 Page content and evidence claims are unchanged by this adoption.
+
+## Kev and profiles — 2026-09-21
+
+Add the explicit Kev adapter to backend choices and a Profiles & tuning section
+with a reusable SDK example and the detailed setup/training guide. Profiles
+freeze task questions and an exact route; they do not attest checkpoint bytes
+or start training. Keep Kev unscored in the comparison until matching evidence
+exists. Desktop and mobile browser review covered code wrapping, navigation,
+appearance, and the Kev calculator's operator-supplied cost inputs.

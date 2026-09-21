@@ -31,6 +31,7 @@
 .docs-code-block { margin-top: 2.5rem; border: 1px solid var(--line); border-radius: .875rem; overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); }
 .docs-code-heading { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; color: var(--hraness-marketing-terminal-muted); background: var(--hraness-marketing-terminal-chrome); font-size: .78rem; }
 .docs-code-block pre { padding: 1.35rem; color: var(--hraness-marketing-terminal-command); font-size: .77rem; line-height: 1.8; }
+.docs-code-block + p { margin-top: 1.5rem; }
 .docs-definition-list { margin: 0; border-top: 1px solid var(--line); }
 .docs-definition-list > div { display: grid; grid-template-columns: minmax(10rem, .6fr) minmax(0, 1.6fr); gap: 2rem; padding: 1.35rem 0; border-bottom: 1px solid var(--grid); }
 .docs-definition-list dt { font-weight: 600; }

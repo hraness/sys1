@@ -33,6 +33,10 @@
   bounded, read-only, credential-free, and additive by id.
 - `src/cli.ts` owns the `sys1` command surface and exit codes.
 - `src/client.ts` is the portable Node/Bun client and `/client` export.
+- `src/kev.ts` adapts explicit Kev endpoints, retaining two-decimal output and
+  restoring Score legends only after validating their native rendering.
+- `src/profile.ts` owns portable versioned decision profiles. Keep them pure:
+  exact backend/model pin, frozen questions, state-only composition, no I/O.
 - `src/runtime.ts` is the embedded Bun router with explicit disposal.
 - `src/index.ts` is the runtime package public surface.
 - `test/` contains protocol, routing, config, gateway, model-store, decision,
@@ -76,6 +80,9 @@
   Keep Noul/Choice/Score answer
   objects exactly Jev-compatible. Do not make stronger model-quality claims
   without checkpoint-specific qualification.
+- Apply Kev's rounding tolerance only to explicit Kev adapters or the paired
+  gateway adapter/precision headers. Never renormalize lossy probabilities or
+  treat profile IDs and model aliases as checkpoint attestation.
 - Keep local inference lazy, serialized, cancellation-bounded, and
   residency-capped. Terminate and collect owned native worker processes on timeout, abort,
   eviction, and shutdown. Never claim unsupported native AbortSignal semantics.

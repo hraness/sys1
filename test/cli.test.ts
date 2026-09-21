@@ -89,6 +89,50 @@ describe("setup CLI", () => {
   });
 });
 
+describe("Kev and profile CLI", () => {
+  test("persists an explicit Kev adapter and rejects unknown adapters", async () => {
+    const dir = home();
+    const args = ["backend", "add", "--name", "kev", "--url", "http://127.0.0.1:8009", "--model", "kev-latest"];
+    expect((await runCli([...args, "--adapter", "unknown"], { home: dir })).code).toBe(2);
+    expect(loadConfig(dir)).toMatchObject({ ok: true, existed: false });
+    expect((await runCli([...args, "--adapter", "kev"], { home: dir })).code).toBe(0);
+    expect(loadConfig(dir)).toMatchObject({ ok: true, config: { backends: [expect.objectContaining({ adapter: "kev", model: "kev-latest" })] } });
+  });
+
+  test("a profile composes only the state and sends no profile metadata or overrides", async () => {
+    const dir = home();
+    const profile = { version: 1, id: "triage", revision: "v1", model: "kev/kev-latest", questions: { q: { type: "noul", instructions: "Is there a request?" } } };
+    const profileFile = join(dir, "profile.json");
+    const inputFile = join(dir, "input.json");
+    writeFileSync(profileFile, JSON.stringify(profile));
+    writeFileSync(inputFile, JSON.stringify({ state: "Please help" }));
+    const received: unknown[] = [];
+    const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
+      if (new URL(request.url).pathname === "/healthz") return Response.json({ ok: true });
+      received.push(await request.json());
+      return Response.json({ model: "kev-latest", answers: { q: { type: "noul", noul: 0.9 } }, usage: { input_tokens: 10, output_tokens: 20 } });
+    } });
+    saveConfig(dir, configSchema.parse({ version: 1, gateway: { port: server.port } }));
+    try {
+      const args = ["eval", "--profile", profileFile, "--file", inputFile, "--json"];
+      const result = await runCli(args, { home: dir });
+      expect(result.code).toBe(0);
+      expect(JSON.parse(result.stdout).model).toBe("kev-latest");
+      expect(received).toEqual([{ model: profile.model, state: "Please help", questions: profile.questions }]);
+      writeFileSync(inputFile, JSON.stringify({ state: "private input", model: "typesafe/jev-1.13.0" }));
+      const overridden = await runCli(args, { home: dir });
+      expect(overridden.code).toBe(2);
+      expect(overridden.stderr).not.toContain("private input");
+      expect(received).toHaveLength(1);
+      writeFileSync(profileFile, JSON.stringify({ ...profile, model: "auto", secret: "private recipe" }));
+      const invalid = await runCli(args, { home: dir });
+      expect(invalid.code).toBe(2);
+      expect(invalid.stderr).not.toContain("private recipe");
+      expect(received).toHaveLength(1);
+    } finally { server.stop(true); }
+  });
+});
+
 describe("Jev CLI", () => {
   test("a credential does not activate Jev until explicitly enabled", async () => {
     const dir = home();

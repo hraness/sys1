@@ -196,3 +196,7 @@ export type {
 } from "./client.ts";
 export { createRouter } from "./runtime.ts";
 export type { RouterOptions, EmbeddedRouter } from "./runtime.ts";
+export { createProfile, Sys1ProfileError } from "./profile.ts";
+export type {
+  DecisionProfile, ProfileDefinition, ReadonlyProfileDefinition, ProfileErrorCode,
+} from "./profile.ts";

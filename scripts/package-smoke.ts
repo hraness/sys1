@@ -219,14 +219,16 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
       `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
     );
     writeFileSync(join(consumer, "client-smoke.mjs"), [
-      `import { createClient, Sys1ClientError } from "${PACKAGE_NAME}/client";`,
+      `import { createClient, createProfile, Sys1ProfileError, Sys1ClientError } from "${PACKAGE_NAME}/client";`,
       `let calls = 0;`,
       `const client = createClient({ fetch: async (url, init) => {`,
       `  calls++;`,
       `  if (url !== "http://127.0.0.1:13900/v1/systemone" || init.redirect !== "error") throw new Error("unexpected client target");`,
       `  return Response.json({ model: "smoke", answers: { q: { type: "noul", noul: 0.5 } }, usage: { input_tokens: 1, output_tokens: 0 } });`,
       `} });`,
-      `const result = await client.evaluate({ state: "x", questions: { q: { type: "noul" } } });`,
+      `const profile = createProfile({ version: 1, id: "smoke", revision: "1", model: "fixture/smoke", questions: { q: { type: "noul" } } });`,
+      `const result = await client.evaluate(profile.request("x"));`,
+      `if (!Object.isFrozen(profile.definition.questions) || !(new Sys1ProfileError("invalid_profile") instanceof Error)) throw new Error("portable profiles failed");`,
       `if (result.response.answers.q.noul !== 0.5 || calls !== 1 || !(new Sys1ClientError("timeout") instanceof Error)) throw new Error("portable client failed");`,
       `console.log("portable client verified");`,
     ].join("\n"));
@@ -262,10 +264,14 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
       if (workerOutput.trim() !== "packed worker verified") throw new Error("packed worker returned invalid output");
     }
     writeFileSync(join(consumer, "client-types.ts"), [
-      `import { createClient, type SystemOneRequest, type EvaluationResult } from "${PACKAGE_NAME}/client";`,
+      `import { createClient, createProfile, type DecisionProfile, type SystemOneRequest, type EvaluationResult } from "${PACKAGE_NAME}/client";`,
       `const request: SystemOneRequest = { state: "x", questions: { q: { type: "noul" } } };`,
       `const result: Promise<EvaluationResult> = createClient().evaluate(request);`,
       `void result;`,
+      `const profile: DecisionProfile = createProfile({ version: 1, id: "test", revision: "1", model: "kev/kev-latest", questions: request.questions });`,
+      `const fromProfile: SystemOneRequest = profile.request("x"); void fromProfile;`,
+      `const question = profile.definition.questions["q"];`,
+      `if (question?.type === "score") { const criterion = question.criteria[0]; void criterion; }`,
     ].join("\n"));
     writeFileSync(join(consumer, "tsconfig.json"), JSON.stringify({
       compilerOptions: { strict: true, noEmit: true, target: "ES2022", module: "NodeNext", types: [], lib: ["ES2022", "DOM"] },

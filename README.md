@@ -19,6 +19,11 @@ its common System One decision API; OpenJev's image, chat, and advanced sampling
 extensions are outside Sys1's contract. An operator-run server must be selected
 explicitly; adding one does not change the default decision route.
 
+[Kev](https://github.com/jaredpalmer/kev) is supported through an explicit wire
+adapter, including its two-decimal probability output and structured Score
+legends. Use versioned decision profiles to reuse task instructions with Jev,
+local models, or a separately trained Kev checkpoint. [Kev and tuning guide](docs/kev.md).
+
 ## System One skills
 
 [system-one-skills](https://github.com/hraness/system-one-skills) provides
@@ -41,7 +46,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.10.0/hraness-sys1-0.10.0.tgz
 sys1 doctor
 ```
 
@@ -62,7 +67,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.9.0/hraness-sys1-0.9.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.10.0/hraness-sys1-0.10.0.tgz
 ```
 
 ```ts
@@ -419,6 +424,50 @@ response bodies. Backends that do not publish limits receive a warning unless
 static caps were configured. All configured HTTP processes remain
 operator-owned: Sys1 probes and forwards to them but does not download their
 weights, mutate credentials, or own their lifecycle.
+
+## Kev and decision profiles
+
+After starting and verifying a separately owned Kev server, register it explicitly:
+
+```sh
+sys1 backend add --adapter kev --name kev \
+  --url http://127.0.0.1:8009 --model kev-latest
+sys1 backend check --name kev
+```
+
+Kev remains outside automatic routing. A versioned profile pins the route and
+reuses the same instructions and criteria while each call supplies new state:
+
+```ts
+import { createClient, createProfile } from "@hraness/sys1/client";
+
+const triage = createProfile({
+  version: 1, id: "ticket-triage", revision: "1", model: "kev/kev-latest",
+  questions: {
+    urgent: { type: "noul", instructions: "Does the ticket describe an active outage?" },
+  },
+});
+const result = await createClient().evaluate(triage.request("Checkout is unavailable."));
+```
+
+Profiles work with the Node/Bun client and embedded router. Definitions are
+validated and frozen; each request is a fresh ordinary System One request.
+Only model, state, and questions cross the wire. No templating, hidden prompt
+injection, global profile registry, or automatic training is involved. Save
+the definition as JSON for `sys1 eval --profile triage.json`, which accepts
+only `{"state": ...}` on stdin or `--file`.
+[Start from the ticket-triage profile](examples/ticket-triage.profile.json).
+
+For a direct Kev endpoint, use `createClient({ baseUrl: "http://127.0.0.1:8009",
+adapter: "kev" })` with an ordinary request containing `model: "kev-latest"`.
+When calling the Sys1 gateway, leave the client adapter unset. Routing metadata
+identifies Kev and its two-decimal precision; probabilities are not renormalized.
+
+The backend/model pin identifies a route, not its weights. Kev always advertises
+`kev-latest`; verify the server's actual checkpoint separately. The
+[setup and tuning guide](docs/kev.md) covers pinned checkpoints, prompt revisions,
+fine-tuning, calibration, and held-out evaluation. Model downloads and training
+remain explicit Kev operations. Protocol tests do not establish model quality.
 
 ## Diagnostics
 

@@ -1,6 +1,7 @@
 import type { LocalBackendConfig } from "./config.ts";
 import { extractBackendCapabilities, extractModelIds } from "./backends.ts";
 import { systemOneResponseSchema, type SystemOneRequest } from "./protocol.ts";
+import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
 
 export type BackendQualificationStatus = "pass" | "warn" | "fail";
 
@@ -211,12 +212,13 @@ export async function qualifyBackend(
     }
   }
 
+  const qualification = { ...QUALIFICATION_REQUEST, model: backend.model };
   const decisionResponse = await requestJson(
     `${base}/v1/systemone`,
     {
       method: "POST", redirect: "manual",
       headers: { accept: "application/json", "content-type": "application/json" },
-      body: JSON.stringify({ ...QUALIFICATION_REQUEST, model: backend.model }),
+      body: JSON.stringify(backend.adapter === "kev" ? adaptKevRequest(qualification) : qualification),
     },
     options.requestTimeoutMs,
     fetchFn,
@@ -224,7 +226,17 @@ export async function qualifyBackend(
   if (!decisionResponse.ok) {
     checks.push({ id: "systemone", status: "fail", summary: "System One qualification request failed", detail: decisionResponse.detail });
   } else {
-    const issue = responseContract(decisionResponse.body);
+    let issue: string | null;
+    if (backend.adapter === "kev") {
+      try {
+        adaptKevResponse(qualification, decisionResponse.body);
+        issue = null;
+      } catch {
+        issue = "response does not match the Kev decision contract";
+      }
+    } else {
+      issue = responseContract(decisionResponse.body);
+    }
     checks.push(
       issue === null
         ? { id: "systemone", status: "pass", summary: "noul, choice, and score response is conformant" }
