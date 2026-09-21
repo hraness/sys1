@@ -2,3 +2,9 @@
 /benchmarks/*.json text eol=lf
 /site/data/*.json text eol=lf
 /benchmarks/laya/** text eol=lf
+
+# Canonical brand provenance uses byte hashes across all CI platforms.
+/brand/*.json text eol=lf
+/brand/*.svg text eol=lf
+/site/marks/*.svg text eol=lf
+/scripts/generate-brand-icons.ts text eol=lf

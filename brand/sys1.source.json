@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "Sys1",
+  "inspiration": "1️⃣ — keycap: 1",
+  "viewBox": "0 0 160 160",
+  "box": "M40 16H120Q144 16 144 40V120Q144 144 120 144H40Q16 144 16 120V40Q16 16 40 16Z",
+  "one": "M76 42H96V108H112V124H52V108H76V63L56 75L47 61Z",
+  "palette": {
+    "mark": "#2474d4",
+    "primary": "#f2f2ed",
+    "secondary": "#858982",
+    "background": "#000000"
+  },
+  "recipe": {
+    "iconInset": 0.125,
+    "webIconSize": 512,
+    "appleTouchSize": 180
+  }
+}

@@ -237,8 +237,8 @@ At 800px and below, gutters become 1.25rem and section padding becomes
 3.75rem. Integration and questions stack; the integration modes temporarily
 form three columns. The header hides its first navigation link.
 
-At 560px and below, navigation links are hidden while the brand, start action,
-and appearance control remain. Benefits, integration modes, comparison rows,
+At 640px and below, navigation links are hidden while the brand, start action,
+and appearance control remain. At 560px, benefits, integration modes, comparison rows,
 and the request/answer specimen stack. Request-path arrows rotate with the
 vertical flow, the comparison header is hidden, and the example controls
 grow to a 2.75rem minimum height. Code wraps with `white-space: pre-wrap` and
@@ -404,3 +404,21 @@ no-JavaScript reading, footer hit testing and end-of-page clearance under the
 production CSP. Final screenshots show the shared icon menu and footer in
 Paper light and dark. Product link, icon and focus rules leave shared
 components under their own stylesheet ownership.
+
+## Sys1 identity — 2026-09-21
+
+The boxed-one mark is inspired by the keycap 1 emoji. Use the checked-in,
+path-only SVG at `site/marks/sys1.svg`, beside the text wordmark at 32px; the
+image is decorative within the existing “Sys1 home” link. Its transparent
+numeral remains visible on both Paper appearances. The mark uses the shared
+project blue, while browser and home-screen icons use the same geometry in
+the shared two-tone palette on black. Every page declares the same icon set.
+
+`brand/sys1.source.json` is the editable geometry and palette;
+`scripts/generate-brand-icons.ts` produces the assets and provenance manifest.
+See `brand/README.md` for regeneration, sizes and review expectations. The
+Hraness project grid uses the same mark and padded illustration. These are
+original paths, with no runtime emoji, font or image-model dependency.
+Collapse header navigation at 640px so the added mark leaves room for the
+start action and coarse-pointer appearance control. Keep the start label on
+one line. Other content retains its existing responsive breakpoints.
