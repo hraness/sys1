@@ -36,24 +36,6 @@ for (const button of document.querySelectorAll("[data-example]")) {
   });
 }
 
-const appearance = document.getElementById("appearance");
-const systemAppearance = matchMedia("(prefers-color-scheme: dark)");
-function updateThemeColor() {
-  const mode = document.documentElement.dataset.theme;
-  const dark = mode === "dark" || (mode !== "light" && systemAppearance.matches);
-  document.querySelector('meta[name="theme-color"]').content = dark ? "#12100f" : "#f8f7f4";
-}
-appearance.value = document.documentElement.dataset.theme || "system";
-appearance.addEventListener("change", () => {
-  const mode = appearance.value;
-  if (mode === "light" || mode === "dark") document.documentElement.dataset.theme = mode;
-  else delete document.documentElement.dataset.theme;
-  try { localStorage.setItem("sys1-appearance", mode); } catch { /* Appearance still works for this visit. */ }
-  updateThemeColor();
-});
-systemAppearance.addEventListener("change", updateThemeColor);
-updateThemeColor();
-
 for (const button of document.querySelectorAll("[data-copy]")) {
   button.addEventListener("click", async () => {
     const status = document.getElementById("copy-status");

@@ -66,3 +66,10 @@ The homepage now answers three questions in order: what Sys1 is, how it enters a
 Implementation and research details now point to `/docs`: getting started, integration modes, backend semantics, module proof, and dated evaluation reports live there. The homepage names Jev, local Qwen, compatible HTTP services, and the surrounding runtime without placing benchmark snapshots or release-specific install commands in the primary story. The local quickstart uses the evergreen source build path; exact release artifacts stay in the docs.
 
 The design remains the Hraness Paper system used by Peopleblade: warm paper surfaces, Instrument Serif display type, Nebula Sans body text, quiet rules, shared footer, and light/dark appearance control. Review target: desktop 1280px, mobile 390px, and intermediate widths with no horizontal overflow.
+
+## Shared controls — 2026-09-20
+
+Adopts the canonical design-kit appearance icon/menu with the existing saved
+preference key, sticky shared marketing header, and pinned sticky Hraness
+footer. See DESIGN.md and the vendor provenance for the common contract.
+Page content and evidence claims are unchanged by this adoption.

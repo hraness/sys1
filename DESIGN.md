@@ -93,12 +93,12 @@ components:
     padding: ".6rem 1.2rem"
   button-secondary-hover:
     backgroundColor: "{colors.surface-hover}"
-  appearance-select:
+  appearance-menu:
     backgroundColor: "{colors.background}"
     textColor: "{colors.muted}"
     typography: "{typography.label}"
     rounded: "{rounded.control}"
-    padding: ".55rem .45rem"
+    padding: "0"
   option-chip:
     textColor: "{colors.terminal-ink}"
     rounded: "{rounded.compact}"
@@ -184,11 +184,12 @@ light and dark appearances; inherit the selected color scheme instead of
 introducing a fixed-color island.
 
 The root opts in with `data-hraness-theme="paper"`, `data-palette="paper"`, and
-`data-hraness-marketing-preset="editorial"`. Without `data-theme`, it follows
-the operating system. The appearance control selects System, Light, or Dark;
-explicit choices are restored from `sys1-appearance` before styles load.
-Storage failures leave the current visit usable. System color changes also
-update the browser theme-color metadata. Forced-colors mode maps the Paper
+`data-hraness-marketing-preset="editorial"`. Without JavaScript, Paper follows the operating system. The shared appearance
+menu selects Light, Dark, or System and resolves the preference before styles
+load. Existing `sys1-appearance` choices are preserved. The shared browser
+controller owns keyboard navigation, focus return, cross-tab storage updates,
+system appearance changes, and browser theme-color synchronization. Storage
+failures leave the current visit usable. Forced-colors mode maps the Paper
 roles to system colors and adds visible specimen/button borders.
 
 ## Typography
@@ -243,8 +244,9 @@ vertical flow, the comparison header is hidden, and the example controls
 grow to a 2.75rem minimum height. Code wraps with `white-space: pre-wrap` and
 `overflow-wrap: anywhere`; it does not require horizontal page scrolling.
 
-The header stays in normal document flow. Anchor scrolling is smooth with a
-six-rem offset, reduced to 1.5rem on compact screens. Reduced-motion preference
+The header stays visible at the viewport top and opts into the shared marketing
+header paint. Anchor scrolling is smooth with a six-rem offset, reduced to
+5.5rem on compact screens. The skip link stays above the sticky header. Reduced-motion preference
 changes scrolling to `auto`.
 
 ## Elevation & Depth
@@ -268,7 +270,7 @@ textures as visible Sys1 decoration or infer a textured-background requirement.
 ## Shapes
 
 Use the frontmatter's compact radius for option labels and copy controls,
-control radius for buttons and the appearance select, and frame radius for
+control radius for buttons and the appearance menu, and frame radius for
 specimens, code, and the request path. Standard rules and control borders are
 one pixel. Corners stay modest; editorial sections remain unboxed.
 
@@ -290,12 +292,16 @@ Keyboard focus is a two-pixel focus-color outline offset by four pixels.
 Links retain a one-pixel underline treatment with a .2em offset; navigation
 and button links receive their component-specific hover treatment.
 
-### Appearance select and navigation
+### Shared appearance menu and navigation
 
-Use a native select with an accessible Appearance label, Paper background,
-muted ink, a structural border, and a 2.625rem minimum height. The header's
-links remain a simple horizontal row until the responsive rules reduce them.
-Keep the skip-to-content link available on keyboard focus.
+Use the pinned design-kit `installAppearanceMenus` browser controller and
+`appearance-menu.css`, with the progressive icon trigger as the final header
+action. The menu exposes Light, Dark and System radio items, arrow/Home/End
+and typeahead navigation, Escape dismissal and focus return. The shared CSS
+owns the 2rem desktop and 3rem coarse-pointer trigger sizes and menu styling.
+Keep product SVG rules scoped away from shared control and footer icons.
+The header links remain a simple horizontal row until responsive rules reduce
+them. Keep the skip-to-content link available on keyboard focus.
 
 ### Option labels and example selector
 
@@ -325,7 +331,9 @@ keyboard interaction. Its focus outline remains visible.
 ### Shared footer and progressive enhancement
 
 The pinned shared footer provides Hraness attribution and social links in
-normal flow. Use its generated markup with the documented static adapter;
+sticky mode: the inner bar stays at the viewport bottom and its root reserves
+the matching footprint, including the safe area. Do not add another spacer.
+Use its generated markup with the documented static adapter;
 there is no mailing-list form, active consent widget, or external script.
 Do not restyle the vendored snapshot to make a product-local adjustment.
 
@@ -379,3 +387,20 @@ boundaries, source revision, editorial ownership, and finish review live in
 - **Don't** replace the shared footer's marks with text glyphs or product-local approximations.
 - **Don't** make JavaScript essential for reading the example, installation commands, or disclosures.
 - **Don't** edit immutable vendor snapshots for a product-local layout or copy change.
+
+## Shared control adoption — 2026-09-20
+
+All seven HTML pages use the same shared appearance menu, sticky marketing
+header, and sticky Hraness footer. The appearance browser artifact and CSS are
+pinned to design-kit `3bb93ea414ae4d25b1d0eee06591aebeb1d5d549`; see
+`site/vendor/hraness-appearance/provenance.json` for source and bundle digests.
+The footer remains v0.15.0 and is regenerated with `placement: "sticky"`.
+The existing Paper palette, content and footer privacy behavior are retained.
+
+The adoption review covered 56 route/viewport/appearance combinations across
+all seven pages at 320, 390, 768 and 1280px. Checks covered keyboard selection,
+Escape focus return, saved preference reload, System changes, denied storage,
+no-JavaScript reading, footer hit testing and end-of-page clearance under the
+production CSP. Final screenshots show the shared icon menu and footer in
+Paper light and dark. Product link, icon and focus rules leave shared
+components under their own stylesheet ownership.

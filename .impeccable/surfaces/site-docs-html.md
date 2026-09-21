@@ -44,3 +44,10 @@ evaluations page may link to a pinned external benchmark such as JevBench, but
 it must label that evidence as external cross-model context and keep it
 separate from Sys1 adapter results; never turn a provider or self-hosted row
 into a Sys1 quality claim.
+
+## Shared controls — 2026-09-20
+
+Adopts the canonical design-kit appearance icon/menu with the existing saved
+preference key, sticky shared marketing header, and pinned sticky Hraness
+footer. See DESIGN.md and the vendor provenance for the common contract.
+Page content and evidence claims are unchanged by this adoption.
