@@ -396,3 +396,11 @@ pinned to design-kit `3bb93ea414ae4d25b1d0eee06591aebeb1d5d549`; see
 `site/vendor/hraness-appearance/provenance.json` for source and bundle digests.
 The footer remains v0.15.0 and is regenerated with `placement: "sticky"`.
 The existing Paper palette, content and footer privacy behavior are retained.
+
+The adoption review covered 56 route/viewport/appearance combinations across
+all seven pages at 320, 390, 768 and 1280px. Checks covered keyboard selection,
+Escape focus return, saved preference reload, System changes, denied storage,
+no-JavaScript reading, footer hit testing and end-of-page clearance under the
+production CSP. Final screenshots show the shared icon menu and footer in
+Paper light and dark. Product link, icon and focus rules leave shared
+components under their own stylesheet ownership.

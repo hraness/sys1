@@ -6,7 +6,7 @@ a:not(:where(.hraness-site-footer a)) { color: var(--primary); text-underline-of
 a:not(:where(.hraness-site-footer a)):hover { text-decoration: underline; }
 button, select { font: inherit; }
 button, a, select, summary { -webkit-tap-highlight-color: transparent; }
-:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+:focus-visible:not(:where(.hraness-site-footer *, [data-hraness-appearance-menu] *)) { outline: 2px solid var(--focus); outline-offset: 4px; }
 button { cursor: pointer; }
 main svg, .button svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
 h1, h2 { font-family: var(--hraness-marketing-display-font); font-weight: 400; text-wrap: balance; }
