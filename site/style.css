@@ -1,3 +1,4 @@
+:root { --hraness-marketing-display-font: var(--font-text); }
 * { box-sizing: border-box; }
 html { scroll-padding-bottom: 4rem; scroll-behavior: smooth; scroll-padding-top: 6rem; scrollbar-color: var(--line) var(--background); }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-text); line-height: 1.65; }
@@ -9,7 +10,7 @@ button, a, select, summary { -webkit-tap-highlight-color: transparent; }
 :focus-visible:not(:where(.hraness-site-footer *, [data-hraness-appearance-menu] *)) { outline: 2px solid var(--focus); outline-offset: 4px; }
 button { cursor: pointer; }
 main svg, .button svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
-h1, h2 { font-family: var(--hraness-marketing-display-font); font-weight: 400; text-wrap: balance; }
+h1, h2 { font-family: var(--hraness-marketing-display-font); font-weight: 550; text-wrap: balance; }
 h1 { font-size: var(--hraness-marketing-h1-size); line-height: 1.06; letter-spacing: -.025em; margin: 0 0 1.5rem; }
 h2 { font-size: var(--hraness-marketing-h2-size); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 1.5rem; }
 h3 { font-size: 1.125rem; font-weight: 600; line-height: 1.4; margin: 0 0 .75rem; }
@@ -31,13 +32,13 @@ pre code { font-size: inherit; }
 .header-inner nav a { color: var(--muted); font-size: .9rem; text-decoration: none; }
 .header-inner nav a:hover { color: var(--foreground); }
 .header-actions { display: flex; align-items: center; gap: .75rem; }
-.button { display: inline-flex; justify-content: center; align-items: center; gap: .8rem; background: light-dark(#28343e, #eceee6); color: light-dark(#fffefa, #20211f); min-height: 2.875rem; padding: .6rem 1.2rem; border: 1px solid transparent; border-radius: .5rem; font-size: .95rem; font-weight: 500; line-height: 1.4; text-decoration: none; transition: background-color 140ms ease-out; }
-.button:hover { background: light-dark(#3a4c5c, #d6dace); text-decoration: none; }
+.button { display: inline-flex; justify-content: center; align-items: center; gap: .8rem; background: var(--primary); color: var(--primary-foreground); min-height: 2.875rem; padding: .6rem 1.2rem; border: 1px solid transparent; border-radius: .5rem; font-size: .95rem; font-weight: 500; line-height: 1.4; text-decoration: none; transition: background-color 140ms ease-out; }
+.button:hover { background: color-mix(in oklch, var(--primary) 88%, var(--foreground)); text-decoration: none; }
 .button-secondary { color: var(--foreground); background: transparent; border-color: var(--line); }
 .button-secondary:hover { background: var(--surface-hover); }
 .button-small { min-height: 2.625rem; padding: .5rem .9rem; font-size: .85rem; }
-.hero { padding: 4rem 2rem 4.5rem; border-bottom: 1px solid var(--grid); background: light-dark(#f1f0eb, #191816); }
-.hero-copy { max-width: 43rem; margin: 0 auto; text-align: center; }
+.hero { padding: 4rem 2rem 4.5rem; }
+.hero-copy { max-width: 43rem; min-width: 0; margin: 0; text-align: start; }
 .eyebrow { margin: 0 0 1rem; color: var(--primary); font-size: .72rem; font-weight: 600; letter-spacing: .11em; line-height: 1.4; text-transform: uppercase; }
 .summary { max-width: 36rem; margin: 0 auto 1.5rem; color: var(--muted); font-size: 1.1rem; line-height: 1.6; }
 .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem; }
@@ -68,7 +69,7 @@ pre code { font-size: inherit; }
 .section-intro > p { color: var(--muted); max-width: 65ch; font-size: 1.0625rem; }
 .benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; margin-bottom: 3rem; }
 .benefits p { color: var(--muted); font-size: .94rem; margin: 0; }
-.request-path { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.8rem 2rem; background: var(--surface); border: 1px solid var(--grid); border-radius: .875rem; }
+.request-path { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.8rem 2rem; background: var(--surface); border: 1px solid var(--hraness-material-seam); border-radius: .875rem;  box-shadow: var(--hraness-material-lift); }
 .request-path > div { display: grid; gap: .15rem; }
 .request-path strong { font-weight: 500; }
 .request-path span { color: var(--muted); font-size: .8rem; }
@@ -83,7 +84,7 @@ pre code { font-size: inherit; }
 .integration-modes dd { margin: 0; }
 .integration-modes dd > code { font-size: .75rem; }
 .integration-modes p { font-size: .9rem; color: var(--muted); margin: .7rem 0 0; }
-.code-example { overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--line); border-radius: .875rem; min-width: 0; }
+.code-example { overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--hraness-material-seam); border-radius: .875rem; min-width: 0;  box-shadow: var(--hraness-material-lift); }
 .code-heading { color: var(--hraness-marketing-terminal-muted); }
 .code-example pre { padding: 1.5rem; line-height: 1.85; font-size: .75rem; }
 .syntax-keyword { color: light-dark(#624397, #c4b1e5); }
@@ -101,7 +102,7 @@ pre code { font-size: inherit; }
 .semantics p { color: var(--muted); font-size: .92rem; }
 .semantics a { font-size: .85rem; }
 .install .section-intro { margin: 0 auto 2rem; text-align: center; }
-.install-terminal { max-width: 55rem; margin: auto; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--line); border-radius: .875rem; overflow: hidden; }
+.install-terminal { max-width: 55rem; margin: auto; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--hraness-material-seam); border-radius: .875rem; overflow: hidden;  box-shadow: var(--hraness-material-lift); }
 .install-terminal pre { padding: 1.5rem; font-size: .78rem; line-height: 2; }
 .copy-button { border: 1px solid var(--line); background: var(--surface); color: var(--foreground); border-radius: .375rem; padding: .4rem .65rem; font-size: .75rem; }
 .copy-button:hover { background: var(--surface-hover); }
@@ -131,7 +132,7 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
   .integration-modes > div { padding: 0; border: 0; }
   .ecosystem-header, .ecosystem-row { gap: 1.2rem; grid-template-columns: 1fr 1fr 1.65fr; }
   .questions { grid-template-columns: 1fr; gap: 1.5rem; }
-  .request-path { padding: 1.5rem; gap: 1rem; }
+  .request-path { padding: 1.5rem; gap: 1rem;  box-shadow: var(--hraness-material-lift); }
 }
 @media (max-width: 640px) {
   html { scroll-padding-top: 5.5rem; }
@@ -159,7 +160,7 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
   .demo-bottom { align-items: center; gap: .75rem; padding-inline: 1.25rem; font-size: .75rem; }
   .demo-caption { max-width: 35ch; margin-inline: auto; }
   .benefits, .integration-modes { grid-template-columns: 1fr; gap: 1.75rem; }
-  .request-path { flex-direction: column; align-items: flex-start; padding: 1.5rem; gap: .75rem; }
+  .request-path { flex-direction: column; align-items: flex-start; padding: 1.5rem; gap: .75rem;  box-shadow: var(--hraness-material-lift); }
   .request-path > svg { transform: rotate(90deg); }
   .ecosystem-header { display: none; }
   .ecosystem-row { grid-template-columns: 1fr; gap: .6rem; padding-block: 1.5rem; }
@@ -178,5 +179,24 @@ details p { padding: 0 1rem 1.25rem 0; margin: 0; color: var(--muted); font-size
 html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
 
 .brand-mark { display: block; width: 2rem; height: 2rem; flex: 0 0 auto; }
+.wordmark .hraness-foil-mark { --hraness-foil-size: 2rem; }
+.wordmark .hraness-foil-mark__paint { --hraness-foil-mask: url("/marks/sys1.svg"); }
 .wordmark .brand-name { color: inherit; font-weight: inherit; }
 .header-actions .button { white-space: nowrap; }
+
+/* The request vocabulary shares the hero light without handling pointer events. */
+.hero { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: clamp(2rem, 4vw, 4rem); padding: clamp(3rem, 6vw, 6rem) max(2rem, calc((100vw - 70rem) / 2)); }
+.hero-copy, .decision-demo { position: relative; z-index: 1; }
+.hero-copy h1 { font-size: clamp(2.7rem, 4.5vw, 4.6rem); line-height: 1.06; letter-spacing: -.05em; }
+.hero-copy .actions { justify-content: flex-start; }
+.decision-demo { min-width: 0; width: 100%; }
+.signal-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.signal-field span { position: absolute; padding: .8rem 1.1rem; border-radius: .9rem; font: .8rem var(--font-mono); color: var(--muted); background: var(--hraness-material-plane); box-shadow: var(--hraness-material-lift); opacity: calc(.16 + var(--hraness-hero-proximity, 0) * .45); filter: blur(calc((1 - var(--hraness-hero-proximity, 0)) * 2px)); }
+.signal-field span:nth-child(1) { left: 4%; top: 10%; rotate: -7deg; }
+.signal-field span:nth-child(2) { left: 38%; top: 4%; rotate: 5deg; }
+.signal-field span:nth-child(3) { left: 75%; top: 7%; rotate: -4deg; }
+.signal-field span:nth-child(4) { left: 6%; top: 82%; rotate: 4deg; }
+.signal-field span:nth-child(5) { left: 45%; top: 86%; rotate: -5deg; }
+.signal-field span:nth-child(6) { left: 86%; top: 78%; rotate: 6deg; }
+@media (max-width: 68rem) { .hero { grid-template-columns: minmax(0, 1fr); padding: 3rem 1.25rem; } .hero-copy { max-width: 45rem; } .decision-demo { max-width: 53rem; } }
+@media (forced-colors: active) { .signal-field { display: none; } }

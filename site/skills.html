@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-hraness-theme="paper" data-palette="paper" data-hraness-marketing-preset="editorial">
+<html lang="en" data-hraness-theme="paper" data-palette="tokyo-night" data-hraness-material="lantern" data-hraness-pattern="mesh" data-hraness-marketing-preset="editorial">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,8 @@
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
-    <meta name="theme-color" content="#f8f7f4" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -29,6 +30,8 @@
     <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
     <link rel="stylesheet" href="/vendor/hraness-paper/paper-theme.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/palette-bridge.css" />
+    <link rel="stylesheet" href="/vendor/hraness-lantern/lantern-material.css" />
     <link rel="stylesheet" href="/vendor/hraness-marketing/product-marketing-preset.css" />
     <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
@@ -41,7 +44,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header hraness-marketing-header">
       <div class="header-inner">
-        <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark" style="--hraness-foil-size:2rem"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true" style="--hraness-foil-mask:url('/marks/sys1.svg')"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
+        <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/#how-it-works">Features</a>
           <a href="/#ecosystem">Ecosystem</a>

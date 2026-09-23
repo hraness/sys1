@@ -1,0 +1,124 @@
+/* StyleX owns --hraness-palette-* values. This opt-in global boundary joins
+ * portable controls, product CSS, and compiled recipes without new runtime CSS.
+ * Import after the existing token boundary. Explicit palette islands carry
+ * their own complete theme class, including portalled overlays. Repeating the
+ * root palette attribute outranks an earlier or later legacy Paper snapshot;
+ * bundlers may deduplicate a consumer's second bridge import. */
+@import "./palette-system.css";
+
+:root.hraness-palette[data-theme],
+.hraness-palette[data-theme],
+:root[data-palette][data-palette],
+[data-palette] {
+  --background: var(--hraness-palette-background);
+  --foreground: var(--hraness-palette-foreground);
+  --muted: var(--hraness-palette-muted);
+  --faint: var(--hraness-palette-faint);
+  --grid: var(--hraness-palette-grid);
+  --line: var(--hraness-palette-line);
+  --control-border: var(--hraness-palette-control-border);
+  --surface: var(--hraness-palette-surface);
+  --surface-raised: var(--hraness-palette-surface-raised);
+  --surface-hover: var(--hraness-palette-surface-hover);
+  --card: var(--hraness-palette-card);
+  --card-foreground: var(--hraness-palette-card-foreground);
+  --popover: var(--hraness-palette-popover);
+  --popover-foreground: var(--hraness-palette-popover-foreground);
+  --primary: var(--hraness-palette-primary);
+  --primary-foreground: var(--hraness-palette-primary-foreground);
+  --primary-soft: var(--hraness-palette-primary-soft);
+  --secondary: var(--hraness-palette-secondary);
+  --secondary-foreground: var(--hraness-palette-secondary-foreground);
+  --accent: var(--hraness-palette-accent);
+  --accent-foreground: var(--hraness-palette-accent-foreground);
+  --focus: var(--hraness-palette-focus);
+  --scrim: var(--hraness-palette-scrim);
+  --disabled: var(--hraness-palette-disabled);
+  --disabled-foreground: var(--hraness-palette-disabled-foreground);
+  --inverse: var(--hraness-palette-inverse);
+  --inverse-foreground: var(--hraness-palette-inverse-foreground);
+  --danger: var(--hraness-palette-danger);
+  --danger-foreground: var(--hraness-palette-danger-foreground);
+  --danger-soft: var(--hraness-palette-danger-soft);
+  --warning: var(--hraness-palette-warning);
+  --warning-foreground: var(--hraness-palette-warning-foreground);
+  --warning-soft: var(--hraness-palette-warning-soft);
+  --success: var(--hraness-palette-success);
+  --success-foreground: var(--hraness-palette-success-foreground);
+  --success-soft: var(--hraness-palette-success-soft);
+  --info: var(--hraness-palette-info);
+  --info-foreground: var(--hraness-palette-info-foreground);
+  --info-soft: var(--hraness-palette-info-soft);
+  --ui-background: var(--hraness-palette-background);
+  --ui-foreground: var(--hraness-palette-foreground);
+  --ui-card: var(--hraness-palette-card);
+  --ui-card-foreground: var(--hraness-palette-card-foreground);
+  --ui-popover: var(--hraness-palette-popover);
+  --ui-popover-foreground: var(--hraness-palette-popover-foreground);
+  --ui-primary: var(--hraness-palette-primary);
+  --ui-primary-foreground: var(--hraness-palette-primary-foreground);
+  --ui-secondary: var(--hraness-palette-secondary);
+  --ui-secondary-foreground: var(--hraness-palette-secondary-foreground);
+  --ui-muted: var(--hraness-palette-surface-raised);
+  --ui-muted-foreground: var(--hraness-palette-muted);
+  --ui-accent: var(--hraness-palette-accent);
+  --ui-accent-foreground: var(--hraness-palette-accent-foreground);
+  --ui-destructive: var(--hraness-palette-danger);
+  --ui-destructive-foreground: var(--hraness-palette-danger-foreground);
+  --ui-destructive-soft: var(--hraness-palette-danger-soft);
+  --ui-border: var(--hraness-palette-line);
+  --ui-input: var(--hraness-palette-control-border);
+  --ui-ring: var(--hraness-palette-focus);
+  --ui-success: var(--hraness-palette-success);
+  --ui-success-foreground: var(--hraness-palette-success-foreground);
+  --ui-success-soft: var(--hraness-palette-success-soft);
+  --ui-warning: var(--hraness-palette-warning);
+  --ui-warning-foreground: var(--hraness-palette-warning-foreground);
+  --ui-warning-soft: var(--hraness-palette-warning-soft);
+  --ui-info: var(--hraness-palette-info);
+  --ui-info-foreground: var(--hraness-palette-info-foreground);
+  --ui-info-soft: var(--hraness-palette-info-soft);
+  --ui-chart-1: var(--hraness-palette-chart1);
+  --ui-chart-2: var(--hraness-palette-chart2);
+  --ui-chart-3: var(--hraness-palette-chart3);
+  --ui-chart-4: var(--hraness-palette-chart4);
+  --ui-chart-5: var(--hraness-palette-chart5);
+  --aurora-rose: var(--hraness-palette-chart1);
+  --aurora-mint: var(--hraness-palette-chart2);
+  --aurora-cyan: var(--hraness-palette-chart3);
+  --aurora-gold: var(--hraness-palette-chart4);
+  --aurora-violet: var(--hraness-palette-chart5);
+  --canvas-background: var(--hraness-palette-background);
+}
+
+.hraness-palette[data-theme="dark"] { color-scheme: dark; }
+.hraness-palette[data-theme="light"] { color-scheme: light; }
+
+@media (forced-colors: active) {
+  /* The pinned StyleX serializer doubles createTheme classes. Outrank those
+   * unlayered rules even when a compiler consumer loads its final union last. */
+  :root.hraness-palette.hraness-palette[data-palette],
+  .hraness-palette.hraness-palette[data-palette],
+  :root[data-palette][data-theme],
+  [data-palette][data-theme],
+  :root[data-palette]:not([data-theme]),
+  [data-palette]:not([data-theme]),
+  :root.hraness-palette.hraness-palette[data-theme],
+  .hraness-palette.hraness-palette[data-theme] {
+    --hraness-palette-background: Canvas;
+    --hraness-palette-foreground: CanvasText;
+    --hraness-palette-muted: CanvasText;
+    --hraness-palette-surface: Canvas;
+    --hraness-palette-surface-raised: Canvas;
+    --hraness-palette-surface-hover: Canvas;
+    --hraness-palette-card: Canvas;
+    --hraness-palette-card-foreground: CanvasText;
+    --hraness-palette-popover: Canvas;
+    --hraness-palette-popover-foreground: CanvasText;
+    --hraness-palette-line: CanvasText;
+    --hraness-palette-control-border: ButtonText;
+    --hraness-palette-primary: Highlight;
+    --hraness-palette-primary-foreground: HighlightText;
+    --hraness-palette-focus: Highlight;
+  }
+}
