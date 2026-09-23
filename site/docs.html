@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Documentation — Sys1</title>
-    <meta name="description" content="Install Sys1, choose a hosted or local route, embed the router, or connect any compatible System One HTTP service." />
+    <title>Docs · Sys1</title>
+    <meta name="description" content="Install Sys1, pick hosted Jev or a local model, and call it from a Node or Bun client, an embedded Bun router, or a local HTTP daemon." />
     <link rel="canonical" href="https://sys1.io/docs" />
-    <meta property="og:title" content="Documentation — Sys1" />
-    <meta property="og:description" content="Start with a typed decision client, embedded Bun router, loopback daemon, or compatible HTTP service." />
+    <meta property="og:title" content="Docs · Sys1" />
+    <meta property="og:description" content="Install Sys1, pick hosted Jev or a local model, and call it from a Node or Bun client, an embedded Bun router, or a local HTTP daemon." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/docs" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
@@ -35,8 +35,9 @@
       <div class="header-inner">
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
-          <a href="/#how-it-works">Features</a>
+          <a href="/#how-it-works">How it works</a>
           <a href="/docs" aria-current="page">Docs</a>
+          <a href="/compare">Compare</a>
           <a href="/skills">Skills</a>
           <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
@@ -59,9 +60,9 @@
     <main id="main" class="docs-page reference-page">
       <section class="docs-hero" aria-labelledby="docs-title">
         <div class="docs-hero-inner">
-          <h1 id="docs-title">One contract for decisions.<br />A route you can explain.</h1>
-          <p class="docs-lede">Sys1 gives an agent or application one typed request for yes/no, choice, and score decisions. Start local, enable hosted Jev explicitly, embed the router in Bun, or connect a compatible HTTP service.</p>
-          <div class="docs-meta"><span>Sys1 0.10.0</span><span>Node client · Bun router · loopback HTTP</span><a href="/docs/evaluations">Read the evidence</a></div>
+          <h1 id="docs-title">Sys1 documentation</h1>
+          <p class="docs-lede">Sys1 gives an agent or application one request format for yes/no, choice, and score decisions. Start with a local model, turn on hosted Jev when you want it, embed the router in a Bun app, or connect a compatible HTTP service.</p>
+          <div class="docs-meta"><span>Sys1 0.10.0</span><span>Node client · Bun router · loopback HTTP</span><a href="/docs/evaluations">Read the evaluations</a></div>
         </div>
       </section>
 
@@ -96,7 +97,7 @@ sys1 jev enable
 sys1 up</code></pre>
               </div>
               <div class="docs-route">
-                <div><h3>Install the pinned release</h3><p>Use the immutable GitHub Release artifact when you want the CLI without building from source. The native runtime is granted only for the named optional dependency.</p></div>
+                <div><h3>Install the pinned release</h3><p>Install the release file from GitHub when you want the CLI without building from source. <code>--allow-scripts=node-llama-cpp</code> lets only the native inference package run its install script.</p></div>
                 <pre><code>npm install --global --allow-scripts=node-llama-cpp \
   https://github.com/hraness/sys1/releases/download/v0.10.0/hraness-sys1-0.10.0.tgz
 sys1 doctor</code></pre>
@@ -130,13 +131,14 @@ sys1 doctor</code></pre>
 
           <section id="backends" class="docs-section" aria-labelledby="backends-title">
             <h2 id="backends-title">Backends &amp; models</h2>
-            <p class="docs-intro">Wire compatibility is a boundary, not a quality claim. Keep the model identity and routing policy visible in your application.</p>
+            <p class="docs-intro">Every backend accepts the same request and returns the same answer format. That says nothing about how well it answers, so keep the model identity and routing policy visible in your app.</p>
             <dl class="docs-definition-list">
-              <div><dt>Hosted Jev 1.13.0</dt><dd>Provider-backed route for a hosted pilot. Enabling Jev selects <code>hosted-only</code>; the credential remains environment-only. Network-inclusive timing and provider capacity are outside local measurements.</dd></div>
+              <div><dt>Hosted Jev 1.13.0</dt><dd>TypeSafe’s hosted decision model. Enabling Jev selects <code>hosted-only</code>; the credential remains environment-only. Network-inclusive timing and provider capacity are outside local measurements.</dd></div>
               <div><dt>Local Qwen3 1.7B</dt><dd>Selected by the quality setup tier and run through the pinned llama.cpp adapter. Local probability readout is experimental and must be evaluated on your own representative cases.</dd></div>
               <div><dt>Local Qwen3 0.6B</dt><dd>Explicit compact diagnostic tier. It is not a memory-driven fallback and cannot silently replace the configured local model.</dd></div>
+              <div><dt>Local Qwen3.5 4B</dt><dd>Larger experimental model, a 2.55 GiB download. Install it with <code>sys1 pull qwen3.5-4b</code>; it answers only when you select it.</dd></div>
               <div><dt>Compatible HTTP service</dt><dd>Register a service that implements <code>POST /v1/systemone</code> and <code>GET /v1/models</code>. Select it explicitly; adding a backend does not alter default routing.</dd></div>
-              <div><dt>Kev</dt><dd>Use <code>--adapter kev</code> for Kev’s native decision server. Sys1 handles its required fields, two-decimal probability output, and structured score labels. You own the checkpoint, server, and any training.</dd></div>
+              <div><dt>Kev</dt><dd>Kev is a set of trainable decision models that runs as your own server. Register it with <code>--adapter kev</code>. Sys1 handles its required fields, two-decimal probability output, and structured score labels. You own the checkpoint, server, and any training.</dd></div>
             </dl>
             <p class="docs-footnote">Sys1 adapters return validated Jev-compatible answer shapes. They do not make generic local weights interchangeable with Jev, OpenJev, or another provider's calibration.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1#external-system-one-backends">External backend guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1#local-models">Local model lifecycle <span aria-hidden="true">↗</span></a></div>
@@ -160,19 +162,19 @@ const result = await client.evaluate(triage.request(ticket));</code></pre></div>
 
           <section id="research" class="docs-section docs-research" aria-labelledby="research-title">
             <h2 id="research-title">Evidence &amp; research</h2>
-            <p class="docs-intro">Evaluations are dated studies under this evergreen guide. They preserve raw reports, workloads, runtime boundaries, and caveats so a new release does not turn one result into a promise.</p>
+            <p class="docs-intro">Each evaluation is dated and keeps its raw reports, workloads, runtime details, and caveats. A result describes the build it tested, not later releases.</p>
             <div class="docs-research-list">
               <a href="/docs/evaluations"><span><strong>Model evaluations</strong><small>JevBench v1.2.6 · Jev, Qwen, and direct Laya study</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations-history"><span><strong>Evaluation history</strong><small>Earlier CUA, Needle, forms-v1, and local adapter results</small></span><span aria-hidden="true">↗</span></a>
-              <a href="/skills"><span><strong>System One Skills</strong><small>A separate developer tool for bounded noisy-check output</small></span><span aria-hidden="true">↗</span></a>
+              <a href="/skills"><span><strong>System One Skills</strong><small>A separate skill that keeps noisy test logs out of agent context</small></span><span aria-hidden="true">↗</span></a>
             </div>
-            <p class="docs-footnote">The evaluation pages are evidence, not a default-selection guide. Read the current release behavior above, then inspect the fixture and raw report before making a quality or cost decision.</p>
+            <p class="docs-footnote">For current defaults, use the sections above. Before you make a quality or cost decision, check the fixture and raw report behind the result.</p>
           </section>
         </div>
       </div>
 
       <section class="docs-closing" aria-label="Next step">
-        <p>Start with one typed decision, then measure the route your application can own.</p>
+        <p>Try one decision locally, then measure the model on your own cases before you rely on it.</p>
         <a class="button" href="/#install">Get Sys1 <span aria-hidden="true">→</span></a>
       </section>
     </main>

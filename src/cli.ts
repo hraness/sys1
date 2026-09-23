@@ -41,7 +41,7 @@ import {
 } from "./local/store.ts";
 
 const EXIT = { ok: 0, usage: 2, config: 3, daemon: 4, backend: 5, doctor: 6 } as const;
-const LOCAL_DECISION_NOTICE = "Local decisions are experimental. Review results and evaluate your task: https://sys1.io/compare";
+const LOCAL_DECISION_NOTICE = "Local decisions are experimental. Check them on your own cases before acting on them: https://sys1.io/docs/evaluations";
 
 function out(text: string): void {
   process.stdout.write(`${text}\n`);
@@ -56,7 +56,7 @@ function fail(message: string, code: number): never {
   process.exit(code);
 }
 
-const USAGE = `sys1 — local System One gateway for coding agents
+const USAGE = `sys1: yes/no, choice, and score decisions for agents, answered by local models or hosted Jev
 
 Usage: sys1 <command> [flags]
 
@@ -666,7 +666,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
         out(`${backend.name}${size} ${backend.enabled ? "" : "(disabled) "}→ ${backend.base_url} model ${backend.model}`);
       }
       if (backends.length === 0) {
-        out("no local backends configured");
+        out("no HTTP backends configured; add one with `sys1 backend add`");
       }
       return;
     }
@@ -675,7 +675,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
       const url = flagString(args.flags, "url");
       const model = flagString(args.flags, "model");
       if (name === undefined || url === undefined || model === undefined) {
-        fail("usage: sys1 backend add --name N --url U --model M [--size-b N] [--cost-rank N]", EXIT.usage);
+        fail("usage: sys1 backend add --name N --url U --model M [--adapter systemone|kev] [--size-b N] [--cost-rank N]", EXIT.usage);
       }
       if (loaded.config.backends.some((candidate) => candidate.name === name)) {
         fail(`backend ${name} already exists`, EXIT.usage);

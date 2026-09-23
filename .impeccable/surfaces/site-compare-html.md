@@ -78,3 +78,16 @@ Adopts the canonical design-kit appearance icon/menu with the existing saved
 preference key, sticky shared marketing header, and pinned sticky Hraness
 footer. See DESIGN.md and the vendor provenance for the common contract.
 Page content and evidence claims are unchanged by this adoption.
+
+## Copy: 2026-09-23
+
+Public copy on this page follows `STYLE.md` and `WRITING.md` (synced from
+hraness/.github) and the “Public copy” section of `PRODUCT.md`.
+
+- Title “Compare models · Sys1”. The social description matches the page
+  description; the old latency and footprint text no longer describes the page.
+- Headings name the section's content (“How the models score on JevBench”,
+  “Sources and studies”). No two-part slogans.
+- `test/compare.test.js` pins facts on this page (the two hard-tier counts,
+  the unscored-Qwen sentence, the external-measurement scope, the MLX limit,
+  and the $4.20 example). Reword those sentences only together with the test.

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Evaluations — Sys1</title>
-    <meta name="description" content="Measured Jev and local Qwen decisions, a direct Laya MLX study, and the external JevBench v1.2.6 scorecard for DiffusionGemma and other typed-decision systems." />
+    <title>Evaluations · Sys1</title>
+    <meta name="description" content="Read Sys1’s own tests of hosted Jev, local Qwen, and Laya, including wrong answers and raw reports, next to external JevBench v1.2.6 scores." />
     <link rel="canonical" href="https://sys1.io/docs/evaluations" />
-    <meta property="og:title" content="Evaluations — Sys1" />
-    <meta property="og:description" content="Decision latency, token accounting, footprint, and evidence for choosing your model." />
+    <meta property="og:title" content="Evaluations · Sys1" />
+    <meta property="og:description" content="Read Sys1’s own tests of hosted Jev, local Qwen, and Laya, including wrong answers and raw reports, next to external JevBench v1.2.6 scores." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/docs/evaluations" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
@@ -35,10 +35,11 @@
       <div class="header-inner">
         <a class="wordmark" href="/" aria-label="Sys1 home"><img class="brand-mark hraness-marketing-brand-mark" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
-          <a href="/#how-it-works">Features</a>
-          <a href="/docs/evaluations" aria-current="page">Evaluations</a>
-          <a href="/skills">Skills</a>
+          <a href="/#how-it-works">How it works</a>
           <a href="/docs">Docs</a>
+          <a href="/compare">Compare</a>
+          <a href="/skills">Skills</a>
+          <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
         <div class="header-actions">
           <a class="button button-small" href="/#install">Get started</a>
@@ -58,13 +59,13 @@
 
     <main id="main" class="comparison-page reference-page">
       <div class="comparison-intro">
-        <h1>Evaluation methods.<br />Original evidence.</h1>
-        <p class="summary">Use the <a href="/compare">model comparison</a> for JevBench accuracy on supported routes and workload costs. This appendix keeps Sys1’s original adapter studies, raw reports, failure analysis, and reproduction methods. These fixtures diagnose integration behavior; they do not replace the external benchmark.</p>
+        <h1>Sys1 evaluations</h1>
+        <p class="summary">These are Sys1’s own tests of the models it can use, with raw reports, failure analysis, and the steps to rerun them. The small fixtures show how each adapter behaves. For cross-model accuracy and cost, use the <a href="/compare">model comparison</a>.</p>
         <p class="comparison-date">Measured September 19–20, 2026 · Full results, including wrong answers, available below</p>
-        <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#jev-results">Jev evidence</a><a href="#jevbench">JevBench</a><a href="#laya">Laya study</a><a href="#latest">Qwen evidence</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Reproduce</a></nav>
+        <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#jev-results">Jev results</a><a href="#jevbench">JevBench</a><a href="#laya">Laya study</a><a href="#latest">Qwen results</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Reproduce</a></nav>
       </div>
       <section id="choose" class="section" aria-labelledby="choose-heading">
-        <div class="section-intro"><h2 id="choose-heading">What these studies cover.</h2><p>Keep your application's questions, permissions, and decision policy. Let Sys1 own transport, response validation, model selection, and local model lifecycle.</p></div>
+        <div class="section-intro"><h2 id="choose-heading">What these studies cover.</h2><p>Sys1 ships two routes, hosted Jev and local Qwen. The studies below test both, plus Laya, a local candidate Sys1 does not bundle.</p></div>
         <dl class="accounting-list">
           <div><dt>Use Jev for a hosted pilot.</dt><dd>Pin <code>jev-1.13.0</code> to preserve the hosted behavior while adopting the Sys1 client. <code>sys1 jev enable</code> selects hosted-only routing. A provider outage returns an error; it does not silently substitute Qwen.</dd></div>
           <div><dt>Evaluate Qwen for local use.</dt><dd>Keep requests on your machine after model setup. Local probability readout is experimental and is not interchangeable with Jev. Select a model explicitly and check its decisions on representative cases before using them to drive actions.</dd></div>
@@ -72,14 +73,14 @@
         <p class="section-footnote">CUA and Needle adapters are removed in Sys1 0.9. Their <a href="/docs/evaluations-history">original results remain available</a>. OpenJev can be registered as an explicitly selected HTTP server; its extensions and server lifecycle remain separate. <a href="https://github.com/hraness/sys1#external-system-one-backends">Compatible server guide</a>.</p>
       </section>
       <section id="jev-results" class="section" aria-labelledby="jev-heading">
-        <div class="section-intro"><h2 id="jev-heading">Jev is measured, too.</h2><p>The completed hosted run uses the earlier forms-v1 test. Its 20/20 result is encouraging for that small task; it is not a score on the broader 72-case evaluation.</p></div>
+        <div class="section-intro"><h2 id="jev-heading">Hosted Jev results</h2><p>The only completed hosted run used the earlier 20-case forms-v1 test, and Jev answered all 20 correctly. Jev has no result on the broader 72-case test.</p></div>
 <div class="table-scroll" role="region" aria-label="forms-v1 · same 20 cases across models · 100 repeated timing calls each" tabindex="0"><table class="comparison-table results-table"><caption>forms-v1 · same 20 cases across models · 100 repeated timing calls each</caption><thead><tr><th scope="col">Route</th><th scope="col">Correct cases</th><th scope="col">p50</th><th scope="col">p95</th><th scope="col">Valid responses</th></tr></thead><tbody><tr><th scope="row">Jev 1.13.0 · HTTP</th><td>20/20</td><td>246.1 ms</td><td>343.0 ms</td><td>100/100</td></tr><tr><th scope="row">Qwen3 1.7B · local adapter</th><td>18/20</td><td>258.3 ms</td><td>271.4 ms</td><td>100/100</td></tr><tr><th scope="row">Qwen3 0.6B · local adapter</th><td>8/20</td><td>206.6 ms</td><td>225.1 ms</td><td>100/100</td></tr></tbody></table></div>
         <p class="results-summary">Jev timing includes the network round trip, provider processing, and the full response body. Local timing excludes HTTP. These boundaries do not measure isolated model speed. Provider hardware, caching, and client region are unverified.</p>
         <p class="results-summary"><strong>The broader hosted run is incomplete.</strong> Authentication was rejected with HTTP 401; the harness stopped after three attempts, with no valid answer. It supplies no new quality or speed result. The completed forms-v1 report remains separate.</p>
         <div class="results-links"><a href="/data/forms-v1-jev-2026-09-20.json">Completed Jev report</a><a href="/data/decisions-v2-jev-auth-incomplete-2026-09-20.json">Incomplete v2 attempt</a><a href="/docs/evaluations-history">Original full comparison</a></div>
       </section>
       <section id="jevbench" class="section" aria-labelledby="jevbench-heading">
-        <div class="section-intro"><h2 id="jevbench-heading">Use JevBench for the external leaderboard.</h2><p>JevBench v1.2.6 is an independent Benchmark Heaven suite for Jev-class typed decisions. We use its pinned artifact as cross-model context and keep Sys1's own fixtures for integration qualification.</p></div>
+        <div class="section-intro"><h2 id="jevbench-heading">JevBench, an external benchmark</h2><p>JevBench v1.2.6 is a benchmark for Jev-class decision models from <a href="https://benchmarkheaven.com">Benchmark Heaven</a>, which is not affiliated with TypeSafe. We use its pinned results to compare models; Sys1’s own fixtures test how each adapter behaves.</p></div>
         <div class="table-scroll" role="region" aria-label="JevBench v1.2.6 external scores" tabindex="0"><table class="comparison-table results-table"><caption>JevBench v1.2.6 · selected reference rows · 534 decisions · JevBench Score</caption><thead><tr><th scope="col">System</th><th scope="col">Score</th><th scope="col">Rank</th><th scope="col">Run condition</th><th scope="col">Probability path</th></tr></thead><tbody><tr><th scope="row">Jev 1.13.0</th><td><strong>75.4</strong></td><td>1</td><td>Hosted API</td><td>Native</td></tr><tr><th scope="row">SemIf · Qwen3.5 4B</th><td><strong>74.7</strong></td><td>2</td><td>GPU endpoint</td><td>Native</td></tr><tr><th scope="row">djev · DiffusionGemma</th><td><strong>74.3</strong></td><td>3</td><td>Hosted API · free preview</td><td>Native</td></tr><tr><th scope="row">openJev Verdict 1.4</th><td><strong>72.5</strong></td><td>4</td><td>Local CPU</td><td>Native</td></tr><tr><th scope="row">Laya · 421M</th><td><strong>70.1</strong></td><td>5</td><td>Local CPU</td><td>Native</td></tr><tr><th scope="row">OpenJev · DiffusionGemma 26B</th><td><strong>67.7</strong></td><td>8</td><td>GPU server</td><td>Native</td></tr></tbody></table></div>
         <p class="results-summary"><strong>What this means:</strong> djev is a hosted Maisa DiffusionGemma implementation; its 74.3 is not a local DiffusionGemma result. The OpenJev DiffusionGemma row is a separate GPU server run. OpenJev can be registered as an operator-owned Sys1 HTTP backend; this external run does not qualify that deployment or establish Mac-local quality. SemIf’s Qwen3.5 4B uses a different adapter and BF16 weights, so its score does not apply to Sys1’s bundled Qwen GGUF path.</p>
         <p class="results-summary">The suite freezes 220 hard decisions (111 public, 109 held out) and 534 decisions per system. Its 25:25:25:25 geometric score combines intelligence, calibration, serial p50/p95 speed, and dollars per 1,000 decisions. These headline values are point estimates from one serial run; they are not confidence intervals or a seed sweep. Evaluator-owned server latency receives a ×2 + 0.15 s adjustment; public demo latency receives ×2. These are assumptions, not measurements. The hard set is English and authored/reviewed by language models, and held-out cases are sent to evaluated services, so this is useful external evidence rather than a contamination-proof production benchmark.</p>
@@ -97,7 +98,7 @@
         <div class="results-links"><a href="/data/decisions-v3-laya-2026-09-20.json">Complete Laya report</a><a href="https://github.com/hraness/sys1/tree/main/benchmarks/laya">Reproduction kit</a><a href="https://github.com/mizorewww/laya-mlx/tree/fc1df62828a3fedf4d8229fdac1cbd85f1cdf337">Audited Laya source</a></div>
       </section>
       <section id="latest" class="section" aria-labelledby="latest-heading">
-        <div class="section-intro"><h2 id="latest-heading">Qwen remains an experiment.</h2><p>Qwen3.5 4B is one evaluated Sys1 candidate. Its 72 cases cover choices, yes/no conditions, and rubric scores, including boundary cases. They were frozen before the model ran.</p></div>
+        <div class="section-intro"><h2 id="latest-heading">Qwen3.5 4B results</h2><p>Qwen3.5 4B is one evaluated Sys1 candidate. Its 72 cases cover choices, yes/no conditions, and rubric scores, including boundary cases. They were frozen before the model ran.</p></div>
         <p class="table-hint">Scroll tables sideways to see all columns.</p>
         <div class="table-scroll" role="region" aria-label="Qwen3.5 correctness on decisions-v3" tabindex="0"><table class="comparison-table results-table"><caption>decisions-v3 · 72 distinct synthetic cases · first-pass quality</caption><thead><tr><th scope="col">Model</th><th scope="col">Correct</th><th scope="col">Choice</th><th scope="col">Yes / no</th><th scope="col">Score</th><th scope="col">Order-stable cases</th></tr></thead><tbody><tr><th scope="row">Qwen3.5 4B</th><td>44/72</td><td>16/24</td><td>16/24</td><td>12/24</td><td>13/24</td></tr></tbody></table></div>
         <p class="results-summary"><strong>Experimental.</strong> 44/72 correct (61.1%) is not dependable general decision quality. A constant-label reference scores 27/72. Of the 13 order-stable choices, ten are always correct and three always wrong.</p>
@@ -107,7 +108,7 @@
         <div class="results-links"><a href="/data/decisions-v3-qwen35-2026-09-20.json">Complete Qwen3.5 report</a><a href="https://github.com/hraness/sys1/blob/476a2a04140344c01d0797c0fc250823d394605b/benchmarks/decisions-v3.json">Frozen cases &amp; labels</a><a href="https://github.com/hraness/sys1/blob/476a2a04140344c01d0797c0fc250823d394605b/scripts/benchmark-decisions.ts">Exact harness</a></div>
       </section>
       <section id="local-results" class="section" aria-labelledby="local-heading">
-        <div class="section-intro"><h2 id="local-heading">The earlier Qwen results stay public.</h2><p>The 72-case decisions-v2 test exposed limits that the initial form-action test missed. Its cases differ from v3 above, so scores across the two fixtures do not measure an improvement.</p></div>
+        <div class="section-intro"><h2 id="local-heading">Earlier Qwen3 results</h2><p>The 72-case decisions-v2 test exposed limits that the initial form-action test missed. Its cases differ from v3 above, so scores across the two fixtures do not measure an improvement.</p></div>
         <p class="table-hint">Scroll tables sideways to see all columns.</p>
 <div class="table-scroll" role="region" aria-label="decisions-v2 · 72 distinct synthetic cases · 24 per question type" tabindex="0"><table class="comparison-table results-table"><caption>decisions-v2 · 72 distinct synthetic cases · 24 per question type</caption><thead><tr><th scope="col">Model</th><th scope="col">Correct</th><th scope="col">Choice</th><th scope="col">Yes / no</th><th scope="col">Score</th><th scope="col">Order-stable cases</th></tr></thead><tbody><tr><th scope="row">Qwen3 1.7B</th><td>32/72</td><td>12/24</td><td>13/24</td><td>7/24</td><td>7/24</td></tr><tr><th scope="row">Qwen3 0.6B</th><td>25/72</td><td>8/24</td><td>12/24</td><td>5/24</td><td>0/24</td></tr></tbody></table></div>
         <p class="results-summary">The best fixed label in each choice family, a constant yes/no answer, and a constant score level together get 27/72. Qwen3 1.7B gets only five more cases right. These are authored synthetic workflows, not a representative production sample.</p>
@@ -133,7 +134,7 @@
 
       </section>
       <section id="method" class="section" aria-labelledby="method-heading">
-        <div class="section-intro"><h2 id="method-heading">Evidence you can rerun.</h2><p>The fixtures, grading rules, model pins, source hashes, and complete responses are public. No case is removed for producing an inconvenient answer.</p></div>
+        <div class="section-intro"><h2 id="method-heading">Rerun these tests.</h2><p>The fixtures, grading rules, model pins, source hashes, and complete responses are public. Every case is reported, including the ones a model got wrong.</p></div>
         <ol class="measurement-list"><li><strong>Quality:</strong> 72 authored cases, 24 per answer type. Grade only the first pass. Choice requires the exact label; yes/no uses a strict 0.5 threshold; score uses a unique most-probable level. Noul and Score ties, and all failures, count as incorrect.</li><li><strong>Stability:</strong> all six option orders for 24 choice cases. Report identical semantic answers separately from correctness; permutations do not add independent cases.</li><li><strong>Timing:</strong> three measured passes, 216 calls at concurrency one. Two earlier form cases warm up the route. p50/p95 use nearest rank over all attempts; throughput includes response validation.</li><li><strong>Boundaries:</strong> pin weights and the provider model version; keep local and network timing distinct. A small project-authored test does not establish production quality or calibrated probabilities.</li></ol>
         <details class="comparison-detail"><summary>Related projects and publisher benchmarks<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><div class="detail-body"><p>Jev is a hosted decision model; Qwen supplies open model weights; llama.cpp supplies local inference. Sys1 connects these to one typed application contract. OpenJev offers a separate compatible server you can operate and explicitly register.</p><p>Publisher speed and quality results use different workloads, runtimes, and hardware. JevBench is the external cross-model suite; its scores remain separate from Sys1's local adapter evidence. The <a href="/docs/evaluations-history#upstream">upstream evidence archive</a> preserves other primary sources and conditions.</p></div></details>
         <div class="actions comparison-actions"><a class="button" href="https://github.com/hraness/sys1/tree/main/benchmarks">Run the evaluation</a><a class="button button-secondary" href="https://github.com/hraness/sys1/blob/main/docs/model-comparison.md">Detailed evidence notes</a><a class="button button-secondary" href="/#integrate">Use Sys1 in your app</a></div>

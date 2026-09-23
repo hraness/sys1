@@ -108,7 +108,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     sha256: "33bcc57074ec7b6eada5a90651ee546ec0c2b271002c22baf9f1b2dd1e8f75cb",
     bytes: 382_156_480,
     context: 2048,
-    description: "Qwen3 0.6B Q4_0 — experimental diagnostic model (365 MiB)",
+    description: "Qwen3 0.6B Q4_0: experimental diagnostic model (365 MiB)",
     experimental: true,
   },
   {
@@ -121,7 +121,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     sha256: "b139949c5bd74937ad8ed8c8cf3d9ffb1e99c866c823204dc42c0d91fa181897",
     bytes: 1_107_409_472,
     context: 2048,
-    description: "Qwen3 1.7B Q4_K_M — experimental default local model (1.0 GiB)",
+    description: "Qwen3 1.7B Q4_K_M: experimental default local model (1.0 GiB)",
     experimental: true,
   },
   {
@@ -134,7 +134,7 @@ export const MODEL_REGISTRY: RegistryEntry[] = [
     sha256: "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
     bytes: 2_740_937_888,
     context: 2048,
-    description: "Qwen3.5 4B Q4_K_M — experimental local decision model (2.6 GiB)",
+    description: "Qwen3.5 4B Q4_K_M: experimental local decision model (2.6 GiB)",
     experimental: true,
   },
 ];

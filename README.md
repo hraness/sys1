@@ -1,47 +1,24 @@
-# SYS1
+# Sys1
 
-Sys1 is the decision interface between an agent and its models. Use a small
-Node/Bun client, embed the router in a Bun application, or run one loopback
-daemon. The Jev-compatible `POST /v1/systemone` contract gives applications two
-main paths: hosted Jev 1.13.0 and experimental local Qwen. Other installed GGUF models
-and operator-run System One HTTP backends remain available by explicit selection.
+Sys1 lets an agent ask a model small, structured questions and get back a
+validated answer instead of prose: `noul` for a yes/no probability, `choice`
+for one option from a list, and `score` for a level on an ordered scale. These
+fit routing, guardrail, review, and triage decisions inside agent loops. The
+same request works with hosted Jev 1.13.0, TypeSafe's decision model, or with an
+experimental local Qwen model. Other installed GGUF models and System One HTTP
+servers you run answer only when you select them.
+
+Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
+local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
 
-System One calls ask typed questions about a state instead of generating prose:
-`noul` for yes/no probability, `choice` for one bounded option, and `score` for
-an ordered level. They fit routing, guardrail, review, and triage decisions
-inside agent loops. Sys1 gives every local agent the same endpoint regardless
-of which model answers.
-
-Sys1 complements [OpenJev](https://github.com/razorback16/openjev) by routing
-its common System One decision API; OpenJev's image, chat, and advanced sampling
-extensions are outside Sys1's contract. An operator-run server must be selected
-explicitly; adding one does not change the default decision route.
-
-[Kev](https://github.com/jaredpalmer/kev) is supported through an explicit wire
-adapter, including its two-decimal probability output and structured Score
-legends. Use versioned decision profiles to reuse task instructions with Jev,
-local models, or a separately trained Kev checkpoint. [Kev and tuning guide](docs/kev.md).
-
-## System One skills
-
-[system-one-skills](https://github.com/hraness/system-one-skills) provides
-`system-one-verify`, a focused skill for Devin, Claude Code, and Codex. It runs
-a known noisy test or build command once, returns its exit status and compact
-evidence, and keeps the full log locally for inspection.
-
-SYS1 provides the decision interface for applications and agents; the skill
-handles deterministic log reduction without a model, API key, or SYS1
-installation. Installing either project does not configure the other.
-[Browse the skills guide](https://sys1.io/skills) for installation, when to use
-the skill, and the limits of the efficiency evidence.
-
 ## Install
 
-Requires Bun 1.3.14 or newer. The canonical package is the SHA-256-listed
-artifact on the immutable GitHub Release. The install grants postinstall only
-to the exact pinned native dependency; the resulting `sys1` executable runs
+Requires Bun 1.3.14 or newer. Install the release file from GitHub. Its SHA-256
+is listed on the release, and release files cannot be replaced after
+publishing. `--allow-scripts=node-llama-cpp` lets only the pinned native
+inference package run its install script. The installed `sys1` command runs
 with Bun.
 
 ```sh
@@ -154,7 +131,7 @@ sys1 up         # starts the gateway on 127.0.0.1:13900
 sys1 status
 ```
 
-Local Qwen is an experimental adapter, not a qualified substitute for Jev.
+Local Qwen is experimental. Do not treat it as a drop-in replacement for Jev.
 The broader tests found 32/72 correct decisions for Qwen3 1.7B and 44/72 for
 Qwen3.5 4B on a different fresh fixture. [Read the evidence](https://sys1.io/docs/evaluations)
 before using local decisions to drive actions.
@@ -211,7 +188,7 @@ Or point any System One client at `http://127.0.0.1:13900`.
 
 ## Add hosted Jev
 
-Hosted Jev is disabled by default—even if `TYPESAFE_API_KEY` happens to exist in
+Hosted Jev is disabled by default, even if `TYPESAFE_API_KEY` is already set in
 the environment. Add it explicitly:
 
 ```sh
@@ -381,9 +358,8 @@ be unique; `typesafe` and `local-*` are reserved for managed candidates. Request
 - `"model": "local-qwen3-0.6b/qwen3-0.6b"` explicitly selects the experimental model;
 - `"model": "openjev/openjev-latest"` pins a registered HTTP backend that advertises that alias.
 
-Selection is capability-aware. Each request's needs — its largest option
-count and total question count — are compared against the backend's published
-limits. A backend the request exceeds is skipped; when no configured backend
+Selection is capability-aware. Sys1 compares each request's largest option
+count and total question count against the backend's published limits. A backend the request exceeds is skipped; when no configured backend
 can serve the request at all the gateway answers `422 request_unsupported`
 rather than dispatching a request that would fail downstream. Builtin
 backends publish their adapter limit (`generic-gguf` 35 options); remote backends
@@ -393,6 +369,11 @@ its configured limits and the common protocol envelope. Missing limits never
 mean zero capability.
 
 ## External System One backends
+
+Sys1 can route to an [OpenJev](https://github.com/razorback16/openjev) server
+through its standard System One decision API. OpenJev's image, chat, and
+advanced sampling extensions are not supported. A server you register answers
+only requests that select it; adding one does not change the default route.
 
 Any service implementing `POST /v1/systemone` and `GET /v1/models` can join the
 same router. For an existing OpenJev server, first inspect its advertised model
@@ -426,6 +407,12 @@ operator-owned: Sys1 probes and forwards to them but does not download their
 weights, mutate credentials, or own their lifecycle.
 
 ## Kev and decision profiles
+
+[Kev](https://github.com/jaredpalmer/kev) servers use a dedicated adapter
+(`--adapter kev`) that handles Kev's two-decimal probability output and
+structured Score legends. Versioned decision profiles reuse task instructions
+with Jev, local models, or a separately trained Kev checkpoint.
+[Kev and tuning guide](docs/kev.md).
 
 After starting and verifying a separately owned Kev server, register it explicitly:
 
@@ -581,3 +568,11 @@ The [opt-in Sys1 benchmarks](benchmarks/README.md) support adapter qualification
 and reproduction; they are not the cross-model leaderboard. No local candidate
 is generally qualified, and the original fixtures do not justify an automatic
 application migration.
+
+## Related
+
+[System One Skills](https://github.com/hraness/system-one-skills) is a separate
+skill for Devin, Claude Code, and Codex. It runs a known noisy test or build
+once, returns a short result with the exit status, and keeps the full log on
+disk. It needs no model, API key, or Sys1 installation, and installing either
+project does not configure the other. [Skills guide](https://sys1.io/skills).
