@@ -1,7 +1,7 @@
 {
   "name": "@hraness/sys1",
   "version": "0.10.0",
-  "description": "Yes/no, choice, and score decisions for agents from local models or hosted Jev, through a Node/Bun client, an embedded Bun router, or a local HTTP gateway.",
+  "description": "Yes/no, choice, and score decisions for agents, answered by local models or hosted Jev.",
   "type": "module",
   "license": "MIT",
   "packageManager": "bun@1.3.14",

@@ -56,7 +56,7 @@ function fail(message: string, code: number): never {
   process.exit(code);
 }
 
-const USAGE = `sys1: yes/no, choice, and score decisions for agents from local or hosted models
+const USAGE = `sys1: yes/no, choice, and score decisions for agents, answered by local models or hosted Jev
 
 Usage: sys1 <command> [flags]
 
