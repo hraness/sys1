@@ -15,6 +15,8 @@ async function fixture() {
   const browser = join(upstream, "dist/browser/index.js");
   const vendor = join(root, "site/vendor/hraness-appearance");
   await Promise.all([mkdir(join(root, "scripts"), { recursive: true }), mkdir(join(root, "site"), { recursive: true }), mkdir(join(upstream, "src"), { recursive: true }), mkdir(join(upstream, "dist/browser"), { recursive: true })]);
+  // Immutable artifact bytes must survive Git restore on Windows as well as Unix.
+  await writeFile(join(upstream, ".gitattributes"), "* -text\n");
   await writeFile(join(root, "scripts/site-appearance.js"), 'import { install } from "@hraness/design-kit/browser"; install();\n');
   await writeFile(browser, 'export function install() { document.documentElement.dataset.ready = "yes"; }\n');
   await writeFile(join(upstream, "src/appearance-menu.css"), ".menu { display: grid; }\n");
@@ -54,10 +56,15 @@ test("refresh binds both palette files, bootstrap, browser and bundle to an immu
 
 test("refresh rejects mismatched release, browser or lock before publishing", async () => {
   const f = await fixture();
+  const browserBytes = await readFile(f.browser);
   await expect(refreshAppearance(f.root, f.upstream, "a".repeat(40), "v1.2.3")).rejects.toThrow("Release tag");
   await writeFile(f.browser, "altered browser\n");
   await expect(refreshAppearance(f.root, f.upstream, f.commit, "v1.2.3")).rejects.toThrow("integrity mismatch");
   expect(await Bun.file(join(f.vendor, "provenance.json")).exists()).toBe(false);
+  execFileSync("git", ["-C", f.upstream, "restore", "dist/browser/index.js"]);
+  expect(await readFile(f.browser)).toEqual(browserBytes);
+  await writeFile(f.browser, browserBytes.toString().replaceAll("\n", "\r\n"));
+  await expect(refreshAppearance(f.root, f.upstream, f.commit, "v1.2.3")).rejects.toThrow("dist/browser/index.js");
   execFileSync("git", ["-C", f.upstream, "restore", "dist/browser/index.js"]);
   await writeFile(join(f.upstream, "bun.lock"), "altered lock\n");
   await expect(refreshAppearance(f.root, f.upstream, f.commit, "v1.2.3")).rejects.toThrow("bun.lock");
