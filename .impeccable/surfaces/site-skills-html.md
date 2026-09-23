@@ -50,7 +50,7 @@ and freshness, not measured savings or admission for another skill.
 
 Existing Paper tokens/assets and site.js remain unchanged. The evidence table
 scrolls inside a labelled focusable region; rows stack at compact widths.
-Schema and visible text identify this as agent-authored analysis.
+The page no longer carries an agent-authored label: from 2026-09-23, AI-drafting disclosure appears only on hraness.com. This brief keeps the provenance record.
 
 ## September 20 benefits and evidence revision — admission
 
@@ -132,3 +132,24 @@ Adopts the canonical design-kit appearance icon/menu with the existing saved
 preference key, sticky shared marketing header, and pinned sticky Hraness
 footer. See DESIGN.md and the vendor provenance for the common contract.
 Page content and evidence claims are unchanged by this adoption.
+
+## Copy: 2026-09-23
+
+Public copy on this page follows `STYLE.md` and `WRITING.md` (synced from
+hraness/.github) and the “Public copy” section of `PRODUCT.md`. This section supersedes the first-viewport and catalog directions above.
+
+- The H1 names the job, not a measurement. The lead says what
+  `system-one-verify` does, gives the 35.20% replay figure with its scope once
+  (text, not billed tokens; not shown to make tasks faster), and says it is the
+  only shipped skill.
+- Limits sit beside the shipped skill: the failed-check replay through the
+  v0.4.0 reducer kept all seven failing test names and their shared error but
+  one of seven call sites, and the scorecard comes from one developer's private
+  sessions.
+- The ten-candidate catalog lives in system-one-skills `docs/SKILL-CATALOG.md`;
+  this page keeps one paragraph and a link.
+- No self-description as honest or clearly scoped, and no repeated scope
+  disclaimers; the text-not-tokens scope is stated in the lead and once in the
+  results section.
+- Recheck on each release: version, runtime test count (43 at v0.4.1), the
+  installed skill count, candidate status, and every pinned source link.

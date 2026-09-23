@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Compare models — Sys1</title>
-    <meta name="description" content="Compare JevBench accuracy for Sys1 routes, choose hosted Jev, local Qwen, Kev, or OpenJev, and estimate model costs for your workload." />
+    <title>Compare models · Sys1</title>
+    <meta name="description" content="See how the models Sys1 can use score on JevBench, where each one runs, and what your monthly workload would cost on each." />
     <link rel="canonical" href="https://sys1.io/compare" />
-    <meta property="og:title" content="Compare models — Sys1" />
-    <meta property="og:description" content="Decision latency, token accounting, footprint, and evidence for choosing your model." />
+    <meta property="og:title" content="Compare models · Sys1" />
+    <meta property="og:description" content="See how the models Sys1 can use score on JevBench, where each one runs, and what your monthly workload would cost on each." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/compare" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
@@ -33,10 +33,11 @@
       <div class="header-inner">
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark" style="--hraness-foil-size:2rem"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true" style="--hraness-foil-mask:url('/marks/sys1.svg')"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
-          <a href="/#how-it-works">Features</a>
+          <a href="/#how-it-works">How it works</a>
+          <a href="/docs">Docs</a>
           <a href="/compare" aria-current="page">Compare</a>
           <a href="/skills">Skills</a>
-          <a href="/docs">Docs</a>
+          <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
         <div class="header-actions">
           <a class="button button-small" href="/#install">Get started</a>
@@ -56,14 +57,14 @@
 
     <main id="main" class="comparison-page model-compare">
       <div class="comparison-intro">
-        <h1>Choose a model.<br />Keep one interface.</h1>
-        <p class="summary">Compare decision quality, choose where it runs, and estimate the cost. Sys1 routes your typed requests to hosted Jev, local Qwen, or a compatible server you operate.</p>
+        <h1>Compare the models<br />Sys1 can use.</h1>
+        <p class="summary">Check JevBench accuracy, choose where the model runs, and estimate the cost. Sys1 sends your requests to hosted Jev, local Qwen, or a compatible server you run.</p>
         <nav class="contents" aria-label="On this page"><a href="#quality">Benchmark</a><a href="#routes">Available routes</a><a href="#cost">Cost calculator</a><a href="#sources">Sources &amp; studies</a></nav>
       </div>
 
       <section id="quality" class="section" aria-labelledby="quality-heading">
         <div class="benchmark-heading">
-          <div><h2 id="quality-heading">Decision quality, side by side.</h2><p>JevBench results for routes available through Sys1. Built-in models and operator-run servers are labelled separately.</p></div>
+          <div><h2 id="quality-heading">How the models score on JevBench</h2><p>JevBench results for the models Sys1 can use. Built-in models and servers you run are labelled separately.</p></div>
           <div class="metric-control js-only"><label for="benchmark-metric">Compare by</label><select id="benchmark-metric" aria-describedby="metric-description"><option value="accuracy">Hard-tier accuracy</option><option value="intelligence">Intelligence score</option><option value="calibration">Calibration score</option><option value="composite">Overall JevBench score</option></select></div>
         </div>
         <figure class="benchmark-figure" aria-labelledby="chart-caption">
@@ -88,7 +89,7 @@
       </section>
 
       <section id="routes" class="section" aria-labelledby="routes-heading">
-        <div class="section-intro"><h2 id="routes-heading">Choose where the work runs.</h2><p>The same yes/no, choice, and score contract. Different setup, ownership, and model behavior.</p></div>
+        <div class="section-intro"><h2 id="routes-heading">Choose where the work runs.</h2><p>Every route takes the same yes/no, choice, and score requests. They differ in setup, in who runs them, and in how well they answer.</p></div>
         <dl class="route-list">
           <div><dt>Jev<span>Hosted · built-in</span></dt><dd>Enable it with your credential. Sys1 selects hosted-only routing and keeps the provider model pinned. A provider outage returns an error.<a href="/docs#getting-started">Set up hosted Jev</a></dd></div>
           <div><dt>Qwen<span>Local · built-in, experimental</span></dt><dd>Run quantized weights through llama.cpp. Qwen3 1.7B is the setup default; 0.6B and Qwen3.5 4B are explicit options. Their probabilities need task-specific evaluation.<a href="/docs#backends">Choose a local model</a></dd></div>
@@ -99,7 +100,7 @@
       </section>
 
       <section id="cost" class="section" aria-labelledby="cost-heading">
-        <div class="section-intro"><h2 id="cost-heading">Put your workload into the numbers.</h2><p>Estimate a hosted bill or allocate the cost of a local machine. All amounts are USD; nothing is sent to a model.</p></div>
+        <div class="section-intro"><h2 id="cost-heading">Estimate the cost of your workload.</h2><p>Estimate a hosted bill or allocate the cost of a local machine. All amounts are USD; nothing is sent to a model.</p></div>
         <form id="cost-planner" class="cost-planner" aria-label="Model cost calculator">
           <div class="planner-inputs">
             <label for="cost-model">Model or service</label>
@@ -130,7 +131,7 @@
       </section>
 
       <section id="sources" class="section" aria-labelledby="sources-heading">
-        <div class="section-intro"><h2 id="sources-heading">Follow the evidence.</h2><p>JevBench is our cross-model reference. Sys1’s original fixtures document adapter behavior and remain available in the research docs.</p></div>
+        <div class="section-intro"><h2 id="sources-heading">Sources and studies</h2><p>JevBench is the cross-model reference on this page. Sys1’s own fixtures, which show how each adapter behaves, are in the evaluation docs.</p></div>
         <div class="source-list">
           <a href="https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/RESULTS-v1.2.md"><strong>Full JevBench results</strong><span>All systems, scoring, timing, and cost assumptions · v1.2.6</span></a>
           <a href="/docs/evaluations"><strong>Sys1 adapter studies</strong><span>Original Jev, Qwen, and Laya runs, raw reports, and limitations</span></a>

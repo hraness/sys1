@@ -60,3 +60,14 @@ freeze task questions and an exact route; they do not attest checkpoint bytes
 or start training. Keep Kev unscored in the comparison until matching evidence
 exists. Desktop and mobile browser review covered code wrapping, navigation,
 appearance, and the Kev calculator's operator-supplied cost inputs.
+
+## Copy: 2026-09-23
+
+Public copy on this page follows `STYLE.md` and `WRITING.md` (synced from
+hraness/.github) and the “Public copy” section of `PRODUCT.md`.
+
+- Title “Docs · Sys1”, matching the nav label. H1 “Sys1 documentation”.
+- The lead names the three question types and the ways to start. Section
+  intros state facts about the reader's choice, not how the docs are organized.
+- The backend list includes every bundled Qwen model (0.6B, 1.7B, and 3.5 4B)
+  and introduces Jev and Kev in plain words at first mention.

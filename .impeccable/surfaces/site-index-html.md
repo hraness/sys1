@@ -26,8 +26,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Benefit clarity refinement — 2026-09-19
 
-Lead with “Local models or Jev. One typed API.” The supporting copy connects
-that interface to yes/no decisions, choices, scores, response validation, and
+The lead line chosen in this refinement was retired on 2026-09-23; see “Copy:
+2026-09-23” below. The supporting copy connects that interface to yes/no decisions, choices, scores, response validation, and
 local model loading, with hosted Jev explicitly opt-in. Feature headings name
 request control, usable answers, and model lifecycle management. Existing
 schema-versus-quality and adapter limitations remain nearby.
@@ -42,8 +42,8 @@ footer are preserved.
 
 ## September 20 supported routes
 
-Headline: Jev or local Qwen, one typed API. Lead with the reusable client,
-explicit model selection, validated response shapes and owned local lifecycle.
+The headline chosen here was retired on 2026-09-23. Lead with the reusable
+client, model selection you control, validated answers, and local model setup.
 All Qwen decisions are experimental; say so beside the hero and local
 quickstart. Enabling Jev selects hosted-only. Keep a hosted module pilot
 distinct from automatic local migration. CUA and Needle are historical
@@ -61,7 +61,7 @@ The Paper system and existing design assets remain unchanged.
 
 ## Evergreen homepage refocus — 2026-09-20
 
-The homepage now answers three questions in order: what Sys1 is, how it enters an application, and where to read evidence. The lead promise is “One typed API for every small decision,” supported by explicit routing, validated answer shapes, and an owned integration boundary. The request-and-answer specimen remains illustrative and makes no model call.
+The homepage now answers three questions in order: what Sys1 is, how it enters an application, and where to read evidence. The H1 is “One typed API for every small decision.” The summary under it says what the agent asks, what comes back, and which models can answer. The request-and-answer specimen remains illustrative and makes no model call.
 
 Implementation and research details now point to `/docs`: getting started, integration modes, backend semantics, module proof, and dated evaluation reports live there. The homepage names Jev, local Qwen, compatible HTTP services, and the surrounding runtime without placing benchmark snapshots or release-specific install commands in the primary story. The local quickstart uses the evergreen source build path; exact release artifacts stay in the docs.
 
@@ -73,3 +73,27 @@ Adopts the canonical design-kit appearance icon/menu with the existing saved
 preference key, sticky shared marketing header, and pinned sticky Hraness
 footer. See DESIGN.md and the vendor provenance for the common contract.
 Page content and evidence claims are unchanged by this adoption.
+
+## Copy: 2026-09-23
+
+Public copy on this page follows `STYLE.md` and `WRITING.md` (synced from
+hraness/.github) and the “Public copy” section of `PRODUCT.md`. This section supersedes the lead lines quoted in the earlier sections;
+do not restore them.
+
+- Title and social title: “Sys1 · Yes/no, choice, and score decisions for
+  agents”. The description and social description are the same one or two
+  sentences, 110 to 160 characters.
+- Hero: keep the H1. The summary names the three question types, the validated
+  answer with probabilities, and who answers, and introduces Jev as TypeSafe's
+  hosted decision model. The hero note carries the status once.
+- Section headings name the section's topic or the reader's task. No two-part
+  slogans, no maxim closer, and no sentences about where evidence belongs or
+  how the site is organized.
+- The 0.9.0 module test is labelled with its date and version and links
+  `site/data/sys1-0.9-module-proof.json`. No script regenerates it, so do not
+  call it reproducible or current. Rerun it for the current release, or remove
+  the paragraph.
+- The quickstart heading matches what its commands do: install and set up a
+  local model. The FAQ answer about replacing a Jev client links the README's
+  adoption section, which is the guide it describes.
+- One primary nav on every page: How it works, Docs, Compare, Skills, GitHub.

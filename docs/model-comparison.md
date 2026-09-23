@@ -1,7 +1,7 @@
 # Model comparison: evidence and measurement
 
-The two built-in paths in Sys1 0.9 are hosted Jev 1.13.0 and experimental
-local Qwen. Qwen3 1.7B remains the local setup selection; 0.6B and 3.5 4B
+Sys1 has two built-in paths: hosted Jev 1.13.0 and experimental local Qwen.
+Qwen3 1.7B remains the local setup selection; 0.6B and 3.5 4B
 require explicit selection. No local candidate is generally qualified. CUA and Needle
 adapters have been removed; their historical measurements remain below.
 Use [the current comparison](https://sys1.io/compare) to choose a supported

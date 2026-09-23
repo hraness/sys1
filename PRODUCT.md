@@ -49,10 +49,42 @@ CUA-S1/Needle measurements remain available; those adapters were removed in 0.9.
 
 README.md, source, docs/DESIGN.md (runtime architecture), release workflows,
 and deterministic/native-install checks document implemented capabilities.
-The comparison page adds an opt-in public synthetic local adapter benchmark
-and primary-source upstream measurements, each with its own scope and limits.
+The comparison page charts external JevBench results for the supported routes
+and has a workload cost calculator. `/docs/evaluations` holds Sys1's own adapter
+studies, and `/docs/evaluations-history` keeps the September 19–20 form-action
+run. The homepage links a dated 0.9.0 module integration record
+(`site/data/sys1-0.9-module-proof.json`); no script regenerates it.
 The broader frozen fixtures show poor Qwen quality; a direct Laya MLX
 candidate study reached 30/72 and remains outside the shipped runtime; local inference remains
 experimental. Jev has a completed 20-case result; a broader attempt failed
 authentication and is not quality evidence. No customer adoption count or testimonial is supplied. Illustrative page
 examples must be labelled as such.
+
+## Public copy
+
+Public copy follows `STYLE.md` and `WRITING.md` in this repository, synced from
+hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
+guides; update a brief in the same change as its page.
+
+- The one-line description comes from the Hraness portfolio registry. Until the
+  registry adopts it, use: “Yes/no, choice, and score decisions for agents,
+  answered by local models or hosted Jev.” Shorten it by cutting words, not by
+  substituting internal ones.
+- Write the name as Sys1 in prose. Use `sys1` only for the command, the package
+  scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a
+  prose spelling.
+- Introduce Jev at its first mention on a page as TypeSafe's hosted decision
+  model.
+- State status once near the top of a page: local Qwen is experimental and
+  hosted Jev is opt-in. Put any other limit beside the feature it limits.
+- The vocabulary of `AGENTS.md` and these briefs (boundary, contract,
+  qualification, admission, surface, pilot, lifecycle, owns) is internal. On a
+  public page, say what the reader gets instead.
+- Headings name the section's topic or the reader's task. Do not write two-part
+  slogan headings, maxim closers, or copy that explains how the site is
+  organized.
+- Every HTML file under `site/` carries its own copy of the primary nav. Keep
+  one nav on every page: How it works, Docs, Compare, Skills, GitHub.
+- Label a historical measurement with its date and version, and link its
+  record. Do not call a record reproducible unless a script in this repository
+  regenerates it.

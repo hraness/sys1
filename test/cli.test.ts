@@ -78,7 +78,8 @@ describe("setup CLI", () => {
     const preview = await runCli(["setup", "--dry-run"], { home: dir });
     expect(preview.code).toBe(0);
     expect(preview.stdout).toContain("Local decisions are experimental");
-    expect(preview.stdout).toContain("https://sys1.io/compare");
+    // The notice must send people to the page that publishes local Qwen results.
+    expect(preview.stdout).toContain("https://sys1.io/docs/evaluations");
     const registry = await runCli(["pull", "--list", "--json"], { home: dir });
     expect(registry.code).toBe(0);
     const data = (JSON.parse(registry.stdout) as { data: { id: string; experimental: boolean }[] }).data;
