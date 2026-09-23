@@ -1,0 +1,141 @@
+/* Shared foil contract
+ *
+ * One pointer-tracked metallic chrome recipe shared by brand wordmarks,
+ * primary calls to action, and the shared site footer. Elements opt in with
+ * the hraness-foil / hraness-foil-text hooks; the marketing header brand,
+ * footer lockups carrying a transparent brandMark, and primary actions carry
+ * the treatment by default. attachFoil() from @hraness/design-kit/browser
+ * eases the two bounded inputs --hraness-foil-x and --hraness-foil-y on
+ * [data-foil] descendants between 8% and 92% around the resting center over
+ * roughly 85ms; the artwork and glyphs stay fixed while the radial light
+ * fields move, and --hraness-foil-glow stays CSS-owned. The spectrum lives in
+ * --hraness-foil-1 through --hraness-foil-6 so a site rethemes every foil
+ * surface from one marketing root; dark roots read the deeper palette where
+ * the pointer sheen stands out.
+ */
+
+.hraness-foil,
+.hraness-marketing-action[data-emphasis="primary"] {
+  --hraness-foil-glow: 0;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  background-color: var(--hraness-foil-surface, var(--surface, var(--background, Canvas)));
+  background-image:
+    linear-gradient(var(--hraness-foil-surface, var(--surface, var(--background, Canvas))), var(--hraness-foil-surface, var(--surface, var(--background, Canvas)))),
+    radial-gradient(ellipse 28% 100% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%), color-mix(in srgb, white calc(60% + var(--hraness-foil-glow, 0) * 24%), transparent) 0%, transparent 72%),
+    radial-gradient(ellipse 80% 180% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)), color-mix(in srgb, white var(--hraness-foil-sheen-opacity, 28%), transparent) 0%, transparent 78%),
+    linear-gradient(115deg,
+      var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))),
+      var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))),
+      var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))),
+      var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))),
+      var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))),
+      var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))));
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box, border-box;
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--foreground, CanvasText) 12%, transparent);
+}
+
+.hraness-foil-text,
+.hraness-marketing-header__brand,
+.hraness-marketing-footer__brand[data-foil] {
+  --hraness-foil-glow: 0;
+  background-image: var(--hraness-foil-image,
+      radial-gradient(ellipse 24% 85% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 80%, var(--background, Canvas)) 0%, transparent 68%),
+      radial-gradient(ellipse 65% 160% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 98%, var(--background, Canvas)) 0%, transparent 72%),
+      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
+      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 90%, var(--background, Canvas)) 0%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 24%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 86%, var(--background, Canvas)) 39%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 56%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 84%, var(--background, Canvas)) 82%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: none;
+}
+
+
+/* The original image remains underneath as the no-mask/CSP/forced-color fallback.
+ * Only its exact alpha silhouette receives the shared metallic paint. */
+.hraness-foil-mark { display: inline-flex; position: relative; flex-shrink: 0; color: var(--foreground, CanvasText); line-height: 0; vertical-align: middle; inline-size: var(--hraness-foil-size, 1.5rem); block-size: var(--hraness-foil-size, 1.5rem); }
+.hraness-foil-mark__image { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
+.hraness-foil-mark__paint { --_hraness-foil-mark-display: none; display: var(--_hraness-foil-mark-display); position: absolute; inset: 0; pointer-events: none; mask-image: var(--hraness-foil-mask, linear-gradient(transparent, transparent)); mask-mode: alpha; mask-repeat: no-repeat; mask-position: center; mask-size: contain; background-image: var(--hraness-foil-image,
+      radial-gradient(ellipse 24% 85% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 80%, var(--background, Canvas)) 0%, transparent 68%),
+      radial-gradient(ellipse 65% 160% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 98%, var(--background, Canvas)) 0%, transparent 72%),
+      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
+      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 90%, var(--background, Canvas)) 0%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 24%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 86%, var(--background, Canvas)) 39%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 56%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 84%, var(--background, Canvas)) 82%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 100%)); }
+@supports (mask-image: linear-gradient(black, black)) {
+  .hraness-foil-mark__paint { --_hraness-foil-mark-display: block; }
+}
+@media (forced-colors: active) {
+  .hraness-foil,
+  .hraness-marketing-action[data-emphasis="primary"] {
+    background-image: none;
+    background-color: Canvas;
+    border-color: ButtonText;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .hraness-foil-text,
+  .hraness-marketing-header__brand,
+  .hraness-marketing-footer__brand[data-foil] {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+  .hraness-foil-mark__paint { --_hraness-foil-mark-display: none; }
+}
+
+@media (hover: hover) {
+  .hraness-foil:hover:not(:disabled),
+  .hraness-foil-text:hover,
+  .hraness-marketing-header__brand:hover,
+  .hraness-marketing-footer__brand[data-foil]:hover,
+  .hraness-marketing-action[data-emphasis="primary"]:hover:not(:disabled) {
+    --hraness-foil-glow: 1;
+  }
+}
+
+:where([data-theme="dark"], .dark):where(
+  .hraness-marketing-page, .hraness-marketing-header, .hraness-marketing-footer,
+    .hraness-marketing-hero,
+  .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
+  .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
+  .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
+  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+  .hraness-marketing-proof-frame
+),
+:where([data-theme="dark"], .dark) :where(
+  .hraness-marketing-page, .hraness-marketing-header, .hraness-marketing-footer,
+    .hraness-marketing-hero,
+  .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
+  .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
+  .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
+  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+  .hraness-marketing-proof-frame
+) {
+  --hraness-foil-1: oklch(0.56 0.16 340);
+  --hraness-foil-2: oklch(0.52 0.15 285);
+  --hraness-foil-3: oklch(0.66 0.14 175);
+  --hraness-foil-4: oklch(0.72 0.13 100);
+  --hraness-foil-5: oklch(0.55 0.15 45);
+  --hraness-foil-6: oklch(0.62 0.16 305);
+}
+
+@media (prefers-color-scheme: dark) {
+  :where(:root:not([data-theme="light"]):not(.light)) :where(
+    .hraness-marketing-page, .hraness-marketing-header, .hraness-marketing-footer,
+    .hraness-marketing-hero,
+    .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
+    .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
+    .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
+    .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+    .hraness-marketing-proof-frame
+  ) {
+    --hraness-foil-1: oklch(0.56 0.16 340);
+    --hraness-foil-2: oklch(0.52 0.15 285);
+    --hraness-foil-3: oklch(0.66 0.14 175);
+    --hraness-foil-4: oklch(0.72 0.13 100);
+    --hraness-foil-5: oklch(0.55 0.15 45);
+    --hraness-foil-6: oklch(0.62 0.16 305);
+    }
+}
