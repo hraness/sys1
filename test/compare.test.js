@@ -140,6 +140,11 @@ describe("comparison evidence contract", () => {
       expect(hrefs).toContain(path);
       const [route, fragment] = path.split("#");
       const page = readFileSync(new URL(`../site${route}.html`, import.meta.url), "utf8");
+      expect(page).toContain('data-palette="tokyo-night"');
+      expect(page).toContain('href="/vendor/hraness-appearance/palette-bridge.css"');
+      expect(page).toContain('href="/vendor/hraness-lantern/lantern-material.css"');
+      expect(page).toContain('media="(prefers-color-scheme: light)" content="#e1e2e7"');
+      expect(page).toContain('media="(prefers-color-scheme: dark)" content="#1a1b26"');
       if (fragment) expect(await select(page, `[id="${fragment}"]`)).toHaveLength(1);
     }
     const evaluations = readFileSync(new URL("../site/docs/evaluations.html", import.meta.url), "utf8");
