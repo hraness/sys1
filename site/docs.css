@@ -1,19 +1,19 @@
 /* Sys1 documentation surface: extends the shared technical product system without new theme tokens. */
-.docs-hero { padding: 4.75rem 2rem 4.5rem; border-bottom: 1px solid var(--grid); background: var(--surface); }
+.docs-hero { padding: var(--sys1-reference-space) 2rem; border-bottom: 1px solid var(--grid); background: var(--surface); }
 .docs-hero-inner { width: min(70rem, 100%); margin-inline: auto; }
-.docs-hero h1 { max-width: 13ch; margin-bottom: 1.5rem; }
+.docs-hero h1 { max-width: var(--sys1-title-measure); margin-bottom: 1.5rem; }
 .docs-lede { max-width: 58ch; color: var(--muted); font-size: 1.12rem; line-height: 1.65; margin: 0 0 1.35rem; }
 .docs-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem 1.5rem; color: var(--muted); font-size: .82rem; }
 .docs-meta span + span { padding-left: 1.5rem; border-left: 1px solid var(--line); }
 .docs-shell { width: min(70rem, calc(100% - 4rem)); margin-inline: auto; display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 4rem; }
-.docs-sidebar { padding-top: 4.5rem; }
+.docs-sidebar { padding-top: var(--sys1-reference-space); }
 .docs-sidebar-title { color: var(--foreground); font-size: .82rem; font-weight: 600; margin: 0 0 .8rem; }
 .docs-nav { display: grid; gap: .65rem; }
 .docs-nav a, .docs-related { color: var(--muted); font-size: .82rem; text-decoration: none; }
 .docs-nav a:hover, .docs-nav a:focus-visible, .docs-related:hover, .docs-related:focus-visible { color: var(--foreground); text-decoration: underline; }
 .docs-related { display: block; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--grid); }
 .docs-content { min-width: 0; }
-.docs-section { padding-block: 4.5rem; scroll-margin-top: 5rem; }
+.docs-section { padding-block: var(--sys1-reference-space); scroll-margin-top: 5rem; }
 .docs-section h2 { margin-bottom: 1rem; }
 .docs-intro { max-width: 62ch; color: var(--muted); font-size: 1.03rem; margin-bottom: 2.5rem; }
 .docs-route-list, .docs-mode-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
@@ -49,7 +49,6 @@
   .docs-sidebar { padding-top: 1.5rem; padding-bottom: 0; }
   .docs-nav { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
   .docs-related { display: inline-block; border: 0; margin-top: .8rem; padding: 0; }
-  .docs-section { padding-block: 3.75rem; }
   .docs-mode-list { grid-template-columns: 1fr; gap: 0; }
   .docs-mode { padding: 1.25rem 0; border-right: 0; border-bottom: 1px solid var(--grid); }
   .docs-mode:first-child { border-top: 1px solid var(--line); }
@@ -58,13 +57,12 @@
   .docs-definition-list > div { grid-template-columns: 1fr; gap: .35rem; }
 }
 @media (max-width: 560px) {
-  .docs-hero { padding: 3.5rem 1.25rem; }
+  .docs-hero { padding: var(--sys1-reference-space) 1.25rem; }
   .docs-hero h1 { max-width: none; }
   .docs-lede { font-size: 1rem; }
   .docs-meta { display: grid; gap: .5rem; }
   .docs-meta span + span { padding: 0; border: 0; }
   .docs-shell { width: calc(100% - 2.5rem); }
-  .docs-section { padding-block: 3.25rem; }
   .docs-closing { padding-block: 3.5rem; }
 }
 

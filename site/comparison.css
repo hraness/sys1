@@ -1,11 +1,11 @@
-.comparison-intro { width: min(70rem, calc(100% - 4rem)); margin: auto; padding: 3.5rem 0 0; }
+.comparison-intro { width: min(70rem, calc(100% - 4rem)); margin: auto; padding: var(--sys1-reference-space, 3.5rem) 0 0; }
 .comparison-intro > a { font-size: .85rem; }
-.comparison-intro h1 { margin-top: 1.4rem; max-width: 18ch; }
+.comparison-intro h1 { margin-top: 1.4rem; max-width: var(--sys1-title-measure, 18ch); }
 .comparison-intro .summary { margin: 0; max-width: 65ch; }
 .comparison-date { font-size: .8rem; color: var(--muted); margin-top: 1.4rem; }
 .contents { display: flex; flex-wrap: wrap; gap: .65rem 1.6rem; border-block: 1px solid var(--grid); padding-block: 1.15rem; margin-top: 2.5rem; }
 .contents a { font-size: .9rem; }
-.comparison-page .section { padding-block: 3.75rem; }
+.comparison-page .section { padding-block: var(--sys1-reference-space, 3.75rem); }
 .comparison-page .section-intro { max-width: 47rem; margin-bottom: 2rem; }
 .table-scroll { overflow-x: auto; scrollbar-color: var(--line) var(--background); }
 .comparison-table { width: 100%; border-collapse: collapse; text-align: left; font-size: .9rem; line-height: 1.5; }
