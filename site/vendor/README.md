@@ -8,7 +8,8 @@ These local assets are immutable snapshots. Product layout and copy belong in
 | `hraness-paper` | Paper contract 1 from `hraness/design-kit` commit `0e089bc18f9a0409f0e74b1fb7192f468956e386` |
 | `hraness-marketing` | Editorial/minimal marketing contract 1 from that same design-kit commit |
 | `nebula-sans` | Unmodified Book 400, Medium 500 and Semibold 600 WOFF2 cuts from that same design-kit commit |
-| `hraness-appearance` | Shared browser appearance menu and CSS from `hraness/design-kit` commit `3bb93ea414ae4d25b1d0eee06591aebeb1d5d549` |
+| `hraness-appearance` | Shared browser appearance menu and CSS from `hraness/design-kit` v0.13.0, commit `655bdb6d84ca69a419a3906efc6a03e1b19396ca` |
+| `hraness-foil` | The shared metallic brand contract extracted byte-exact from that commit's `src/product-marketing.css`; regenerate with `bun scripts/build-site-foil.ts` |
 | `hraness-site-footer` | Complete static footer CSS from `hraness/site-footer` v0.15.0, commit `3f29aaa1116205b86a0a65d779120532aeb2cc5d` |
 
 Paper and marketing were copied byte-for-byte from the corresponding
@@ -19,8 +20,11 @@ directories record the same information for their selected upstream files.
 `nebula-sans/fonts.css` is the small Sys1-owned font registration adapter.
 
 Load Nebula's `fonts.css`, Paper's `paper-theme.css`, marketing's
-`product-marketing-preset.css`, and the footer's complete `stylex.css` before
-the product stylesheet. Retain the relative font and SVG paths. There is no
+`product-marketing-preset.css`, the shared `foil.css`, and the footer's
+complete `stylex.css` before the product stylesheet. The wordmark carries the
+metallic contract: `data-foil` and `hraness-foil-text` on the brand link, the
+mark wrapped in `hraness-foil-mark` with its `--hraness-foil-mask` paint
+layer, and `attachFoil` mounted by the appearance bundle. Retain the relative font and SVG paths. There is no
 runtime CDN, font download service, React requirement, or Lantern dependency.
 
 Use `data-hraness-theme="paper"` and `data-palette="paper"` on the root.

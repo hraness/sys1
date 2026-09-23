@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "source": {
     "repository": "https://github.com/hraness/design-kit",
-    "commit": "3bb93ea414ae4d25b1d0eee06591aebeb1d5d549"
+    "commit": "655bdb6d84ca69a419a3906efc6a03e1b19396ca",
+    "release": "v0.13.0"
   },
   "files": {
     "appearance-menu.css": {
@@ -18,18 +19,18 @@
   },
   "browser": {
     "path": "dist/browser/index.js",
-    "sha256": "089b4340ac96946bfbbe671a975c4fe60cb803dbe3b0aaca7278f31b29f3a6be",
-    "bytes": 51276
+    "sha256": "b815404b7d3d47bb03dfc07eec2f16908aca1f5cccff4148f177bc84d40e8feb",
+    "bytes": 55087
   },
   "entry": "scripts/site-appearance.js",
   "bundle": {
     "path": "site/appearance.js",
-    "sha256": "9498e71ef502946930de78838338ef28917599351a8dca2816b3b1b33397ae68",
-    "bytes": 20832,
+    "sha256": "1a57cbaea9b3e8c2bc62c6d98daa51235d84e05c93ba3e8ba719e53379606a1b",
+    "bytes": 23761,
     "bunVersion": "1.3.14"
   },
   "dependencyLock": {
     "path": "bun.lock",
-    "sha256": "5a0d3a2fe0ca49346f8f3f126c97a586215297146f801433808dd3615bdcf348"
+    "sha256": "9374c79c4aeb88fc12156e0b973481f51a1bcc06434b45d3f49b993d362bfc01"
   }
 }

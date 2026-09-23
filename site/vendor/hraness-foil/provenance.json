@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/hraness/design-kit",
+    "commit": "655bdb6d84ca69a419a3906efc6a03e1b19396ca",
+    "release": "v0.13.0"
+  },
+  "sourceFile": {
+    "path": "src/product-marketing.css",
+    "sha256": "b0d35c40e6eeb7114ec0552724827925e2a7a57cc853e678854dd4286a305ab8"
+  },
+  "extraction": {
+    "script": "scripts/build-site-foil.ts",
+    "from": "/* Shared foil contract",
+    "until": "/* Hero */",
+    "note": "The shared foil contract is one contiguous byte-exact section of the upstream union stylesheet; only that section is vendored."
+  },
+  "foil": {
+    "path": "site/vendor/hraness-foil/foil.css",
+    "sha256": "4fe3e1bfcdbe63c1ac4ad3a4d3306d167760a90d097d93c22d5d5bba442ea817",
+    "bytes": 11136
+  }
+}
