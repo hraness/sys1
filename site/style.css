@@ -1,4 +1,6 @@
 :root { --hraness-marketing-display-font: var(--font-text); }
+/* Lantern consumes this URL from its own stylesheet; bind the separately owned marketing snapshot explicitly. */
+[data-hraness-marketing-preset] { --hraness-material-wall-grain: url("/vendor/hraness-marketing/marketing-assets/grain.svg"); }
 * { box-sizing: border-box; }
 html { scroll-padding-bottom: 4rem; scroll-behavior: smooth; scroll-padding-top: 6rem; scrollbar-color: var(--line) var(--background); }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-text); line-height: 1.65; }
