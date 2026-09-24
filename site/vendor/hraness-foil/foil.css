@@ -44,7 +44,7 @@
   background-image: var(--hraness-foil-image,
       radial-gradient(ellipse 24% 85% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 80%, var(--background, Canvas)) 0%, transparent 68%),
       radial-gradient(ellipse 65% 160% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 98%, var(--background, Canvas)) 0%, transparent 72%),
-      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
+      linear-gradient(115deg, color-mix(in srgb, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
       linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 90%, var(--background, Canvas)) 0%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 24%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 86%, var(--background, Canvas)) 39%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 56%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 84%, var(--background, Canvas)) 82%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 100%));
   -webkit-background-clip: text;
   background-clip: text;
@@ -61,7 +61,7 @@
 .hraness-foil-mark__paint { --_hraness-foil-mark-display: none; display: var(--_hraness-foil-mark-display); position: absolute; inset: 0; pointer-events: none; mask-image: var(--hraness-foil-mask, linear-gradient(transparent, transparent)); mask-mode: alpha; mask-repeat: no-repeat; mask-position: center; mask-size: contain; background-image: var(--hraness-foil-image,
       radial-gradient(ellipse 24% 85% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 80%, var(--background, Canvas)) 0%, transparent 68%),
       radial-gradient(ellipse 65% 160% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)), color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 98%, var(--background, Canvas)) 0%, transparent 72%),
-      linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in oklch, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
+      linear-gradient(115deg, color-mix(in srgb, var(--hraness-foil-1, light-dark(oklch(0.89 0.065 337), oklch(0.56 0.16 340))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-2, light-dark(oklch(0.875 0.05 277), oklch(0.52 0.15 285))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-3, light-dark(oklch(0.92 0.05 170), oklch(0.66 0.14 175))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-4, light-dark(oklch(0.95 0.045 96), oklch(0.72 0.13 100))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-5, light-dark(oklch(0.9 0.05 55), oklch(0.55 0.15 45))) var(--hraness-foil-reflection, 14%), transparent), color-mix(in srgb, var(--hraness-foil-6, light-dark(oklch(0.875 0.06 305), oklch(0.62 0.16 305))) var(--hraness-foil-reflection, 14%), transparent)),
       linear-gradient(115deg, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 90%, var(--background, Canvas)) 0%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 24%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 86%, var(--background, Canvas)) 39%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 56%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 84%, var(--background, Canvas)) 82%, color-mix(in oklch, var(--hraness-foil-text-base, var(--foreground, CanvasText)) 100%, var(--background, Canvas)) 100%)); }
 @supports (mask-image: linear-gradient(black, black)) {
   .hraness-foil-mark__paint { --_hraness-foil-mark-display: block; }
@@ -101,7 +101,8 @@
   .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
   .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
   .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
-  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-related,
+  .hraness-marketing-cta,
   .hraness-marketing-proof-frame
 ),
 :where([data-theme="dark"], .dark) :where(
@@ -110,7 +111,8 @@
   .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
   .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
   .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
-  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+  .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-related,
+  .hraness-marketing-cta,
   .hraness-marketing-proof-frame
 ) {
   --hraness-foil-1: oklch(0.56 0.16 340);
@@ -128,7 +130,8 @@
     .hraness-marketing-pillars, .hraness-marketing-install, .hraness-marketing-section,
     .hraness-marketing-primitives, .hraness-marketing-stats, .hraness-marketing-interfaces,
     .hraness-marketing-trust, .hraness-marketing-quotes, .hraness-marketing-pricing,
-    .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-cta,
+    .hraness-marketing-questions, .hraness-marketing-maker, .hraness-marketing-related,
+    .hraness-marketing-cta,
     .hraness-marketing-proof-frame
   ) {
     --hraness-foil-1: oklch(0.56 0.16 340);

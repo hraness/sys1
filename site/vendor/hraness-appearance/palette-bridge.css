@@ -2,14 +2,14 @@
  * portable controls, product CSS, and compiled recipes without new runtime CSS.
  * Import after the existing token boundary. Explicit palette islands carry
  * their own complete theme class, including portalled overlays. Repeating the
- * root palette attribute outranks an earlier or later legacy Paper snapshot;
+ * palette attribute outranks earlier or later legacy root and island tokens;
  * bundlers may deduplicate a consumer's second bridge import. */
 @import "./palette-system.css";
 
 :root.hraness-palette[data-theme],
 .hraness-palette[data-theme],
 :root[data-palette][data-palette],
-[data-palette] {
+[data-palette][data-palette] {
   --background: var(--hraness-palette-background);
   --foreground: var(--hraness-palette-foreground);
   --muted: var(--hraness-palette-muted);
