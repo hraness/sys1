@@ -576,3 +576,8 @@ skill for Devin, Claude Code, and Codex. It runs a known noisy test or build
 once, returns a short result with the exit status, and keeps the full log on
 disk. It needs no model, API key, or Sys1 installation, and installing either
 project does not configure the other. [Skills guide](https://sys1.io/skills).
+
+[The thread through hraness](https://hraness.com/writing/the-thread-through-hraness)
+describes the design Sys1 shares with every Hraness project: a decision has a
+declared shape before a model is asked, and the answer comes back validated
+instead of as prose.
