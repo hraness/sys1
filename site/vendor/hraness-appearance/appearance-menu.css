@@ -86,7 +86,7 @@
   outline: 2px solid var(--hraness-appearance-focus, var(--ui-ring, Highlight));
   outline-offset: 2px;
   box-shadow: 0 0 0 4px color-mix(
-    in oklch,
+    in srgb,
     var(--hraness-appearance-focus, var(--ui-ring, Highlight)) 24%,
     transparent
   );
