@@ -18,8 +18,8 @@ uv venv --python python3.12 --cache-dir ./laya-uv-cache ./laya-runtime-env
 uv pip install --python ./laya-runtime-env/bin/python --cache-dir ./laya-uv-cache --index-url https://pypi.org/simple --only-binary :all: --require-hashes --no-deps -r laya-runtime-requirements.txt
 python3.12 laya-download.py laya-model laya-artifacts.json
 bun laya-export-schedule.ts "$SYS1_CHECKOUT" laya-v3-schedule-exact.json
-oompa-host-run --mode=heavy --lane=mac-native --label=laya-preflight -- ./laya-runtime-env/bin/python laya-preflight.py --source laya-mlx-source --model laya-model --schedule laya-v3-schedule-exact.json --output laya-v3-preflight.json
-oompa-host-run --mode=heavy --lane=mac-native --label=laya-v3 -- bun laya-v3-run.ts "$SYS1_CHECKOUT" laya-mlx-source laya-model laya-runtime-env/bin/python laya-v3-schedule-exact.json laya-v3-preflight.json decisions-v3-laya-2026-09-20.json
+hra-host-run --mode=heavy --lane=mac-native --label=laya-preflight -- ./laya-runtime-env/bin/python laya-preflight.py --source laya-mlx-source --model laya-model --schedule laya-v3-schedule-exact.json --output laya-v3-preflight.json
+hra-host-run --mode=heavy --lane=mac-native --label=laya-v3 -- bun laya-v3-run.ts "$SYS1_CHECKOUT" laya-mlx-source laya-model laya-runtime-env/bin/python laya-v3-schedule-exact.json laya-v3-preflight.json decisions-v3-laya-2026-09-20.json
 ```
 
 Preflight compares full untruncated token IDs and option markers against the exact upstream `Agent.prepare` output for all 362 requests. It also rejects mask-token literals. Any change or clipping blocks inference; no shortening is permitted. The native process uses GPU, float16, batch size one, no compilation, no prompt cache and the publisher's unchanged 1024-token configuration.
