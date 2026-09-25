@@ -97,3 +97,26 @@ do not restore them.
   local model. The FAQ answer about replacing a Jev client links the README's
   adoption section, which is the guide it describes.
 - One primary nav on every page: How it works, Docs, Compare, Skills, GitHub.
+
+## Copy: 2026-09-24
+
+The canonical Hraness product-messaging record now owns the public identity
+lines. This section supersedes the title, description, and hero lines quoted
+above; do not restore them.
+
+- Title and social title: “Sys1 · Give your agent a System 1.”, the record's
+  name and tagline joined with the site's separator. The description and social
+  description are the record's meta line verbatim, 152 characters.
+- Hero: the eyebrow is the record's category, “Agent decision router”. The H1
+  is the tagline “Give your agent a System 1.”, the summary is the record's
+  hero summary, and the actions are its labels: “Install Sys1” to `#install`
+  and “Read the evaluations” to `/docs/evaluations`.
+- The hero note carries the status once, from the release record: “Latest
+  release: v0.10.0 · MIT · Hosted Jev is opt-in · Local models are
+  experimental”. Render the version from the release record; never retype it
+  without updating the release.
+- Jev is introduced at its first explanatory mention, in the ecosystem
+  section: “Jev, TypeSafe's hosted decision model”.
+- The one-line description rule lives in PRODUCT.md: the meta line is the
+  standalone description (package, README, `llms.txt`), and the short line
+  follows the product name in the CLI.

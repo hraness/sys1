@@ -66,10 +66,12 @@ Public copy follows `STYLE.md` and `WRITING.md` in this repository, synced from
 hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
 guides; update a brief in the same change as its page.
 
-- The one-line description comes from the Hraness portfolio registry. Until the
-  registry adopts it, use: “Yes/no, choice, and score decisions for agents,
-  answered by local models or hosted Jev.” Shorten it by cutting words, not by
-  substituting internal ones.
+- The one-line description is the canonical portfolio messaging record:
+  “Sys1 lets agents ask yes/no, choice, and score questions and get validated
+  answers with probabilities from hosted Jev, a local model, or your own
+  server.” After the product name (“Sys1: …”, “sys1: …”), use the short form:
+  “lets agents ask yes/no, choice, and score questions and get answers”.
+  Shorten by cutting words, not by substituting internal ones.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package
   scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a
   prose spelling.
