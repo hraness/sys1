@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -49,3 +53,23 @@ jobs:
       - run: bun run check
       - name: Install candidate and verify native readiness
         run: bun run check:native
+
+  required:
+    name: Required
+    if: always()
+    needs: [check, platform]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every selected job
+        env:
+          CHECK: ${{ needs.check.result }}
+          PLATFORM: ${{ needs.platform.result }}
+        run: |
+          set -euo pipefail
+          for result in "$CHECK" "$PLATFORM"; do
+            if [[ "$result" != success ]]; then
+              printf 'Unexpected required job result: %s\n' "$result"
+              exit 1
+            fi
+          done
