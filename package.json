@@ -1,7 +1,7 @@
 {
   "name": "@hraness/sys1",
   "version": "0.10.0",
-  "description": "Yes/no, choice, and score decisions for agents, answered by local models or hosted Jev.",
+  "description": "Sys1 lets agents ask yes/no, choice, and score questions and get validated answers with probabilities from hosted Jev, a local model, or your own server.",
   "type": "module",
   "license": "MIT",
   "packageManager": "bun@1.3.14",

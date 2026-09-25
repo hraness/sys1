@@ -1,15 +1,14 @@
 # Sys1
 
-Sys1 lets an agent ask a model small, structured questions and get back a
-validated answer instead of prose: `noul` for a yes/no probability, `choice`
-for one option from a list, and `score` for a level on an ordered scale. These
-fit routing, guardrail, review, and triage decisions inside agent loops. The
-same request works with hosted Jev 1.13.0, TypeSafe's decision model, or with an
-experimental local Qwen model. Other installed GGUF models and System One HTTP
-servers you run answer only when you select them.
+Sys1 lets agents ask yes/no, choice, and score questions and get validated
+answers with probabilities. You choose who answers: TypeSafe's hosted Jev, a
+local model on your machine, or a compatible server you run.
 
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
+
+Latest release: v0.10.0. Install it from the GitHub release with npm; it runs
+on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
 
