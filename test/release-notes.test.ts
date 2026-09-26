@@ -86,7 +86,7 @@ describe("changelog sections", () => {
 
 describe("release page", () => {
   test("titles the page with the product name from the README and the tag", () => {
-    expect(readFileSync(join(root, "README.md"), "utf8").split("\n")[0]).toBe(`# ${PRODUCT_NAME}`);
+    expect(readFileSync(join(root, "README.md"), "utf8").split(/\r?\n/)[0]).toBe(`# ${PRODUCT_NAME}`);
     expect(releaseTitle("v1.2.3")).toBe("Sys1 v1.2.3");
     expect(() => releaseTitle("latest")).toThrow();
   });
