@@ -533,6 +533,12 @@ executes those exact bytes with the native dependency and `doctor` on Ubuntu,
 macOS, and Windows, then publishes them to a repository-enforced immutable
 GitHub Release. No npm registry package is claimed or required.
 
+Each release page copies its summary and changes from the version's section of
+[`CHANGELOG.md`](CHANGELOG.md) and adds the install command, the tarball's
+SHA-256, and the source commit. The workflow stops before publishing when that
+section is missing, and it fails when a published page no longer matches the
+changelog and the attached files.
+
 ## Development
 
 ```sh
