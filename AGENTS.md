@@ -42,8 +42,11 @@
 - `test/` contains protocol, routing, config, gateway, model-store, decision,
   and fake-engine tests; no ordinary test downloads weights, touches the
   network, or uses a real credential.
-- `scripts/` holds the dist build, isolated exact-tarball package smoke, and
-  cross-platform release install verification.
+- `scripts/` holds the dist build, isolated exact-tarball package smoke,
+  cross-platform release install verification, and `release-notes.ts`, which
+  renders and verifies the GitHub Release page from `CHANGELOG.md`.
+- `CHANGELOG.md` holds one section per version; the release workflow copies
+  that section onto the release page and fails when it is missing.
 - `site/` is the static sys1.io landing page; it has no product-runtime
   connection.
 - `.github/workflows/check.yml` is read-only CI. `release.yml` is the annotated
@@ -104,6 +107,7 @@
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
   exact tarball/checksum identity, Ubuntu/macOS/Windows artifact execution,
   repository release immutability, and the no-npm-publication boundary.
+  Write the version's `CHANGELOG.md` section in the version bump pull request.
 - Keep the public repository independently buildable. No sibling checkouts,
   private packages, internal project names, or unpublished provenance.
 
@@ -138,3 +142,8 @@
 - Skip work that cannot change the result inside the workflow: a change-detection job runs `dorny/paths-filter@v4` (it needs job permission `pull-requests: read`, and `predicate-quantifier: some-with-excludes` needs v4), and jobs whose inputs did not change skip through job-level `if:`. Never put `paths`, `paths-ignore`, or `branches-ignore` on the `pull_request` trigger of the workflow that produces `Required`: a skipped workflow never reports `Required`, and the pull request can never merge. Every `uses:` pins a major tag or a SHA with a version comment, and Dependabot keeps `github-actions` current weekly with auto-merge.
 - Measure before and after: a CI change records the previous and new median wall time of the slowest workflow in its pull request body. Regressions that add more than a minute to `Required` are reverted forward the same day.
 <!-- hraness-ci:end -->
+
+<!-- hraness-releases:start -->
+- GitHub Release pages follow `RELEASES.md` in hraness/.github: the title is the registry product name and the tag, and the body is a summary, `## Changes`, `## Install`, `## Verify`, then the repository's identity record as a trailing HTML comment.
+- The summary and changes come from the version's section of `CHANGELOG.md` in the tagged commit. Write that section in the version bump pull request. The release workflow copies it, generates Install and Verify from the release record, fails when the section is missing or empty, and never uses GitHub's generated notes.
+<!-- hraness-releases:end -->

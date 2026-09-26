@@ -8,3 +8,6 @@
 /brand/*.svg text eol=lf
 /site/marks/*.svg text eol=lf
 /scripts/generate-brand-icons.ts text eol=lf
+
+# Release pages copy changelog bytes.
+/CHANGELOG.md text eol=lf

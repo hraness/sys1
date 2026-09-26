@@ -69,6 +69,10 @@ jobs:
             exit 1
           fi
           printf 'sha=%s\ntag=%s\n' "$sha" "$TAG" >> "$GITHUB_OUTPUT"
+      - name: Require release notes in CHANGELOG.md
+        env:
+          TAG: ${{ github.ref_name }}
+        run: bun scripts/release-notes.ts check "$TAG"
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run check
       - name: Pack exact artifact and checksum
@@ -129,6 +133,15 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 1
+          fetch-tags: false
+          persist-credentials: false
+          ref: ${{ needs.verify.outputs.sha }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: 1.3.14
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           artifact-ids: ${{ needs.verify.outputs.artifact_id }}
@@ -145,14 +158,27 @@ jobs:
           cd artifacts
           shasum -a 256 -c SHA256SUMS
           cd ..
+          notes="$RUNNER_TEMP/release-notes.md"
+          record=(--tag "$TAG" --commit "$SHA" --repository "$REPOSITORY" --artifacts artifacts)
+          title="$(bun scripts/release-notes.ts title "$TAG")"
+          bun scripts/release-notes.ts render "${record[@]}" > "$notes"
           if ! gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
             gh release create "$TAG" artifacts/*.tgz artifacts/SHA256SUMS \
               --repo "$REPOSITORY" \
-              --title "sys1 $TAG" \
-              --notes "Automated immutable release of @hraness/sys1 from $TAG." \
+              --title "$title" \
+              --notes-file "$notes" \
               --verify-tag
           fi
           release="$(gh api "repos/$REPOSITORY/releases/tags/$TAG")"
+          if [[ "$(jq -r '.name' <<<"$release")" != "$title" ]]; then
+            echo "::error::GitHub Release title is not $title"
+            exit 1
+          fi
+          jq -j '.body' <<<"$release" > "$RUNNER_TEMP/release-body.md"
+          if ! bun scripts/release-notes.ts verify --body-file "$RUNNER_TEMP/release-body.md" "${record[@]}"; then
+            echo "::error::GitHub Release page does not match CHANGELOG.md and the release record"
+            exit 1
+          fi
           if [[ "$(jq -r '.immutable' <<<"$release")" != "true" || "$(jq -r '.draft' <<<"$release")" != "false" ]]; then
             echo "::error::GitHub Release is not immutable and published"
             exit 1
