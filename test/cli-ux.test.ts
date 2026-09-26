@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -105,6 +105,24 @@ describe("sys1 setup preview", () => {
     expect(json.download).toMatchObject({ model: "qwen3-1.7b", bytes: 1_107_409_472, installed: false });
     const quiet = await sys1(["setup", "--dry-run"], { HRANESS_AUDIENCE: "quiet" });
     expect(quiet.stderr).toBe("");
+  });
+});
+
+describe("sys1 previews stay read-only", () => {
+  test("setup --dry-run works when the model list is damaged", async () => {
+    const state = home();
+    mkdirSync(join(state, "models"), { recursive: true });
+    writeFileSync(join(state, "models", "manifest.json"), "{not json");
+    const result = await sys1(["setup", "--dry-run"], { SYS1_HOME: state });
+    expect(result.code).toBe(0);
+    expect(result.stdout).toContain("Would download qwen3-1.7b (1.03 GiB)");
+  });
+
+  test("pull of an unknown model does not announce a download", async () => {
+    const result = await sys1(["pull", "qwen3-7b"]);
+    expect(result.code).toBe(5);
+    expect(result.stderr).not.toContain("Downloading");
+    expect(result.stderr).toStartWith("✗ ");
   });
 });
 

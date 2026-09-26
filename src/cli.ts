@@ -37,6 +37,7 @@ import {
   MODEL_REGISTRY,
   installedModels,
   modelsDir,
+  resolvePullTarget,
   pullModel,
   removeModel,
   storeBytes,
@@ -205,7 +206,7 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     model,
     bytes: MODEL_REGISTRY.find((entry) => entry.id === model)?.bytes ?? null,
     directory: modelsDir(home),
-    installed: installedModels(home).some((installed) => installed.id === model),
+    installed: isInstalled(home, model),
   };
   const downloadLine = download.installed
     ? `${model} is already installed in ${tildePath(download.directory)}.`
@@ -270,6 +271,15 @@ async function cmdSetup(home: string, flags: Map<string, string | boolean>): Pro
     out(`Platform: ${recommendation.target} (${native.backend ?? "cpu"})`);
     out(`${sym("ok", process.stdout)} Local setup complete: ${recommendation.model} is ${existing === undefined ? "installed" : "already installed"} and turned on.`);
     hint(flags, "sys1 up");
+  }
+}
+
+/** Whether a model is installed; false when the store can't be read, so previews stay read-only. */
+function isInstalled(home: string, model: string): boolean {
+  try {
+    return installedModels(home).some((installed) => installed.id === model);
+  } catch {
+    return false;
   }
 }
 
@@ -360,6 +370,8 @@ async function cmdUp(home: string, flags: Map<string, string | boolean>): Promis
   } else if (result.ok) {
     out(`${sym("ok", process.stdout)} Gateway running at ${result.url} (pid ${result.pid}).`);
     hint(flags, "sys1 status");
+  } else if (result.message.startsWith("already running")) {
+    fail(`The gateway is ${result.message}; there is nothing to start.`, EXIT.daemon, "sys1 status");
   } else {
     fail(`The gateway didn't start: ${result.message.replaceAll("daemon", "gateway")}`, EXIT.daemon, "sys1 doctor");
   }
@@ -531,7 +543,7 @@ async function cmdPull(home: string, args: ParsedArgs): Promise<void> {
   }
   const asJson = wantsJson(args.flags);
   const known = MODEL_REGISTRY.find((entry) => entry.id === ref);
-  if (isHuman(args.flags) && !installedModels(home).some((model) => model.id === ref)) {
+  if (isHuman(args.flags) && !("error" in resolvePullTarget(ref)) && !isInstalled(home, ref)) {
     err(`${sym("progress", process.stderr)} Downloading ${ref}${known === undefined ? "" : ` (${formatBytes(known.bytes)})`} to ${tildePath(modelsDir(home))}…`);
   }
   const progress = downloadProgress(args.flags, ref);
