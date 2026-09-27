@@ -43,10 +43,16 @@ does not install the CLI, create tokens, or configure credentials. Confirm the
 account can write to the `hranesscom` organization and that the destination is
 the dataset above. Keep authentication material outside the repository and logs.
 
-For this SEO handoff, Ben must approve the exact public card and file set before
-the first upload. Routine future synchronization needs recorded standing
-publication authorization; a completed local stage alone never grants it.
-After approval, upload the reviewed stage:
+On 2026-09-27, Ben approved the exact initial public card and file set and granted
+standing authority for routine reviewed synchronization to the existing
+`hranesscom/sys1-benchmarks` dataset. The initial publication is
+[Hub revision 6f11134bba12c0d8f8a211c19ef69203d167d384](https://huggingface.co/datasets/hranesscom/sys1-benchmarks/commit/6f11134bba12c0d8f8a211c19ef69203d167d384).
+Agents may publish future updates within this scope after the source review,
+required checks, rights review, staging comparison, and identity checks above.
+Preserve immutable study history, license notices, and the verification below.
+This authority excludes new destinations, private data, and paid resources.
+A completed local stage alone never grants broader authority.
+Upload the reviewed stage:
 
 ```sh
 uvx --from huggingface-hub==2.0.0 hf auth whoami
@@ -71,5 +77,6 @@ provider run, new benchmark, or product release is required by dataset sync.
 
 Dataset card and runbook drafted by the Codex SYS1 Hugging Face worker and
 reviewed by the independent Codex integration owner. The same review confirmed
-the listed files fall under the existing repository MIT license. No human
-review or publication is claimed by these files.
+the listed files fall under the existing repository MIT license. Ben's public
+content approval and the initial publication are recorded above; source review
+and publication verification remain separate evidence.
