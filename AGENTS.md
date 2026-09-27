@@ -32,6 +32,9 @@
 - `src/doctor.ts` owns the stable versioned readiness report. Keep checks
   bounded, read-only, credential-free, and additive by id.
 - `src/cli.ts` owns the `sys1` command surface and exit codes.
+- `src/audit/` owns experimental advisory diff collection, reusable rule packs,
+  request compilation, evaluation, and the opt-in fixture benchmark. Bundled
+  rules live in `packs/` and are copied into the release artifact.
 - `src/client.ts` is the portable Node/Bun client and `/client` export.
 - `src/kev.ts` adapts explicit Kev endpoints, retaining two-decimal output and
   restoring Score legends only after validating their native rendering.
@@ -63,6 +66,10 @@
 - Use Bun 1.3.14. Run `bun run check` before handoff: strict typecheck,
   tests, dist build, and packed-package smoke check.
 - Reject oversized local input without silently truncating evidence.
+- Audit completeness is evidence coverage, never correctness. Preserve removed
+  lines and exact staged/committed snapshots; report every selected skip. Pin
+  routes, bound spend and cancellation, and never multiply rule scores as joint
+  probabilities. Keep rule changes separate from final held-out evaluation.
 - Keep the gateway loopback-only. Config must reject non-loopback binding. Do
   not add remote state without an explicit authenticated design change.
 - Read the hosted credential from the environment only. Never persist keys,

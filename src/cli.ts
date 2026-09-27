@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 import { readBoundedText } from "./http.ts";
+import { runAuditCli, renderAudit, AuditCliError } from "./audit/cli.ts";
 import { existsSync } from "node:fs";
 import {
   DEFAULT_CONFIG,
@@ -60,7 +61,7 @@ function err(text: string): void {
 let currentCommand: string | undefined;
 let jsonRequested = false;
 
-const ERROR_CODES: Readonly<Record<number, string>> = { 1: "failed", 2: "usage", 3: "config", 4: "daemon", 5: "backend", 6: "doctor" };
+const ERROR_CODES: Readonly<Record<number, string>> = { 1: "failed", 2: "usage", 3: "config", 4: "daemon", 5: "backend", 6: "doctor", 8: "audit_incomplete" };
 
 function sentence(message: string): string {
   const text = message.trim().replace(/^usage: /u, "Usage: ");
@@ -783,12 +784,17 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const args = parseArgs(process.argv.slice(2));
+  const rawArgs = process.argv.slice(2);
+  const separator = rawArgs.indexOf("--");
+  const beforePaths = parseArgs(separator === -1 ? rawArgs : rawArgs.slice(0, separator));
+  // Audit owns everything after -- as literal paths. Do not interpret a file
+  // named --help or --version as a top-level control flag.
+  const args = beforePaths.positional[0] === "audit" ? beforePaths : parseArgs(rawArgs);
   const [command] = args.positional;
   const home = sys1Home(process.env);
 
   currentCommand = command;
-  jsonRequested = args.flags.get("json") === true;
+  jsonRequested = args.flags.get("json") === true || (command === "audit" && args.flags.get("agent") === true);
   if (args.flags.get("version") === true || (command === "version" && args.flags.get("help") !== true)) {
     if (jsonRequested) out(JSON.stringify({ name: "sys1", version: SYS1_VERSION }));
     else out(`sys1 ${SYS1_VERSION}`);
@@ -824,6 +830,20 @@ async function main(): Promise<void> {
   }
 
   switch (command) {
+    case "audit": {
+      try {
+        const commandIndex = rawArgs.indexOf("audit");
+        const report = await runAuditCli([...rawArgs.slice(0, commandIndex), ...rawArgs.slice(commandIndex + 1)], home);
+        if (wantsJson(args.flags) || args.flags.has("agent")) out(JSON.stringify(report));
+        else process.stdout.write(renderAudit(report));
+        if (report.status === "incomplete") process.exitCode = 8;
+      } catch (error) {
+        if (error instanceof AuditCliError) fail(error.message, error.exitCode, "sys1 audit --help");
+        // Pack errors can contain local guide text through schema diagnostics.
+        fail("Audit could not load or evaluate the selected rules", EXIT.config, "sys1 audit --help");
+      }
+      return;
+    }
     case "setup":
       await cmdSetup(home, args.flags);
       return;

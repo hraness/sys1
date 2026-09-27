@@ -1,0 +1,2387 @@
+{
+  "version": 1,
+  "date": "2026-09-27",
+  "scope": "Experimental advisory diff rules; no production qualification or hook activation.",
+  "calibration": {
+    "version": 1,
+    "experimental": true,
+    "qualification": "unqualified",
+    "score_interpretation": "uncalibrated_model_score",
+    "status": "complete",
+    "complete": true,
+    "split": "calibration",
+    "route": "typesafe/jev-1.13.0",
+    "question_format": 2,
+    "pack": {
+      "name": "core",
+      "revision": "2026.09.1"
+    },
+    "fixture_sha256": {
+      "calibration": "70a11eba2e571bcf881cb9ec8dfb8b811d2e61290f8ec1a904acc1f38ee2636b",
+      "heldout": "984de9b6f4931b495f3ee40137fec5ed436ed50adb958234b18c4ed433b4bd40"
+    },
+    "fixture_content_sha256": "e0727ad2bbedc05ae10e0fe648c9ce0215b7704e423dd136b02e84c52df22fa5",
+    "limits": {
+      "max_requests": 40,
+      "timeout_ms": 120000,
+      "retries": 0
+    },
+    "planned_fixtures": 40,
+    "evaluated_fixtures": 40,
+    "planned_requests": 40,
+    "requests": 40,
+    "questions": 60,
+    "usage": {
+      "input_tokens": 41923,
+      "output_tokens": 1400,
+      "known_requests": 40,
+      "unknown_requests": 0
+    },
+    "elapsed_ms": 20577,
+    "latency_ms": {
+      "attempts": 40,
+      "p50": 498.6399590000001,
+      "p95": 592.1223750000026,
+      "valid_attempts": 40,
+      "valid_p50": 498.6399590000001,
+      "valid_p95": 592.1223750000026
+    },
+    "rules": [
+      {
+        "id": "core-new-empty-catch",
+        "revision": "d7286983a4e96436d169ea708bc09bfa024bc3e54499993c0c3b1dceedb789e0",
+        "support": {
+          "planned": 20,
+          "evaluated": 20,
+          "clean": 10,
+          "violations": 10,
+          "minimum_for_warning": 8,
+          "below_minimum": false,
+          "high_predictions_below_minimum": true,
+          "medium_predictions_below_minimum": false
+        },
+        "high": {
+          "threshold": 0.85,
+          "tp": 2,
+          "fp": 0,
+          "tn": 10,
+          "fn": 8,
+          "precision": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1,
+            "wilson95": [
+              0.34238022750665303,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 2,
+            "denominator": 10,
+            "value": 0.2,
+            "wilson95": [
+              0.05668215145437519,
+              0.5098375284633583
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        },
+        "at_least_medium": {
+          "threshold": 0.6,
+          "tp": 7,
+          "fp": 1,
+          "tn": 9,
+          "fn": 3,
+          "precision": {
+            "numerator": 7,
+            "denominator": 8,
+            "value": 0.875,
+            "wilson95": [
+              0.5291118177871464,
+              0.9775825085499433
+            ]
+          },
+          "recall": {
+            "numerator": 7,
+            "denominator": 10,
+            "value": 0.7,
+            "wilson95": [
+              0.39677814746114537,
+              0.8922087325936989
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 10,
+            "value": 0.1,
+            "wilson95": [
+              0.017876213095072896,
+              0.4041500267952385
+            ]
+          }
+        },
+        "calibration_thresholds": [
+          {
+            "threshold": 0.5,
+            "tp": 8,
+            "fp": 1,
+            "tn": 9,
+            "fn": 2,
+            "precision": {
+              "numerator": 8,
+              "denominator": 9,
+              "value": 0.8888888888888888,
+              "wilson95": [
+                0.5650002944233439,
+                0.9801091123614551
+              ]
+            },
+            "recall": {
+              "numerator": 8,
+              "denominator": 10,
+              "value": 0.8,
+              "wilson95": [
+                0.49016247153664183,
+                0.9433178485456247
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 1,
+              "denominator": 10,
+              "value": 0.1,
+              "wilson95": [
+                0.017876213095072896,
+                0.4041500267952385
+              ]
+            }
+          },
+          {
+            "threshold": 0.6,
+            "tp": 7,
+            "fp": 1,
+            "tn": 9,
+            "fn": 3,
+            "precision": {
+              "numerator": 7,
+              "denominator": 8,
+              "value": 0.875,
+              "wilson95": [
+                0.5291118177871464,
+                0.9775825085499433
+              ]
+            },
+            "recall": {
+              "numerator": 7,
+              "denominator": 10,
+              "value": 0.7,
+              "wilson95": [
+                0.39677814746114537,
+                0.8922087325936989
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 1,
+              "denominator": 10,
+              "value": 0.1,
+              "wilson95": [
+                0.017876213095072896,
+                0.4041500267952385
+              ]
+            }
+          },
+          {
+            "threshold": 0.7,
+            "tp": 3,
+            "fp": 1,
+            "tn": 9,
+            "fn": 7,
+            "precision": {
+              "numerator": 3,
+              "denominator": 4,
+              "value": 0.75,
+              "wilson95": [
+                0.30064184258240184,
+                0.9544127391902995
+              ]
+            },
+            "recall": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "wilson95": [
+                0.10779126740630099,
+                0.6032218525388546
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 1,
+              "denominator": 10,
+              "value": 0.1,
+              "wilson95": [
+                0.017876213095072896,
+                0.4041500267952385
+              ]
+            }
+          },
+          {
+            "threshold": 0.8,
+            "tp": 3,
+            "fp": 0,
+            "tn": 10,
+            "fn": 7,
+            "precision": {
+              "numerator": 3,
+              "denominator": 3,
+              "value": 1,
+              "wilson95": [
+                0.4385029682449546,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "wilson95": [
+                0.10779126740630099,
+                0.6032218525388546
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.85,
+            "tp": 2,
+            "fp": 0,
+            "tn": 10,
+            "fn": 8,
+            "precision": {
+              "numerator": 2,
+              "denominator": 2,
+              "value": 1,
+              "wilson95": [
+                0.34238022750665303,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 2,
+              "denominator": 10,
+              "value": 0.2,
+              "wilson95": [
+                0.05668215145437519,
+                0.5098375284633583
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.9,
+            "tp": 2,
+            "fp": 0,
+            "tn": 10,
+            "fn": 8,
+            "precision": {
+              "numerator": 2,
+              "denominator": 2,
+              "value": 1,
+              "wilson95": [
+                0.34238022750665303,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 2,
+              "denominator": 10,
+              "value": 0.2,
+              "wilson95": [
+                0.05668215145437519,
+                0.5098375284633583
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.95,
+            "tp": 0,
+            "fp": 0,
+            "tn": 10,
+            "fn": 10,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.99,
+            "tp": 0,
+            "fp": 0,
+            "tn": 10,
+            "fn": 10,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "core-removed-test-assertions",
+        "revision": "a0523bb53621bb9fce0726b8508f11347dc8261bec0e4afa2c36c87c9120527a",
+        "support": {
+          "planned": 20,
+          "evaluated": 20,
+          "clean": 10,
+          "violations": 10,
+          "minimum_for_warning": 8,
+          "below_minimum": false,
+          "high_predictions_below_minimum": true,
+          "medium_predictions_below_minimum": false
+        },
+        "high": {
+          "threshold": 0.85,
+          "tp": 7,
+          "fp": 0,
+          "tn": 10,
+          "fn": 3,
+          "precision": {
+            "numerator": 7,
+            "denominator": 7,
+            "value": 1,
+            "wilson95": [
+              0.6456695649333126,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 7,
+            "denominator": 10,
+            "value": 0.7,
+            "wilson95": [
+              0.39677814746114537,
+              0.8922087325936989
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        },
+        "at_least_medium": {
+          "threshold": 0.6,
+          "tp": 10,
+          "fp": 1,
+          "tn": 9,
+          "fn": 0,
+          "precision": {
+            "numerator": 10,
+            "denominator": 11,
+            "value": 0.9090909090909091,
+            "wilson95": [
+              0.6226415635484043,
+              0.9837678271141151
+            ]
+          },
+          "recall": {
+            "numerator": 10,
+            "denominator": 10,
+            "value": 1,
+            "wilson95": [
+              0.7224672001371107,
+              0.9999999999999999
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 10,
+            "value": 0.1,
+            "wilson95": [
+              0.017876213095072896,
+              0.4041500267952385
+            ]
+          }
+        },
+        "calibration_thresholds": [
+          {
+            "threshold": 0.5,
+            "tp": 10,
+            "fp": 1,
+            "tn": 9,
+            "fn": 0,
+            "precision": {
+              "numerator": 10,
+              "denominator": 11,
+              "value": 0.9090909090909091,
+              "wilson95": [
+                0.6226415635484043,
+                0.9837678271141151
+              ]
+            },
+            "recall": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 1,
+              "denominator": 10,
+              "value": 0.1,
+              "wilson95": [
+                0.017876213095072896,
+                0.4041500267952385
+              ]
+            }
+          },
+          {
+            "threshold": 0.6,
+            "tp": 10,
+            "fp": 1,
+            "tn": 9,
+            "fn": 0,
+            "precision": {
+              "numerator": 10,
+              "denominator": 11,
+              "value": 0.9090909090909091,
+              "wilson95": [
+                0.6226415635484043,
+                0.9837678271141151
+              ]
+            },
+            "recall": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 1,
+              "denominator": 10,
+              "value": 0.1,
+              "wilson95": [
+                0.017876213095072896,
+                0.4041500267952385
+              ]
+            }
+          },
+          {
+            "threshold": 0.7,
+            "tp": 10,
+            "fp": 0,
+            "tn": 10,
+            "fn": 0,
+            "precision": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "recall": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.8,
+            "tp": 10,
+            "fp": 0,
+            "tn": 10,
+            "fn": 0,
+            "precision": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "recall": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.85,
+            "tp": 7,
+            "fp": 0,
+            "tn": 10,
+            "fn": 3,
+            "precision": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1,
+              "wilson95": [
+                0.6456695649333126,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 7,
+              "denominator": 10,
+              "value": 0.7,
+              "wilson95": [
+                0.39677814746114537,
+                0.8922087325936989
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.9,
+            "tp": 3,
+            "fp": 0,
+            "tn": 10,
+            "fn": 7,
+            "precision": {
+              "numerator": 3,
+              "denominator": 3,
+              "value": 1,
+              "wilson95": [
+                0.4385029682449546,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "wilson95": [
+                0.10779126740630099,
+                0.6032218525388546
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.95,
+            "tp": 0,
+            "fp": 0,
+            "tn": 10,
+            "fn": 10,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          },
+          {
+            "threshold": 0.99,
+            "tp": 0,
+            "fp": 0,
+            "tn": 10,
+            "fn": 10,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            },
+            "false_positive_rate": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.2775327998628892
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "calibration-new-empty-catch-new-optional-binding",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "0fd7bd3506f0ec439fa1ed98aa7a3db2f59d7cefc86c7c78a8eb9ccaec7fac39",
+        "request_sha256": [
+          "ad86b2f0d5a5d8a74316c26a0637272a6cb46e8360a2d6abcbc4ef09feca4c2a"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-removed-log",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "851b18dc88743910ddfeef62ef0b9c743ef73bb24f846f38b9f9f7568a0c7a12",
+        "request_sha256": [
+          "34c3f254675ecd4c4ccc96b518075a9875e03b3f5b9822f22e4441f016cf077f"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-removed-rethrow",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "aff30aae17b0aaecb1fe3ecd0aefff662078469d554b05080336f66764350578",
+        "request_sha256": [
+          "18f465d7cd2dc2980ce69903af4005bb8cf66cbcec0772d67edb76bb828d5521"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-new-empty-catch-comment-only",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "2fadb6437b137c2ffa2de5ccd75e7e9ede07a226218fd5f0ab94687e277c6ec1",
+        "request_sha256": [
+          "e1fb86dbc747a87a9f8c2c024a8bd204a950be03d3fa1b02d2bb1e3515b0e174"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-semicolon-only",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "83a58a659c1af7b176b99c54ecff7cb50856ee543260c5b8d3ac93dc5bf135db",
+        "request_sha256": [
+          "e9dad74bc9bd8a1a908e64a3220acdc1919aad7f6e77115a0c48a4330d462775"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-nested-catch",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "9ffd5f3be61ff62d1a8c5f48db88f4135462801e6044e64506fa906e2022ef4b",
+        "request_sha256": [
+          "d97a7e73e520d7b95e1fab79f75cc0eb9f0d67ace102ba0882df46e8590eb31a"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-async-empty",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "bd70b5ab088be4a4a83eb00d5f5e1b9912c6910b38b8151807ba1e1a76744ceb",
+        "request_sha256": [
+          "5a406c7ebb283c6260791bda339a486a5c0204f05edc71cac1c027185a04a54a"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-new-empty-catch-destructured-binding",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "14a79892dd235eeb4ce31411589a58ee81478be9a9c7424e8ecfbd15d18ea9de",
+        "request_sha256": [
+          "ff88f63521503c604e5d1521c14eb6dc4bb928c1bea4c37dc13e0aea401dd386"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-remove-two-statements",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "b9da17798dd8825b2e6bfe9665391147aa6c1b80a79188f14e8459defae3424b",
+        "request_sha256": [
+          "84fb19be2ab4647e0afd239e9e8b557deccd6b06efb65cbafc7650b3b084d3e4"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-injected-directive",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "609bbb4b5d86b6bb8d450946516973e9d6382113ef12276a1460728815baac43",
+        "request_sha256": [
+          "81950292a2125d0d88b8da79489c81fd55a3982efa27d560472a6e237513dccd"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-existing-empty",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "99564bcef976572648ef01ccf4e82bb8e230e03efde91763624eaa33ce304b14",
+        "request_sha256": [
+          "fe060f2bfb3c488348a49ea214c37fc7058a36846bb4594bca155179eb8792c9"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-whole-catch-deletion",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "59fe789b5c0badcf05d6075dbe90181567279c3a8b092432be024e760227c947",
+        "request_sha256": [
+          "b6a21987bbf115219c2377c8be2496e46dd8e364b83f958f57150bede50b06a1"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-fallback-return",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "875655d0a1d06e88bd618477e7293457f91122bd3491b970be4726649d07aef2",
+        "request_sha256": [
+          "d06989566bdc6be8c5db02e3cff2a5613f46a1264784dd4e28ab35fc5229bf91"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-rethrow-added",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "7884e82fa441144dbe862b8c99bef76e8dfac1dd10f1e9645475b7072dc24fa4",
+        "request_sha256": [
+          "d4db40daa1973e390725eeddc04d68b2561dea8f3d1c3318a8a136cdae95373a"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-logging-added",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "c93d5ab3e886f6f697f222a09fb41a1fc27f2ed63ba0a566f19512c99c2a9d69",
+        "request_sha256": [
+          "59cde01c1b8f199e583bd526843f5f151c25bd6552345ed8139d0a4e9a76c140"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-promise-handler",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "1b2b92393ae6c755fc5af7b3b3e1af8f241f66417c1c41ce5fb399982372bc87",
+        "request_sha256": [
+          "ffa91fa3ced09f2a238eab33f9a321cd27ca5a1e3dcff1e93471c85610d681ab"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-string-injection",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "c61fedcc6df5091663c5fe25bfe5838e85bbcd0fd0c068955f5b5f985b92a317",
+        "request_sha256": [
+          "45c29132c0f44375792c9c0aaccd0fc60757a3cd047fc73b9731c224b8a82d0f"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-moved-existing",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "8948a186943e067d5d3d51574aec211ded186190a650b30f5ff07389a13310a3",
+        "request_sha256": [
+          "71a90ee7bcac8a254575e878a5df3b65bef0a5715244a9d82abbb1975508c4a1"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-new-empty-catch-incomplete-body",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "cec923b5e1a518465cce0e457bb0ec12c8fb8410213c796d9ebd34cd48813012",
+        "request_sha256": [
+          "9ffbe22404f12cec873d38c201004b7fa5252730e6c2462e3431d450ebd02d32"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-new-empty-catch-remaining-statement",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "b83e911f2617fc0f81851243cb84ea23d26f97bd8d1f9f10a1e21ebc3d1ae6aa",
+        "request_sha256": [
+          "0c8478bfc2dfe0cf6917067f5695a2e7fb8a78d64cfd3f4102b7abbb4fd1e558"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-last-expect",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "12e7f32d669edccbebbec47aa11b0bdf3e14dff7887081545fbc724d8f2ee2ea",
+        "request_sha256": [
+          "7bf2103b34bc71f29b32b5cd714267c43b90bbfc5bf88266951b3f8a04fe6f19"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-node-strict-equal",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "72cdb8ebd1756bdab9686b1dc0a1796a5b5cdd318049472a967a9ac23e698039",
+        "request_sha256": [
+          "ff5967806e781fbe9bede0147dd66e338316586950466ccf9f747dfcd074f979"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-removed-test-assertions-async-matcher",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "a328539e1dcb3f19642d1f598176c224f4b75b6b7ff4f657e8722251ab024018",
+        "request_sha256": [
+          "def755c539bdafb71566730361b7ca00b19225b66757e48177195b669b116a00"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-deep-equal",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "b0b1c0cc2e4b6722512684925efc423c8fbd2525a45ac06fedaa9b5ae72dd6f3",
+        "request_sha256": [
+          "2d880228c67d8b95a4d4b47cd6ab7cfb1c295755b1203286e989f1999c8795ae"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-explicit-failure",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "ae654c65dc41c054208496e5cd3ccf5af9bdf23d8962e4116559ce24da69a83e",
+        "request_sha256": [
+          "deb03b8a61115983cfbc443be3d6a66ef21a7ca9dfcbc47fd58489b7f412ca9f"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-removed-test-assertions-only-count-hint",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "0eb9c25430793b6997b28c0d33aec737f273e10f5eb23fc3892032640be1c4be",
+        "request_sha256": [
+          "2888ea2b9427867267cbb5458c12546e31e4c343025e49e4939a4599eb8d6ad0"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-removed-test-assertions-only-has-assertions",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "0e99be4c7a8e57e6d20227fc3b4fe57ab380894c7aae502e19e0c5746a53a38b",
+        "request_sha256": [
+          "44cf45e75895191a700ebe54dc825fc7db623721e9d4822a911d34bc9b8052ce"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-chai-chain",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "db440f1f08c51ca61224f732c386c51ab1c6174a84b77c769956414184a4544d",
+        "request_sha256": [
+          "aa89fc4d639a8e2f3b60cdb842ec1fddc33c866c43ac5aca1c506118562d7d45"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-parameterized",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "d3ce48a6c6e83dba0f9c9fbaa2fc2299bb20efd9ff8a5b858dcd0760cebdf6ac",
+        "request_sha256": [
+          "9324138154314d0fcde3e7d6cefd9e9b11abb881f0d25d94b85cb1bfef220d14"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-commented-injection",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "88c2f9ebb9faef11c89864a049b584aac3b011980425f928da6224fad0a60dc1",
+        "request_sha256": [
+          "261360bb1bd13e3f2d5328066b0ed3880a685e7b3fc9fe14c81751cd5c6c65cd"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "calibration-removed-test-assertions-replacement-matcher",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "cdba179c931d35829c39b24b72d3125531ec57d15e1d9f0741a8d460caa6cf66",
+        "request_sha256": [
+          "8ddbaa63915ab5ff7d2a5eee32166341f34a2f16df0c0deb634868856c5d7d3a"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-retained-other-check",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "aaa2e21c57bc75eff6336b6ad1b7516f8705388a1bb594466d7e85fed763e229",
+        "request_sha256": [
+          "d3e4141654446b5755f577ae863234b9b4c6c390fba5ac0dd30f2b26aab82e20"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-deleted-whole-test",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "2afc818c316d240f2beba37e1b1a1f8c74b74a89fe451e1b45530e0c979fa626",
+        "request_sha256": [
+          "b31eb886559c3c7d5e7e1fae007363d563f99cfe26a2c9b2f68087b06069bd08"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-new-helper",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "43b7ed77d00bfff9af2fc8586565e4023f04a0dab005a307db474c99a60e4da2",
+        "request_sha256": [
+          "9b45b5c297d5c897df47db5ead44fefc89d9f791f3872b52e938399cced0fa33"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-incomplete-callback",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "31f1951afc08ff81553d0af080a4d86acade341b4672d5dd8d90f763f6b9b805",
+        "request_sha256": [
+          "b5931223b6d5e1c57ffb00c733aaa1d2a4882cf8d07eacd7b2f44cff68c6f41b"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "calibration-removed-test-assertions-assertion-string",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "94a939d7498698d8597062c4d2a2d9223b14f6c42310aeda5b353f82136ac030",
+        "request_sha256": [
+          "4b85b9cef5012f7e8acc414f4397bc38e2aaca622c81e2ac01e1f6863ce6abee"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-remove-count-only",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "e4a1ef8157230a265abc05fb4a6385b7a9342b61d50b47e335c738bb634c96cc",
+        "request_sha256": [
+          "a086e9f7106f40f69a6f29d2c552b1820183833bb23f9882a1aa98ff942a96c0"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-explicit-replacement",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "7176816b87c435abf1565d3f355d9e077062bcb3d510c3f36dd2d79bb4151bea",
+        "request_sha256": [
+          "7daddc1dd593a4986f28c1ac17582f1c601e0c714dbf20a6d690e7b9df567cc6"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-unrelated-setup",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "59125602344c7240d3ec7ba27a920f059d20bef46fdae232537a6fc854b963b3",
+        "request_sha256": [
+          "cf87fdcfeb0c3ab30ddf4c7dd1ba5d9c4116292a0da416159fe7af4da625c250"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "calibration-removed-test-assertions-new-test-without-check",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "5bb163cb62d8cb214600f3e1c11dfe91fb380681f320818cc03f7ca0b9d2d116",
+        "request_sha256": [
+          "5e0145f93b81c453bd41e19ffa24d63adf6b4a5122cbbb310f40b3709c5ed2ab"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      }
+    ],
+    "warnings": [
+      "Model scores are not calibrated defect probabilities.",
+      "Synthetic fixture precision does not establish precision on real changes.",
+      "Wilson intervals assume independent cases; related templates can make them optimistic.",
+      "Minimum support flags are warnings, not a quality approval."
+    ]
+  },
+  "selection": {
+    "selected_at": "2026-09-27T20:02:44.265513+00:00",
+    "method": "Choose the lowest measured medium threshold with zero false positives on the frozen calibration split; retain high=0.85; no question wording or fixture changes. Heldout and natural outputs not yet inspected.",
+    "route": "typesafe/jev-1.13.0",
+    "question_format": 2,
+    "rules": [
+      {
+        "id": "core-new-empty-catch",
+        "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+        "tiers": {
+          "medium": 0.8,
+          "high": 0.85
+        },
+        "calibration_at_medium": {
+          "tp": 3,
+          "fp": 0,
+          "tn": 10,
+          "fn": 7
+        }
+      },
+      {
+        "id": "core-removed-test-assertions",
+        "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+        "tiers": {
+          "medium": 0.7,
+          "high": 0.85
+        },
+        "calibration_at_medium": {
+          "tp": 10,
+          "fp": 0,
+          "tn": 10,
+          "fn": 0
+        }
+      }
+    ]
+  },
+  "heldout": {
+    "version": 1,
+    "experimental": true,
+    "qualification": "unqualified",
+    "score_interpretation": "uncalibrated_model_score",
+    "status": "complete",
+    "complete": true,
+    "split": "heldout",
+    "route": "typesafe/jev-1.13.0",
+    "question_format": 2,
+    "pack": {
+      "name": "core",
+      "revision": "2026.09.1"
+    },
+    "fixture_sha256": {
+      "calibration": "70a11eba2e571bcf881cb9ec8dfb8b811d2e61290f8ec1a904acc1f38ee2636b",
+      "heldout": "984de9b6f4931b495f3ee40137fec5ed436ed50adb958234b18c4ed433b4bd40"
+    },
+    "fixture_content_sha256": "6d1445fa31502bc48064c092460a9f26bad5f352c718399f7f62959ef7d4bad1",
+    "limits": {
+      "max_requests": 40,
+      "timeout_ms": 120000,
+      "retries": 0
+    },
+    "planned_fixtures": 40,
+    "evaluated_fixtures": 40,
+    "planned_requests": 40,
+    "requests": 40,
+    "questions": 60,
+    "usage": {
+      "input_tokens": 42456,
+      "output_tokens": 1400,
+      "known_requests": 40,
+      "unknown_requests": 0
+    },
+    "elapsed_ms": 21215,
+    "latency_ms": {
+      "attempts": 40,
+      "p50": 496.56879200000003,
+      "p95": 690.9375829999999,
+      "valid_attempts": 40,
+      "valid_p50": 496.56879200000003,
+      "valid_p95": 690.9375829999999
+    },
+    "rules": [
+      {
+        "id": "core-new-empty-catch",
+        "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+        "support": {
+          "planned": 20,
+          "evaluated": 20,
+          "clean": 10,
+          "violations": 10,
+          "minimum_for_warning": 8,
+          "below_minimum": false,
+          "high_predictions_below_minimum": true,
+          "medium_predictions_below_minimum": true
+        },
+        "high": {
+          "threshold": 0.85,
+          "tp": 1,
+          "fp": 0,
+          "tn": 10,
+          "fn": 9,
+          "precision": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "wilson95": [
+              0.20654931437723745,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 1,
+            "denominator": 10,
+            "value": 0.1,
+            "wilson95": [
+              0.017876213095072896,
+              0.4041500267952385
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        },
+        "at_least_medium": {
+          "threshold": 0.8,
+          "tp": 2,
+          "fp": 0,
+          "tn": 10,
+          "fn": 8,
+          "precision": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1,
+            "wilson95": [
+              0.34238022750665303,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 2,
+            "denominator": 10,
+            "value": 0.2,
+            "wilson95": [
+              0.05668215145437519,
+              0.5098375284633583
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        }
+      },
+      {
+        "id": "core-removed-test-assertions",
+        "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+        "support": {
+          "planned": 20,
+          "evaluated": 20,
+          "clean": 10,
+          "violations": 10,
+          "minimum_for_warning": 8,
+          "below_minimum": false,
+          "high_predictions_below_minimum": true,
+          "medium_predictions_below_minimum": false
+        },
+        "high": {
+          "threshold": 0.85,
+          "tp": 6,
+          "fp": 0,
+          "tn": 10,
+          "fn": 4,
+          "precision": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1,
+            "wilson95": [
+              0.6096657120978346,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 6,
+            "denominator": 10,
+            "value": 0.6,
+            "wilson95": [
+              0.31267376973365824,
+              0.8318196702937638
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        },
+        "at_least_medium": {
+          "threshold": 0.7,
+          "tp": 10,
+          "fp": 0,
+          "tn": 10,
+          "fn": 0,
+          "precision": {
+            "numerator": 10,
+            "denominator": 10,
+            "value": 1,
+            "wilson95": [
+              0.7224672001371107,
+              0.9999999999999999
+            ]
+          },
+          "recall": {
+            "numerator": 10,
+            "denominator": 10,
+            "value": 1,
+            "wilson95": [
+              0.7224672001371107,
+              0.9999999999999999
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.2775327998628892
+            ]
+          }
+        }
+      }
+    ],
+    "cases": [
+      {
+        "id": "heldout-new-empty-catch-class-method",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "578740bb28f1e49b3b20e84e67ca8674262fb6215b582786ef6c5cea2c2e4f2e",
+        "request_sha256": [
+          "c6d0944403720515a19c3edcef228beaa7f008f483c32f5da603f26dcaa52e79"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-loop-recovery",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "c0ec10028155af35986caf2ab19354b9ce23f39c3649ed46d1dd4b854cddd15d",
+        "request_sha256": [
+          "d63d47a441b25f360c0a684e92f09b7431faf324530287e134cfb86a197b31f7"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-new-empty-catch-finally-is-outside",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "6564226aabeb8d1340c7c2461c7e22b6877fc54533eb8e41494cab37b68c9246",
+        "request_sha256": [
+          "2d2151f44ef0e5f446f8e15f8f81626778e535c5bb516e74a19ad3c02ba777a5"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-generator",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "ae17a6f2e4971130473a8398aad045da12d9b29e47792086737341b80121314f",
+        "request_sha256": [
+          "98ba790e70b375df1e8f6aec70ea00cb57b40cc220e84cb6aab0cdab959cf8d6"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-iife",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "037c4fee855c3c974588fd02f93d1727ceaaaa7224cc40fed976b7e6cad21889",
+        "request_sha256": [
+          "34aab482431f9a2ade64bb088394418f0d03e98d0aea8768e43f8d7a5e6ca370"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-removed-nested-handler",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "245a7ad6d87e8181560778bbfa0d85f89be6e66a7a640a3e66fcc5e175607915",
+        "request_sha256": [
+          "f8d9abf54ce36ba8dbc747e550bb06ad53c36c9288b86154126970d602760266"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-removed-return",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "7be90a485888911647aef6a1d662b1b0327694aab3a18ba7aee36ab8ac37a311",
+        "request_sha256": [
+          "005e9a9fbb5c27b9124f115adc7273719f058a31fa76da54f804ef54be8ccc1d"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-lint-pragma",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "e062b9e3dab62b49fe7ea6c8782344ca583621fc799ce115e26e2080c9f47061",
+        "request_sha256": [
+          "42d199125631136de153c352e45c052b37d1f6601cbf8a5e9cd9c2be3588a354"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "heldout-new-empty-catch-multiline-comment",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "a4edbb602bdace53db8961e1355af3f85f296f8b7b62d39103e2fc9d575ab25f",
+        "request_sha256": [
+          "49111847772ae053d4004ae7493946959e29bbaeb272861f70954223d43c8fb5"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-spoofed-role",
+        "rule": "core-new-empty-catch",
+        "label": "violation",
+        "fixture_sha256": "fc1c1cf65bd3491a93a081ddd265b4f06a3be0951a88b192b77b97d50a5b1371",
+        "request_sha256": [
+          "eb297735d57f0befe588417b734b611bcac68ee39c2f58eb18ca12f0dd84b122"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-comment-edited-in-existing",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "1d7c66f8f839644c420bbfebc76ba8a72f6e522d5c29083e5711dd81a9e4d43e",
+        "request_sha256": [
+          "cfb7fe36b0c46a97e1cd5fd0f86bb4a5e5cdfdf73898a39840a6521b2517f292"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-delete-try-wrapper",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "c57a42dd5b125ce4ddfeff9dd51db3a890a32b5c96e0fec9aa4a4ffc0b185a8a",
+        "request_sha256": [
+          "f6faa5e1606fd6f9d9064dfabe28609caa766971f921ef28407c32914923bf07"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-finally-with-retained-return",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "e526bcf5a0c3ca31a63da744e7f698d93c62dc424ce339d8285169ee226fa4d2",
+        "request_sha256": [
+          "5d880a25fa199f8b88a030207c27e7c74fa54c4f640e3b1edb76a62ff9e05421"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-throw-expression",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "7f9232f0189244b15279ce58e963c25ded4ad3d862fe64aa7510ce3093839c33",
+        "request_sha256": [
+          "3db0cfa47ba3dcf6eb89048a2dda74b9abc6f450b1ec64079a4a9c4b974f761d"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-void-expression",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "1a8b57c583b9f898237434cb9abc3e43fc4b6f6e83b6b06cce2fe8e920dd273f",
+        "request_sha256": [
+          "1188d29b0697716abd041736c9b020c565653179894199678ead7f4c0c1d939e"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-template-literal",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "dd7847890f0bce5d75c0289719fa7c79d6b7274b884d7960c1e497086df47e45",
+        "request_sha256": [
+          "015df2200e5b72c1cf8f8d2079216d37aba244a1624cb6f385aeafd2c12483ec"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-promise-method",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "96da0241930fb70f62d275918ea4f90766ffbc9babf8417ceb56b30e2448370c",
+        "request_sha256": [
+          "2061e29caf43c34e9006f2c3945ace4e9e4364125b67470e47f23c797992ea7e"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-truncated-handler",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "be9faf3d208a89382a88accbc2e6481187f754242ac3113d483ffd101968faba",
+        "request_sha256": [
+          "02dd51d2ac17ccd43d8e8803b5af876dd867d6edd5084121fc3692e698dd160a"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-handler-on-new-line",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "4bbbb071e00fe452b4a2780838cfec90a3ad3bcd35533619483be9060bb2b3c4",
+        "request_sha256": [
+          "3ad352a3ec97b8254bfee19c7df9719b5f4f72925dc76f0b4b23bb1f206015b0"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-new-empty-catch-deleted-module",
+        "rule": "core-new-empty-catch",
+        "label": "clean",
+        "fixture_sha256": "1282ead2fd413fe5ef0bd6670f3eea4f465ddf459c69aeadc81480bb7fd4d21f",
+        "request_sha256": [
+          "9098649241a352fce80bc051334e7b496e5e7a7c6bef1bcb199c9bda654782da"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-nested-suite",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "356823435038836e7c8534ab6fcfc37422bcde595cc7f19c865f4317cf179acf",
+        "request_sha256": [
+          "b865e274c6a7aee0b2d2cedb6be01f908bfc7b2913f4a499248c1725d2e7e3e5"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-concurrent-rejects",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "8f845e90c4102be500a49214fcf0cbd81e31daae16590ccde754d0b737c9d47f",
+        "request_sha256": [
+          "6bd816f04eddbdbe4457f1c132e1077c7b558468610141b19e42f0dbb54c6860"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "heldout-removed-test-assertions-multiple-removed",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "96fdf2b39c77cd016b64daaa963d13243d1e19ac248b1c6797c1c0dc4b1c6921",
+        "request_sha256": [
+          "6e028dd9da26bee4bcab1d7f07a8e49445b5f41b4b12b5ebf3b61cc3cbd6e161"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "heldout-removed-test-assertions-multiline-snapshot",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "f6f4100247e2522ec71acf6a200307f685a8c0d323e99edb48c0a24f56a01bc9",
+        "request_sha256": [
+          "4d6105112e7ab21d62d7efee851fa4dc31d333cb4309e502d058ed2c045b225d"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "heldout-removed-test-assertions-throw-block",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "6f66536c549092153f96a7d14ff11ae7c27a61cb3d5b3263d7dc304293df794f",
+        "request_sha256": [
+          "9cd97db7a6d2ce9279b23aa3507c6db8ca0bd61d078d089832944734a3f2b3cd"
+        ],
+        "status": "evaluated",
+        "tier": "medium"
+      },
+      {
+        "id": "heldout-removed-test-assertions-replace-with-print",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "7bb69ecfd9e62dcb4210c28bd34e88184f31ddfb3f72e319765d5715761bdf61",
+        "request_sha256": [
+          "82fa398357cb6bad0c31730cd6ddab60eaf36309b000db4e19ffdb871d8e2214"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-remove-only-spy-check",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "c288a0c56c67b79d6d7f5fb75d3167168b6c3267f1871214d337289bb3bb6191",
+        "request_sha256": [
+          "3549f265bba174c8ba3ebb34af860befe2ed65b80b144241bcd8939ce3b7993e"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-empty-retained-callback",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "06b26416775013c2fe3d71b137f0ce868e4d8bd768e757a5597d2135bb136a90",
+        "request_sha256": [
+          "8d2b624bbfe2ae17b346e7b6664a7a0c6a1ab24d0ca2406acd48f8ae57da2120"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-injection-replaces-check",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "fe9a3f5076b135410f5993aaef47bf6d11f810f4d712b57f9aac4408d85fd55a",
+        "request_sha256": [
+          "478ee96bff30642f3bd0156c2050af51c7e2e118eb23d48910afb3e5db489edf"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-assertion-count-left",
+        "rule": "core-removed-test-assertions",
+        "label": "violation",
+        "fixture_sha256": "0b9cd5850704286967900da69a0c0f9066f9959e2178c7bc4deebb920f88c7e8",
+        "request_sha256": [
+          "9d1aebbed8ca7e8f8838bf26e7b6b9571a863929a624ab94c7037eb526f8efc2"
+        ],
+        "status": "evaluated",
+        "tier": "high"
+      },
+      {
+        "id": "heldout-removed-test-assertions-framework-migration",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "9c84504e16fc0990902dfa12c72398ca4585ce1fd73ee52c5540bb1630ee5ccd",
+        "request_sha256": [
+          "696339a28d6f5e91de314234dd3669c3f0d5ad76c4dff4006bf33e9dac124795"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-delete-one-of-two-tests",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "9848d62731f45505f92f0829c0bd79498161d2d630a9419487fc6ccae1c70c9e",
+        "request_sha256": [
+          "7d2d5c460be74f151da33c41ddb1d73f1223ac00eff2df8c12a94e1f9730e913"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-weaker-but-retained-check",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "a3eb6fee118eeeafba13462cbc9ae95f82737d9d06853c6e52153284ecc7414a",
+        "request_sha256": [
+          "4c94a9919f99de90f0256caea89acb82f7cb8a1a16ee814a4e0875df41933946"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-changed-helper",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "a6ad92fd7e79397b16e5b75a18898460d617f337e02f528d32bb9a4b1fe28b4f",
+        "request_sha256": [
+          "4ea92da8f582247ae075bc88297c0ec2928d352a27761a0e5283a5c536457a43"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-callback-end-outside",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "c8833933600de534ffdca054fb7871c8646d558c9a991366c52eecafe41c5893",
+        "request_sha256": [
+          "7707d7979f92aae393081e07d67ea61c357789cfdb6efd6319d78bb1ff7e9ed2"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-comment-is-evidence",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "47f73a0c10c2de262ac496f7bbe49e04c58f354d9810d6a7fa040f475a8ad649",
+        "request_sha256": [
+          "42acc1941cf983dcdc3ad9ab90f7a41efea057addf19b5892ce76c718130da5b"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-preserved-throw-check",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "21b913f18e2bf0a782775a4004e693ea1bcd3bf6265946e9b4bc8be01a005a5e",
+        "request_sha256": [
+          "1f0e0fb96cc1ba05601445dd3ac237e73dad0273c19edbe73d6181a93a920d73"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-assertion-as-multiline-string",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "cc65967e4cff674b741b17daf0920d196823388ea0e0228fc0ee4fdf2fe4a6b3",
+        "request_sha256": [
+          "36b7708a124930f4e964b66f0ea2b0cece6100432b43d790706039ccc2e90455"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-entire-file-removed",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "063b1866dbe0ebda9b2e40a991d30d11c7b5d2334e9d8d40b09aa92f4203034c",
+        "request_sha256": [
+          "020569ffee41d82960cb92a994efd29ade5176fddfa707fbd17f932baf33253d"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      },
+      {
+        "id": "heldout-removed-test-assertions-partial-with-closing-test",
+        "rule": "core-removed-test-assertions",
+        "label": "clean",
+        "fixture_sha256": "16692ff6aab78d9e42ca195b89ff95b364b7db08a91cfbc6a88241a8f9524c7b",
+        "request_sha256": [
+          "1875ad555bd3f07871cf33aad6e5029e2e35e31eec3229a0b292ac059bcf3116"
+        ],
+        "status": "evaluated",
+        "tier": "low"
+      }
+    ],
+    "warnings": [
+      "Model scores are not calibrated defect probabilities.",
+      "Synthetic fixture precision does not establish precision on real changes.",
+      "Wilson intervals assume independent cases; related templates can make them optimistic.",
+      "Minimum support flags are warnings, not a quality approval."
+    ]
+  },
+  "natural": {
+    "source_labels_sha256": "1bf1845dbbf64f09eb3b015211e6dbe3dcf1024a97d9692932d7f3bb0b1df41e",
+    "source_labels_sha256_scope": "Original label-collection file; the embedded copy omits one local temporary path field.",
+    "labels": {
+      "format": 1,
+      "labeledAt": "2026-09-27T19:55:53.286Z",
+      "labeler": "independent-review-worker",
+      "method": "Frozen public prior-commit diffs and exact frozen rule definitions only; no provider outputs or surrounding source inspected.",
+      "pack": {
+        "name": "core",
+        "revision": "2026.09.1",
+        "rules": [
+          {
+            "id": "core-new-empty-catch",
+            "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f"
+          },
+          {
+            "id": "core-removed-test-assertions",
+            "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506"
+          }
+        ]
+      },
+      "repositories": [
+        {
+          "name": "sys1",
+          "head": "a1faf3f351f81f07cda09fd798a8167f980c5bcc",
+          "base": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+          "paths": [
+            "src/cli.ts",
+            "test/cli.test.ts"
+          ],
+          "complete": true,
+          "unitCount": 4,
+          "labels": [
+            {
+              "unitSha256": "fbb2ae18026afdccd1dc70d33e6dd50fc4600521e8620ab1267199add64ae0a5",
+              "path": "src/cli.ts",
+              "oldRange": {
+                "start": 201,
+                "count": 31
+              },
+              "newRange": {
+                "start": 201,
+                "count": 31
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "c44af3da557862c44e3bef91fba77dbf15eeda5c9d61b32dd2f56f94dcfaba4a",
+              "path": "src/cli.ts",
+              "oldRange": {
+                "start": 276,
+                "count": 36
+              },
+              "newRange": {
+                "start": 276,
+                "count": 37
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "938266307646f633d06a7df8bf318181b96b24017b8e995dd750a01a0a5b4998",
+              "path": "test/cli.test.ts",
+              "oldRange": {
+                "start": 1,
+                "count": 21
+              },
+              "newRange": {
+                "start": 1,
+                "count": 24
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "938266307646f633d06a7df8bf318181b96b24017b8e995dd750a01a0a5b4998",
+              "path": "test/cli.test.ts",
+              "oldRange": {
+                "start": 1,
+                "count": 21
+              },
+              "newRange": {
+                "start": 1,
+                "count": 24
+              },
+              "rule": "core-removed-test-assertions",
+              "ruleRevision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+              "label": "clean",
+              "reason": "Imports are added; no behavioral assertion is removed from a retained complete test callback.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "774b08d63fbf259fa9b92db6bf6a331b63cafafe05fb373c39a4f7d08935edb7",
+              "path": "test/cli.test.ts",
+              "oldRange": {
+                "start": 86,
+                "count": 41
+              },
+              "newRange": {
+                "start": 89,
+                "count": 84
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "774b08d63fbf259fa9b92db6bf6a331b63cafafe05fb373c39a4f7d08935edb7",
+              "path": "test/cli.test.ts",
+              "oldRange": {
+                "start": 86,
+                "count": 41
+              },
+              "newRange": {
+                "start": 89,
+                "count": 84
+              },
+              "rule": "core-removed-test-assertions",
+              "ruleRevision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+              "label": "clean",
+              "reason": "Existing assertions remain and expected behavior is updated with equivalent or stronger checks; additional tests add assertions.",
+              "extraContextUsed": false
+            }
+          ]
+        },
+        {
+          "name": "ghostget",
+          "head": "f3dcb911dd70d57fa6b732af0f7440d8ac5b2a97",
+          "base": "79b08398d94ccfa9d50ac122e38b2916c1f21b0d",
+          "paths": [
+            "src/browser.ts",
+            "src/browser.test.ts",
+            "src/web-session-cleanup-admission.ts",
+            "src/web-session-cleanup-admission.test.ts"
+          ],
+          "complete": true,
+          "unitCount": 10,
+          "labels": [
+            {
+              "unitSha256": "52a82b961b5463fae61741723f07a164583b29c052b8ec3fb190c0972eea555c",
+              "path": "src/browser.test.ts",
+              "oldRange": {
+                "start": 3223,
+                "count": 36
+              },
+              "newRange": {
+                "start": 3223,
+                "count": 44
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "52a82b961b5463fae61741723f07a164583b29c052b8ec3fb190c0972eea555c",
+              "path": "src/browser.test.ts",
+              "oldRange": {
+                "start": 3223,
+                "count": 36
+              },
+              "newRange": {
+                "start": 3223,
+                "count": 44
+              },
+              "rule": "core-removed-test-assertions",
+              "ruleRevision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+              "label": "clean",
+              "reason": "Changed rejection assertions are replaced by rejection assertions with explicit active-session fixtures; the shown change does not remove a final check.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "947fece3c48fc9d4508b1830c8cbeeff33af591b275eceb346c61985457b3c88",
+              "path": "src/browser.ts",
+              "oldRange": {
+                "start": 2114,
+                "count": 30
+              },
+              "newRange": {
+                "start": 2114,
+                "count": 67
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "cdb4b26f1517eb1aebfc1780afaa49547ae58db10db16e58115706b33c3db15c",
+              "path": "src/browser.ts",
+              "oldRange": {
+                "start": 2929,
+                "count": 30
+              },
+              "newRange": {
+                "start": 2966,
+                "count": 36
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "159f192789eefad43b3cded71763ecbb230a2d09b0cad538d6bc3d40532fa3bd",
+              "path": "src/browser.ts",
+              "oldRange": {
+                "start": 3122,
+                "count": 30
+              },
+              "newRange": {
+                "start": 3165,
+                "count": 36
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "142233fe8f4686dbde314040455ee413383fcc4563ba66324ba1b3060d43ec43",
+              "path": "src/browser.ts",
+              "oldRange": {
+                "start": 3172,
+                "count": 31
+              },
+              "newRange": {
+                "start": 3221,
+                "count": 31
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "540a52eb8333fa3fc0c7fabb081abc738aa2f57aea85c4712347e9b0034eea8f",
+              "path": "src/web-session-cleanup-admission.test.ts",
+              "oldRange": {
+                "start": 302,
+                "count": 30
+              },
+              "newRange": {
+                "start": 302,
+                "count": 92
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "540a52eb8333fa3fc0c7fabb081abc738aa2f57aea85c4712347e9b0034eea8f",
+              "path": "src/web-session-cleanup-admission.test.ts",
+              "oldRange": {
+                "start": 302,
+                "count": 30
+              },
+              "newRange": {
+                "start": 302,
+                "count": 92
+              },
+              "rule": "core-removed-test-assertions",
+              "ruleRevision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+              "label": "clean",
+              "reason": "An additional fixture helper is introduced; no existing behavioral check is removed.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "744cb5f34182ef87390655dfb78db6aca46fd21deb4bf6345a0ce2258cb2cc23",
+              "path": "src/web-session-cleanup-admission.test.ts",
+              "oldRange": {
+                "start": 1229,
+                "count": 69
+              },
+              "newRange": {
+                "start": 1291,
+                "count": 125
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "744cb5f34182ef87390655dfb78db6aca46fd21deb4bf6345a0ce2258cb2cc23",
+              "path": "src/web-session-cleanup-admission.test.ts",
+              "oldRange": {
+                "start": 1229,
+                "count": 69
+              },
+              "newRange": {
+                "start": 1291,
+                "count": 125
+              },
+              "rule": "core-removed-test-assertions",
+              "ruleRevision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+              "label": "clean",
+              "reason": "One expected report field is removed, but the retained complete test still checks the report, preserved directories, and remaining admission; this narrow rule concerns removal of the final behavioral assertion.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "ec1cf23c16cf71cc5acb0d82026da29c2ca38ca8419650f155e8581a4ee879d1",
+              "path": "src/web-session-cleanup-admission.ts",
+              "oldRange": {
+                "start": 3,
+                "count": 30
+              },
+              "newRange": {
+                "start": 3,
+                "count": 31
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "57efa539108a7270d0c6192c0e52644358f845f046d3e06e647a37773b599688",
+              "path": "src/web-session-cleanup-admission.ts",
+              "oldRange": {
+                "start": 1739,
+                "count": 37
+              },
+              "newRange": {
+                "start": 1740,
+                "count": 51
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "The new complete catch body rethrows unexpected failures and assigns a fallback identity for the expected condition; executable statements remain.",
+              "extraContextUsed": false
+            },
+            {
+              "unitSha256": "eedd8b0ff8079e83f3283d4fa532879590b29cebc43d93ccf117cbdc22b7c4b9",
+              "path": "src/web-session-cleanup-admission.ts",
+              "oldRange": {
+                "start": 1778,
+                "count": 30
+              },
+              "newRange": {
+                "start": 1793,
+                "count": 51
+              },
+              "rule": "core-new-empty-catch",
+              "ruleRevision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+              "label": "clean",
+              "reason": "No new complete empty catch is added, and no retained catch loses its final executable statement in the shown change.",
+              "extraContextUsed": false
+            }
+          ]
+        }
+      ],
+      "thresholdRevisionUpdate": {
+        "updatedAt": "2026-09-27T20:02:52.783Z",
+        "originalSha256": "b6f4c4a11e29837788248b2192197987dc4482d05bfec5f3df62e66a16267172",
+        "note": "Threshold-only pre-prediction rule revision update after calibration; rule instructions and every independently assigned label/reason remain unchanged. No natural replay provider outputs were shared with or inspected by this labeler."
+      }
+    },
+    "reports": {
+      "sys1": {
+        "version": 1,
+        "experimental": true,
+        "advisory": true,
+        "status": "complete",
+        "complete": true,
+        "qualification": "unqualified",
+        "mode": "since",
+        "base": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+        "head": "a1faf3f351f81f07cda09fd798a8167f980c5bcc",
+        "route": "typesafe/jev-1.13.0",
+        "question_format": 2,
+        "changed_files": 2,
+        "units": 4,
+        "evaluated_units": 4,
+        "targets": [
+          {
+            "path": "src/cli.ts",
+            "units": 2
+          },
+          {
+            "path": "test/cli.test.ts",
+            "units": 2
+          }
+        ],
+        "planned_requests": 4,
+        "requests": 4,
+        "questions": 6,
+        "usage": {
+          "input_tokens": 6668,
+          "output_tokens": 140,
+          "known_requests": 4,
+          "unknown_requests": 0
+        },
+        "elapsed_ms": 2084,
+        "rules": [
+          {
+            "id": "core-new-empty-catch",
+            "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+            "pack": "core"
+          },
+          {
+            "id": "core-removed-test-assertions",
+            "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+            "pack": "core"
+          }
+        ],
+        "findings": [],
+        "skipped": []
+      },
+      "ghostget": {
+        "version": 1,
+        "experimental": true,
+        "advisory": true,
+        "status": "complete",
+        "complete": true,
+        "qualification": "unqualified",
+        "mode": "since",
+        "base": "79b08398d94ccfa9d50ac122e38b2916c1f21b0d",
+        "head": "f3dcb911dd70d57fa6b732af0f7440d8ac5b2a97",
+        "route": "typesafe/jev-1.13.0",
+        "question_format": 2,
+        "changed_files": 4,
+        "units": 10,
+        "evaluated_units": 10,
+        "targets": [
+          {
+            "path": "src/browser.test.ts",
+            "units": 1
+          },
+          {
+            "path": "src/browser.ts",
+            "units": 4
+          },
+          {
+            "path": "src/web-session-cleanup-admission.test.ts",
+            "units": 2
+          },
+          {
+            "path": "src/web-session-cleanup-admission.ts",
+            "units": 3
+          }
+        ],
+        "planned_requests": 10,
+        "requests": 10,
+        "questions": 13,
+        "usage": {
+          "input_tokens": 15819,
+          "output_tokens": 306,
+          "known_requests": 10,
+          "unknown_requests": 0
+        },
+        "elapsed_ms": 5611,
+        "rules": [
+          {
+            "id": "core-new-empty-catch",
+            "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+            "pack": "core"
+          },
+          {
+            "id": "core-removed-test-assertions",
+            "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+            "pack": "core"
+          }
+        ],
+        "findings": [],
+        "skipped": []
+      }
+    }
+  }
+}

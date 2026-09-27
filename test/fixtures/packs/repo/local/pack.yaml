@@ -1,0 +1,16 @@
+version: 1
+pack: local
+revision: r1
+description: Test repository pack.
+rules:
+  - id: shared-rule
+    applies:
+      paths: ["src/**"]
+    ensure: The repository wording holds.
+    breaks: The repository wording is broken.
+  - id: repo-only
+    applies:
+      paths: ["src/**/*.ts"]
+    gate: false
+    ensure: Outside input is validated before use.
+    breaks: Outside input is used without validation.

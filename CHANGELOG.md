@@ -5,6 +5,15 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.12.0 - 2026-09-27
+
+Sys1 can review a Git diff with reusable rules and report candidates for an agent or developer to inspect. This audit is experimental and advisory; its model scores are not calibrated defect probabilities.
+
+- `sys1 audit` reviews staged, working-tree, or committed changes with an explicitly selected backend and model. It preserves removed lines, reads staged content from the index, and reports excluded or incomplete evidence.
+- Bundled rules look for newly empty error handlers and removed test assertions. Repository and user rule packs can override or extend them. `--dry-run` previews paths, rules, and request count without calling a model.
+- Audits have request and time limits, never retry model calls, and keep source and answers out of persistent storage. Findings do not fail the command; incomplete coverage exits 8. Audit installs no automatic hooks.
+- An opt-in fixture benchmark reports confusion counts, uncertainty intervals, token usage, and latency separately for calibration and held-out examples. It does not automatically approve a rule for production use.
+
 ## 0.11.0 - 2026-09-26
 
 The sys1 command line is easier to read: a short start screen, help for every command, errors that say what to run next, and a setup that shows the download size first.
