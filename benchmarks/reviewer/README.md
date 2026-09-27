@@ -9,6 +9,8 @@ changes.
 `manifest.json` records public commit and parent IDs, source paths and line
 windows, complete source blob hashes, excerpt hashes, label evidence, and the
 representation of each example. `fixtures.jsonl` contains the exact model input.
+Original source license notices are preserved in
+[Third-party source notices](THIRD_PARTY_NOTICES.md).
 The independent [label review](label-review.md) finished before live predictions.
 It excluded the Sys1 inference pair: the earlier adapter explicitly exposed zero
 confidence and coverage, making its false-success label ambiguous under the rule.
