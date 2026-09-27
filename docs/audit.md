@@ -4,9 +4,12 @@
 reported item is a candidate to inspect, and its model score is not a calibrated
 probability of a defect. Run your normal tests and review alongside it.
 
+For project skills, repeated checks, feedback, and rule drafting, use the
+[agent review workflow](review.md). `sys1 audit` runs a stateless check.
+
 ## Preview and run
 
-Choose an explicit backend and model. For hosted Jev, provide
+Choose an explicit backend and model. For Jev, TypeSafe's hosted decision model, provide
 `TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Enabling hosted
 Jev selects the hosted-only routing policy. The audit command sends changed
 source and nearby context to that configured backend.
@@ -67,7 +70,8 @@ remaining budget is reported as skipped.
 
 ## Add repository rules
 
-Put a pack in `.sys1/rules/<name>/pack.yaml` and commit it with the repository:
+Draft and validate a convention with [`sys1 rules`](review.md#draft-a-repository-rule),
+or write a pack directly in `.sys1/rules/<name>/pack.yaml` and commit it:
 
 ```yaml
 version: 1
@@ -87,7 +91,7 @@ A later definition replaces the same rule id. Pack parsing is strict; invalid
 fields fail before model calls. `ensure` requires a `breaks` sentence explaining
 the violation. Choice and score rules can name violating options or levels.
 At most 256 distinct rules can remain after overrides.
-Conditional rules and whole-file review are not part of this first audit flow.
+Conditional rules and whole-file review are not supported.
 
 Keep each rule answerable from the changed lines and nearby context. Put the
 whole condition in one question. Use a deterministic linter when one already

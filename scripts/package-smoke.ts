@@ -355,6 +355,25 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     if (audit["status"] !== "planned" || audit["planned_requests"] !== 1 || audit["requests"] !== 0 || !Array.isArray(audit["rules"]) || audit["rules"].length === 0) {
       throw new Error("packed audit must load bundled rules and preview without a backend");
     }
+    const review = record(JSON.parse(await run([
+      process.execPath, installedCli, "review", "checkpoint", "--worktree", "--model", "typesafe/jev-1.13.0", "--dry-run", "--json",
+    ], { cwd: auditRepo, env })), "review preview");
+    if (review["status"] !== "planned" || review["requests"] !== 0 || !Array.isArray(review["findings"])) {
+      throw new Error("packed review must preview without inference");
+    }
+    for (const target of ["codex", "claude-code"]) {
+      const setupArgs = [process.execPath, installedCli, "review", "setup", target, "--json"];
+      const installed = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), "review skill setup");
+      const repeated = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), "review skill repeat setup");
+      if (installed["status"] !== "created" || repeated["status"] !== "unchanged" || typeof installed["path"] !== "string") {
+        throw new Error("packed review skill setup must be idempotent");
+      }
+      if (!readFileSync(join(auditRepo, installed["path"]), "utf8").includes("sys1 review checkpoint")) {
+        throw new Error("packed review skill is missing its runnable command");
+      }
+    }
+    const rules = record(JSON.parse(await run([process.execPath, installedCli, "rules", "list", "--json"], { cwd: auditRepo, env })), "rule list");
+    if (!Array.isArray(rules["rules"]) || rules["rules"].length === 0) throw new Error("packed CLI did not list bundled rules");
     console.log(`standalone package verified (${entries.length} files, Bun ${Bun.version})`);
   } finally {
     rmSync(work, { recursive: true, force: true });

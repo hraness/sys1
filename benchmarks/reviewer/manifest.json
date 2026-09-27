@@ -1,0 +1,370 @@
+{
+  "version": 1,
+  "corpus": "reviewer-natural-discovery-2026-09-27",
+  "status": "independently-reviewed",
+  "purpose": "discovery-not-heldout",
+  "public_visibility_verified": "2026-09-27 via gh repo view --json visibility,url",
+  "fixtures_sha256": "62f521eba51b83c71e18a7f60471aeaf9d7c9bfc231bbc373da5b5fe96b884f8",
+  "units": [
+    {
+      "id": "ghostget-login-before",
+      "repository": "hraness/ghostget",
+      "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+      "parent": "639825a4ff998a38e554c25028dd0b0f93ce2342",
+      "representation": "snapshot-as-additions",
+      "pair": "ghostget-login",
+      "sections": [
+        {
+          "path": "src/accounts-auth.ts",
+          "start": 136,
+          "end": 161,
+          "blob_sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "excerpt_sha256": "0efadd01c80ea0b7b28ec556f78841521cee6e9dad9348ea5ac84add728426cb"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "violation",
+      "evidence": "Fix 42fbc4d says success preceded durable save. Added accounts-auth.test.ts delayed-storage and failed-write tests establish required completion.",
+      "label_confidence": "supported",
+      "state_sha256": "ad6a6ee90d8c2dcf317a72972bee702d151fff92862ac1d76c260cd07904b826"
+    },
+    {
+      "id": "ghostget-login-after",
+      "repository": "hraness/ghostget",
+      "commit": "42fbc4d05e5011c5112fee1f4afbb7e81072e1f5",
+      "parent": "a09aa4137e55546219b141808db90a4461c514a6",
+      "representation": "snapshot-as-additions",
+      "pair": "ghostget-login",
+      "sections": [
+        {
+          "path": "src/accounts-auth.ts",
+          "start": 171,
+          "end": 208,
+          "blob_sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+          "excerpt_sha256": "95e669d9071963ebb76e2d51df82df723b6d94ad9d348ad70b055fd568fb589e"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "evidence": "Same public repair awaits storage and returns kind:error on failure.",
+      "label_confidence": "supported",
+      "state_sha256": "ee13eafef01bcfe7aeb236d45322aad18fe2a5807a1aa343153db73161db0ca2"
+    },
+    {
+      "id": "sys1-inference-before",
+      "repository": "hraness/sys1",
+      "commit": "d238943da057bbc9c47482105f7bca9ee4b06f9d",
+      "parent": "f271685f36cad6a60c2a729cfe3a11c980f439a8",
+      "representation": "snapshot-as-additions",
+      "pair": "sys1-inference",
+      "sections": [
+        {
+          "path": "src/local/runner.ts",
+          "start": 196,
+          "end": 256,
+          "blob_sha256": "7d2589b83a16227f3499e2334b18f4fed18cb7f91230e1c3a101bf017f0dd52a",
+          "excerpt_sha256": "5465fbcfe41bf0537f515989a328f3d939cd2c0ece54678a9a87fb767bf6ba48"
+        },
+        {
+          "path": "src/local/decide.ts",
+          "start": 227,
+          "end": 235,
+          "blob_sha256": "66cc3182a1ded88c3ab745481f2da861028f5996ff182ecf12ad2d0feac03f66",
+          "excerpt_sha256": "746b111b12124279054b84faf3a573106ed194dc46049420a78fa104c593cdb4"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "violation",
+      "evidence": "Independent review rejected this positive for the required-work rule: the earlier adapter explicitly exposes confidence:0 and coverage:0, plausibly an unavailable result, and its documentation says zero confidence rather than guessing. Repair 3fa98af primarily tightens the Jev wire contract. Entire pair excluded from predictions and metrics; historical label retained only as rejected source evidence.",
+      "label_confidence": "rejected",
+      "state_sha256": "31f0816cbf3ca83945d5e94fefa890a7600ddbbe1cc6894e93a4ccaccb1040b1"
+    },
+    {
+      "id": "sys1-inference-after",
+      "repository": "hraness/sys1",
+      "commit": "3fa98af5f2ad491fb108d33bc126d7ca31b26e9a",
+      "parent": "d238943da057bbc9c47482105f7bca9ee4b06f9d",
+      "representation": "snapshot-as-additions",
+      "pair": "sys1-inference",
+      "sections": [
+        {
+          "path": "src/local/runner.ts",
+          "start": 203,
+          "end": 255,
+          "blob_sha256": "d40144f5f72e95b1b14c1fce358ea7fc87f22cd081b5f17a3e476432f77d3e93",
+          "excerpt_sha256": "ce39a72ecabfc4070536f551f1c6500a3a86e2e893e78fb78cb444df3f6f61bf"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "evidence": "Repair explicitly returns ok:false before constructing an answer when inference has no allowed outcome.",
+      "label_confidence": "supported",
+      "state_sha256": "22590fba5fe8f8ef238ed003f6d3c8bcfd5745d50b41848075451cd14a01960a"
+    },
+    {
+      "id": "sys1-manifest-before",
+      "repository": "hraness/sys1",
+      "commit": "ac4a5bdb825a21c5172dcddd08c28db53cd89f5f",
+      "parent": "4612caf6d50d77c1944a46546f7405606fbd0947",
+      "representation": "snapshot-as-additions",
+      "pair": "sys1-manifest",
+      "sections": [
+        {
+          "path": "src/local/store.ts",
+          "start": 31,
+          "end": 51,
+          "blob_sha256": "8477caf31b3d2e4b7b98c6438ef49761c0875391967a87fbbcc6230e67046c42",
+          "excerpt_sha256": "b6af3a2cbf4ca6018de1441f37d5ee0f306184d49f840dd9a2dd70741984fa07"
+        },
+        {
+          "path": "src/local/store.ts",
+          "start": 102,
+          "end": 128,
+          "blob_sha256": "8477caf31b3d2e4b7b98c6438ef49761c0875391967a87fbbcc6230e67046c42",
+          "excerpt_sha256": "86af905b6e8a4608475d52ad37b3569eb8915462e24050280dcac85c1c20a1d7"
+        },
+        {
+          "path": "src/local/store.ts",
+          "start": 145,
+          "end": 147,
+          "blob_sha256": "8477caf31b3d2e4b7b98c6438ef49761c0875391967a87fbbcc6230e67046c42",
+          "excerpt_sha256": "f58d6c4fca7311954ac0b8ad44f2d304c682112d9c8ccb700486648d2e56913c"
+        }
+      ],
+      "rule": "validate-path-components",
+      "label": "violation",
+      "evidence": "Repair 67197a9 test/local-store.test.ts adds rejection of file:../../escape.gguf. Earlier schema accepts that string and modelFilePath joins it into the model directory.",
+      "label_confidence": "supported",
+      "state_sha256": "a2fd33292f54106a250f1ea6748ed58cb6eee4aad97365ca478dd74837985cbd"
+    },
+    {
+      "id": "sys1-manifest-after",
+      "repository": "hraness/sys1",
+      "commit": "67197a91118e892c0545a0fe25f23705c6bb9be7",
+      "parent": "ac4a5bdb825a21c5172dcddd08c28db53cd89f5f",
+      "representation": "snapshot-as-additions",
+      "pair": "sys1-manifest",
+      "sections": [
+        {
+          "path": "src/local/store.ts",
+          "start": 37,
+          "end": 61,
+          "blob_sha256": "c539302b058f3642fdedefdd98c5392454b298532e87b23b5b1799475523befd",
+          "excerpt_sha256": "6a44a70c4d5c1535a24fcfce6ddca6c0e50929b88e4142def86cae2ee799491a"
+        },
+        {
+          "path": "src/local/store.ts",
+          "start": 116,
+          "end": 141,
+          "blob_sha256": "c539302b058f3642fdedefdd98c5392454b298532e87b23b5b1799475523befd",
+          "excerpt_sha256": "35b142014d1c35dc715aefde5d580a044e89065aa68a1db945e021a319c2d82e"
+        },
+        {
+          "path": "src/local/store.ts",
+          "start": 158,
+          "end": 160,
+          "blob_sha256": "c539302b058f3642fdedefdd98c5392454b298532e87b23b5b1799475523befd",
+          "excerpt_sha256": "f58d6c4fca7311954ac0b8ad44f2d304c682112d9c8ccb700486648d2e56913c"
+        }
+      ],
+      "rule": "validate-path-components",
+      "label": "clean",
+      "evidence": "Safe filename regex rejects slash and path traversal before modelFilePath consumes parsed manifest values.",
+      "label_confidence": "supported",
+      "state_sha256": "d04479b9ce0d12987bec2e9e813c30ae3adda2f7bfbb6d0fb47dad4fd8778c17"
+    },
+    {
+      "id": "design-kit-forced-before",
+      "repository": "hraness/design-kit",
+      "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+      "parent": "3288fab06ee922d41b58900d517efa36af1e0b7d",
+      "representation": "snapshot-as-additions",
+      "pair": "design-kit-forced",
+      "sections": [
+        {
+          "path": "src/react/theme.tsx",
+          "start": 93,
+          "end": 120,
+          "blob_sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "excerpt_sha256": "0befec8818a16d19d1b65292fd5599621a4f894f0da5d06ef95cbace1afc6130"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "violation",
+      "evidence": "Repair f335cf8 and added theme-resolution.test.ts establish forced appearance wins over saved/resolved appearance. Earlier PortalThemeBridge chooses resolvedTheme first despite the explicit forcedTheme prop and its visible contract.",
+      "label_confidence": "supported",
+      "state_sha256": "8bff3e26364386d5de884072f26750a5ea3220dd0d1179f13605c85e1222cef6"
+    },
+    {
+      "id": "design-kit-forced-after",
+      "repository": "hraness/design-kit",
+      "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+      "parent": "898d80364085a41c858350f1b492ac28b5a0384b",
+      "representation": "snapshot-as-additions",
+      "pair": "design-kit-forced",
+      "sections": [
+        {
+          "path": "src/react/theme.tsx",
+          "start": 95,
+          "end": 120,
+          "blob_sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+          "excerpt_sha256": "97d4c7fcdd2e66c744cf72aa0c4d26ada96500c930a6d5729d8df3e4842a50be"
+        },
+        {
+          "path": "src/react/theme-resolution.ts",
+          "start": 1,
+          "end": 11,
+          "blob_sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+          "excerpt_sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "evidence": "The repair chooses a valid forcedTheme before resolvedTheme in the helper included from the same commit.",
+      "label_confidence": "supported",
+      "state_sha256": "11d1d58439896a715fb416f1d9c437f5887f1475744333f695ff66dbfe5682dc"
+    },
+    {
+      "id": "design-kit-label-before",
+      "repository": "hraness/design-kit",
+      "commit": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+      "parent": "d38d13c07d7956d02ddfbca8d32aa2066d88fbd3",
+      "representation": "snapshot-as-additions",
+      "pair": "design-kit-label",
+      "sections": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "start": 83,
+          "end": 155,
+          "blob_sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+          "excerpt_sha256": "f2efccf0bd96e40313d017c7598f9baebdc7b3dffe9c84560286bb17a41a43e7"
+        }
+      ],
+      "rule": "preserve-native-activation",
+      "label": "violation",
+      "evidence": "Repair 850a0d3 adds real-browser mouse/touch tests in scripts/palette-browser.ts for a menu inside a focusable ancestor. Clicking an inner label temporarily focuses that ancestor; synchronous onBlur closes the menu before its radio activation.",
+      "label_confidence": "supported",
+      "state_sha256": "2c44b00af7ddddf33a90a5dfde9e6be4c8395b63b24917bee3d09f23c407908e"
+    },
+    {
+      "id": "design-kit-label-after",
+      "repository": "hraness/design-kit",
+      "commit": "850a0d3e98a5d897ba8951544b0caafc007fd7f3",
+      "parent": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+      "representation": "snapshot-as-additions",
+      "pair": "design-kit-label",
+      "sections": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "start": 83,
+          "end": 196,
+          "blob_sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+          "excerpt_sha256": "6d9ed17da03e172317df17b8e5706ff3fcfbab9778115f74c4d4f9d96827c8d9"
+        }
+      ],
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "evidence": "The repair tracks an inside pointer through click settlement and preserves ordinary outside-pointer, Tab, and Escape dismissal.",
+      "label_confidence": "supported",
+      "state_sha256": "17f3217556af83bfa9dae8a643658549fc71f9bfd8a56a1ca8d638b7d5fe43ec"
+    },
+    {
+      "id": "sys1-doctor-copy",
+      "repository": "hraness/sys1",
+      "commit": "0c2bddf7429480374244dd1863548a2b15ff742e",
+      "parent": "baf08bc6ddbfdbfaceb30340c4d17e6dc04734a3",
+      "representation": "actual-diff",
+      "pair": "sys1-doctor-copy",
+      "sections": [
+        {
+          "path": "src/doctor.ts"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "evidence": "Unrelated ordinary copy change preserves readiness statuses and existing awaited probes. Clean is rule-specific, not a claim the whole file is defect-free.",
+      "label_confidence": "supported",
+      "state_sha256": "bedd49c80b1a51d48c02646cc71eaeca0cdf15eb546334c885a8132df0f5a650"
+    },
+    {
+      "id": "ghostget-views",
+      "repository": "hraness/ghostget",
+      "commit": "10e83baa317637f583b36586b4fd891372cb9493",
+      "parent": "eb1933cd5a8ba96ba04970d59193811e5b6744d3",
+      "representation": "actual-diff",
+      "pair": "ghostget-views",
+      "sections": [
+        {
+          "path": "src/providers/meta-web.ts"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "evidence": "Unrelated feature adds target-bound views data; missing or conflicting data stays explicitly unavailable, exact zero remains valid.",
+      "label_confidence": "supported",
+      "state_sha256": "e6069195738768f19db3ddefc683cb5748895fe198b57e87ec0c18ab4a8eda46"
+    },
+    {
+      "id": "design-kit-relative-time",
+      "repository": "hraness/design-kit",
+      "commit": "76058d431d7e30c6dbcb3d9fa58c28f182fcfa61",
+      "parent": "8937fceab35ae5bf591202bde3d641d48cec7f46",
+      "representation": "actual-diff",
+      "pair": "design-kit-relative-time",
+      "sections": [
+        {
+          "path": "src/react/relative-time.tsx"
+        }
+      ],
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "evidence": "Unrelated new timer-driven time component contains no menu dismissal or native label activation.",
+      "label_confidence": "supported",
+      "state_sha256": "f75ffa0fc97c59908a7dee2718bdbd14d966bf78ad0b9c327b7a213e063f7740"
+    },
+    {
+      "id": "ghostget-storage-fallback",
+      "repository": "hraness/ghostget",
+      "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+      "parent": "639825a4ff998a38e554c25028dd0b0f93ce2342",
+      "representation": "snapshot-as-additions",
+      "pair": "ghostget-login",
+      "sections": [
+        {
+          "path": "src/accounts-auth.ts",
+          "start": 35,
+          "end": 69,
+          "blob_sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "excerpt_sha256": "4954a4f073f04e4e35325a7ffc236d25df024bb847031eb0b4bf9b373c160173"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "evidence": "Hard negative from the same pre-fix file: an empty catch is followed by an awaited alternative persistent write. It is not false success for this rule; other storage-policy questions are outside scope.",
+      "label_confidence": "supported",
+      "state_sha256": "30299fb30be624a2859ac74f4308d275ffc4eaf940f69a13113afefc369e3b30"
+    },
+    {
+      "id": "design-kit-no-override",
+      "repository": "hraness/design-kit",
+      "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+      "parent": "3288fab06ee922d41b58900d517efa36af1e0b7d",
+      "representation": "snapshot-as-additions",
+      "pair": "design-kit-forced",
+      "sections": [
+        {
+          "path": "src/react/theme.tsx",
+          "start": 81,
+          "end": 91,
+          "blob_sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "excerpt_sha256": "6a26d953508da3006b62aae8e7b92ad73d8e07471247990f6a689534c79a4dbd"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "evidence": "Negative contextual control: this snippet contains no explicit override input. Do not infer unseen forcedTheme from neighboring source. The real full component did have a forced-theme bug; this is clean only under the rule visible-evidence requirement.",
+      "label_confidence": "supported",
+      "state_sha256": "6b6896b7d3318a7489faedbc78c273807486f42fd821b3f54b8d09a7a65425f9"
+    }
+  ]
+}

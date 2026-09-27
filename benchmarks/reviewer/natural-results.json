@@ -1,0 +1,512 @@
+{
+  "version": 1,
+  "experimental": true,
+  "qualification": "unqualified",
+  "score_interpretation": "uncalibrated_model_score",
+  "status": "complete",
+  "complete": true,
+  "split": "natural-discovery",
+  "route": "typesafe/jev-1.13.0",
+  "question_format": 2,
+  "pack": {
+    "name": "reviewer-candidates",
+    "revision": "2026.09.discovery.1"
+  },
+  "fixture_content_sha256": "32f6f43f890d4f2032fce4d3aa09798ec20571aa61c4d02db6e140b4967451c1",
+  "limits": {
+    "max_requests": 13,
+    "timeout_ms": 300000,
+    "retries": 0
+  },
+  "planned_fixtures": 13,
+  "evaluated_fixtures": 13,
+  "planned_requests": 13,
+  "requests": 13,
+  "questions": 52,
+  "usage": {
+    "input_tokens": 34665,
+    "output_tokens": 1092,
+    "known_requests": 13,
+    "unknown_requests": 0
+  },
+  "elapsed_ms": 7236,
+  "latency_ms": {
+    "attempts": 13,
+    "p50": 550.315333,
+    "p95": 700.577959,
+    "valid_attempts": 13,
+    "valid_p50": 550.315333,
+    "valid_p95": 700.577959
+  },
+  "rules": [
+    {
+      "id": "required-work-before-success",
+      "revision": "8b366d5e531cda8278e1868a8b9992934931b5f45e6bfae08385f80531870ebe",
+      "support": {
+        "planned": 5,
+        "evaluated": 5,
+        "clean": 4,
+        "violations": 1,
+        "minimum_for_warning": 8,
+        "below_minimum": true,
+        "high_predictions_below_minimum": true,
+        "medium_predictions_below_minimum": true
+      },
+      "high": {
+        "threshold": 0.9,
+        "tp": 0,
+        "fp": 0,
+        "tn": 4,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 4,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.4898908364545973
+          ]
+        }
+      },
+      "at_least_medium": {
+        "threshold": 0.8,
+        "tp": 0,
+        "fp": 0,
+        "tn": 4,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 4,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.4898908364545973
+          ]
+        }
+      }
+    },
+    {
+      "id": "validate-path-components",
+      "revision": "0c96910acf56271445fe86366c7354c57cda43dc74bb3ec724d1fbc70c4c48b3",
+      "support": {
+        "planned": 2,
+        "evaluated": 2,
+        "clean": 1,
+        "violations": 1,
+        "minimum_for_warning": 8,
+        "below_minimum": true,
+        "high_predictions_below_minimum": true,
+        "medium_predictions_below_minimum": true
+      },
+      "high": {
+        "threshold": 0.9,
+        "tp": 0,
+        "fp": 0,
+        "tn": 1,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        }
+      },
+      "at_least_medium": {
+        "threshold": 0.8,
+        "tp": 1,
+        "fp": 0,
+        "tn": 1,
+        "fn": 0,
+        "precision": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "wilson95": [
+            0.20654931437723745,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "wilson95": [
+            0.20654931437723745,
+            1
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        }
+      }
+    },
+    {
+      "id": "explicit-override-precedence",
+      "revision": "23f154e7388fa238996dd57f88c9da2d776e0b24a88da4a5b4bf8c5e423d48e9",
+      "support": {
+        "planned": 3,
+        "evaluated": 3,
+        "clean": 2,
+        "violations": 1,
+        "minimum_for_warning": 8,
+        "below_minimum": true,
+        "high_predictions_below_minimum": true,
+        "medium_predictions_below_minimum": true
+      },
+      "high": {
+        "threshold": 0.9,
+        "tp": 0,
+        "fp": 0,
+        "tn": 2,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 2,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.6576197724933469
+          ]
+        }
+      },
+      "at_least_medium": {
+        "threshold": 0.8,
+        "tp": 0,
+        "fp": 0,
+        "tn": 2,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 2,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.6576197724933469
+          ]
+        }
+      }
+    },
+    {
+      "id": "preserve-native-activation",
+      "revision": "946eb6eba07fb577c7014e755a46c2f6c780384c5bef75b8ab23c14116029a6d",
+      "support": {
+        "planned": 3,
+        "evaluated": 3,
+        "clean": 2,
+        "violations": 1,
+        "minimum_for_warning": 8,
+        "below_minimum": true,
+        "high_predictions_below_minimum": true,
+        "medium_predictions_below_minimum": true
+      },
+      "high": {
+        "threshold": 0.9,
+        "tp": 0,
+        "fp": 0,
+        "tn": 2,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 2,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.6576197724933469
+          ]
+        }
+      },
+      "at_least_medium": {
+        "threshold": 0.8,
+        "tp": 0,
+        "fp": 0,
+        "tn": 2,
+        "fn": 1,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "wilson95": null
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.7934506856227626
+          ]
+        },
+        "false_positive_rate": {
+          "numerator": 0,
+          "denominator": 2,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.6576197724933469
+          ]
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "ghostget-login-before",
+      "rule": "required-work-before-success",
+      "label": "violation",
+      "fixture_sha256": "e817e66953fb321f63a762795628cd04bdf3f88f4990366f711d4dd20df892e7",
+      "request_sha256": [
+        "878e5b05053156e73b34edc2ab6765cef964ce2dbc8c82c8e5847aabb117e346"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "ghostget-login-after",
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "fixture_sha256": "b57548efc7dcc1bf883a1c0702fb285ef59fad8504b1219b024171f3f2f42ba6",
+      "request_sha256": [
+        "cfaba26ffa7c87af78608ca66b137a1fcda918a421eccf2cba9bc8e176138700"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "sys1-manifest-before",
+      "rule": "validate-path-components",
+      "label": "violation",
+      "fixture_sha256": "dff6b68774a6fbd3bb35866130e479351e7cf5b6d788ecf4b41c457ee3ab1aa6",
+      "request_sha256": [
+        "3b83f604130883775c8b17627b8f68341b5394d38e5df61268ce88ee4128c8c7"
+      ],
+      "status": "evaluated",
+      "tier": "medium"
+    },
+    {
+      "id": "sys1-manifest-after",
+      "rule": "validate-path-components",
+      "label": "clean",
+      "fixture_sha256": "f4ef84b86a0d2c4c5e74fee6a87fd296ca302e54f9b591691b691b5c42f6c735",
+      "request_sha256": [
+        "bbc94bcf9c5196d94e2a04a7eb2ba27366ae1b05aaa7821230556059262470c1"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-forced-before",
+      "rule": "explicit-override-precedence",
+      "label": "violation",
+      "fixture_sha256": "ce87bdc0cd6cf40ec644228917728cb8087ea3e9fdf3286dea0e4994065a8b7d",
+      "request_sha256": [
+        "34e980e0a120e1b0393203e2daedfedbbfac50b0476a4d0c31105840509529d7"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-forced-after",
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "fixture_sha256": "3d249555a82c9a7cd586dc01773ad9a042a47c02434bf5ee5d6a2a4c7c2cd968",
+      "request_sha256": [
+        "17f08af5cd3165504920f9e4bc896238a911c8eb388bd6da9b48fc86a626e25c"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-label-before",
+      "rule": "preserve-native-activation",
+      "label": "violation",
+      "fixture_sha256": "04f81c88774bad74a196ef68c5ede06c6002f75097908f5e5661fcdae46153b1",
+      "request_sha256": [
+        "b32b0b41d5a18e6ea7c46132ee3a2962c212d1cdf91a295a6da6bbaee170d95a"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-label-after",
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "fixture_sha256": "a36da1737bf8369fb710d4e9a48d365f4a415fd8899328452c98891c2017d7c6",
+      "request_sha256": [
+        "6f2f363adcbfcddfe02bc653ff1308c3c3006b6ae47ac4532d380b945de68d59"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "sys1-doctor-copy",
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "fixture_sha256": "8d1e427d5ec3ead46429b4f193d09e2b57f5694aa7e8e1a527f38a94e1a8af44",
+      "request_sha256": [
+        "1dee7594f4f84a5b08e48b544add0910d4e0c73e94cbd22c9a01ab914efe79ea"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "ghostget-views",
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "fixture_sha256": "1c06c2a2cdef972100ec8d7ec65fe8a7e2ea7b9bf9835a222bef1721c3e225f0",
+      "request_sha256": [
+        "6f48448238c0225fc9977145bf316324280da3b8aa764a1da08f51d32b0a3324"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-relative-time",
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "fixture_sha256": "ed027258bc0a331aba4a99953ea93cd56b7d5e26383cc07d2f33e3ef4e7d588c",
+      "request_sha256": [
+        "e1a0c42e709e18a03108193f2687b35abe6dd7b79964d96e54b48ccaf7b04644"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "ghostget-storage-fallback",
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "fixture_sha256": "58a2a509fe47ab794b438f9f1b523c5fa96ad08ff53578ea19c47662fc302b92",
+      "request_sha256": [
+        "a305f3492938798db7ee29742f301d83db8566ea3b013270b599d5536697c113"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    },
+    {
+      "id": "design-kit-no-override",
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "fixture_sha256": "4f729567c6286a4612398a5cb14d23ac401f45415b4a29f6499e2db4857c03bf",
+      "request_sha256": [
+        "2551e711e96a8a5ec4c93a58884891cf95619a5c6d23908bf88b0879f898d36f"
+      ],
+      "status": "evaluated",
+      "tier": "low"
+    }
+  ],
+  "warnings": [
+    "Discovery cases were selected while writing these rules; this is not held-out accuracy.",
+    "Source-window replay is not the original bug-introducing diff or a whole-repository review.",
+    "Before/after controls share families and repair comments; intervals assume more independence than this set provides.",
+    "Clean means no visible target-rule violation, not absence of all defects.",
+    "Model scores and rule qualification remain uncalibrated and unqualified."
+  ],
+  "corpus": "reviewer-natural-discovery-2026-09-27",
+  "manifest_sha256": "f00c23123ffd0c40c44dee4b74c2c203670f885d70960faec90d6576802c22f8",
+  "fixtures_sha256": "62f521eba51b83c71e18a7f60471aeaf9d7c9bfc231bbc373da5b5fe96b884f8",
+  "pack_sha256": "de0a1e0b83c277611c78fac6ee20001ddd0f6a252f6fa141ee2a8fac81992ea8",
+  "excluded_fixtures": [
+    "sys1-inference-before",
+    "sys1-inference-after"
+  ],
+  "families": 7,
+  "gateway_dispatches": 13
+}

@@ -35,6 +35,10 @@
 - `src/audit/` owns experimental advisory diff collection, reusable rule packs,
   request compilation, evaluation, and the opt-in fixture benchmark. Bundled
   rules live in `packs/` and are copied into the release artifact.
+- `src/review/` owns advisory checkpoints, repeated-candidate suppression,
+  feedback and original-evidence rechecks, private worktree metadata, and
+  embedded project-skill templates. Keep source, raw answers, rule prose, and
+  scores out of persistent review metadata; changed evidence never means fixed.
 - `src/client.ts` is the portable Node/Bun client and `/client` export.
 - `src/kev.ts` adapts explicit Kev endpoints, retaining two-decimal output and
   restoring Score legends only after validating their native rendering.

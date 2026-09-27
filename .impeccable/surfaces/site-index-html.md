@@ -120,3 +120,9 @@ above; do not restore them.
 - The one-line description rule lives in PRODUCT.md: the meta line is the
   standalone description (package, README, `llms.txt`), and the short line
   follows the product name in the CLI.
+
+## Release metadata: 2026-09-27
+
+The release label follows package.json at 0.13.0. Homepage layout, product
+messaging, and dated measurement records are unchanged. Agent review commands
+and their limits are documented at `/docs#audit`.

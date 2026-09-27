@@ -7,7 +7,7 @@ local model on your machine, or a compatible server you run.
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
-Latest release: v0.12.0. Install it from the GitHub release with npm; it runs
+Latest release: v0.13.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.12.0/hraness-sys1-0.12.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.13.0/hraness-sys1-0.13.0.tgz
 sys1 doctor
 ```
 
@@ -36,20 +36,26 @@ bun run build:dist
 ln -sf "$PWD/dist/cli.js" ~/.local/bin/sys1
 ```
 
-## Review a Git diff (experimental)
+## Review changes with your agent (experimental)
 
-Run reusable rules against staged, working-tree, or committed changes. Preview
-the selected files and request count before sending source to a backend:
+Install a project skill and preview a batch before sending source to a backend:
 
 ```sh
-sys1 audit --staged --model typesafe/jev-1.13.0 --dry-run --json
-sys1 audit --staged --model typesafe/jev-1.13.0 --json
+sys1 review setup codex
+sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
+  --max-requests 10 --dry-run --json -- src test
 ```
 
-Hosted Jev must already be enabled with an environment credential. Findings
-are advisory candidates; model scores are not calibrated defect probabilities.
-The report names skipped evidence, and incomplete audits exit 8. See the
-[audit guide](docs/audit.md) for local models, repository rules, and limits.
+Use `setup claude-code` for Claude Code. Hosted Jev must already be enabled with
+an environment credential. Inspect the preview, then repeat without `--dry-run`
+to run the checkpoint. Investigate candidates, record feedback, and recheck the
+original evidence. Repeated complete batches reuse their review for up to
+24 hours; setup installs no automatic hooks.
+
+Findings are advisory, and scores are not calibrated defect probabilities. See
+the [agent review guide](docs/review.md) for setup, feedback, rechecks, and rule
+drafts. For a stateless check, use [`sys1 audit`](docs/audit.md). Both report
+skipped evidence and incomplete coverage.
 
 ## Use as a module
 
@@ -58,7 +64,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.12.0/hraness-sys1-0.12.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.13.0/hraness-sys1-0.13.0.tgz
 ```
 
 ```ts

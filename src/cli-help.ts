@@ -3,7 +3,7 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "audit", "help", "version",
+  "backend", "config", "eval", "audit", "review", "rules", "help", "version",
 ] as const;
 
 const DESCRIPTION = `Sys1 lets agents ask yes/no, choice, and score questions and get validated
@@ -56,6 +56,10 @@ Models
 Review (experimental)
   sys1 audit --staged --model <backend/model>
                              Suggest changes using reusable rules
+  sys1 review checkpoint|issues|feedback|recheck|setup
+                             Review batches and track investigated candidates
+  sys1 rules list|check|draft
+                             Inspect rules or draft repository conventions
 
 Routing
   sys1 backend list|add|check|remove
@@ -88,6 +92,64 @@ function wrapList(items: readonly string[]): string {
 }
 
 const COMMAND_HELP: Readonly<Record<string, string>> = {
+  review: `Usage: sys1 review checkpoint <--staged|--worktree|--since <ref>>
+                   --model <backend/model> [options] [-- paths...]
+       sys1 review issues [--json]
+       sys1 review feedback <id> useful|incorrect|unverifiable [--json]
+       sys1 review recheck <id> --model <backend/model> [options]
+       sys1 review setup codex|claude-code [--dry-run] [--json]
+
+Review a batch of Git changes, investigate candidates, and record feedback.
+Experimental and advisory. Hosted Jev is opt-in; local models are experimental.
+
+Checkpoint/recheck options
+  --model <route>       Exact backend/model, with no fallback
+  --dry-run             Preview paths and requests without inference or writes
+  --max-requests <n>     Request cap: 1..200, default 20
+  --timeout-ms <n>       Model-call deadline: 1..120000 ms, default 30000
+  --gateway             Use the running loopback gateway (needed for local)
+  --json, --agent        Print JSON
+
+Checkpoint uses the same source selection and rule packs as sys1 audit.
+Unchanged complete batches reuse a review for up to 24 hours. Changed rules,
+source, or route trigger a new review. Repeated candidates are suppressed.
+Issues lists their metadata and feedback. Recheck always evaluates again when
+the original evidence is available. Superseded evidence never means fixed.
+
+Source context goes to the selected backend. SYS1_HOME holds private metadata
+and feedback, without source, raw answers, rule prose, or scores. Setup installs
+a project skill, preserves edited files, and does not configure hooks or models.
+
+Exit 0: previewed/completed, including advisory findings or unchanged batches.
+Exit 8: incomplete, stale, unavailable, or superseded evidence; inspect report.
+
+Examples
+  sys1 review setup codex
+  sys1 review checkpoint --staged --model typesafe/jev-1.13.0 --dry-run
+  sys1 review issues --json
+`,
+  rules: `Usage: sys1 rules list [--json]
+       sys1 rules check <pack-directory> [--json]
+       sys1 rules draft <name> --ensure <sentence> --breaks <sentence>
+                  --path <glob> --source <guide-path> [--dry-run] [--json]
+
+List active rules, validate a pack, or draft a repository convention locally.
+These commands make no model calls. Run them within a Git repository.
+
+Draft requires a kebab-case name, a narrow repository-relative path glob, an
+ensure sentence, a breaks sentence, and the guide's repository-relative path.
+It writes .sys1/drafts/<name>/pack.yaml and leaves the rule inactive. Existing
+edited files are preserved. Review the prose and test examples before moving
+the pack into .sys1/rules/<name>/ to activate it for audits and checkpoints.
+
+List includes rule revisions, source, selection, and override information.
+Check validates the schema and request compilation without evaluating accuracy.
+--json or --agent prints machine-readable output. --dry-run applies to draft.
+
+Examples
+  sys1 rules list --json
+  sys1 rules check .sys1/drafts/await-success
+`,
   audit: `Usage: sys1 audit <--staged|--worktree|--since <ref>>
                   --model <backend/model> [options] [-- paths...]
 

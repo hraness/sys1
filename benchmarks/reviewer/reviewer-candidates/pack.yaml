@@ -1,0 +1,85 @@
+version: 1
+pack: reviewer-candidates
+revision: "2026.09.discovery.1"
+description: Exploratory checks selected from public historical repairs; opt in explicitly and investigate every finding.
+rules:
+  - id: required-work-before-success
+    applies:
+      paths: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      A newly added or changed success path must not report a required operation
+      completed while its visible work is still pending, failed, or produced no
+      usable result. Follow the shown branches through the reported result.
+      An explicitly awaited working fallback is allowed. Best-effort background
+      work unrelated to the success claim, an explicitly unavailable or partial
+      result, and an unchanged problematic path are not violations. Report only
+      when the required work and misleading completion are both visible; do not
+      assume unseen helpers fail, succeed, or lack validation.
+    breaks: >-
+      The change visibly reports success or usable required data before required
+      asynchronous work completes, after it fails, or after replacing an unusable
+      result with a fabricated ordinary value, without an explicit partial or
+      unavailable result or a completed working fallback.
+    severity: P2
+    tiers: { medium: 0.8, high: 0.9 }
+    overlaps: ["typescript-eslint/no-floating-promises (partial; void can suppress it)"]
+    source: { kind: guide, file: benchmarks/reviewer/README.md }
+  - id: validate-path-components
+    applies:
+      paths: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      When a changed path joins a foreign filename to a designated directory,
+      visible validation must constrain that filename to a single safe component
+      or verify the final path stays inside the directory. A length or string
+      type check alone does not reject traversal or separators. Require the
+      foreign source, applicable validation, and path construction to be visible.
+      Do not report constant filenames, intentional arbitrary paths, unchanged
+      code, or an unseen validation helper whose behavior cannot be determined.
+    breaks: >-
+      The changed code visibly accepts a foreign filename with traversal or path
+      separators and joins it into a directory intended to contain its files,
+      with no visible component or containment check along that path.
+    severity: P1
+    tiers: { medium: 0.8, high: 0.9 }
+    overlaps: ["CodeQL path-injection analysis (potential; custom-schema modeling may be needed)"]
+    source: { kind: guide, file: benchmarks/reviewer/README.md }
+  - id: explicit-override-precedence
+    applies:
+      paths: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      When the visible API defines an explicit forced override, changed code
+      computing the effective value must prefer a valid override over a saved,
+      system, or resolved default. The override input, its precedence contract,
+      and the effective-value computation must all be visible. An invalid or
+      absent override may fall back. Do not infer an override from unseen code,
+      and do not flag independent stored preferences that are not effective values.
+    breaks: >-
+      A changed effective-value computation visibly chooses a saved, resolved,
+      or system default despite a valid explicit override whose shown contract
+      says it controls that value.
+    severity: P2
+    tiers: { medium: 0.8, high: 0.9 }
+    source: { kind: guide, file: benchmarks/reviewer/README.md }
+  - id: preserve-native-activation
+    applies:
+      paths: ["**/*.{js,jsx,ts,tsx}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      Changed menu or disclosure dismissal must preserve native activation of
+      its visible label/input controls. A synchronous blur dismissal based only
+      on focus moving outside can interrupt an inside label pointer gesture
+      when a focusable ancestor temporarily receives focus. Require the blur
+      dismissal, contained label/input, and relevant pointer handling to be
+      visible. A guard through click activation or settled-focus check is allowed.
+      Outside-pointer, Escape, and deliberate Tab dismissal are allowed. Do not
+      flag components without such controls or infer hidden handlers.
+    breaks: >-
+      The changed code synchronously hides a menu or disclosure on blur to an
+      outside target even during an inside label/input pointer activation, with
+      no visible pointer guard or deferred settled-focus check.
+    severity: P2
+    tiers: { medium: 0.8, high: 0.9 }
+    source: { kind: guide, file: benchmarks/reviewer/README.md }

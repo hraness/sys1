@@ -4,14 +4,15 @@
 
 Sys1 lets agents ask yes/no, choice, and score questions and get validated answers with probabilities. You choose who answers: TypeSafe's hosted Jev, a local model on your machine, or a compatible server you run. Every backend takes the same request format, Sys1 checks each answer against the question asked, and each response says which backend produced it. Call Sys1 from a Node or Bun client, embed its router, or run its local HTTP daemon for any language. Sys1 is free and MIT licensed.
 
-Latest release: v0.12.0.
+Latest release: v0.13.0.
 
 ## Docs
 
 - [Getting started](https://sys1.io/docs#getting-started): Install Sys1 and run the first checks.
 - [Integration modes](https://sys1.io/docs#integration): Call Sys1 from a Node or Bun client, an embedded Bun router, or the local HTTP daemon.
 - [Backends and models](https://sys1.io/docs#backends): Hosted Jev, local models, and compatible servers.
-- [Review a Git diff](https://sys1.io/docs#audit): Experimental advisory rules, explicit model routes, coverage reports, and request caps.
+- [Review with your agent](https://sys1.io/docs#audit): Project skills, advisory checkpoints, local feedback, and rechecks.
+- [Agent review guide](https://github.com/hraness/sys1/blob/main/docs/review.md): Install for Codex or Claude Code, preview selected files, investigate findings, and draft rules.
 - [Evaluations](https://sys1.io/docs/evaluations): Dated test reports, wrong answers included.
 - [Compare models](https://sys1.io/compare): JevBench scores and workload cost.
 
