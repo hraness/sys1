@@ -63,6 +63,14 @@
 
 # Guidelines
 
+- `hf/MAINTAINING.md` owns the Hugging Face dataset sync procedure for
+  `hranesscom/sys1-benchmarks`. When public benchmark fixtures or reports change,
+  review `hf/manifest.json` and `hf/README.md` in the same change. Stage only the
+  explicit checksum allowlist with `python3 -B hf/stage.py`; keep history and
+  fixture versions distinct. Upload only a reviewed external stage through the
+  supported `hf` CLI after publication authorization and rights review. Never
+  mirror the checkout, credentials, private inputs, or model weights.
+
 - Use Bun 1.3.14. Run `bun run check` before handoff: strict typecheck,
   tests, dist build, and packed-package smoke check.
 - Reject oversized local input without silently truncating evidence.
