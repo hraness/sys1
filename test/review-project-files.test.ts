@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeProjectFile } from "../src/review/project-files.ts";
@@ -7,16 +8,17 @@ import { runRulesCli } from "../src/audit/rules-cli.ts";
 
 const scratch: string[] = [];
 afterEach(() => { for (const root of scratch.splice(0)) rmSync(root, { recursive: true, force: true }); });
-function fixture() {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "sys1-review-files-")));
+async function fixture() {
+  const root = mkdtempSync(join(tmpdir(), "sys1-review-files-"));
   scratch.push(root);
   const repo = join(root, "repo"); mkdirSync(repo);
-  return { root, repo, home: join(root, "home") };
+  // Match production's canonical root API; Windows sync/native spellings can differ.
+  return { root, repo: await realpath(repo), home: join(root, "home") };
 }
 
 describe("bounded project files", () => {
   test("caps UTF-8 bytes before creating directories and admits the exact boundary", async () => {
-    const { repo } = fixture();
+    const { repo } = await fixture();
     await expect(writeProjectFile(repo, "new/oversized.txt", "é".repeat(32_769), false)).rejects.toThrow("size limit");
     expect(existsSync(join(repo, "new"))).toBe(false);
     const text = "é".repeat(32_768);
@@ -26,7 +28,7 @@ describe("bounded project files", () => {
   });
 
   test("rejects final file symlinks and hardlinks without changing either target", async () => {
-    const { root, repo } = fixture();
+    const { root, repo } = await fixture();
     const target = join(root, "owned.txt"); writeFileSync(target, "keep this\n");
     // File symlink creation needs a Windows privilege; hardlink coverage runs everywhere.
     if (process.platform !== "win32") {
@@ -41,7 +43,7 @@ describe("bounded project files", () => {
   });
 
   test("rejects traversal and non-directory parents without adding files", async () => {
-    const { root, repo } = fixture();
+    const { root, repo } = await fixture();
     for (const path of ["../outside", "a/../outside", "a/./file", "a//file", "a\0file"]) {
       await expect(writeProjectFile(repo, path, "content", false)).rejects.toThrow("destination");
     }
@@ -52,7 +54,7 @@ describe("bounded project files", () => {
   });
 
   test("rule provenance quotes stay data and oversized names remain inert", async () => {
-    const { repo, home } = fixture();
+    const { repo, home } = await fixture();
     const source = 'docs/the "quoted" guide.md';
     const flags = ["--ensure", "Errors remain visible.", "--breaks", "Errors disappear.", "--source", source, "--path", "src/**/*.ts"];
     await expect(runRulesCli(["draft", "a".repeat(65), ...flags], home, repo)).rejects.toThrow("kebab-case");

@@ -7,7 +7,8 @@ export class ProjectFileError extends Error {
 }
 
 /** Create a small project-owned file exclusively; edited files and links are
- * never replaced. The caller supplies a canonical repository root. */
+ * never replaced. The caller supplies a canonical repository root from
+ * node:fs/promises.realpath, as resolveReviewRoot does. */
 export async function writeProjectFile(root: string, path: string, text: string, dryRun: boolean): Promise<"created" | "unchanged" | "planned"> {
   if (path.includes("\0") || isAbsolute(path) || path.split(/[\\/]/).some((part) => part === ".." || part === "." || part === "")) {
     throw new ProjectFileError("Invalid project destination");

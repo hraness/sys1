@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { installReviewSkill, REVIEW_SKILL } from "../src/review/install.ts";
@@ -8,17 +9,18 @@ import { loadPacks, packRoots } from "../src/audit/pack.ts";
 
 const scratch: string[] = [];
 afterEach(() => { for (const path of scratch.splice(0)) rmSync(path, { recursive: true, force: true }); });
-function fixture() {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "sys1-review-install-")));
+async function fixture() {
+  const root = mkdtempSync(join(tmpdir(), "sys1-review-install-"));
   scratch.push(root);
   const repo = join(root, "repo");
   const home = join(root, "home");
   mkdirSync(repo);
-  return { root, repo, home };
+  // Match production's canonical root API; Windows sync/native spellings can differ.
+  return { root, repo: await realpath(repo), home };
 }
 describe("project review skill", () => {
   test("preview leaves no directories; setup is idempotent for supported targets", async () => {
-    const { repo, home } = fixture();
+    const { repo, home } = await fixture();
     for (const target of ["codex", "claude-code"]) {
       const preview = await installReviewSkill({ repoRoot: repo, target, dryRun: true });
       expect(preview.status).toBe("planned");
@@ -32,7 +34,7 @@ describe("project review skill", () => {
     expect(existsSync(join(repo, ".claude", "settings.json"))).toBe(false);
   });
   test("preserves edited skill and rejects symlink parent or destination", async () => {
-    const { repo, root } = fixture();
+    const { repo, root } = await fixture();
     const result = await installReviewSkill({ repoRoot: repo, target: "codex" });
     const destination = join(repo, result.path);
     writeFileSync(destination, "user-maintained instructions\n");
@@ -45,7 +47,7 @@ describe("project review skill", () => {
     expect(existsSync(join(outside, "skills"))).toBe(false);
   });
   test("unknown targets do not produce files", async () => {
-    const { repo } = fixture();
+    const { repo } = await fixture();
     await expect(installReviewSkill({ repoRoot: repo, target: "toString" })).rejects.toThrow();
     await expect(installReviewSkill({ repoRoot: repo, target: "../outside" })).rejects.toThrow();
   });
@@ -54,7 +56,7 @@ describe("project review skill", () => {
 describe("repository rule authoring", () => {
   const draft = ["draft", "await-success", "--ensure", "Required storage succeeds before reporting success.", "--breaks", "The change reports success while required storage can still fail.", "--source", "AGENTS.md", "--path", "src/**/*.ts"];
   test("draft validates but stays inactive until explicitly moved", async () => {
-    const { repo, home } = fixture();
+    const { repo, home } = await fixture();
     const preview = await runRulesCli([...draft, "--dry-run"], home, repo);
     expect(preview).toMatchObject({ status: "planned", active: false, requests: 0 });
     expect(existsSync(join(repo, ".sys1"))).toBe(false);
@@ -65,7 +67,7 @@ describe("repository rule authoring", () => {
     expect(await runRulesCli(draft, home, repo)).toMatchObject({ status: "unchanged" });
   });
   test("quoted and multiline guide prose cannot inject another rule", async () => {
-    const { repo, home } = fixture();
+    const { repo, home } = await fixture();
     const modified = [...draft];
     modified[3] = "Keep 'truth': true\nrules: [injected]\n in documentation examples.";
     await runRulesCli(modified, home, repo);
@@ -74,7 +76,7 @@ describe("repository rule authoring", () => {
     expect(result.rules).toHaveLength(1);
   });
   test("rejects unknown, duplicate, conflicting and oversized options", async () => {
-    const { repo, home } = fixture();
+    const { repo, home } = await fixture();
     for (const args of [
       ["draft", "../escape"], ["draft", "missing-prose"],
       [...draft, "--ensure", "second"], [...draft, "--enable"],
