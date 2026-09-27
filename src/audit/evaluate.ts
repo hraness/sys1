@@ -128,70 +128,75 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
     report.elapsed_ms = Math.round(performance.now() - started);
     return report;
   }
-  const deadline = AbortSignal.timeout(timeoutMs);
-  const signal = options.signal === undefined ? deadline : AbortSignal.any([deadline, options.signal]);
-  const routeSlash = options.route.indexOf("/");
-  const expectedBackend = options.route.slice(0, routeSlash);
-  const expectedModel = options.route.slice(routeSlash + 1);
-  let halted: string | undefined;
-  for (const entry of work) {
-    if (halted !== undefined || signal.aborted) {
-      skipped.push({ path: entry.unit.path, reason: halted ?? "timeout_or_cancelled" });
-      continue;
-    }
-    // Reserve the complete unit's budget before starting it. Never report a
-    // partially evaluated unit as checked when its questions cross the cap.
-    if (report.requests + entry.requests.length > maxRequests) {
-      skipped.push({ path: entry.unit.path, reason: "request_limit" });
-      halted = "request_limit";
-      continue;
-    }
-    const scores = new Map<string, number>();
-    try {
-      for (const request of entry.requests) {
-        if (signal.aborted) throw new Error("audit_cancelled");
-        report.requests++;
-        report.questions += Object.keys(request.questions).length;
-        const result = await untilAborted(options.decider!.evaluate(request, { signal }), signal);
-        const response = validateResponseForRequest(request, result.response, result.metadata.adapter === "kev" ? 2 : 3);
-        if (result.response.model !== expectedModel || result.metadata.backend !== expectedBackend || (result.metadata.attempts ?? 1) !== 1) {
-          throw new Error("audit_route_mismatch");
+  // Own the timer so a decider with no active I/O still has a live deadline
+  // on every supported runtime, and successful calls release it immediately.
+  const deadline = new AbortController();
+  const timer = setTimeout(() => deadline.abort(), timeoutMs);
+  try {
+    const signal = options.signal === undefined ? deadline.signal : AbortSignal.any([deadline.signal, options.signal]);
+    const routeSlash = options.route.indexOf("/");
+    const expectedBackend = options.route.slice(0, routeSlash);
+    const expectedModel = options.route.slice(routeSlash + 1);
+    let halted: string | undefined;
+    for (const entry of work) {
+      if (halted !== undefined || signal.aborted) {
+        skipped.push({ path: entry.unit.path, reason: halted ?? "timeout_or_cancelled" });
+        continue;
+      }
+      // Reserve the complete unit's budget before starting it. Never report a
+      // partially evaluated unit as checked when its questions cross the cap.
+      if (report.requests + entry.requests.length > maxRequests) {
+        skipped.push({ path: entry.unit.path, reason: "request_limit" });
+        halted = "request_limit";
+        continue;
+      }
+      const scores = new Map<string, number>();
+      try {
+        for (const request of entry.requests) {
+          if (signal.aborted) throw new Error("audit_cancelled");
+          report.requests++;
+          report.questions += Object.keys(request.questions).length;
+          const result = await untilAborted(options.decider!.evaluate(request, { signal }), signal);
+          const response = validateResponseForRequest(request, result.response, result.metadata.adapter === "kev" ? 2 : 3);
+          if (result.response.model !== expectedModel || result.metadata.backend !== expectedBackend || (result.metadata.attempts ?? 1) !== 1) {
+            throw new Error("audit_route_mismatch");
+          }
+          report.usage.input_tokens += response.usage.input_tokens;
+          report.usage.output_tokens += response.usage.output_tokens;
+          report.usage.known_requests++;
+          for (const loaded of entry.rules) {
+            const answer = response.answers[loaded.id];
+            if (answer !== undefined) scores.set(loaded.id, violationScore(loaded.rule, answer));
+          }
         }
-        report.usage.input_tokens += response.usage.input_tokens;
-        report.usage.output_tokens += response.usage.output_tokens;
-        report.usage.known_requests++;
+        if (scores.size !== entry.rules.length) throw new Error("audit_incomplete_response");
+        report.evaluated_units++;
         for (const loaded of entry.rules) {
-          const answer = response.answers[loaded.id];
-          if (answer !== undefined) scores.set(loaded.id, violationScore(loaded.rule, answer));
+          const score = scores.get(loaded.id)!;
+          if (score < loaded.rule.tiers.medium) continue;
+          const before = entry.unit.newRange.count === 0;
+          report.findings.push({
+            id: createHash("sha256").update(JSON.stringify([diff.repoRoot, loaded.id, loaded.revision, QUESTION_FORMAT, entry.unit.id, options.route])).digest("hex").slice(0, 16),
+            rule: loaded.id, revision: loaded.revision, path: entry.unit.path,
+            line: Math.max(1, before ? entry.unit.oldRange.start : entry.unit.newRange.start), side: before ? "before" : "after",
+            model_score: score, tier: score >= loaded.rule.tiers.high ? "high" : "medium",
+            summary: "ensure" in loaded.rule ? loaded.rule.ensure : loaded.rule.ask,
+            qualification: "unqualified",
+          });
         }
+      } catch {
+        // Never echo an untrusted provider exception (it may contain the source).
+        halted = signal.aborted ? "timeout_or_cancelled" : "backend_error";
+        skipped.push({ path: entry.unit.path, reason: halted });
       }
-      if (scores.size !== entry.rules.length) throw new Error("audit_incomplete_response");
-      report.evaluated_units++;
-      for (const loaded of entry.rules) {
-        const score = scores.get(loaded.id)!;
-        if (score < loaded.rule.tiers.medium) continue;
-        const before = entry.unit.newRange.count === 0;
-        report.findings.push({
-          id: createHash("sha256").update(JSON.stringify([diff.repoRoot, loaded.id, loaded.revision, QUESTION_FORMAT, entry.unit.id, options.route])).digest("hex").slice(0, 16),
-          rule: loaded.id, revision: loaded.revision, path: entry.unit.path,
-          line: Math.max(1, before ? entry.unit.oldRange.start : entry.unit.newRange.start), side: before ? "before" : "after",
-          model_score: score, tier: score >= loaded.rule.tiers.high ? "high" : "medium",
-          summary: "ensure" in loaded.rule ? loaded.rule.ensure : loaded.rule.ask,
-          qualification: "unqualified",
-        });
-      }
-    } catch {
-      // Never echo an untrusted provider exception (it may contain the source).
-      halted = signal.aborted ? "timeout_or_cancelled" : "backend_error";
-      skipped.push({ path: entry.unit.path, reason: halted });
     }
-  }
-  report.findings.sort((a, b) => b.model_score - a.model_score || a.path.localeCompare(b.path) || a.rule.localeCompare(b.rule));
-  report.usage.unknown_requests = report.requests - report.usage.known_requests;
-  report.complete = diff.complete && skipped.length === 0;
-  report.status = report.complete ? "complete" : "incomplete";
-  report.elapsed_ms = Math.round(performance.now() - started);
-  return report;
+    report.findings.sort((a, b) => b.model_score - a.model_score || a.path.localeCompare(b.path) || a.rule.localeCompare(b.rule));
+    report.usage.unknown_requests = report.requests - report.usage.known_requests;
+    report.complete = diff.complete && skipped.length === 0;
+    report.status = report.complete ? "complete" : "incomplete";
+    report.elapsed_ms = Math.round(performance.now() - started);
+    return report;
+  } finally { clearTimeout(timer); }
 }
 
 /** Bound injected deciders too; cancel real transports through their signal. */

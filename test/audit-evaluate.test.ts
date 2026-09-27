@@ -104,9 +104,20 @@ describe("advisory audit", () => {
 
   test("timeout bounds even a decider that ignores cancellation", async () => {
     const before = performance.now();
-    const report = await evaluateAudit({ diff: diff(), rules, route, timeoutMs: 20, decider: { evaluate: () => new Promise(() => {}) } });
+    let calls = 0;
+    let observedSignal: AbortSignal | undefined;
+    const report = await evaluateAudit({ diff: diff([unit("a.ts"), unit("b.ts")]), rules, route, timeoutMs: 20, decider: {
+      evaluate(_request, options) {
+        calls++;
+        observedSignal = options?.signal;
+        return new Promise(() => {});
+      },
+    } });
     expect(performance.now() - before).toBeLessThan(1000);
-    expect(report.skipped[0]?.reason).toBe("timeout_or_cancelled");
+    expect(calls).toBe(1);
+    expect(observedSignal?.aborted).toBe(true);
+    expect(report).toMatchObject({ complete: false, requests: 1, evaluated_units: 0, findings: [] });
+    expect(report.skipped).toEqual([{ path: "a.ts", reason: "timeout_or_cancelled" }, { path: "b.ts", reason: "timeout_or_cancelled" }]);
   });
 
   test("no candidates never renders an all-clear claim", async () => {

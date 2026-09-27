@@ -1,21 +1,28 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
-import { devNull, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import { delimiter, dirname, join } from "node:path";
 import { collectDiff, DiffError } from "../src/audit/diff.ts";
 
 const repositories: string[] = [];
+const gitTimeoutMs = 5_000;
 afterEach(async () => {
   await Promise.all(repositories.splice(0).map((path) => rm(path, { recursive: true, force: true })));
 });
 
-function git(cwd: string, ...args: string[]): string {
+function runGit(cwd: string, ...args: string[]): Bun.ReadableSyncSubprocess {
   const env = { ...process.env };
   for (const key of Object.keys(env)) if (key.startsWith("GIT_")) delete env[key];
-  const result = Bun.spawnSync(["git", "-c", "user.name=Audit Test", "-c", "user.email=audit@example.invalid", ...args], {
-    cwd, env: { ...env, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1" }, stdout: "pipe", stderr: "pipe", stdin: "ignore",
+  return Bun.spawnSync(["git", "-c", "user.name=Audit Test", "-c", "user.email=audit@example.invalid", ...args], {
+    // An absent ordinary file suppresses global config without Windows device-path handling.
+    cwd, env: { ...env, GIT_CONFIG_GLOBAL: join(cwd, ".git", "fixture-global.gitconfig"), GIT_CONFIG_NOSYSTEM: "1", GIT_TERMINAL_PROMPT: "0" },
+    stdout: "pipe", stderr: "pipe", stdin: "ignore", timeout: gitTimeoutMs, killSignal: "SIGKILL",
   });
-  if (result.exitCode !== 0) throw new Error(`git ${args[0]} failed: ${result.stderr.toString()}`);
+}
+
+function git(cwd: string, ...args: string[]): string {
+  const result = runGit(cwd, ...args);
+  if (!result.success) throw new Error(`git ${args[0]} failed${result.exitedDueToTimeout ? " (timeout)" : ""}: ${result.stderr.toString()}`);
   return result.stdout.toString().trim();
 }
 
@@ -326,7 +333,7 @@ describe("Git audit evidence", () => {
     git(root, "checkout", "--quiet", initial);
     await write(root, "conflict.ts", "current\n");
     git(root, "commit", "--quiet", "-am", "Current fixture");
-    const merge = Bun.spawnSync(["git", "-c", "user.name=Audit Test", "-c", "user.email=audit@example.invalid", "merge", "--no-edit", "incoming"], { cwd: root, stdout: "pipe", stderr: "pipe" });
+    const merge = runGit(root, "merge", "--no-edit", "incoming");
     expect(merge.exitCode).toBe(1);
     for (const mode of ["staged", "worktree"] as const) {
       const result = await collectDiff({ cwd: root, mode });
@@ -362,7 +369,7 @@ if (args.includes("--patch") && args.at(-1) === "b.ts" && !existsSync(marker)) {
   writeFileSync(marker, "triggered");
   writeFileSync(join(process.cwd(), ${JSON.stringify(race === "modified" ? "a.ts" : "new-after-enumeration.ts")}), "laterMutation();\\n");
 }
-const child = Bun.spawnSync([${JSON.stringify(realGit)}, ...args], { stdin: "ignore", stdout: "inherit", stderr: "inherit" });
+const child = Bun.spawnSync([${JSON.stringify(realGit)}, ...args], { stdin: "ignore", stdout: "inherit", stderr: "inherit", timeout: ${gitTimeoutMs}, killSignal: "SIGKILL" });
 process.exit(child.exitCode);
 `);
       await chmod(shim, 0o755);
