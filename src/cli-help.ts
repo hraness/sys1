@@ -104,6 +104,7 @@ Experimental and advisory. Hosted Jev is opt-in; local models are experimental.
 
 Checkpoint/recheck options
   --model <route>       Exact backend/model, with no fallback
+  --rule <id>           Checkpoint: select an active rule; repeat for several
   --dry-run             Preview paths and requests without inference or writes
   --max-requests <n>     Request cap: 1..200, default 20
   --timeout-ms <n>       Model-call deadline: 1..120000 ms, default 30000
@@ -111,6 +112,8 @@ Checkpoint/recheck options
   --json, --agent        Print JSON
 
 Checkpoint uses the same source selection and rule packs as sys1 audit.
+Omit --rule to use all active rules. Unknown IDs fail before model calls.
+Recheck uses the finding's original rule and does not accept --rule.
 Unchanged complete batches reuse a review for up to 24 hours. Changed rules,
 source, or route trigger a new review. Repeated candidates are suppressed.
 Issues lists their metadata and feedback. Recheck always evaluates again when
@@ -161,6 +164,7 @@ Options
   --worktree            Review HEAD versus current files, including untracked
   --since <ref>         Review committed changes from ref to HEAD
   --model <route>       Pin the exact backend/model; no fallback
+  --rule <id>           Select an active rule; repeat to select several
   --dry-run             List coverage and request count without model calls
   --max-requests <n>     Request cap: 1..200, default 20
   --timeout-ms <n>       Model-call deadline: 1..120000 ms, default 30000
@@ -170,6 +174,8 @@ Options
 
 Rules load from bundled packs, SYS1_HOME/rules, then .sys1/rules in the repo.
 Later rules replace earlier rules with the same id. Only hunk rules run.
+Omit --rule to use all active rules. Find IDs with sys1 rules list.
+Unknown IDs fail before model calls; selection does not activate draft rules.
 Source diff context goes to the pinned configured backend. Hosted Jev must be
 enabled explicitly. Sensitive/generated paths and oversized evidence are
 skipped and reported. No source, answers, or findings are saved by audit.

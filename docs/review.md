@@ -24,8 +24,9 @@ sys1 review setup codex --json
 Codex receives `.agents/skills/sys1-review/SKILL.md`. For Claude Code, run
 `sys1 review setup claude-code`; its path is
 `.claude/skills/sys1-review/SKILL.md`. Repeating setup preserves an identical
-file and refuses to overwrite edited instructions. Commit the skill if the
-repository should share it.
+file and refuses to overwrite different content, including an older Sys1
+template. Update existing instructions through the repository's normal review.
+Commit the skill if the repository should share it.
 
 Setup installs instructions only. It does not activate models, add hooks, or
 change the repository's required checks. Other agents, including Devin, can use
@@ -61,6 +62,21 @@ its `local-<id>/<id>` route, and add `--gateway`. Local models are experimental.
 Checkpoints use the [same rule packs and coverage limits](audit.md) as
 `sys1 audit`.
 
+Use `sys1 rules list --json` to find active IDs, then add `--rule` to run a
+chosen check:
+
+```sh
+sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+  --rule core-removed-test-assertions --max-requests 10 --timeout-ms 60000 \
+  --dry-run --json -- test
+```
+
+Repeat `--rule <id>` to select several rules, up to 256 selections. Omit it to
+use all active rules. Unknown or malformed IDs fail with exit 2 before model
+calls or metadata writes. Selection does not activate drafts or expand a rule's
+file filters. Preserve the chosen rules and paths when running the previewed
+batch.
+
 ## Investigate and record feedback
 
 Inspect each finding's rule and before/after evidence in the code. Check the
@@ -88,7 +104,8 @@ sys1 review recheck <finding-id> --model typesafe/jev-1.13.0 \
 ```
 
 Recheck makes a fresh evaluation when the original rule and diff evidence are
-available. It preserves your feedback. After a repair changes that evidence,
+available. It uses only the finding's original rule and does not accept
+`--rule`. It preserves your feedback. After a repair changes that evidence,
 run a new checkpoint on the repaired batch, alongside its tests.
 
 | Status | Meaning |
@@ -108,8 +125,10 @@ Neither an empty report nor `not_reported` proves a fix.
 
 ## Repeated checks and local data
 
-Complete batches can be reused for up to 24 hours. Changing the selection,
-source, rule revision, or route triggers evaluation again. Previously recorded
+Complete batches can be reused for up to 24 hours. Changing the selected paths
+or rules, source, a selected rule's revision, or route triggers evaluation again.
+Reordering or repeating rule IDs has no effect. Changes to unselected rules do
+not trigger evaluation. Previously recorded
 candidates are suppressed from new checkpoint output regardless of their
 feedback. `suppressed_count` reports those repeats; `issues` keeps them
 available. Recheck bypasses reuse.
@@ -162,3 +181,5 @@ outside the packaged and default packs. The corpus links original commits,
 independent label review, and deterministic checks. It is discovery evidence,
 not a held-out accuracy estimate. The [dated evaluation](reviewer-evaluation-2026-09-27.md)
 reports detections, misses, clean controls, and workflow checks.
+The [focused-review follow-up](reviewer-followup-2026-09-27.md) compares specific
+requirements with added source context and records the remaining limitations.

@@ -6,12 +6,13 @@ import { checkpointReview, feedbackReview, listReviewIssues, recheckReview, REVI
 import { mutateReviewState, readReviewState, reviewStatePath } from "../src/review/state.ts";
 import { ruleRevision, ruleSchema } from "../src/audit/schema.ts";
 import type { LoadedPack, LoadedRule, RuleSet } from "../src/audit/pack.ts";
+import { selectRules } from "../src/audit/select.ts";
 import type { Sys1Client } from "../src/client.ts";
 
 const roots: string[] = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true }))); });
-function ruleset(wording = "The changed code keeps errors visible."): RuleSet {
-  const rule = ruleSchema.parse({ id: "errors-visible", applies: { paths: ["**/*.ts"] }, ensure: wording, breaks: "The changed code hides errors." });
+function ruleset(wording = "The changed code keeps errors visible.", id = "errors-visible"): RuleSet {
+  const rule = ruleSchema.parse({ id, applies: { paths: ["**/*.ts"] }, ensure: wording, breaks: "The changed code hides errors." });
   const pack = { name: "test", rules: [rule] } as unknown as LoadedPack;
   const loaded = { id: rule.id, rule, revision: ruleRevision(rule), pack, overrides: [] } satisfies LoadedRule;
   return { rules: [loaded], packs: [pack], get: id => id === rule.id ? loaded : undefined, pack: () => pack };
@@ -111,6 +112,48 @@ describe("agent review checkpoint", () => {
     const source = await checkpointReview(f.options);
     expect(new Set([first, route, rules, source].map(item => item.snapshot)).size).toBe(4);
     expect(new Set([first, route, rules, source].map(item => item.findings[0]!.id)).size).toBe(4);
+  });
+
+  test("selected rules govern receipt identity and recheck retains the finding's original rule", async () => {
+    const f = await fixture();
+    let firstWording = "The first condition holds.";
+    let secondWording = "The second condition holds.";
+    const loadRules = (ids?: readonly string[]) => async (): Promise<RuleSet> => {
+      const entries = [...ruleset(firstWording, "first-rule").rules, ...ruleset(secondWording, "second-rule").rules];
+      return selectRules({ rules: entries, packs: entries.map(rule => rule.pack), get: id => entries.find(rule => rule.id === id), pack: () => entries[0]!.pack }, ids);
+    };
+    const questions: string[][] = [];
+    const decider: Sys1Client = { evaluate(request, options) {
+      questions.push(Object.keys(request.questions));
+      return f.decider.evaluate(request, options);
+    } };
+    const base = { ...f.options, decider };
+    const selected = { ...base, loadRules: loadRules(["first-rule"]) };
+    const first = await checkpointReview(selected);
+    expect(first.status).toBe("complete");
+    expect(questions).toEqual([["first-rule"]]);
+    const all = await checkpointReview({ ...base, loadRules: loadRules() });
+    expect(all.status).toBe("complete");
+    expect(all.snapshot).not.toBe(first.snapshot);
+    expect(questions[1]).toEqual(["first-rule", "second-rule"]);
+    expect(await checkpointReview(selected)).toMatchObject({ status: "unchanged", snapshot: first.snapshot, requests: 0 });
+    expect(await checkpointReview({ ...base, loadRules: loadRules(["second-rule", "first-rule", "second-rule"]) })).toMatchObject({ status: "unchanged", snapshot: all.snapshot, requests: 0 });
+    expect(f.calls()).toBe(2);
+
+    secondWording = "The unselected condition has changed.";
+    expect(await checkpointReview(selected)).toMatchObject({ status: "unchanged", snapshot: first.snapshot, requests: 0 });
+    const id = first.findings[0]!.id;
+    expect(await recheckReview({ ...base, loadRules: loadRules(), id })).toMatchObject({ status: "reported" });
+    expect(questions[2]).toEqual(["first-rule"]);
+    expect(f.calls()).toBe(3);
+
+    firstWording = "The selected condition has changed.";
+    expect(await recheckReview({ ...base, loadRules: loadRules(), id })).toMatchObject({ status: "superseded", reason: "rule_changed" });
+    expect(f.calls()).toBe(3);
+    const revised = await checkpointReview(selected);
+    expect(revised.status).toBe("complete");
+    expect(revised.snapshot).not.toBe(first.snapshot);
+    expect(f.calls()).toBe(4);
   });
 
   test("expired receipts trigger a fresh evaluation without repeating unchanged findings", async () => {

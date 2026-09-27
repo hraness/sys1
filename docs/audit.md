@@ -36,6 +36,21 @@ included. To select exact files or directory prefixes, put them after `--`:
 sys1 audit --worktree --model typesafe/jev-1.13.0 -- src test
 ```
 
+To run only chosen rules, find their active IDs with `sys1 rules list --json`
+and add `--rule` for each one:
+
+```sh
+sys1 audit --worktree --model typesafe/jev-1.13.0 \
+  --rule core-removed-test-assertions --dry-run --json -- test
+```
+
+Omitting `--rule` uses all active rules. Repeated IDs are evaluated once, and
+their order does not affect the review. Up to 256 selections are accepted.
+Unknown or malformed IDs fail with exit 2 before model calls. Draft rules stay
+inactive. Rule selection preserves each rule's file filters; evidence without
+an applicable selected rule is reported as skipped. Keep the same rules and
+paths when repeating a preview without `--dry-run`.
+
 For an already installed local model, start `sys1 up` and add `--gateway` with
 its exact `local-<id>/<id>` route. HTTP backends registered with
 `sys1 backend add` also accept explicit routes. The configured routing policy

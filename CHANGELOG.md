@@ -5,6 +5,15 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.14.0 - 2026-09-27
+
+Sys1 lets agents focus a review on selected rules and records what narrower requirements changed in experiments on historical code.
+
+- Add repeatable `--rule <id>` to `sys1 audit` or `sys1 review checkpoint` to check selected active rules without rewriting a pack. Unknown IDs fail before model calls, and selecting rules preserves repository overrides, path restrictions, and review freshness checks.
+- The project skill and review guide explain how to preview selected checks and draft a specific repository requirement.
+- A frozen 24-request experiment revisits three previously missed defects. Specific requirements detected two; adding full supporting files detected none. The native activation case remained undetected. These known examples guide the workflow and do not establish detection on unseen defects.
+- Publish a separate ten-case clean-control check and CLI trials on selected changes in complete Sys1, Ghostget, and design-kit checkouts. All three checkpoints completed and repeated without additional requests; the reports preserve the limits on detection and review-time claims.
+
 ## 0.13.0 - 2026-09-27
 
 Sys1 adds an advisory agent review workflow: check a batch of edits, investigate candidates, record feedback, and recheck the original evidence.

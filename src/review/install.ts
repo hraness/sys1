@@ -28,6 +28,11 @@ within the user's task. With source transmission authorized, repeat without
 \`--max-requests 10 --timeout-ms 60000\`. Use \`--gateway\` for a running local
 model. An unchanged complete batch can reuse a recent review without new calls.
 
+To run chosen checks, find active IDs with \`sys1 rules list --json\` and add
+\`--rule <id>\` for each one. Omitting \`--rule\` uses all active rules. Unknown
+IDs fail before model calls; drafts stay inactive. Keep the same selected
+rules and paths between preview and evaluation, and inspect skipped evidence.
+
 Investigate each new candidate in the actual code and tests. Scores rank
 candidates; they are not calibrated probabilities. Read the rule and the
 before/after evidence. Check callers or surrounding code when needed, and
@@ -45,7 +50,8 @@ sys1 review recheck <finding-id> --model <backend/model> --json
 Choose one feedback outcome after investigation. Feedback is an explicit
 judgment, not proof of model accuracy. Recheck reruns the original evidence
 when available; changed or missing evidence is superseded or unavailable,
-never automatically fixed. After a repair, run the relevant tests and a fresh
+never automatically fixed. Recheck uses the finding's original rule and does
+not accept \`--rule\`. After a repair, run the relevant tests and a fresh
 checkpoint on the repaired batch. Inspect incomplete coverage and exit 8;
 zero new candidates or suppressed repeats do not prove correctness.
 

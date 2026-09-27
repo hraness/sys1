@@ -99,3 +99,8 @@ Caller and callee context is useful to compare against the misses in the
 [reviewer evaluation](reviewer-evaluation-2026-09-27.md). This experiment supports
 that comparison; it does not establish that importing Perch's engine would
 improve Sys1's findings.
+
+A [later Sys1 experiment](reviewer-followup-2026-09-27.md) found that complete
+target-side files did not recover the three missed defects. Specific requirements
+recovered two known cases. That experiment did not test caller graphs or Perch's
+analysis engine.

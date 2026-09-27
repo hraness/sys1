@@ -1,0 +1,117 @@
+{
+  "verified_at": "2026-09-27",
+  "checks": [
+    {
+      "command": "gh api repos/hraness/design-kit/commits/6a1429a3b90c57ba4a801af9b248f5b3a2fe337a --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "6a1429a3b90c57ba4a801af9b248f5b3a2fe337a",
+        "url": "https://github.com/hraness/design-kit/commit/6a1429a3b90c57ba4a801af9b248f5b3a2fe337a"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/design-kit/commits/9d5483322b03b0d96e295a749537e74577431863 --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "9d5483322b03b0d96e295a749537e74577431863",
+        "url": "https://github.com/hraness/design-kit/commit/9d5483322b03b0d96e295a749537e74577431863"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/design-kit/commits/b24c966f73d142d13e129c247c0e0aed2db88615 --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "b24c966f73d142d13e129c247c0e0aed2db88615",
+        "url": "https://github.com/hraness/design-kit/commit/b24c966f73d142d13e129c247c0e0aed2db88615"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/ghostget/commits/4e2a56ada454a083eefd6dcf144fd07a39c40ccf --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "4e2a56ada454a083eefd6dcf144fd07a39c40ccf",
+        "url": "https://github.com/hraness/ghostget/commit/4e2a56ada454a083eefd6dcf144fd07a39c40ccf"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/slopcamera/commits/4479d6a6c0626b6bff01d7e4e93198d8215d215e --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "4479d6a6c0626b6bff01d7e4e93198d8215d215e",
+        "url": "https://github.com/hraness/slopcamera/commit/4479d6a6c0626b6bff01d7e4e93198d8215d215e"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/sys1/commits/b9e423dbb425e8dc5f09cafa44294cd0b72058c6 --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+        "url": "https://github.com/hraness/sys1/commit/b9e423dbb425e8dc5f09cafa44294cd0b72058c6"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/wordcell/commits/5c9d8a9d66824f35eadde01b332c326d408a0e7f --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "5c9d8a9d66824f35eadde01b332c326d408a0e7f",
+        "url": "https://github.com/hraness/wordcell/commit/5c9d8a9d66824f35eadde01b332c326d408a0e7f"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/wordcell/commits/9fec758d6581780ab27bff971deaa75c5536312c --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "9fec758d6581780ab27bff971deaa75c5536312c",
+        "url": "https://github.com/hraness/wordcell/commit/9fec758d6581780ab27bff971deaa75c5536312c"
+      }
+    },
+    {
+      "command": "gh api repos/hraness/wordcell/commits/aeb51e34c4740fb4081d36da7709c94b4866a754 --jq '{sha: .sha, url: .html_url}'",
+      "exit_code": 0,
+      "result": {
+        "sha": "aeb51e34c4740fb4081d36da7709c94b4866a754",
+        "url": "https://github.com/hraness/wordcell/commit/aeb51e34c4740fb4081d36da7709c94b4866a754"
+      }
+    },
+    {
+      "command": "gh repo view hraness/design-kit --json visibility,url",
+      "exit_code": 0,
+      "result": {
+        "url": "https://github.com/hraness/design-kit",
+        "visibility": "PUBLIC"
+      }
+    },
+    {
+      "command": "gh repo view hraness/ghostget --json visibility,url",
+      "exit_code": 0,
+      "result": {
+        "url": "https://github.com/hraness/ghostget",
+        "visibility": "PUBLIC"
+      }
+    },
+    {
+      "command": "gh repo view hraness/slopcamera --json visibility,url",
+      "exit_code": 0,
+      "result": {
+        "url": "https://github.com/hraness/slopcamera",
+        "visibility": "PUBLIC"
+      }
+    },
+    {
+      "command": "gh repo view hraness/sys1 --json visibility,url",
+      "exit_code": 0,
+      "result": {
+        "url": "https://github.com/hraness/sys1",
+        "visibility": "PUBLIC"
+      }
+    },
+    {
+      "command": "gh repo view hraness/wordcell --json visibility,url",
+      "exit_code": 0,
+      "result": {
+        "url": "https://github.com/hraness/wordcell",
+        "visibility": "PUBLIC"
+      }
+    }
+  ]
+}

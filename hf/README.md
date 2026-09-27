@@ -56,6 +56,9 @@ comparing observations.
 These small, project-authored synthetic studies measure adapter behavior.
 They do not establish calibration, production safety, or general model quality.
 The separate external JevBench leaderboard is not included in this dataset.
+The historical code-review studies in `benchmarks/reviewer/` and
+`benchmarks/reviewer-next/` remain in the source repository and are outside
+this synthetic dataset's explicit export list.
 
 ## Provenance and updates
 

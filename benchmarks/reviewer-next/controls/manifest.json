@@ -1,0 +1,448 @@
+{
+  "version": 1,
+  "corpus": "reviewer-fresh-controls-2026-09-27",
+  "status": "independently-reviewed",
+  "purpose": "fresh-clean-controls-with-separate-contract-diagnostic",
+  "fixtures_sha256": "b9bb6c1ae847bd1ebe4f75e1e3ca61af57cd521ce7cd6161977760837bb26a63",
+  "diagnostics_sha256": "be32154ce2a197c2cb7339076639a84da424b5edcf190bf4cf25ee96b94c3dd9",
+  "units": [
+    {
+      "id": "design-kit-share-await",
+      "repository": "hraness/design-kit",
+      "commit": "b24c966f73d142d13e129c247c0e0aed2db88615",
+      "parent": "271f8143592ad424c9bdaf539dac09bd75840267",
+      "representation": "snapshot-as-additions",
+      "family": "native-file-share-completion",
+      "sections": [
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 6,
+          "end": 10,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "209289c3f4e6038c3d291425385682d53f35a2f730b4515b700fe48f302d67a3"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 103,
+          "end": 108,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "043a2930d2e2aaf3f1bf5bad190f42316e9eecc69ebcb7ae792eb678ac05a50f"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 110,
+          "end": 112,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "b06ee7bc4c6e5a72885337e496cf5f48886e80a555df898234cfca2a5b578fe6"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 114,
+          "end": 124,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "2591b5416b6b2b27226f63f42e05e7a90c83f9376c8178ad820daf5690b9a551"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 126,
+          "end": 135,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "5c55ed868be664fc6dfbaaf36f8f0a870266c06419cc1dedee483fe1038e928f"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 137,
+          "end": 142,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "ee6cd6f7fe25bb5953ac957fdb3fd89d1330f4043f5a106e36cf601c4848f555"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 144,
+          "end": 164,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "df48c3c01f76bd594c3aeeb90b325843100845ca9ef29c604dfe10ffe56f487b"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Native share is awaited before kind:shared; capability absence, rejection, and AbortError produce explicit unavailable/failed/cancelled states. Reproduction exercises the original helper bodies with controlled browser APIs; no real sharing.",
+      "state_sha256": "44abcb9fb1c458d7d24ee3c1c6dc60f747d35705c7fe5e23eb424d285c33d8c9"
+    },
+    {
+      "id": "design-kit-download-revocation",
+      "repository": "hraness/design-kit",
+      "commit": "b24c966f73d142d13e129c247c0e0aed2db88615",
+      "parent": "271f8143592ad424c9bdaf539dac09bd75840267",
+      "representation": "snapshot-as-additions",
+      "family": "download-dispatch-and-deferred-url-revocation",
+      "sections": [
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 12,
+          "end": 17,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "7a1d7e23228c31dbc7d9f975ee3abdc3bcf8171bef646a2dbbad47e38e05d608"
+        },
+        {
+          "path": "src/browser/artifact-share.ts",
+          "start": 73,
+          "end": 101,
+          "blob_sha256": "ce8a051db2cf21270cb0465db81e81020eefb9ef1157266a172d866c6b3de238",
+          "excerpt_sha256": "cbe864f78accbf8c3be82881cb149ac8536fb89b1552bdace7e1363723cf00f2"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "The visible contract says starts a browser download and schedules URL cleanup after synthetic activation. It does not claim download completion. Deferred revokeObjectURL is not pending work contradicting that start claim. Original helper reproduction verifies dispatch precedes scheduled revocation.",
+      "state_sha256": "a21383c5612a76ad25c78f8e258e16bc6fe0c559fa71d39734a96f6c4764e312"
+    },
+    {
+      "id": "wordcell-bundle-containment",
+      "repository": "hraness/wordcell",
+      "commit": "5c9d8a9d66824f35eadde01b332c326d408a0e7f",
+      "parent": "aeb51e34c4740fb4081d36da7709c94b4866a754",
+      "representation": "snapshot-as-additions",
+      "family": "capture-bundle-lexical-containment",
+      "sections": [
+        {
+          "path": "src/clip/bundle-reader.ts",
+          "start": 97,
+          "end": 107,
+          "blob_sha256": "83ce14a53ee3fbafcc11d123dfacb84bbd1378f7da9084d0136466a420d8ca58",
+          "excerpt_sha256": "386f27d687d4da29e2b8a814894e7ec41d8d150586dc0d7f72f065eb54a2eb22"
+        },
+        {
+          "path": "src/clip/bundle-reader.ts",
+          "start": 109,
+          "end": 114,
+          "blob_sha256": "83ce14a53ee3fbafcc11d123dfacb84bbd1378f7da9084d0136466a420d8ca58",
+          "excerpt_sha256": "24966887b20ed3a8598e77d0b4d993fb4ed0b3e24706a42a12a3b0eaaefde717"
+        },
+        {
+          "path": "src/clip/bundle-reader.ts",
+          "start": 128,
+          "end": 135,
+          "blob_sha256": "83ce14a53ee3fbafcc11d123dfacb84bbd1378f7da9084d0136466a420d8ca58",
+          "excerpt_sha256": "47683e68bdd1c995120ad0256b0a009c49217d45c271d445d57a47b397569048"
+        }
+      ],
+      "rule": "validate-path-components",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "The foreign path validator rejects absolute, backslash, empty, dot, dot-dot, and NUL components; confined also checks the resolved relative result before returning a path. Both validation bodies are visible. Reproduction exercises exact helper bodies; this is lexical/path-component evidence, not a symlink-race claim.",
+      "state_sha256": "c1c42dd92343c1a1bcce2c7645ec7e4233552f4da38e16d9da8269f11f1c5b79"
+    },
+    {
+      "id": "wordcell-http-containment",
+      "repository": "hraness/wordcell",
+      "commit": "9fec758d6581780ab27bff971deaa75c5536312c",
+      "parent": "94a74395ed5362344819d31d261edba7ebf17683",
+      "representation": "snapshot-as-additions",
+      "family": "decoded-http-path-and-realpath-containment",
+      "sections": [
+        {
+          "path": "src/serve.ts",
+          "start": 1,
+          "end": 180,
+          "blob_sha256": "37da2e78fe749beb0d77897d7ac032963576bfed9c49e28986ef16797ecf073b",
+          "excerpt_sha256": "37da2e78fe749beb0d77897d7ac032963576bfed9c49e28986ef16797ecf073b"
+        }
+      ],
+      "rule": "validate-path-components",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Complete static handler decodes foreign pathname, rejects traversal/backslashes/NUL, then checks realpath under root and regular-file type. Reproduction covers valid files, encoded traversal, malformed encoding, and an escaping symlink on a temporary filesystem; no network listener.",
+      "state_sha256": "85f210e1bfc0ea74a0767171b0d97da405e3358d43cf172a4cc44ff925c10dd9"
+    },
+    {
+      "id": "ghostget-artifact-containment",
+      "repository": "hraness/ghostget",
+      "commit": "4e2a56ada454a083eefd6dcf144fd07a39c40ccf",
+      "parent": "a6c67d52658362899362a025dd616448e21e44f7",
+      "representation": "snapshot-as-additions",
+      "family": "media-artifact-relative-path-validation",
+      "sections": [
+        {
+          "path": "src/media/manifest.ts",
+          "start": 388,
+          "end": 392,
+          "blob_sha256": "be20f9e65ea6c0a067c58ff69c8e6feb3965774b41a3b28a27df20c1c3453559",
+          "excerpt_sha256": "ed51ba8431471cb6eb7b54b99b3d24c4199e0eddd9d65727065ab2959f63f17c"
+        },
+        {
+          "path": "src/media/manifest.ts",
+          "start": 1338,
+          "end": 1343,
+          "blob_sha256": "be20f9e65ea6c0a067c58ff69c8e6feb3965774b41a3b28a27df20c1c3453559",
+          "excerpt_sha256": "64d3216fa2ac30edb68b63d04a90f8a445d5e93fc6dd421782f1c1dcecc0ac0a"
+        },
+        {
+          "path": "src/media/manifest.ts",
+          "start": 1708,
+          "end": 1712,
+          "blob_sha256": "be20f9e65ea6c0a067c58ff69c8e6feb3965774b41a3b28a27df20c1c3453559",
+          "excerpt_sha256": "e98d7f929612abbde175d032dc856101ca4dd859f654010fb91fbce9bf054912"
+        }
+      ],
+      "rule": "validate-path-components",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Visible safeRelativePath rejects traversal, separators, NUL, absolute paths and unsafe components; containedPath also enforces the root prefix. Reproduction exercises exact helpers and both rejection and nested valid paths. This is not a filesystem race qualification.",
+      "state_sha256": "cdbce36898f6ae2b9f478989bbcdde9d71c259e58b60417ceefcf292d97886e6"
+    },
+    {
+      "id": "sys1-state-home-override",
+      "repository": "hraness/sys1",
+      "commit": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+      "parent": "c03f21e91fad1297e6999e37cb91d82bd56de49a",
+      "representation": "snapshot-as-additions",
+      "family": "state-directory-environment-override",
+      "sections": [
+        {
+          "path": "src/config.ts",
+          "start": 105,
+          "end": 109,
+          "blob_sha256": "b54155229970c8e90ca8ab968e9a829ca4b619b23447f3e2bbd1c26e3a07aa7b",
+          "excerpt_sha256": "06dff391e2f2239c8b7a73c0089a07898f37fc02ffe82bdca29244e7862dc2a5"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "A nonempty SYS1_HOME value named override is returned immediately; only absent/empty input reaches the default. AGENTS.md at this revision documents SYS1_HOME as the state-directory override. Reproduction checks custom, missing, and empty values.",
+      "state_sha256": "bce8d8d99c040ab0b94bc178ac6a79061af918f56588922228f491960c58a459"
+    },
+    {
+      "id": "sys1-explicit-backend-pin",
+      "repository": "hraness/sys1",
+      "commit": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+      "parent": "c03f21e91fad1297e6999e37cb91d82bd56de49a",
+      "representation": "snapshot-as-additions",
+      "family": "explicit-backend-model-pin",
+      "sections": [
+        {
+          "path": "src/router.ts",
+          "start": 1,
+          "end": 222,
+          "blob_sha256": "499526d5792ea065cfb48d08428490ce2ca08f40bc2f0160994161da9be7ddbb",
+          "excerpt_sha256": "499526d5792ea065cfb48d08428490ce2ca08f40bc2f0160994161da9be7ddbb"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Complete pure router documents exact backend/model pinning and chooses a valid available pinned candidate ahead of policy-order defaults. Invalid, incompatible or policy-excluded pins return explicit errors. Reproduction checks valid pin precedence and unavailable/policy-restricted pins.",
+      "state_sha256": "926cf72d76c2ce83d48dad6dd15a689991f75028a78c52a9cdb9dfa310fbae3e"
+    },
+    {
+      "id": "slopcamera-requested-aspect",
+      "repository": "hraness/slopcamera",
+      "commit": "4479d6a6c0626b6bff01d7e4e93198d8215d215e",
+      "parent": "7006bc3d1f182bf8951d15019ebd8a710030f2bf",
+      "representation": "actual-diff",
+      "unified": 3,
+      "family": "provider-resolution-requested-aspect",
+      "sections": [
+        {
+          "path": "apps/desktop/cli/gateway-media-catalog.ts",
+          "blob_sha256": "82194b69b265ee0c7f9280e316525dcaa3fa5c0b4be9456ebfe2439a812d1ac5",
+          "parent_blob_sha256": "8762225318c914b990e7f261a62a9b31b941652ec74f6363fdf4f3427517efc0"
+        }
+      ],
+      "rule": "explicit-override-precedence",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Actual added mapping uses requested aspectRatio before the documented absent-value 16:9 default; unsupported explicit combinations return null. It translates a representation without replacing a valid explicit request with a default. Exact added constant/function reproduction checks landscape default, portrait, unsupported and non-Wan passthrough.",
+      "state_sha256": "6289ee58f6727d56a674e4522b9457c18ff68896228cb526f43b3d79f0235d0a"
+    },
+    {
+      "id": "design-kit-fader-presentation",
+      "repository": "hraness/design-kit",
+      "commit": "9d5483322b03b0d96e295a749537e74577431863",
+      "parent": "4e96893394d2ea5590c8e3c86471d0d5fa7da911",
+      "representation": "actual-diff",
+      "unified": 200,
+      "family": "fader-presentation-migration",
+      "sections": [
+        {
+          "path": "src/react/fader.tsx",
+          "blob_sha256": "9b62d01b2623ce2cdaa773f8082a1af21ee818ae2301b41e876f871a145df10f",
+          "parent_blob_sha256": "e85da009c057ce20a36a23217c7a77356f953f308c1b4313bff6e0ae38045269"
+        }
+      ],
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Actual ordinary StyleX migration includes the whole Fader component and visible Label/SliderThumb controls. No synchronous blur dismissal or hiding handler is introduced or visible; hidden library behavior is not inferred. Original existing Fader tests are source evidence, not rerun in this task.",
+      "state_sha256": "b04e9f98c0617978045fc200c2404c094070a8724f046fbda4272e4542a8fdff"
+    },
+    {
+      "id": "design-kit-playback-presentation",
+      "repository": "hraness/design-kit",
+      "commit": "6a1429a3b90c57ba4a801af9b248f5b3a2fe337a",
+      "parent": "73972e336ff1fbb58744d657e46aa7802b64cb8f",
+      "representation": "actual-diff",
+      "unified": 200,
+      "family": "playback-presentation-migration",
+      "sections": [
+        {
+          "path": "src/react/playback-transport.tsx",
+          "blob_sha256": "abc0c225637176cf708827f6688e9c9c3ea72d23055fd320e28830bc9a42a17f",
+          "parent_blob_sha256": "2a88331b1084e880955dffacdaf2c4da60a5cdbd65702352f6f5b6b1a62fe3af"
+        }
+      ],
+      "rule": "preserve-native-activation",
+      "label": "clean",
+      "label_confidence": "supported",
+      "evidence": "Actual ordinary StyleX migration includes complete button transport and its explicit play/stop handlers. There is no label/input disclosure or blur dismissal. Under the exact rule this is an out-of-scope clean control; hidden library handlers are not inferred. Original playback tests are source evidence, not rerun.",
+      "state_sha256": "4139cc262fc88489acc593871b5d91fdfc7426d998252336315138a45f076de8"
+    }
+  ],
+  "diagnostics": [
+    {
+      "id": "wordcell-release-before",
+      "repository": "hraness/wordcell",
+      "commit": "aeb51e34c4740fb4081d36da7709c94b4866a754",
+      "parent": "1f234f904f14191f0f4ed1eaebfe73828578d31a",
+      "representation": "snapshot-as-additions",
+      "family": "concurrent-file-lease-release",
+      "sections": [
+        {
+          "path": "src/note-lock.ts",
+          "start": 1,
+          "end": 485,
+          "blob_sha256": "f74b49bc40e9447b065fd7eceacd5cb1dfde3c4c93bcc0ac893e2ba6d10c43a7",
+          "excerpt_sha256": "f74b49bc40e9447b065fd7eceacd5cb1dfde3c4c93bcc0ac893e2ba6d10c43a7"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "violation",
+      "label_confidence": "diagnostic-only",
+      "evidence": "Independent review classifies this pair as a contract-sensitive diagnostic only. Before, a second release promise resolves while original cleanup remains pending; after, both calls join releasePromise. The existing deterministic seam pauses after rename has already removed the original lock path. A Promise<void> completion contract is inferred, not an explicit success report. Original added regression covers heartbeat, not concurrent release. Excluded from primary labels and metrics; see exact-module reproduction.",
+      "state_sha256": "5a0c07a89c7cd2abafce91b51de86fa493879be484c32c2530a0166e3cb87288"
+    },
+    {
+      "id": "wordcell-release-after",
+      "repository": "hraness/wordcell",
+      "commit": "5c9d8a9d66824f35eadde01b332c326d408a0e7f",
+      "parent": "aeb51e34c4740fb4081d36da7709c94b4866a754",
+      "representation": "snapshot-as-additions",
+      "family": "concurrent-file-lease-release",
+      "sections": [
+        {
+          "path": "src/note-lock.ts",
+          "start": 1,
+          "end": 529,
+          "blob_sha256": "4b4d3112035c07bc56c2cdd2ead144dee409baba045a1ead25b737635daf84e5",
+          "excerpt_sha256": "4b4d3112035c07bc56c2cdd2ead144dee409baba045a1ead25b737635daf84e5"
+        }
+      ],
+      "rule": "required-work-before-success",
+      "label": "clean",
+      "label_confidence": "diagnostic-only",
+      "evidence": "Independent review classifies this pair as a contract-sensitive diagnostic only. Before, a second release promise resolves while original cleanup remains pending; after, both calls join releasePromise. The existing deterministic seam pauses after rename has already removed the original lock path. A Promise<void> completion contract is inferred, not an explicit success report. Original added regression covers heartbeat, not concurrent release. Excluded from primary labels and metrics; see exact-module reproduction.",
+      "state_sha256": "4495131c302133466b2fc6bb8db56f110d83f262cbecf5393e5c8d4e310fd582"
+    }
+  ],
+  "limitations": [
+    "No fresh unambiguous positive defect family was found in bounded public-history research; primary controls cannot measure sensitivity or qualify any rule.",
+    "The twelve source units comprise ten primary clean controls and two excluded diagnostic states; they are not twelve independent defects.",
+    "Seven primary units replay complete source functions as additions. Three are actual historical diffs. Neither representation is a whole-repository review.",
+    "Two primary controls share artifact-share.ts and a commit. Five repositories are represented, but this does not establish representative sampling.",
+    "Native activation controls have no dismissal; they test overreach on ordinary UI changes, not preservation under challenging blur/pointer races.",
+    "Clean means no visible target-rule violation, not absence of all defects.",
+    "No new rule wording or thresholds are derived from these examples; independent labels precede any predictions."
+  ],
+  "label_review": "label-review.md",
+  "public_visibility_verified": "2026-09-27; nine exact GitHub source commits and all five repository visibility responses in public-provenance.json",
+  "license_revisions": [
+    {
+      "repository": "hraness/design-kit",
+      "commit": "b24c966f73d142d13e129c247c0e0aed2db88615",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/design-kit",
+      "commit": "271f8143592ad424c9bdaf539dac09bd75840267",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/wordcell",
+      "commit": "5c9d8a9d66824f35eadde01b332c326d408a0e7f",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/wordcell",
+      "commit": "aeb51e34c4740fb4081d36da7709c94b4866a754",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/wordcell",
+      "commit": "9fec758d6581780ab27bff971deaa75c5536312c",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/wordcell",
+      "commit": "94a74395ed5362344819d31d261edba7ebf17683",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/ghostget",
+      "commit": "4e2a56ada454a083eefd6dcf144fd07a39c40ccf",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/ghostget",
+      "commit": "a6c67d52658362899362a025dd616448e21e44f7",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/sys1",
+      "commit": "b9e423dbb425e8dc5f09cafa44294cd0b72058c6",
+      "license_sha256": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539"
+    },
+    {
+      "repository": "hraness/sys1",
+      "commit": "c03f21e91fad1297e6999e37cb91d82bd56de49a",
+      "license_sha256": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539"
+    },
+    {
+      "repository": "hraness/slopcamera",
+      "commit": "4479d6a6c0626b6bff01d7e4e93198d8215d215e",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/slopcamera",
+      "commit": "7006bc3d1f182bf8951d15019ebd8a710030f2bf",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    },
+    {
+      "repository": "hraness/design-kit",
+      "commit": "9d5483322b03b0d96e295a749537e74577431863",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/design-kit",
+      "commit": "4e96893394d2ea5590c8e3c86471d0d5fa7da911",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/design-kit",
+      "commit": "6a1429a3b90c57ba4a801af9b248f5b3a2fe337a",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/design-kit",
+      "commit": "73972e336ff1fbb58744d657e46aa7802b64cb8f",
+      "license_sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0"
+    },
+    {
+      "repository": "hraness/wordcell",
+      "commit": "1f234f904f14191f0f4ed1eaebfe73828578d31a",
+      "license_sha256": "fa7d249dcd800e7faa648a60289865073d8819d477ab3f5edcd626345160d452"
+    }
+  ]
+}

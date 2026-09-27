@@ -91,6 +91,7 @@ describe("audit command integration", () => {
 
   test("registered loopback backend receives exact evidence and reports advisory findings", async () => {
     const { repo, home } = fixture();
+    writeFileSync(join(repo, "code.test.ts"), "export function fetchData() { try { fetch(); } catch {} }\n");
     let calls = 0;
     const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
       if (new URL(request.url).pathname === "/v1/models") return Response.json({ data: [{ id: "fake-v1" }] });
@@ -100,11 +101,12 @@ describe("audit command integration", () => {
       expect(body.model).toBe("fake-v1");
       expect(body.state).toContain("+export function");
       expect(body.state).not.toContain(repo);
+      expect(Object.keys(body.questions)).toEqual(["core-removed-test-assertions"]);
       return Response.json({ model: "fake-v1", answers: Object.fromEntries(Object.entries(body.questions).map(([id, question]) => [id, { type: question.type, noul: 0.01 }])), usage: { input_tokens: 100, output_tokens: 4 } });
     } });
     saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", base_url: `http://127.0.0.1:${server.port}`, model: "fake-v1" }] }));
     try {
-      const report = await runAuditCli(["--worktree", "--model", "fake/fake-v1"], home, repo);
+      const report = await runAuditCli(["--worktree", "--model", "fake/fake-v1", "--rule", "core-removed-test-assertions", "--", "code.test.ts"], home, repo);
       expect(calls).toBe(1);
       expect(report).toMatchObject({ complete: true, status: "complete", requests: 1, route: "fake/fake-v1" });
       expect(report.findings.length).toBeGreaterThan(0);

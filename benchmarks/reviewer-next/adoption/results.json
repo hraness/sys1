@@ -1,0 +1,523 @@
+{
+  "version": 1,
+  "freeze_sha256": "6a4cc642198bc79ce738bcbda74ecf8758b2e858b8112f663068817693b454b0",
+  "route": "typesafe/jev-1.13.0",
+  "cap": 40,
+  "accepted_requests": 33,
+  "hosted_dispatches": 33,
+  "elapsed_ms": 8427,
+  "results": [
+    {
+      "repository": "hraness/sys1",
+      "initial": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "3d2faecdfcce3057c93720a5f5b7bac52341a5ad",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "24",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src",
+          "test"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 6481,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "complete",
+          "complete": true,
+          "snapshot": "f8dc1d7e2605a845843fde1a3ff509974c1bf18c2560a89c44e6fb80b7275878",
+          "checked_at": 1790551638262,
+          "age_ms": 0,
+          "receipt_ttl_ms": 86400000,
+          "requests": 21,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": {
+            "version": 1,
+            "experimental": true,
+            "advisory": true,
+            "status": "complete",
+            "complete": true,
+            "qualification": "unqualified",
+            "mode": "since",
+            "base": "3d2faecdfcce3057c93720a5f5b7bac52341a5ad",
+            "head": "6759898c0dae3a032015a87f1786e8ff0a232af8",
+            "route": "typesafe/jev-1.13.0",
+            "question_format": 2,
+            "changed_files": 16,
+            "units": 21,
+            "evaluated_units": 21,
+            "targets": [
+              {
+                "path": "src/audit/evaluate.ts",
+                "units": 2
+              },
+              {
+                "path": "src/audit/rules-cli.ts",
+                "units": 1
+              },
+              {
+                "path": "src/cli-help.ts",
+                "units": 3
+              },
+              {
+                "path": "src/cli.ts",
+                "units": 3
+              },
+              {
+                "path": "src/gateway.ts",
+                "units": 1
+              },
+              {
+                "path": "src/review/checkpoint.ts",
+                "units": 1
+              },
+              {
+                "path": "src/review/cli.ts",
+                "units": 1
+              },
+              {
+                "path": "src/review/install.ts",
+                "units": 1
+              },
+              {
+                "path": "src/review/project-files.ts",
+                "units": 1
+              },
+              {
+                "path": "src/review/state.ts",
+                "units": 1
+              },
+              {
+                "path": "test/review-checkpoint.test.ts",
+                "units": 1
+              },
+              {
+                "path": "test/review-cli.test.ts",
+                "units": 1
+              },
+              {
+                "path": "test/review-install.test.ts",
+                "units": 1
+              },
+              {
+                "path": "test/review-project-files.test.ts",
+                "units": 1
+              },
+              {
+                "path": "test/review-state.test.ts",
+                "units": 1
+              },
+              {
+                "path": "test/reviewer-corpus.test.ts",
+                "units": 1
+              }
+            ],
+            "planned_requests": 21,
+            "requests": 21,
+            "questions": 27,
+            "usage": {
+              "input_tokens": 52196,
+              "output_tokens": 636,
+              "known_requests": 21,
+              "unknown_requests": 0
+            },
+            "elapsed_ms": 4690,
+            "rules": [
+              {
+                "id": "core-new-empty-catch",
+                "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+                "pack": "core"
+              },
+              {
+                "id": "core-removed-test-assertions",
+                "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+                "pack": "core"
+              }
+            ],
+            "findings": [],
+            "skipped": []
+          }
+        }
+      },
+      "repeated": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "3d2faecdfcce3057c93720a5f5b7bac52341a5ad",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "24",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src",
+          "test"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 1779,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "unchanged",
+          "complete": true,
+          "snapshot": "f8dc1d7e2605a845843fde1a3ff509974c1bf18c2560a89c44e6fb80b7275878",
+          "checked_at": 1790551638262,
+          "age_ms": 962,
+          "receipt_ttl_ms": 86400000,
+          "requests": 0,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": null
+        }
+      },
+      "issues": {
+        "argv": [
+          "review",
+          "issues",
+          "--json"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 122,
+        "report": {
+          "command": "issues",
+          "version": 1,
+          "advisory": true,
+          "issues": []
+        }
+      },
+      "unchanged_checkout": true
+    },
+    {
+      "repository": "hraness/ghostget",
+      "initial": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "79b08398d94ccfa9d50ac122e38b2916c1f21b0d",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "12",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src/browser.ts",
+          "src/browser.test.ts",
+          "src/web-session-cleanup-admission.ts",
+          "src/web-session-cleanup-admission.test.ts"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 3074,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "complete",
+          "complete": true,
+          "snapshot": "91f6ccfcde02fb45228008777a4468a1fb1a101e1f06678a5ae6083f52d1d88c",
+          "checked_at": 1790551634855,
+          "age_ms": 0,
+          "receipt_ttl_ms": 86400000,
+          "requests": 10,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": {
+            "version": 1,
+            "experimental": true,
+            "advisory": true,
+            "status": "complete",
+            "complete": true,
+            "qualification": "unqualified",
+            "mode": "since",
+            "base": "79b08398d94ccfa9d50ac122e38b2916c1f21b0d",
+            "head": "fccd37840420c9ff75ce39eab4efef8f0e9442c7",
+            "route": "typesafe/jev-1.13.0",
+            "question_format": 2,
+            "changed_files": 4,
+            "units": 10,
+            "evaluated_units": 10,
+            "targets": [
+              {
+                "path": "src/browser.test.ts",
+                "units": 1
+              },
+              {
+                "path": "src/browser.ts",
+                "units": 4
+              },
+              {
+                "path": "src/web-session-cleanup-admission.test.ts",
+                "units": 2
+              },
+              {
+                "path": "src/web-session-cleanup-admission.ts",
+                "units": 3
+              }
+            ],
+            "planned_requests": 10,
+            "requests": 10,
+            "questions": 13,
+            "usage": {
+              "input_tokens": 15819,
+              "output_tokens": 306,
+              "known_requests": 10,
+              "unknown_requests": 0
+            },
+            "elapsed_ms": 2202,
+            "rules": [
+              {
+                "id": "core-new-empty-catch",
+                "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+                "pack": "core"
+              },
+              {
+                "id": "core-removed-test-assertions",
+                "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+                "pack": "core"
+              }
+            ],
+            "findings": [],
+            "skipped": []
+          }
+        }
+      },
+      "repeated": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "79b08398d94ccfa9d50ac122e38b2916c1f21b0d",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "12",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src/browser.ts",
+          "src/browser.test.ts",
+          "src/web-session-cleanup-admission.ts",
+          "src/web-session-cleanup-admission.test.ts"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 821,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "unchanged",
+          "complete": true,
+          "snapshot": "91f6ccfcde02fb45228008777a4468a1fb1a101e1f06678a5ae6083f52d1d88c",
+          "checked_at": 1790551634855,
+          "age_ms": 486,
+          "receipt_ttl_ms": 86400000,
+          "requests": 0,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": null
+        }
+      },
+      "issues": {
+        "argv": [
+          "review",
+          "issues",
+          "--json"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 107,
+        "report": {
+          "command": "issues",
+          "version": 1,
+          "advisory": true,
+          "issues": []
+        }
+      },
+      "unchanged_checkout": true
+    },
+    {
+      "repository": "hraness/design-kit",
+      "initial": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "fd47d9229e590dc956a08ccc4df00625846991ee",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "4",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src/status-page.ts",
+          "src/status-page.test.ts"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 1314,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "complete",
+          "complete": true,
+          "snapshot": "e918ed8e9a2f6c0bdeed5bae63d1bead2e5837b950d4dcf9da34b7c5f9e0adb0",
+          "checked_at": 1790551633102,
+          "age_ms": 0,
+          "receipt_ttl_ms": 86400000,
+          "requests": 2,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": {
+            "version": 1,
+            "experimental": true,
+            "advisory": true,
+            "status": "complete",
+            "complete": true,
+            "qualification": "unqualified",
+            "mode": "since",
+            "base": "fd47d9229e590dc956a08ccc4df00625846991ee",
+            "head": "077fd940ccd9fd8324c32e8a688ca44693212a56",
+            "route": "typesafe/jev-1.13.0",
+            "question_format": 2,
+            "changed_files": 2,
+            "units": 2,
+            "evaluated_units": 2,
+            "targets": [
+              {
+                "path": "src/status-page.test.ts",
+                "units": 1
+              },
+              {
+                "path": "src/status-page.ts",
+                "units": 1
+              }
+            ],
+            "planned_requests": 2,
+            "requests": 2,
+            "questions": 3,
+            "usage": {
+              "input_tokens": 4306,
+              "output_tokens": 70,
+              "known_requests": 2,
+              "unknown_requests": 0
+            },
+            "elapsed_ms": 724,
+            "rules": [
+              {
+                "id": "core-new-empty-catch",
+                "revision": "f5f38bab53b696d964c758b03c8216d165dead935b333c14b2096faa614e147f",
+                "pack": "core"
+              },
+              {
+                "id": "core-removed-test-assertions",
+                "revision": "e1281c3c14cdc8f45d69e7320e704a9fa2fde2e2c3969225d0f77b4f20839506",
+                "pack": "core"
+              }
+            ],
+            "findings": [],
+            "skipped": []
+          }
+        }
+      },
+      "repeated": {
+        "argv": [
+          "review",
+          "checkpoint",
+          "--since",
+          "fd47d9229e590dc956a08ccc4df00625846991ee",
+          "--model",
+          "typesafe/jev-1.13.0",
+          "--max-requests",
+          "4",
+          "--timeout-ms",
+          "60000",
+          "--rule",
+          "core-new-empty-catch",
+          "--rule",
+          "core-removed-test-assertions",
+          "--gateway",
+          "--json",
+          "--",
+          "src/status-page.ts",
+          "src/status-page.test.ts"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 574,
+        "report": {
+          "command": "checkpoint",
+          "version": 1,
+          "advisory": true,
+          "status": "unchanged",
+          "complete": true,
+          "snapshot": "e918ed8e9a2f6c0bdeed5bae63d1bead2e5837b950d4dcf9da34b7c5f9e0adb0",
+          "checked_at": 1790551633102,
+          "age_ms": 360,
+          "receipt_ttl_ms": 86400000,
+          "requests": 0,
+          "suppressed_count": 0,
+          "findings": [],
+          "audit": null
+        }
+      },
+      "issues": {
+        "argv": [
+          "review",
+          "issues",
+          "--json"
+        ],
+        "exit_code": 0,
+        "elapsed_ms": 112,
+        "report": {
+          "command": "issues",
+          "version": 1,
+          "advisory": true,
+          "issues": []
+        }
+      },
+      "unchanged_checkout": true
+    }
+  ]
+}

@@ -7,7 +7,7 @@ local model on your machine, or a compatible server you run.
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
-Latest release: v0.13.0. Install it from the GitHub release with npm; it runs
+Latest release: v0.14.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.13.0/hraness-sys1-0.13.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.14.0/hraness-sys1-0.14.0.tgz
 sys1 doctor
 ```
 
@@ -50,7 +50,8 @@ Use `setup claude-code` for Claude Code. Hosted Jev must already be enabled with
 an environment credential. Inspect the preview, then repeat without `--dry-run`
 to run the checkpoint. Investigate candidates, record feedback, and recheck the
 original evidence. Repeated complete batches reuse their review for up to
-24 hours; setup installs no automatic hooks.
+24 hours; setup installs no automatic hooks. Add `--rule <id>` to focus a
+checkpoint on a rule from `sys1 rules list`.
 
 Findings are advisory, and scores are not calibrated defect probabilities. See
 the [agent review guide](docs/review.md) for setup, feedback, rechecks, and rule
@@ -64,7 +65,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.13.0/hraness-sys1-0.13.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.14.0/hraness-sys1-0.14.0.tgz
 ```
 
 ```ts
