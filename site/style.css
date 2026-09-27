@@ -135,6 +135,8 @@ html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
   .wordmark { font-size: 1.3rem; min-height: 2.75rem; }
   .header-actions { gap: .5rem; }
   .button-small { padding-inline: .8rem; }
+  .header-inner a { min-width: 44px; min-height: 44px; }
+  .header-inner .hraness-design-theme-toggle[data-hraness-appearance-menu] .hraness-design-theme-toggle__trigger { min-inline-size: 44px; min-block-size: 44px; }
   .header-inner nav { order: 3; flex: 1 0 100%; gap: 0 1.25rem; margin-inline: -1.25rem; padding-inline: 1.25rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .header-inner nav::-webkit-scrollbar { display: none; }
   .header-inner nav a { display: inline-flex; align-items: center; min-height: 2.75rem; flex: 0 0 auto; white-space: nowrap; }
