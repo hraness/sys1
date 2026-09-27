@@ -6,6 +6,10 @@ import { fileURLToPath } from "node:url";
 import { configSchema, saveConfig } from "../src/config.ts";
 
 const CLI = fileURLToPath(new URL("../src/cli.ts", import.meta.url));
+// These workflows launch several CLI processes and collect real Git snapshots.
+// Keep their integration budget separate from single-invocation tests and
+// product deadlines so shared-runner process/IO overhead has bounded headroom.
+const CLI_WORKFLOW_TIMEOUT_MS = 20_000;
 const scratch: string[] = [];
 afterEach(() => { for (const root of scratch.splice(0)) rmSync(root, { recursive: true, force: true }); });
 function fixture() {
@@ -37,7 +41,7 @@ describe("review command", () => {
       expect(result.code).toBe(0); expect(result.err).toBe("");
       expect(JSON.parse(result.out).version).toBe(1);
     }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
   test("literal path flags do not become help/version and invalid commands stay JSON", async () => {
     const { repo, home } = fixture();
     for (const path of ["--help", "--version", "--rule"]) {
@@ -59,7 +63,7 @@ describe("review command", () => {
       const result = await invoke(["--agent", ...args], repo, home);
       expect(result.code).toBe(2); expect(JSON.parse(result.out)).toMatchObject({ ok: false, error: { code: "usage" } });
     }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
   test("audit and checkpoint select the same exact rules, including repeated and equals options", async () => {
     const { repo, home } = fixture();
     writeFileSync(join(repo, "code.test.ts"), "test('example', () => { expect(true).toBe(true); });\n");
@@ -80,7 +84,7 @@ describe("review command", () => {
         expect(existsSync(join(home, "review"))).toBe(false);
       }
     }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
   const invalidRuleSelections: [string, string[]][] = [
     ["unknown rule", ["--rule", "missing-rule"]],
     ["known and unknown rules", ["--rule", "core-new-empty-catch", "--rule=missing-rule"]],
@@ -136,5 +140,5 @@ describe("review command", () => {
       const changed = await invoke(["review", "recheck", id, "--model", "fake/v1", "--json"], repo, home);
       expect(changed.code).toBe(8); expect(JSON.parse(changed.out).status).toBe("superseded"); expect(calls).toBe(2);
     } finally { backend.stop(true); }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
 });
