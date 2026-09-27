@@ -9,7 +9,9 @@ const config = await Bun.file(resolve(import.meta.dir, "../vercel.json")).json()
 const headers = Object.fromEntries(config.headers[0].headers.map((item: { key: string; value: string }) => [item.key, item.value]));
 const artifacts = resolve(process.env.SYS1_BROWSER_ARTIFACTS ?? "/tmp/sys1-site-browser");
 await mkdir(artifacts, { recursive: true });
-const server = Bun.serve({
+const production = process.argv.includes("--production");
+assert.ok(process.argv.slice(2).every(argument => argument === "--production"), "Unknown argument");
+const server = production ? undefined : Bun.serve({
   hostname: "127.0.0.1", port: 0,
   async fetch(request) {
     let pathname: string;
@@ -24,6 +26,7 @@ const server = Bun.serve({
 });
 const pages = [...new Bun.Glob("**/*.html").scanSync(site)].sort();
 let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
 try {
   browser = await chromium.launch();
@@ -36,7 +39,7 @@ try {
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
       for (const file of pages) {
         const route = file === "index.html" ? "/" : `/${file.replace(/\.html$/u, "")}`;
-        const response = await page.goto(new URL(route, server.url).href);
+        const response = await page.goto(new URL(route, origin).href);
         assert.equal(response?.status(), 200, route);
         await page.evaluate(() => document.fonts.ready);
         await page.locator("main").waitFor();
@@ -58,7 +61,7 @@ try {
         assert.deepEqual(errors, [], `${route}: browser errors`);
         results.push({ route, width, theme });
       }
-      await page.goto(server.url.href);
+      await page.goto(origin.href);
       await page.getByRole("button", { name: /^Appearance:/u }).click();
       const targetTheme = theme === "light" ? "dark" : "light";
       await page.getByRole("menuitemradio", { name: targetTheme, exact: false }).click();
@@ -72,7 +75,7 @@ try {
   }
 } finally {
   try { await browser?.close(); }
-  finally { await server.stop(true); }
+  finally { await server?.stop(true); }
 }
-await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ cleanup: "browser and server closed", results }, null, 2) + "\n");
+await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), cleanup: "browser and server closed", results }, null, 2) + "\n");
 console.log(`Verified ${results.length} route/viewport/theme combinations.`);
