@@ -1,0 +1,58 @@
+{
+  "schema": "hraness-hf-export-v1",
+  "repo_type": "dataset",
+  "repo_id": "hranesscom/sys1-benchmarks",
+  "rights_status": "reviewed-existing-mit",
+  "files": [
+    {
+      "source": "benchmarks/forms-v1.json",
+      "destination": "data/benchmarks/forms-v1.json",
+      "sha256": "8e3073ac4ad1fb460fe574084b40631577ece6a49e190fca2d89659cee15604c"
+    },
+    {
+      "source": "benchmarks/decisions-v2.json",
+      "destination": "data/benchmarks/decisions-v2.json",
+      "sha256": "7e1b3e988c9c27eae96efd1782cb301d998204b94a09ed915bebe0ad3d97e69b"
+    },
+    {
+      "source": "benchmarks/decisions-v3.json",
+      "destination": "data/benchmarks/decisions-v3.json",
+      "sha256": "992d0078faff0f781d87be0755828b48689345e4a8a68d20b25f12b7a0fa87cc"
+    },
+    {
+      "source": "site/data/forms-v1-m5-max-2026-09-19.json",
+      "destination": "data/site/data/forms-v1-m5-max-2026-09-19.json",
+      "sha256": "e6d73a638aeeb0815defc2860ce0c08b13921e41f0cdfe09733f7de8bcd4616b"
+    },
+    {
+      "source": "site/data/forms-v1-jev-2026-09-20.json",
+      "destination": "data/site/data/forms-v1-jev-2026-09-20.json",
+      "sha256": "639da1d3a9d59ef9bb632e2a6002e673edbce8efe5249d5fc81983307d7fac79"
+    },
+    {
+      "source": "site/data/decisions-v2-qwen06-2026-09-20.json",
+      "destination": "data/site/data/decisions-v2-qwen06-2026-09-20.json",
+      "sha256": "7d720a55f4551fdbe6e6caafd678bb8c81435a87a38339452d93fc47126b7c4c"
+    },
+    {
+      "source": "site/data/decisions-v2-qwen17-2026-09-20.json",
+      "destination": "data/site/data/decisions-v2-qwen17-2026-09-20.json",
+      "sha256": "2fa6e7784fff95cf7ea9bd32005c30a1ccdd8fed69ad0700876869501f7a581c"
+    },
+    {
+      "source": "site/data/decisions-v3-qwen35-2026-09-20.json",
+      "destination": "data/site/data/decisions-v3-qwen35-2026-09-20.json",
+      "sha256": "0720e2796ddbadf5013a61fb9c506663d959ae1d75bb0f366a3836d9932a5e5c"
+    },
+    {
+      "source": "site/data/decisions-v3-laya-2026-09-20.json",
+      "destination": "data/site/data/decisions-v3-laya-2026-09-20.json",
+      "sha256": "088df3c18fe05f4444f50cc253583d16b70ad088545104819f14f5e6a98e258d"
+    },
+    {
+      "source": "LICENSE",
+      "destination": "LICENSE",
+      "sha256": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539"
+    }
+  ]
+}

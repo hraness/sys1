@@ -28,6 +28,10 @@ jobs:
           node-version: 24.19.0
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run check
+      - name: Validate Hugging Face export
+        run: |
+          python3 -B hf/stage.py
+          python3 -B -m unittest discover -s hf -p 'test_*.py'
       - name: Install candidate and verify native readiness
         run: bun run check:native
 
