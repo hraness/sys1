@@ -81,25 +81,28 @@ describe("review command", () => {
       }
     }
   });
-  test("unknown or malformed rule selections fail before any backend request or state write, even with no diff", async () => {
+  const invalidRuleSelections: [string, string[]][] = [
+    ["unknown rule", ["--rule", "missing-rule"]],
+    ["known and unknown rules", ["--rule", "core-new-empty-catch", "--rule=missing-rule"]],
+    ["malformed rule", ["--rule=BAD"]],
+    ["empty rule", ["--rule="]],
+  ];
+  const invalidRuleCases = [["audit"], ["review", "checkpoint"]].flatMap(command =>
+    [false, true].flatMap(empty => invalidRuleSelections.map(([name, selection]) =>
+      [`${command.join(" ")} rejects ${name} with ${empty ? "no diff" : "a changed file"}`, command, empty, selection] as const)));
+  test.each(invalidRuleCases)("%s before any backend request or state write", async (_name, command, empty, selection) => {
     const { repo, home } = fixture();
+    if (empty) rmSync(join(repo, "code.ts"));
     let requests = 0;
     const backend = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch() { requests++; return new Response("", { status: 500 }); } });
-    saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", model: "v1", base_url: `http://127.0.0.1:${backend.port}` }] }));
     try {
-      for (const empty of [false, true]) {
-        if (empty) rmSync(join(repo, "code.ts"));
-        for (const command of [["audit"], ["review", "checkpoint"]]) {
-          for (const selection of [["--rule", "missing-rule"], ["--rule", "core-new-empty-catch", "--rule=missing-rule"], ["--rule=BAD"], ["--rule="]]) {
-            const result = await invoke([...command, "--worktree", "--model", "fake/v1", "--json", ...selection], repo, home);
-            expect(result.code).toBe(2);
-            expect(JSON.parse(result.out)).toMatchObject({ ok: false, error: { code: "usage" } });
-            expect(existsSync(join(home, "review"))).toBe(false);
-          }
-        }
-      }
+      saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", model: "v1", base_url: `http://127.0.0.1:${backend.port}` }] }));
+      const result = await invoke([...command, "--worktree", "--model", "fake/v1", "--json", ...selection], repo, home);
+      expect(result.code).toBe(2);
+      expect(JSON.parse(result.out)).toMatchObject({ ok: false, error: { code: "usage" } });
+      expect(existsSync(join(home, "review"))).toBe(false);
       expect(requests).toBe(0);
-    } finally { backend.stop(true); }
+    } finally { await backend.stop(true); }
   });
   test("full loop records feedback, avoids repeat inference, and never calls changed evidence fixed", async () => {
     const { repo, home } = fixture();
