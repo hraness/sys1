@@ -33,7 +33,8 @@ root owns homepage/navigation redirects and any browser review.
 ## Source contract
 
 Product truth comes from PRODUCT.md, README.md, src/cli.ts, src/client.ts,
-src/runtime.ts, src/protocol.ts, and the 0.10.0 release metadata. Local Qwen
+src/runtime.ts, src/protocol.ts, src/cli-help.ts, src/review/, src/audit/,
+and package.json release metadata. Local Qwen
 remains experimental; hosted Jev activation is explicit and hosted-only. The
 client is portable to Node 24 and Bun; the embedded router requires Bun; the
 daemon exposes loopback HTTP. Compatible HTTP services require explicit
@@ -71,3 +72,13 @@ hraness/.github) and the “Public copy” section of `PRODUCT.md`.
   intros state facts about the reader's choice, not how the docs are organized.
 - The backend list includes every bundled Qwen model (0.6B, 1.7B, and 3.5 4B)
   and introduces Jev and Kev in plain words at first mention.
+
+## Agent review: 2026-09-27
+
+The existing `#audit` destination introduces the advisory agent workflow and
+links the new `docs/review.md` guide alongside stateless audit documentation.
+Show the setup command, a scoped preview with request cap, and the issues
+command. Explain source transmission, 24-hour reuse, local metadata, and recheck
+limits without accuracy claims. The native setup targets are Codex and Claude
+Code. Preserve the existing layout and primary navigation. Release labels and
+archive URLs follow package.json at 0.13.0. No Markdown twin exists for this page.

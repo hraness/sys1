@@ -24,6 +24,8 @@ export function violationScore(rule: Rule, answer: Answer): number {
 
 export interface AuditFinding {
   id: string;
+  /** Exact before/after evidence digest, for advisory workflow identity. */
+  unit_id: string;
   rule: string;
   revision: string;
   path: string;
@@ -177,6 +179,7 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
           const before = entry.unit.newRange.count === 0;
           report.findings.push({
             id: createHash("sha256").update(JSON.stringify([diff.repoRoot, loaded.id, loaded.revision, QUESTION_FORMAT, entry.unit.id, options.route])).digest("hex").slice(0, 16),
+            unit_id: entry.unit.id,
             rule: loaded.id, revision: loaded.revision, path: entry.unit.path,
             line: Math.max(1, before ? entry.unit.oldRange.start : entry.unit.newRange.start), side: before ? "before" : "after",
             model_score: score, tier: score >= loaded.rule.tiers.high ? "high" : "medium",

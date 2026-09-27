@@ -1,6 +1,10 @@
 #!/usr/bin/env bun
 import { readBoundedText } from "./http.ts";
 import { runAuditCli, renderAudit, AuditCliError } from "./audit/cli.ts";
+import { runReviewCli, renderReview, reviewExitCode } from "./review/cli.ts";
+import { ReviewError, resolveReviewRoot } from "./review/checkpoint.ts";
+import { ProjectFileError } from "./review/project-files.ts";
+import { runRulesCli } from "./audit/rules-cli.ts";
 import { existsSync } from "node:fs";
 import {
   DEFAULT_CONFIG,
@@ -789,12 +793,12 @@ async function main(): Promise<void> {
   const beforePaths = parseArgs(separator === -1 ? rawArgs : rawArgs.slice(0, separator));
   // Audit owns everything after -- as literal paths. Do not interpret a file
   // named --help or --version as a top-level control flag.
-  const args = beforePaths.positional[0] === "audit" ? beforePaths : parseArgs(rawArgs);
+  const args = ["audit", "review", "rules"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
   const [command] = args.positional;
   const home = sys1Home(process.env);
 
   currentCommand = command;
-  jsonRequested = args.flags.get("json") === true || (command === "audit" && args.flags.get("agent") === true);
+  jsonRequested = args.flags.get("json") === true || (["audit", "review", "rules"].includes(command ?? "") && args.flags.get("agent") === true);
   if (args.flags.get("version") === true || (command === "version" && args.flags.get("help") !== true)) {
     if (jsonRequested) out(JSON.stringify({ name: "sys1", version: SYS1_VERSION }));
     else out(`sys1 ${SYS1_VERSION}`);
@@ -830,6 +834,30 @@ async function main(): Promise<void> {
   }
 
   switch (command) {
+    case "review": {
+      try {
+        const index = rawArgs.indexOf("review");
+        const report = await runReviewCli([...rawArgs.slice(0, index), ...rawArgs.slice(index + 1)], home);
+        if (wantsJson(args.flags) || args.flags.has("agent")) out(JSON.stringify(report));
+        else process.stdout.write(renderReview(report));
+        process.exitCode = reviewExitCode(report);
+      } catch (error) {
+        if (error instanceof ReviewError || error instanceof ProjectFileError) fail(error.message, error.exitCode, "sys1 review --help");
+        fail("Review could not read the selected changes, rules, or metadata", EXIT.config, "sys1 review --help");
+      }
+      return;
+    }
+    case "rules": {
+      try {
+        const index = rawArgs.indexOf("rules");
+        const report = await runRulesCli([...rawArgs.slice(0, index), ...rawArgs.slice(index + 1)], home, await resolveReviewRoot(process.cwd()));
+        out(JSON.stringify(report, null, wantsJson(args.flags) || args.flags.has("agent") ? undefined : 2));
+      } catch (error) {
+        if (error instanceof ReviewError || error instanceof ProjectFileError) fail(error.message, error.exitCode, "sys1 rules --help");
+        fail("Rules could not be loaded or validated; check the pack and command options", EXIT.config, "sys1 rules --help");
+      }
+      return;
+    }
     case "audit": {
       try {
         const commandIndex = rawArgs.indexOf("audit");

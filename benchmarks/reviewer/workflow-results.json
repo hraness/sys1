@@ -1,0 +1,287 @@
+{
+  "version": 1,
+  "route": "typesafe/jev-1.13.0",
+  "cap": 40,
+  "gateway_dispatches": 7,
+  "manifest_sha256": "f00c23123ffd0c40c44dee4b74c2c203670f885d70960faec90d6576802c22f8",
+  "usage": {
+    "input_tokens": 13373,
+    "output_tokens": 282,
+    "known_requests": 7,
+    "unknown_requests": 3
+  },
+  "observations": [
+    {
+      "repository": "hraness/ghostget",
+      "before_fixture": "ghostget-login-before",
+      "after_fixture": "ghostget-login-after",
+      "representation": "historical source windows in a disposable Git project; selected supporting windows joined with omission comments",
+      "target_rule": "required-work-before-success",
+      "gateway_dispatches": 2,
+      "setup": {
+        "exit": 0,
+        "wall_ms": 95,
+        "status": "created",
+        "requests": 0
+      },
+      "preview": {
+        "exit": 0,
+        "wall_ms": 301,
+        "status": "planned",
+        "requests": 0,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "first": {
+        "exit": 0,
+        "wall_ms": 1178,
+        "status": "complete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 1424,
+          "output_tokens": 43,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "repeated": {
+        "exit": 0,
+        "wall_ms": 484,
+        "status": "unchanged",
+        "requests": 0
+      },
+      "repaired": {
+        "exit": 0,
+        "wall_ms": 1023,
+        "status": "complete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 1546,
+          "output_tokens": 43,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "incomplete": {
+        "exit": 8,
+        "wall_ms": 477,
+        "status": "incomplete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 1
+        },
+        "skipped": [
+          {
+            "path": "src/accounts-auth.ts",
+            "reason": "backend_error"
+          }
+        ]
+      },
+      "feedback": [],
+      "rechecks": [],
+      "after_repair_rechecks": []
+    },
+    {
+      "repository": "hraness/sys1",
+      "before_fixture": "sys1-manifest-before",
+      "after_fixture": "sys1-manifest-after",
+      "representation": "historical source windows in a disposable Git project; selected supporting windows joined with omission comments",
+      "target_rule": "validate-path-components",
+      "gateway_dispatches": 3,
+      "setup": {
+        "exit": 0,
+        "wall_ms": 128,
+        "status": "created",
+        "requests": 0
+      },
+      "preview": {
+        "exit": 0,
+        "wall_ms": 308,
+        "status": "planned",
+        "requests": 0,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "first": {
+        "exit": 0,
+        "wall_ms": 975,
+        "status": "complete",
+        "requests": 1,
+        "findings": [
+          {
+            "rule": "validate-path-components",
+            "tier": "medium"
+          }
+        ],
+        "usage": {
+          "input_tokens": 1844,
+          "output_tokens": 42,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "repeated": {
+        "exit": 0,
+        "wall_ms": 462,
+        "status": "unchanged",
+        "requests": 0
+      },
+      "repaired": {
+        "exit": 0,
+        "wall_ms": 1054,
+        "status": "complete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 1894,
+          "output_tokens": 42,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "incomplete": {
+        "exit": 8,
+        "wall_ms": 524,
+        "status": "incomplete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 1
+        },
+        "skipped": [
+          {
+            "path": "src/local/store.ts",
+            "reason": "backend_error"
+          }
+        ]
+      },
+      "feedback": [
+        {
+          "outcome": "useful",
+          "exit": 0
+        }
+      ],
+      "rechecks": [
+        {
+          "status": "reported",
+          "exit": 0
+        }
+      ],
+      "after_repair_rechecks": [
+        {
+          "status": "superseded",
+          "exit": 8
+        }
+      ]
+    },
+    {
+      "repository": "hraness/design-kit",
+      "before_fixture": "design-kit-label-before",
+      "after_fixture": "design-kit-label-after",
+      "representation": "historical source windows in a disposable Git project; selected supporting windows joined with omission comments",
+      "target_rule": "preserve-native-activation",
+      "gateway_dispatches": 2,
+      "setup": {
+        "exit": 0,
+        "wall_ms": 105,
+        "status": "created",
+        "requests": 0
+      },
+      "preview": {
+        "exit": 0,
+        "wall_ms": 301,
+        "status": "planned",
+        "requests": 0,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "first": {
+        "exit": 0,
+        "wall_ms": 1002,
+        "status": "complete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 2317,
+          "output_tokens": 45,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "repeated": {
+        "exit": 0,
+        "wall_ms": 462,
+        "status": "unchanged",
+        "requests": 0
+      },
+      "repaired": {
+        "exit": 0,
+        "wall_ms": 1112,
+        "status": "complete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 2919,
+          "output_tokens": 45,
+          "known_requests": 1,
+          "unknown_requests": 0
+        },
+        "skipped": []
+      },
+      "incomplete": {
+        "exit": 8,
+        "wall_ms": 498,
+        "status": "incomplete",
+        "requests": 1,
+        "findings": [],
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "known_requests": 0,
+          "unknown_requests": 1
+        },
+        "skipped": [
+          {
+            "path": "src/react/design-palette.tsx",
+            "reason": "backend_error"
+          }
+        ]
+      },
+      "feedback": [],
+      "rechecks": [],
+      "after_repair_rechecks": []
+    }
+  ]
+}

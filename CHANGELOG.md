@@ -5,6 +5,16 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.13.0 - 2026-09-27
+
+Sys1 adds an advisory agent review workflow: check a batch of edits, investigate candidates, record feedback, and recheck the original evidence.
+
+- `sys1 review setup codex|claude-code` installs project instructions without changing models or adding hooks. Checkpoints preview selected paths and request counts, require an explicit backend/model route, and retain audit's request and time limits.
+- `sys1 review checkpoint` reuses unchanged complete batches for up to 24 hours and suppresses repeated candidates. Private worktree metadata retains up to 2,000 findings without source, raw answers, rule prose, or model scores.
+- `sys1 review issues` lists recorded candidates; `feedback` records useful, incorrect, or unverifiable judgments. `recheck` evaluates available original evidence again. Changed, missing, or superseded evidence is never marked fixed; incomplete and stale results exit 8.
+- `sys1 rules draft`, `check`, and `list` help turn repository conventions into inactive drafts, validate their structure, and inspect active packs. Activating a draft requires moving it into the repository's rules directory.
+- An opt-in source benchmark includes four candidate rules and historical defects and controls from Sys1, Ghostget, and design-kit, with source hashes, independent label review, and deterministic baselines. These discovery examples stay outside the packaged and default rule packs.
+
 ## 0.12.0 - 2026-09-27
 
 Sys1 can review a Git diff with reusable rules and report candidates for an agent or developer to inspect. This audit is experimental and advisory; its model scores are not calibrated defect probabilities.
