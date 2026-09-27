@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "source": {
     "repository": "https://github.com/hraness/design-kit",
-    "commit": "d38d13c07d7956d02ddfbca8d32aa2066d88fbd3",
-    "release": "v0.16.2"
+    "commit": "3df4c411c7f5e5cbc02448463571696f0d47cee5",
+    "release": "v0.23.0"
   },
   "files": {
     "appearance-menu.css": {
       "path": "src/appearance-menu.css",
-      "sha256": "7696f1a2ea215fcdc7a8be578a70a8b8f23d9883f91a565ccfa59d40fc7b0958",
-      "bytes": 8263
+      "sha256": "532520267a203b40d416c44e31a61c2d04521e763964ec32d5fbdb6c04b2f5fb",
+      "bytes": 9285
     },
     "palette-bridge.css": {
       "path": "src/palette-bridge.css",
@@ -29,24 +29,24 @@
   },
   "browser": {
     "path": "dist/browser/index.js",
-    "sha256": "a62f3c7b9be13e8ea3dfb8836fab83dbb3da2d816eedc9f73a54b6e028e13553",
-    "bytes": 60268
+    "sha256": "1af979511d58c568adc8dc511e0315b90fb93ec0c579c0beb92bd6166276d3bd",
+    "bytes": 78307
   },
   "entry": "scripts/site-appearance.js",
   "bootstrap": {
     "path": "scripts/site-appearance.js",
-    "sha256": "df79d270ab236d3f461859ae5af1f880dae01aff8c76be5c3b8de08bc7164e0a",
-    "bytes": 630
+    "sha256": "2f2f5f2daa3f23cab57f3caca265077de219626ab61aaf558facf96d425c989c",
+    "bytes": 370
   },
   "bundle": {
     "path": "site/appearance.js",
-    "sha256": "c86cc3f1b3153d458d2caeed9cbdfab66ad96d60daa197718571af16eb75ff17",
-    "bytes": 26775,
+    "sha256": "1ef774dda1ab94e13b9543f22e23f6aed44e168024724dfd91e6c1aef10df15e",
+    "bytes": 23778,
     "bunVersion": "1.3.14"
   },
   "dependencyLock": {
     "path": "bun.lock",
-    "sha256": "f386a237d7c2553b6536563e51cea2fbbf40493feba7cd0da227cb6059be757a",
-    "bytes": 61525
+    "sha256": "4daf33ab141794a43dba944eb439608a99677bced1959617ca8a54d58a4961c3",
+    "bytes": 64899
   }
 }
