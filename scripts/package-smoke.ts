@@ -345,6 +345,16 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     if (jev["enabled"] !== false || jev["active"] !== false) {
       throw new Error("packed CLI must keep Jev disabled by default");
     }
+    const auditRepo = join(work, "audit-repo");
+    mkdirSync(auditRepo);
+    await run(["git", "init", "--quiet"], { cwd: auditRepo, env });
+    writeFileSync(join(auditRepo, "example.ts"), "try { run(); } catch {}\n");
+    const audit = record(JSON.parse(await run([
+      process.execPath, installedCli, "audit", "--worktree", "--model", "typesafe/jev-1.13.0", "--dry-run", "--json",
+    ], { cwd: auditRepo, env })), "audit preview");
+    if (audit["status"] !== "planned" || audit["planned_requests"] !== 1 || audit["requests"] !== 0 || !Array.isArray(audit["rules"]) || audit["rules"].length === 0) {
+      throw new Error("packed audit must load bundled rules and preview without a backend");
+    }
     console.log(`standalone package verified (${entries.length} files, Bun ${Bun.version})`);
   } finally {
     rmSync(work, { recursive: true, force: true });

@@ -3,7 +3,7 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "help", "version",
+  "backend", "config", "eval", "audit", "help", "version",
 ] as const;
 
 const DESCRIPTION = `Sys1 lets agents ask yes/no, choice, and score questions and get validated
@@ -53,6 +53,10 @@ Models
                              Manage installed models
   sys1 models                List models on every reachable backend
 
+Review (experimental)
+  sys1 audit --staged --model <backend/model>
+                             Suggest changes using reusable rules
+
 Routing
   sys1 backend list|add|check|remove
                              Manage your own System One HTTP servers
@@ -84,6 +88,37 @@ function wrapList(items: readonly string[]): string {
 }
 
 const COMMAND_HELP: Readonly<Record<string, string>> = {
+  audit: `Usage: sys1 audit <--staged|--worktree|--since <ref>>
+                  --model <backend/model> [options] [-- paths...]
+
+Review a Git diff with reusable rules (experimental, advisory). Findings are
+candidates to inspect, not verified defects. Scores are uncalibrated.
+
+Options
+  --staged              Review HEAD versus the index
+  --worktree            Review HEAD versus current files, including untracked
+  --since <ref>         Review committed changes from ref to HEAD
+  --model <route>       Pin the exact backend/model; no fallback
+  --dry-run             List coverage and request count without model calls
+  --max-requests <n>     Request cap: 1..200, default 20
+  --timeout-ms <n>       Model-call deadline: 1..120000 ms, default 30000
+  --gateway             Use the loopback gateway (needed for local models)
+  --json, --agent        Print a machine-readable report
+  -- paths...           Exact files or directory prefixes within the repository
+
+Rules load from bundled packs, SYS1_HOME/rules, then .sys1/rules in the repo.
+Later rules replace earlier rules with the same id. Only hunk rules run.
+Source diff context goes to the pinned configured backend. Hosted Jev must be
+enabled explicitly. Sensitive/generated paths and oversized evidence are
+skipped and reported. No source, answers, or findings are saved by audit.
+
+Exit 0: completed or previewed (including advisory findings).
+Exit 8: incomplete coverage or a model error; inspect skipped in the report.
+
+Examples
+  sys1 audit --staged --model typesafe/jev-1.13.0 --dry-run --json
+  sys1 audit --worktree --model typesafe/jev-1.13.0 -- src test
+`,
   setup: `Usage: sys1 setup [--tier quality|compact] [--dry-run] [--json]
 
 Download the local model for this computer, check it, and turn it on. Local

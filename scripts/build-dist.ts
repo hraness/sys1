@@ -1,4 +1,4 @@
-import { chmodSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -68,6 +68,7 @@ async function buildDist(): Promise<void> {
     "external",
   ]);
   await run([process.execPath, TYPESCRIPT_CLI, "--project", "tsconfig.build.json", "--outDir", outdir]);
+  cpSync(join(PACKAGE_ROOT, "packs"), join(outdir, "packs"), { recursive: true });
 
   const cliPath = join(outdir, "cli.js");
   const cliSource = readFileSync(cliPath, "utf8");

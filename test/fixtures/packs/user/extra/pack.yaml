@@ -1,0 +1,18 @@
+version: 1
+pack: extra
+revision: 3
+description: Test user pack.
+rules:
+  - id: shared-rule
+    applies:
+      paths: ["**/*"]
+    ensure: The user wording holds.
+    breaks: The user wording is broken.
+  - id: user-only
+    applies:
+      paths: ["docs/**/*.md"]
+    unit: hunk
+    ask: Does the first paragraph lead with its point?
+    "true": The first paragraph states its point in its opening sentence.
+    "false": The first paragraph opens with setup and states its point later or never.
+    tiers: { high: 0.9, medium: 0.7 }

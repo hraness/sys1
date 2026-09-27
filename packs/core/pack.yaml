@@ -1,0 +1,50 @@
+version: 1
+pack: core
+revision: "2026.09.1"
+description: Experimental advisory checks for two narrow JavaScript and TypeScript changes.
+rules:
+  - id: core-new-empty-catch
+    applies:
+      paths: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      The change does not introduce a new empty JavaScript or TypeScript catch
+      block. A violation requires a complete catch body visible after the
+      change, with no executable statement, that was either newly added or
+      emptied by removing its last executable statement. Comments, whitespace,
+      and empty semicolon statements do not count as executable statements.
+      An unchanged or moved empty catch, removal of a catch, an incomplete
+      catch body, a Promise.catch callback, or catch text inside a string is
+      outside this rule. Any executable statement, including return, makes
+      the catch nonempty. Judge only the shown before and after code.
+    breaks: >-
+      The shown change adds a complete empty catch block or removes every
+      executable statement from a retained complete catch block, leaving
+      only whitespace, comments, or empty semicolon statements.
+    severity: P2
+    tiers: { medium: 0.8, high: 0.85 }
+    source: { kind: builtin }
+  - id: core-removed-test-assertions
+    applies:
+      paths: ["**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/{test,tests,__tests__}/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
+      languages: [javascript, typescript]
+    ensure: >-
+      The change does not remove the last visible behavioral assertion from
+      a retained JavaScript or TypeScript test callback. A violation requires
+      the complete test callback to be visible before and after, a removed
+      executable expect matcher, assert check, or explicit throw-on-failure
+      check, and no such check remaining or replacing it after. Assertion
+      count hints such as expect.assertions or expect.hasAssertions, logging,
+      comments, and mock setup are not behavioral assertions. A removed
+      whole test, an incomplete callback, a retained or replacement assertion,
+      and assertion text in a string are outside this rule. If a new or changed
+      helper call could contain a replacement check that is not shown, the
+      evidence is insufficient: do not report a violation. Do not infer tests
+      or helpers outside the shown code.
+    breaks: >-
+      A complete retained test callback had an executable behavioral assertion
+      before, loses its last such check in this diff, and contains no behavioral
+      check or possible replacement assertion helper call afterward.
+    severity: P2
+    tiers: { medium: 0.7, high: 0.85 }
+    source: { kind: builtin }

@@ -7,7 +7,7 @@ local model on your machine, or a compatible server you run.
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
-Latest release: v0.11.0. Install it from the GitHub release with npm; it runs
+Latest release: v0.12.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
@@ -22,7 +22,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.11.0/hraness-sys1-0.11.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.12.0/hraness-sys1-0.12.0.tgz
 sys1 doctor
 ```
 
@@ -36,6 +36,21 @@ bun run build:dist
 ln -sf "$PWD/dist/cli.js" ~/.local/bin/sys1
 ```
 
+## Review a Git diff (experimental)
+
+Run reusable rules against staged, working-tree, or committed changes. Preview
+the selected files and request count before sending source to a backend:
+
+```sh
+sys1 audit --staged --model typesafe/jev-1.13.0 --dry-run --json
+sys1 audit --staged --model typesafe/jev-1.13.0 --json
+```
+
+Hosted Jev must already be enabled with an environment credential. Findings
+are advisory candidates; model scores are not calibrated defect probabilities.
+The report names skipped evidence, and incomplete audits exit 8. See the
+[audit guide](docs/audit.md) for local models, repository rules, and limits.
+
 ## Use as a module
 
 For a Node 24 or Bun application that calls a running gateway, install the
@@ -43,7 +58,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.11.0/hraness-sys1-0.11.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.12.0/hraness-sys1-0.12.0.tgz
 ```
 
 ```ts

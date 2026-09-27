@@ -1,0 +1,51 @@
+version: 1
+pack: core
+revision: "2026.09.1"
+description: Test built-in pack.
+rules:
+  - id: shared-rule
+    applies:
+      paths: ["**/*"]
+    ensure: The built-in wording holds.
+    breaks: The built-in wording is broken.
+  - id: builtin-only
+    applies:
+      paths: ["**/*.ts"]
+      except: ["**/*.test.ts"]
+    ensure: Errors reaching this code are surfaced to the caller.
+    breaks: A caught error is dropped without being logged, rethrown, or returned.
+    severity: P1
+    source: { kind: builtin }
+  - id: exposed
+    applies:
+      paths: ["**/*"]
+    gate: false
+    ensure: The changed code handles no input an outside caller controls.
+    breaks: The changed code reads input an outside caller controls.
+  - id: injection
+    applies:
+      paths: ["**/*"]
+    ensure: Outside input never reaches a query, command, or template unescaped.
+    breaks: Outside input is concatenated into a query, command, or template.
+  - id: defect-kind
+    type: choice
+    applies:
+      paths: ["**/*.ts"]
+      languages: [typescript]
+    ask: Which kind of defect, if any, does the changed code have?
+    options:
+      none: No defect.
+      boundary: An off-by-one or boundary error.
+      swallowed: A swallowed error.
+    violations: [boundary, swallowed]
+  - id: defect-severity
+    type: score
+    applies:
+      paths: ["**/*.ts"]
+    ask: How severe is the worst defect in the changed code?
+    levels:
+      - None.
+      - Cosmetic.
+      - Wrong result in an edge case.
+      - Data loss or a security hole.
+    violation_at: 2
