@@ -44,6 +44,7 @@ pre code { font-size: inherit; }
 .button-small { min-height: 2.625rem; padding: .5rem .9rem; font-size: .85rem; }
 .hero { width: min(70rem, calc(100% - 4rem)); margin-inline: auto; padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(2.5rem, 5vw, 3.5rem); }
 .hero h1 { max-width: 16ch; font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem); line-height: 1.04; letter-spacing: -.04em; margin-bottom: 1.25rem; }
+.hero-phrase { white-space: nowrap; }
 .hero-accent { display: block; color: var(--primary); font-weight: 400; }
 .eyebrow { margin: 0 0 1rem; color: var(--muted); font-family: var(--font-mono); font-size: .75rem; font-weight: 500; letter-spacing: .08em; line-height: 1.4; text-transform: uppercase; }
 .summary { max-width: 42rem; margin: 0 0 1.75rem; color: var(--muted); font-size: 1.125rem; line-height: 1.6; }
@@ -156,3 +157,8 @@ html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
 
 main { flex: 1; }
 :root { --hraness-site-footer-measure: 70rem; }
+
+/* Keep the shared recovery page quiet without modifying its release snapshot. */
+.hraness-status-page__code { display: none; }
+.hraness-status-page__action[data-emphasis="primary"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); box-shadow: none; }
+.hraness-status-page__action[data-emphasis="primary"]::before, .hraness-status-page__action[data-emphasis="primary"]::after { display: none; }
