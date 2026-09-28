@@ -67,10 +67,12 @@ hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
 guides; update a brief in the same change as its page.
 
 - The one-line description is the canonical portfolio messaging record:
-  “Sys1 lets agents ask yes/no, choice, and score questions and get validated
-  answers with probabilities from hosted Jev, a local model, or your own
+  “Sys1 helps coding agents review changes against your repository's rules,
+  with probability-scored answers from hosted Jev, a local model, or your own
   server.” After the product name (“Sys1: …”, “sys1: …”), use the short form:
-  “lets agents ask yes/no, choice, and score questions and get answers”.
+  “helps coding agents review changes against your repository's rules”.
+  Adopted 2026-09-28 at the user's request; review stays experimental and
+  advisory, and the typed yes/no, choice, and score API remains the foundation.
   Shorten by cutting words, not by substituting internal ones.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package
   scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a

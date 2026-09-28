@@ -5,6 +5,14 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.15.0 - 2026-09-28
+
+Sys1 adds Devin setup for agent review and a read-only `sys1 usage` report on how often coding agents use Sys1, and adopts a new one-line description.
+
+- `sys1 review setup devin` installs the project review skill at `.devin/skills/sys1-review/SKILL.md`, alongside the Codex and Claude Code targets. It adds no hooks and configures no models.
+- `sys1 usage [--days <n>]` counts `sys1` subcommands, `system-one-skills check` runs, and Sys1 or System One skill loads in local Devin, Claude Code, and Codex transcripts, per agent and per day. It prints counts only, never prompt text, command text, paths, or source, and makes no model calls.
+- The one-line description now reads: Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server. Review remains experimental and advisory.
+
 ## 0.14.0 - 2026-09-27
 
 Sys1 lets agents focus a review on selected rules and records what narrower requirements changed in experiments on historical code.

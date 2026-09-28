@@ -69,9 +69,9 @@ the mistake. Do not treat a single successful example as qualification.
 `;
 
 export async function installReviewSkill(options: { repoRoot: string; target: string; dryRun?: boolean }) {
-  const roots: Record<string, string> = { codex: ".agents", "claude-code": ".claude" };
+  const roots: Record<string, string> = { codex: ".agents", "claude-code": ".claude", devin: ".devin" };
   const directory = Object.hasOwn(roots, options.target) ? roots[options.target] : undefined;
-  if (directory === undefined) throw new ProjectFileError("Choose setup codex or claude-code");
+  if (directory === undefined) throw new ProjectFileError("Choose setup codex, claude-code, or devin");
   const path = `${directory}/skills/sys1-review/SKILL.md`;
   const status = await writeProjectFile(options.repoRoot, path, REVIEW_SKILL, options.dryRun ?? false);
   return { version: 1 as const, advisory: true as const, command: "setup" as const, target: options.target, path, status };
