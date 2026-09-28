@@ -5,13 +5,15 @@ const site = new URL("../site/", import.meta.url);
 const origin = "https://sys1.io";
 const read = (path: string) => readFileSync(new URL(path, site), "utf8");
 const fileFor = (path: string) => (path === "/" ? "index.html" : `${path.slice(1)}.html`);
+const escapeRegExp = (value: string) => value.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
 const meta = (html: string, attribute: "name" | "property", key: string) =>
-  html.match(new RegExp(`<meta ${attribute}="${key.replace(/[.:]/g, "\\$&")}" content="([^"]*)"`))?.[1];
+  html.match(new RegExp(`<meta ${attribute}="${escapeRegExp(key)}" content="([^"]*)"`))?.[1];
 
 const sitemap = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]!);
 const paths = sitemap.map((loc) => {
-  expect(loc.startsWith(origin)).toBe(true);
-  return loc.slice(origin.length) || "/";
+  const url = new URL(loc);
+  expect(url.origin).toBe(origin);
+  return url.pathname;
 });
 const vercel = JSON.parse(read("../vercel.json")) as { redirects?: { source: string; destination: string; permanent: boolean }[] };
 
@@ -55,7 +57,7 @@ test("structured data parses and every WebSite reference resolves to the home gr
     const html = read(fileFor(path));
     for (const [, block] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
       const references = [...JSON.stringify(JSON.parse(block!)).matchAll(/"@id":"([^"]+)"/g)].map((match) => match[1]!);
-      for (const id of references) expect(id.startsWith(origin) ? ids.has(id) || id === `${origin}${path === "/" ? "/" : path}` : id === "https://hraness.com/#organization").toBe(true);
+      for (const id of references) expect(new URL(id).origin === origin ? ids.has(id) || id === `${origin}${path === "/" ? "/" : path}` : id === "https://hraness.com/#organization").toBe(true);
     }
   }
 });
