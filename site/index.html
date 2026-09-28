@@ -3,18 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sys1 · Give your agent a System 1.</title>
+    <title>Sys1 · Agent code review with Jev</title>
     <meta name="description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
     <link rel="canonical" href="https://sys1.io/" />
-    <meta property="og:title" content="Sys1 · Give your agent a System 1." />
+    <meta property="og:title" content="Sys1 · Agent code review with Jev" />
     <meta property="og:description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sys1 · Agent code review with Jev" />
+    <meta name="twitter:description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://sys1.io/",
+  "url": "https://sys1.io/",
+  "name": "Sys1",
+  "description": "Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS, Linux, Windows",
+  "softwareVersion": "0.17.0",
+  "license": "https://github.com/hraness/sys1/blob/main/LICENSE"
+}
+    </script>
     <script src="/appearance.js"></script>
     <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
@@ -58,14 +75,45 @@
 
     <main id="main" tabindex="-1">
       <section class="hero" aria-labelledby="hero-heading">
-        <p class="eyebrow">Agent decision router</p>
-        <h1 id="hero-heading">Ask a <span class="hero-phrase">small question.</span> <span class="hero-accent">Get a typed answer.</span></h1>
-        <p class="summary">Your agent asks small yes/no, choice, and score questions and gets validated answers with probabilities. You choose the model: a local one, TypeSafe’s hosted Jev, or a server you run.</p>
+        <h1 id="hero-heading">Review your <span class="hero-phrase">agent’s changes.</span></h1>
+        <p class="summary">Check Git changes against your repository’s rules, investigate candidates, and check the agent’s completion claims. Choose Jev, TypeSafe’s hosted decision model, a local model, or a compatible server you run.</p>
         <div class="actions">
           <a class="button" href="#install">Install Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-          <a class="text-link" href="/docs">Read the docs</a>
+          <a class="text-link" href="/skills">Choose a workflow</a>
         </div>
-        <p class="hero-note">v0.16.0 · MIT · macOS, Linux &amp; Windows · Bun 1.3.14+ · Hosted Jev is opt-in; local models are experimental</p>
+        <p class="hero-note">v0.17.0 · MIT · Review and verify are advisory. Local models are experimental; hosted Jev is opt-in.</p>
+      </section>
+
+      <section id="how-it-works" class="section" aria-labelledby="review-heading">
+        <div class="section-intro">
+          <h2 id="review-heading">Give your agent a review checkpoint.</h2>
+          <p>The <code>sys1-review</code> project skill guides Codex, Claude Code, or Devin through the same workflow. Start with checks for newly empty catch blocks and removed test assertions in JavaScript and TypeScript, or add your own rules.</p>
+        </div>
+        <ol class="steps">
+          <li><h3>Install the project instructions</h3><p>Run <code>sys1 review setup codex</code>, <code>claude-code</code>, or <code>devin</code> inside your Git repository. Setup adds a skill file; it does not enable a model or install automatic hooks.</p></li>
+          <li><h3>Preview a batch of changes</h3><p>Choose worktree, staged, or committed changes. A dry run lists the selected rules, files, skipped evidence, and planned requests before any source goes to the model.</p></li>
+          <li><h3>Investigate and keep feedback</h3><p>Run the checkpoint, inspect each candidate in the code, and mark it useful, incorrect, or unverifiable. Complete unchanged batches can reuse a review for up to 24 hours.</p></li>
+        </ol>
+        <p class="section-footnote">Review is experimental. Scores help rank candidates; they are not calibrated defect probabilities, and an empty report does not prove correctness. Keep your repository’s tests and review. <a href="/docs#audit">Set up agent review</a>.</p>
+        <div class="integration-body">
+          <dl class="integration-modes">
+            <div><dt>Check the completion message</dt><dd><p>The <code>sys1-verify</code> project skill runs <code>sys1 verify</code> to compare claims about commits, merges, checks, and live pages with reachable evidence. Install it with <code>sys1 verify setup codex</code>, <code>claude-code</code>, or <code>devin</code>, and pass a saved message from your agent.</p><a href="/docs#verify">Verify a completion claim</a></dd></div>
+            <div><dt>Keep noisy check output short</dt><dd><p>The separate <code>system-one-verify</code> skill runs a known noisy test or build once and keeps the full log on disk. It needs neither Sys1 nor a model backend.</p><a href="/skills#shipped">Use compact check output</a></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="decision-api" class="section" aria-labelledby="how-heading">
+        <div class="section-intro">
+          <h2 id="how-heading">Use small decisions in your own application.</h2>
+          <p>Agents make many small judgment calls: classify a message, pick the next task, check a condition. Sys1 sends each call to the model you chose and checks the answer, so your code gets the same format whichever model replied.</p>
+        </div>
+        <ol class="steps">
+          <li><h3>Ask a typed question</h3><p>Send some state and one or more questions. <code>noul</code> returns a yes/no probability, <code>choice</code> picks one of your named options, and <code>score</code> returns a number over your ordered criteria.</p></li>
+          <li><h3>Sys1 sends it to the model you picked</h3><p>A local Qwen model, hosted Jev, or a compatible server you registered. Pin the backend and model in configuration; the <code>local-only</code> policy keeps requests on your machine.</p></li>
+          <li><h3>Your code gets a checked answer</h3><p>Sys1 rejects malformed answers, carries cancellation through the request, and reports which backend answered. Answers from built-in local models also name the adapter.</p></li>
+          <li><h3>Your app decides what happens next</h3><p>Permissions, thresholds, and follow-up actions stay in your code. Sys1 does not estimate accuracy per request.</p></li>
+        </ol>
       </section>
 
       <section class="section proof" aria-labelledby="proof-heading">
@@ -113,23 +161,8 @@
         </figure>
       </section>
 
-      <section id="how-it-works" class="section" aria-labelledby="how-heading">
-        <div class="section-intro">
-          <p class="eyebrow">How it works</p>
-          <h2 id="how-heading">One request format for every model.</h2>
-          <p>Agents make many small judgment calls: classify a message, pick the next task, check a condition. Sys1 sends each call to the model you chose and checks the answer, so your code gets the same format whichever model replied.</p>
-        </div>
-        <ol class="steps">
-          <li><h3>Ask a typed question</h3><p>Send some state and one or more questions. <code>noul</code> returns a yes/no probability, <code>choice</code> picks one of your named options, and <code>score</code> returns a number over your ordered criteria.</p></li>
-          <li><h3>Sys1 sends it to the model you picked</h3><p>A local Qwen model, hosted Jev, or a compatible server you registered. Pin the backend and model in configuration; the <code>local-only</code> policy keeps requests on your machine.</p></li>
-          <li><h3>Your code gets a checked answer</h3><p>Sys1 rejects malformed answers, carries cancellation through the request, and reports which backend answered. Answers from built-in local models also name the adapter.</p></li>
-          <li><h3>Your app decides what happens next</h3><p>Permissions, thresholds, and follow-up actions stay in your code. Sys1 does not estimate accuracy per request.</p></li>
-        </ol>
-      </section>
-
       <section id="integrate" class="section" aria-labelledby="integration-heading">
         <div class="section-intro">
-          <p class="eyebrow">Integrate</p>
           <h2 id="integration-heading">Three ways to call Sys1.</h2>
           <p>All three take the same request and return the same answer format.</p>
         </div>
@@ -167,14 +200,13 @@ console.log(metadata.backend);</code></pre>
 
       <section id="backends" class="section" aria-labelledby="ecosystem-heading">
         <div class="section-intro">
-          <p class="eyebrow">Backends</p>
           <h2 id="ecosystem-heading">What Sys1 connects to.</h2>
           <p>Every backend answers in the same format, but not equally well. Accuracy and calibration differ by model, so test each one on your task before you reuse thresholds or change defaults. <a href="/compare">Compare the models</a>.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="Backends and their relationship to Sys1">
           <div class="ecosystem-header" role="row"><span role="columnheader">Backend</span><span role="columnheader">What it is</span><span role="columnheader">How Sys1 uses it</span></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://huggingface.co/Qwen/Qwen3-1.7B">Qwen3 1.7B</a><span class="project-kind">Local model, experimental</span></div><p role="cell">The default local model, run on your hardware.</p><p role="cell"><code>sys1 setup</code> downloads verified weights and turns it on. It stays selected when you install another model.</p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://docs.typesafe.ai/introduction">Jev</a><span class="project-kind">Hosted, opt-in</span></div><p role="cell">TypeSafe’s hosted decision model.</p><p role="cell">Off until you run <code>sys1 jev enable</code> with your own TypeSafe API key. Enabling it selects hosted-only routing, so requests do not fall back to a local model.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://docs.typesafe.ai/introduction">Jev</a><span class="project-kind">Hosted, opt-in</span></div><p role="cell">TypeSafe’s hosted System One decision model.</p><p role="cell">Off until you run <code>sys1 jev enable</code> with your own TypeSafe API key. Enabling it selects hosted-only routing, so requests do not fall back to a local model.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://github.com/razorback16/openjev">OpenJev</a><span class="project-kind">Self-hosted server</span></div><p role="cell">An open implementation of a Jev-compatible decision API.</p><p role="cell">Register a server you run and test it with <code>sys1 backend check</code>. Image, chat, and advanced sampling extensions are not supported.</p></div>
           <div class="ecosystem-row" role="row"><div role="cell"><a href="https://node-llama-cpp.withcat.ai/">llama.cpp</a><span class="project-kind">Local runtime</span></div><p role="cell">Native local inference, through node-llama-cpp.</p><p role="cell">Sys1 loads the model, cancels requests, and maps first-token probabilities to answers.</p></div>
         </div>
@@ -182,25 +214,22 @@ console.log(metadata.backend);</code></pre>
 
       <section id="install" class="section" aria-labelledby="install-heading">
         <div class="section-intro">
-          <p class="eyebrow">Get started</p>
-          <h2 id="install-heading">Install and set up a local model.</h2>
-          <p>Install the release from GitHub, then run setup. Setup downloads Qwen3 1.7B; hosted Jev stays off until you turn it on.</p>
+          <h2 id="install-heading">Install Sys1.</h2>
+          <p>Install the release from GitHub, inspect your setup, then add the project skill for your agent. Choose hosted Jev or a local model in the <a href="/docs#getting-started">setup guide</a>.</p>
         </div>
         <div class="code-frame install-terminal">
           <div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy</button></div>
           <pre><code id="install-command">npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.11.0/hraness-sys1-0.11.0.tgz
-sys1 setup
-sys1 up
-sys1 status</code></pre>
+  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
+sys1 doctor
+sys1 review setup codex</code></pre>
         </div>
         <p id="copy-status" class="copy-status" role="status"></p>
-        <p class="section-footnote">Requires Bun 1.3.14 or newer. <code>--allow-scripts=node-llama-cpp</code> lets only the native inference package run its install script. To build from source, use it as a module, or move an existing Jev app, see <a href="/docs#getting-started">getting started</a>.</p>
+        <p class="section-footnote">The CLI requires Bun 1.3.14 or newer on macOS, Linux, or Windows. <code>--allow-scripts=node-llama-cpp</code> permits the native inference package’s install script. Installation downloads no model weights and activates no hosted backend. Use <code>setup claude-code</code> or <code>setup devin</code> for those agents.</p>
       </section>
 
       <section class="section questions" aria-labelledby="questions-heading">
         <div class="section-intro">
-          <p class="eyebrow">FAQ</p>
           <h2 id="questions-heading">Before you begin.</h2>
         </div>
         <div class="question-list">
@@ -208,7 +237,7 @@ sys1 status</code></pre>
           <details><summary>Can I replace my existing Jev client?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Yes. Run <code>sys1 jev enable</code>, which turns on hosted Jev and sets routing to <code>hosted-only</code> so no request falls back to a local model. Pin <code>jev-1.13.0</code> so your app keeps the same model while you switch to the Sys1 client. Test your request sizes, question limits, cancellation, and error handling. <a href="https://github.com/hraness/sys1#adopting-sys1-in-an-existing-jev-application">Read the adoption guide</a>.</p></details>
           <details><summary>Does Sys1 pick the most accurate model?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>No. You choose the model. Fresh setup uses Qwen3 1.7B; enabling Jev selects hosted-only operation, and a hosted outage returns an error. Local fallback needs an explicit policy change after you evaluate it. Installing a smaller model does not change the selection.</p></details>
           <details><summary>What does it cost?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Sys1 is free, open-source software under the MIT license. Local inference uses your hardware. Hosted providers may charge separately under their own plans.</p></details>
-          <details><summary>How do I keep noisy test logs out of my agent’s context?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p><a href="/skills">System One Skills</a> gives Devin, Claude Code, and Codex a skill that runs a known noisy check once, returns a short result, and keeps the full log on disk. It works without Sys1 or any model backend.</p></details>
+          <details><summary>How do I keep noisy test logs out of my agent’s context?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p><a href="/skills#shipped">System One Skills</a> provides the separate <code>system-one-verify</code> skill for Devin, Claude Code, and Codex. It runs a known noisy check once, returns a short result, and keeps the full log on disk. It works without Sys1 or any model backend.</p></details>
         </div>
       </section>
     </main>

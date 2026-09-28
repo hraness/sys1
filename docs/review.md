@@ -5,6 +5,12 @@ them, and record whether they helped. This workflow is experimental and
 advisory. Its scores rank candidates; they are not calibrated probabilities of
 a defect. Keep the repository's normal tests and review.
 
+The project skill supplies the workflow; rule packs supply the checks. You can
+use the same workflow across Git repositories and coding agents, while each
+repository selects rules for its own code and conventions. The bundled pack
+checks newly empty catch blocks and removed test assertions in JavaScript and
+TypeScript. It does not provide general review coverage for every language.
+
 The [contract-based experiment](reviewer-contract-2026-09-27.md) missed its
 reproduced defect and flagged two of five control hunks. Investigate every
 candidate before treating it as a defect.
@@ -36,7 +42,8 @@ Commit the skill if the repository should share it.
 
 Setup installs instructions only. It does not activate models, add hooks, or
 change the repository's required checks. Other agents can use the CLI
-directly.
+directly, following this guide. Review needs a Git worktree and an enabled
+model route; it does not need an agent transcript or a particular framework.
 
 ## Preview and run a checkpoint
 
@@ -128,6 +135,20 @@ run a new checkpoint on the repaired batch, alongside its tests.
 Exit 0 includes previews, completed checks, unchanged batches, and advisory
 findings. Exit 8 covers `incomplete`, `stale`, `superseded`, and `unavailable`.
 Neither an empty report nor `not_reported` proves a fix.
+
+## Check the completion message
+
+After finishing the work, compare the proposed final message with the current
+repository and any linked pull requests or live pages. Save the draft outside
+the Git worktree so the message itself does not become an uncommitted file:
+
+```sh
+sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --json
+```
+
+Use a file or `--message -` with any coding agent. Automatic message discovery
+and check-command evidence are available for local Devin sessions. The
+[verification guide](verify.md) explains the evidence, exit codes, and limits.
 
 ## Repeated checks and local data
 

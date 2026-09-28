@@ -10,9 +10,10 @@ fallback behavior. Sys1 owns transport, routing policy, bounded schema
 validation, and the lifecycle of explicitly installed local models. Wire shape
 compatibility does not imply equal calibration or application quality.
 
-The normal route is hosted Jev 1.13.0 when enabled, with local Qwen3 1.7B as
-the selected local model. The configured `local.model` determines the only
-installed model eligible for unpinned requests. Other installed GGUF models
+Fresh configuration keeps hosted Jev disabled and selects local Qwen3 1.7B;
+model installation is explicit. `sys1 jev enable` activates hosted Jev 1.13.0
+and selects `hosted-only` routing. The configured `local.model` determines
+the only installed model eligible for unpinned requests. Other installed GGUF models
 and operator-registered HTTP services require explicit selection.
 
 The portable `@hraness/sys1/client` entry exports the typed HTTP client and
@@ -58,6 +59,27 @@ language clients use the HTTP contract directly.
 - **Daemon** (`src/daemon.ts`) owns detached process, pid file, health check,
   log, and stop lifecycle. Authenticated per-instance shutdown never signals a
   saved PID whose ownership may have changed.
+
+## Agent workflows
+
+The CLI combines advisory decisions with local workflow helpers:
+
+- **Audit** (`src/audit/`) collects selected Git diff evidence, resolves rule
+  packs, compiles questions, and reports candidates and skipped evidence. It
+  does not keep review history.
+- **Review** (`src/review/`) installs project skills, runs checkpoints, reuses
+  unchanged complete batches, and records feedback. Its private worktree
+  metadata excludes source, rule prose, raw answers, and scores.
+- **Verification** (`src/verify/`) installs a project skill and compares a final
+  message with local Git state, linked pull requests, Devin check-command results when available,
+  and fetched pages. File and stdin input support messages from other agents.
+- **Usage** (`src/usage.ts`) counts Sys1 commands and skill loads in local
+  Devin, Claude Code, and Codex transcripts without model calls.
+
+Skills supply agent instructions; rule packs define which changes to check.
+Installing a skill does not enable a backend or add an automatic hook. Review
+and verification require a selected backend/model route and leave the
+repository's normal tests and delivery requirements in place.
 
 ## Request flow
 

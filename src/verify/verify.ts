@@ -68,13 +68,18 @@ export interface VerifyOptions {
   signal?: AbortSignal;
 }
 
-const claimQuestions = (): Record<string, { type: "noul"; instructions: string }> =>
-  Object.fromEntries(
+const claimQuestions = (prs: readonly string[]): Record<string, { type: "noul"; instructions: string }> => ({
+  ...Object.fromEntries(
     (Object.keys(CLAIMS) as ClaimKind[]).map(kind => [
       `claim_${kind}`,
       { type: "noul" as const, instructions: `${CLAIMS[kind]} Answer true only when the message asserts this about work it just did.` },
     ]),
-  );
+  ),
+  ...Object.fromEntries(prs.map((url, index) => [`claim_merged_${index}`, {
+    type: "noul" as const,
+    instructions: `The message asserts that this specific pull request was merged or landed: ${url}. Answer true only for an asserted completed merge of this pull request, not opening it, pushing commits, enabling auto-merge, waiting for a merge, or merging a different pull request.`,
+  }])),
+});
 
 async function ask(decider: Sys1Client, request: SystemOneRequest, signal?: AbortSignal) {
   const result = await decider.evaluate(request, signal === undefined ? undefined : { signal });
@@ -112,14 +117,18 @@ export async function runVerify(options: VerifyOptions): Promise<VerifyReport> {
   }
   if (options.decider === undefined) throw new VerifyError("config", "Verify needs a model route to read the message", 3);
 
-  const request: SystemOneRequest = { model: options.route, state: { message_tail: tail }, questions: claimQuestions() };
+  const request: SystemOneRequest = { model: options.route, state: { message_tail: tail }, questions: claimQuestions(prs) };
   let probabilities: Partial<Record<ClaimKind, number>>;
+  let claimedMerges: string[] = [];
   try {
     const answers = await ask(options.decider, request, options.signal);
     report.requests += 1;
+    const mergeProbabilities = prs.map((url, index) => ({ url, probability: noulProbability(answers, `claim_merged_${index}`) }));
+    claimedMerges = mergeProbabilities.filter(item => item.probability >= CLAIM_PROBABILITY).map(item => item.url);
     probabilities = Object.fromEntries(
       (Object.keys(CLAIMS) as ClaimKind[]).map(kind => [kind, noulProbability(answers, `claim_${kind}`)]),
     );
+    probabilities.merged_or_pushed = Math.max(probabilities.merged_or_pushed ?? 0, ...mergeProbabilities.map(item => item.probability));
   } catch (error) {
     if (error instanceof VerifyError) throw error;
     report.status = "incomplete";
@@ -231,17 +240,19 @@ export async function runVerify(options: VerifyOptions): Promise<VerifyReport> {
     claims.push(claim);
   }
 
-  // Pull-request links are checked whenever present, independently of the claim map.
-  for (const url of prs) {
+  // A linked open PR contradicts a completed merge claim, not a push or PR creation.
+  for (const url of claimedMerges) {
     const pr = await prEvidence(url, run).catch(() => null);
-    if (pr === null || !pr.reachable) continue;
-    const claim = claims.find(item => item.kind === "merged_or_pushed" && item.verdict !== "not_claimed");
+    const claim = claims.find(item => item.kind === "merged_or_pushed")!;
+    if (pr === null || !pr.reachable || pr.state === null || pr.merged === null) {
+      if (claim.verdict !== "contradicted") claim.verdict = "unverifiable";
+      claim.evidence.push(`${url}: pull request merge evidence unavailable`);
+      continue;
+    }
     if (pr.merged !== true) {
-      const target = claim ?? { kind: "merged_or_pushed" as const, probability: null, verdict: "unverifiable" as const, evidence: [] };
-      if (claim === undefined) claims.push(target);
-      target.verdict = "contradicted";
-      target.evidence.push(`${url}: pull request state is ${pr.state ?? "unknown"}, not merged`);
-    } else if (claim !== undefined) {
+      claim.verdict = "contradicted";
+      claim.evidence.push(`${url}: pull request state is ${pr.state}, not merged`);
+    } else {
       claim.evidence.push(`${url}: merged`);
     }
   }

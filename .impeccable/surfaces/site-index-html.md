@@ -126,3 +126,62 @@ above; do not restore them.
 The release label follows package.json at 0.13.0. Homepage layout, product
 messaging, and dated measurement records are unchanged. Agent review commands
 and their limits are documented at `/docs#audit`.
+
+## Agent workflows and discovery — 2026-09-28
+
+This direction supersedes earlier hero and metadata snapshots. Preserve the
+current September 27 visual implementation. The page is Persuade: help a
+coding-agent user decide whether to install Sys1. The title is “Sys1 · Agent
+code review with Jev”, while the description keeps the portfolio registry text
+verbatim. Lead with repository review, then show the independent `sys1-verify`
+skill and separate System One Skills noisy-output workflow. The decision API
+and recorded Qwen example remain useful for application developers below that
+entry point. Keep the ordinary tests/review requirement beside candidate scores.
+
+The release example is drawn from package.json; the integration owner updates
+it for the joined release. The `sys1 verify setup` examples depend on the
+standalone project-skill implementation being integrated before publication.
+JSON-LD identifies an MIT developer application and the shipped version, with
+no review-accuracy, adoption, or ranking claims. Twitter and Open Graph copy
+match the page metadata. Jev is TypeSafe’s hosted System One decision model;
+no separate framework capability is asserted.
+
+Editorial admission: revise this existing homepage. Reader job: understand
+what the skills add and choose installation or the relevant workflow. The
+non-obvious answer is that a project skill can guide model-assisted review
+while ordinary tests and investigation remain necessary. Original contribution:
+product behavior tied to `src/review/`, `src/verify/`, package metadata, and the
+checked TypeSafe docs. Neighbors: /skills chooses instructions, /docs gives
+commands, /compare reports model evidence; the homepage supplies the product
+and adoption decision. Scores: utility 2, original evidence 2, factual
+confidence 1 pending joined `verify setup` source, host fit 2, voice 2,
+maintenance 2 (11/12). Owner: Sys1 maintainer. Draft/source pass: Codex agent
+/root/site_value on 2026-09-28. Human review: none. Independent source review
+and desktop/mobile visual review: pending integration owner. Reassess on the
+next skill or release change, or 2026-10-26. No new assets or CSS.
+
+Independent source/copy review: Codex agent /root/readme_docs on 2026-09-28.
+One finding repaired: disclose the two bundled JavaScript/TypeScript rules
+beside generic review-workflow guidance, so portability does not imply broad
+built-in language coverage. Other checked claims, Jev terminology, metadata,
+and advisory/privacy boundaries aligned source. Runtime setup convergence and
+rendered review remain with the integration owner.
+
+Integration-owner visual review: Codex /root reported a passing 48-combination
+browser check and inspected desktop/mobile homepage, docs, and skills captures
+on 2026-09-28, with no blocker. Evidence:
+`/private/tmp/sys1-portable-skills-browser/results.json`. The owner also checked
+150 internal links and all seven sitemap canonical URLs, then collected the
+browser and server. No additional visual iteration was requested. The
+independent source/copy reviewer reported no remaining public-copy blockers.
+Runtime-source fixes and release validation remain owned by the integration
+owner; the prior pending visual-review note is now resolved.
+
+Joined runtime source review: Codex /root/site_value inspected the standalone
+verify installer, CLI dispatch, embedded skills, and corrected per-PR merge
+checks on 2026-09-28. The setup commands described above now exist in source;
+the worker's focused suite reported 30 passing tests and no failures. No
+remaining source/copy blocker was found. Factual confidence is now 2 and the
+revised page's admission total is 12/12. This records editorial/source
+admission; aggregate validation, publication, and production evidence remain
+with the integration owner's ordinary delivery workflow.

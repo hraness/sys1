@@ -10,6 +10,10 @@ description: Review a coherent batch of Git changes with Sys1's advisory rules, 
 
 Use the repository's configured rule packs and exact backend/model route.
 Read \`sys1 review --help\` and \`sys1 rules --help\` for the installed version.
+Choose rules that match the change and the repository's languages. Bundled
+rules have path scopes; inspect active rules and skipped coverage instead of
+assuming every language is covered. Select actual task-owned files or
+directories; repositories need not have \`src\` or \`test\` folders.
 Hosted Jev (TypeSafe's hosted decision model) needs explicit activation and
 receives selected source diff context. Local models are experimental.
 Installing this skill configures neither a backend nor automatic hooks.
@@ -60,16 +64,22 @@ not store source, raw answers, rule prose, model scores, or freeform notes.
 The ordinary \`sys1 audit\` command remains stateless.
 
 Before reporting completion, check your final message against reachable
-evidence (experimental):
+evidence (experimental). Save the message in a temporary file outside the Git
+worktree so it does not appear as unfinished work:
 
 \`\`\`sh
-sys1 verify --model <backend/model>
-sys1 verify --model <backend/model> --url <live-url>
+sys1 verify --message <final-message-file> --model <backend/model> --dry-run --json
+sys1 verify --message <final-message-file> --model <backend/model> --url <live-url>
 \`\`\`
 
-Inside Devin it reads this session's final message and the last turn's
-check-command results automatically. Other agents pipe the message with
-\`sys1 verify --message -\`. Claims such as deployed, merged, committed, and
+Any agent can pipe the final message with
+\`sys1 verify --message - --model <backend/model>\`. Plain message input
+has no command transcript, so check-result claims stay unverifiable.
+Without \`--message\`, Sys1 selects the newest Devin session for this
+directory or an ancestor; it may select another task, not the current session.
+Preview before authorizing message and page transmission to the selected
+backend. Install the standalone instructions with \`sys1 verify setup\` and
+your agent's target. Claims such as deployed, merged, committed, and
 checks passed are compared with the worktree, linked pull requests, and fetched
 pages. Exit 7 means a claim contradicted reachable evidence; unverifiable
 evidence is never a contradiction. Fix the claim or the work, then rerun.
@@ -81,6 +91,14 @@ outside the active rules directory. Validate with \`sys1 rules check\`, review
 the prose and examples, then explicitly move the reviewed pack into
 \`.sys1/rules/<name>/\`. Prefer an existing deterministic check when it covers
 the mistake. Do not treat a single successful example as qualification.
+
+Useful rule topics across languages include checking resource ownership before
+a write, completing durable storage before reporting success, preserving the
+ordering of externally visible events, and keeping error responses free of
+private input. Adopt only conventions supported by this repository's guides.
+For each rule, name the affected operation and choose paths that exist here;
+avoid vague instructions to produce clean or secure code. Cover a real
+violation and a plausible correct implementation in the repository's language.
 `;
 
 export async function installReviewSkill(options: { repoRoot: string; target: string; dryRun?: boolean }) {

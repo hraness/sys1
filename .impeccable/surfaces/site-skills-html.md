@@ -153,3 +153,65 @@ hraness/.github) and the “Public copy” section of `PRODUCT.md`. This section
   results section.
 - Recheck on each release: version, runtime test count (43 at v0.4.1), the
   installed skill count, candidate status, and every pinned source link.
+
+## Sys1 skills and separate output runtime — 2026-09-28
+
+This direction supersedes the earlier “one shipped skill” framing. The existing
+/skills URL remains a Read page. Start with a practical choice between Sys1’s
+`sys1-review`, its independent `sys1-verify`, and the separate System One Skills
+`system-one-verify`. The first two use the configured model; the third captures
+command output and requires no model. Each section provides its task, preview
+or installation command, limits, and next reference. Generic use means readers
+supply their own paths, rules, messages, and commands; no repository-specific
+private setup is assumed. Preserve existing styles and shared components.
+
+The Sys1 verify installation examples must join with their implementation
+before release. System One Skills v0.4.1 is the current upstream release,
+confirmed by the integration owner on 2026-09-28. Its September 20 replay
+figures and immutable sources remain unchanged, explicitly scoped to that
+project’s UTF-8 output bytes. The study is not evidence of Sys1 review accuracy,
+whole-task tokens, or speed. Research candidates are dated to their source
+revision. Metadata and schema describe the workflow chooser, not the old
+single-skill landing page. No new indexable pages are created.
+
+Editorial admission: revise the existing skill guide. Reader job: choose and
+install the skill matching code review, completion claims, or noisy checks.
+Non-obvious answer: similarly named verify commands do different jobs and
+require different runtimes. Original contribution: a current choice of Sys1
+project instructions connected to separately preserved compact-output evidence.
+Neighbors: / gives the adoption decision, /docs explains the CLI, upstream
+System One Skills owns its release and reports. Keep this URL because it owns
+the installation choice across these distinct workflows and existing evidence
+links. Scores: utility 2, original evidence 2, factual confidence 1 pending
+joined `verify setup` source, host fit 2, voice 2, maintenance 2 (11/12).
+Owner: Sys1 maintainer; output-study evidence owner: System One Skills.
+Drafter/source pass: Codex agent /root/site_value on 2026-09-28. Human review:
+none. Independent source and desktop/mobile visual review: pending integration
+owner. Reassess on either skill release or 2026-10-26. Earlier finish records
+apply only to their recorded revisions.
+
+Independent source/copy review: Codex agent /root/readme_docs on 2026-09-28.
+One finding repaired: disclose the two bundled JavaScript/TypeScript rules
+beside generic review-workflow guidance, so portability does not imply broad
+built-in language coverage. Other checked claims, Jev terminology, metadata,
+and advisory/privacy boundaries aligned source. Runtime setup convergence and
+rendered review remain with the integration owner.
+
+Integration-owner visual review: Codex /root reported a passing 48-combination
+browser check and inspected desktop/mobile homepage, docs, and skills captures
+on 2026-09-28, with no blocker. Evidence:
+`/private/tmp/sys1-portable-skills-browser/results.json`. The owner also checked
+150 internal links and all seven sitemap canonical URLs, then collected the
+browser and server. No additional visual iteration was requested. The
+independent source/copy reviewer reported no remaining public-copy blockers.
+Runtime-source fixes and release validation remain owned by the integration
+owner; the prior pending visual-review note is now resolved.
+
+Joined runtime source review: Codex /root/site_value inspected the standalone
+verify installer, CLI dispatch, embedded skills, and corrected per-PR merge
+checks on 2026-09-28. The setup commands described above now exist in source;
+the worker's focused suite reported 30 passing tests and no failures. No
+remaining source/copy blocker was found. Factual confidence is now 2 and the
+revised page's admission total is 12/12. This records editorial/source
+admission; aggregate validation, publication, and production evidence remain
+with the integration owner's ordinary delivery workflow.
