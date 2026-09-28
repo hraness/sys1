@@ -1,5 +1,5 @@
 /**
- * Sys1-owned adapter for the pinned v0.15.0 static renderer. That renderer
+ * Sys1-owned adapter for the pinned v0.20.0 static renderer. That renderer
  * unconditionally includes a hidden consent subtree and has no opt-out.
  * Sys1 configures no consent runtime, so omit its inactive action and copy.
  */

@@ -119,6 +119,27 @@ components:
     padding: ".4rem .65rem"
 ---
 
+# Current design — September 27, 2026
+
+Sys1 is a local decision router for developers and agents. The landing page
+explains typed questions, shows one recorded answer and its limitations,
+and leads to installation or documentation. The recovered pass uses sans
+headings, a single-column hero, flat sections, and persistent phone navigation.
+The proof is the measured repetition0 of inbox-routing-03 in the September20
+decisions-v2 Qwen3 1.7B record; its full answer matches the linked artifact.
+The caption gives the overall32/72 result and states the shortened request.
+Hosted Jev stays opt-in and local models experimental.
+
+Paper/marketing/Lantern snapshots use design-kit0.23.0 source3df4c41; the
+existing shared appearance controller and saved Tokyo Night choice stay.
+Footer0.20.0 uses normal document flow and no active consent runtime. The
+regenerator and immutable hashes are documented in site/vendor/README.md.
+Use desktop/phone light/dark checks before delivery; these are pending.
+
+The historical design below describes earlier releases; its specimen, serif
+heading, hidden phone navigation and sticky footer guidance is superseded.
+
+
 # Design System: Sys1
 
 ## Overview

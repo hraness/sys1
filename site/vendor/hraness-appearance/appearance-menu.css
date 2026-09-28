@@ -2,25 +2,27 @@
 /*
  * Framework-neutral fallback for the standards-only browser controller.
  * React ThemeToggle marks its root and owns the same presentation with StyleX,
- * including its portalled popover.
+ * including its portalled popover. Lantern tokens exist only inside a
+ * data-hraness-material="lantern" island, so each chain falls through to the
+ * palette outside one.
  */
 .hraness-design-theme-toggle[data-hraness-appearance-menu][data-presentation="menu"]:not([data-hraness-theme-toggle-stylex]) {
   --hraness-appearance-control-background:
-    var(--ui-background, Canvas);
+    var(--hraness-material-plane, var(--ui-background, Canvas));
   --hraness-appearance-control-foreground:
-    var(--ui-foreground, CanvasText);
+    var(--hraness-material-ink, var(--ui-foreground, CanvasText));
   --hraness-appearance-control-border:
-    var(--ui-input, GrayText);
+    var(--hraness-material-seam, var(--ui-input, GrayText));
   --hraness-appearance-popover-background:
-    var(--ui-popover, Canvas);
+    var(--hraness-material-plane, var(--ui-popover, Canvas));
   --hraness-appearance-popover-foreground:
-    var(--ui-popover-foreground, CanvasText);
+    var(--hraness-material-ink, var(--ui-popover-foreground, CanvasText));
   --hraness-appearance-accent:
-    var(--ui-accent, ButtonFace);
+    var(--hraness-material-warm-plane, var(--ui-accent, ButtonFace));
   --hraness-appearance-accent-foreground:
-    var(--ui-accent-foreground, ButtonText);
+    var(--hraness-material-ink, var(--ui-accent-foreground, ButtonText));
   --hraness-appearance-focus:
-    var(--ui-ring, Highlight);
+    var(--hraness-material-focus, var(--ui-ring, Highlight));
   position: relative;
   display: inline-flex;
   min-inline-size: 0;
@@ -52,12 +54,14 @@
     --hraness-appearance-control-foreground,
     var(--ui-foreground, CanvasText)
   );
+  box-shadow: var(--hraness-material-raised, none);
   font: inherit;
   place-items: center;
   touch-action: manipulation;
   transition:
     background-color 120ms cubic-bezier(0.2, 0, 0, 1),
     border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 120ms cubic-bezier(0.2, 0, 0, 1),
     color 120ms cubic-bezier(0.2, 0, 0, 1),
     transform 120ms cubic-bezier(0.2, 0, 0, 1);
 }
@@ -78,6 +82,7 @@
 
 .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
   .hraness-design-theme-toggle__trigger:where([data-pressed], :active) {
+  box-shadow: var(--hraness-material-inset, none);
   transform: translateY(1px);
 }
 
@@ -133,8 +138,8 @@
     var(--ui-popover-foreground, CanvasText)
   );
   box-shadow: var(
-    --elevation-overlay,
-    0 18px 48px -18px rgb(0 0 0 / 32%)
+    --hraness-material-lift,
+    var(--elevation-overlay, 0 18px 48px -18px rgb(0 0 0 / 32%))
   );
 }
 
@@ -198,6 +203,20 @@
   font-weight: var(--font-weight-medium, 550);
 }
 
+.hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
+  .hraness-design-theme-toggle__item[data-selected]:not(:where(
+  [data-focused],
+  [data-hovered],
+  :focus-visible,
+  :hover
+)) {
+  background: var(--hraness-material-warm-plane, transparent);
+  color: var(
+    --hraness-material-ink,
+    var(--hraness-appearance-popover-foreground, var(--ui-popover-foreground, CanvasText))
+  );
+}
+
 @media (pointer: coarse) {
   .hraness-design-theme-toggle[data-hraness-appearance-menu][data-presentation="menu"]:not([data-hraness-theme-toggle-stylex])
     .hraness-design-theme-toggle__trigger {
@@ -225,6 +244,7 @@
   .hraness-design-theme-toggle[data-hraness-appearance-menu]:not([data-hraness-theme-toggle-stylex])
     .hraness-design-theme-toggle__popover {
     border-color: CanvasText;
+    box-shadow: none;
     forced-color-adjust: auto;
   }
 
