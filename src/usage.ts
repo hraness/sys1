@@ -39,7 +39,7 @@ export interface UsageReport {
 
 export const USAGE_LIMITS = { minDays: 1, maxDays: 90, maxFiles: 50_000, maxLineBytes: 8 * 1024 * 1024 } as const;
 
-const SYS1_SUBCOMMANDS = "audit|review|rules|eval|setup|jev|up|down|serve|status|doctor|pull|model|models|backend|config";
+const SYS1_SUBCOMMANDS = "audit|review|rules|eval|setup|jev|up|down|serve|status|doctor|pull|model|models|backend|config|verify";
 const SYS1_COMMAND = new RegExp(`(?:^|[\\s;&|(/"'\`])sys1\\s+(${SYS1_SUBCOMMANDS})\\b`, "g");
 const VERIFY_CHECK = /system-one-skills\s+check\b/g;
 const SKILL_FILE = /skills\/((?:sys1|system-one)[a-z0-9-]*)\/SKILL\.md/g;

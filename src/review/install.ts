@@ -59,6 +59,21 @@ State in SYS1_HOME stores only review metadata and explicit feedback. It does
 not store source, raw answers, rule prose, model scores, or freeform notes.
 The ordinary \`sys1 audit\` command remains stateless.
 
+Before reporting completion, check your final message against reachable
+evidence (experimental):
+
+\`\`\`sh
+sys1 verify --model <backend/model>
+sys1 verify --model <backend/model> --url <live-url>
+\`\`\`
+
+Inside Devin it reads this session's final message and the last turn's
+check-command results automatically. Other agents pipe the message with
+\`sys1 verify --message -\`. Claims such as deployed, merged, committed, and
+checks passed are compared with the worktree, linked pull requests, and fetched
+pages. Exit 7 means a claim contradicted reachable evidence; unverifiable
+evidence is never a contradiction. Fix the claim or the work, then rerun.
+
 To turn a repository convention into a rule, first find a concrete violation
 and a clean counterexample. Use \`sys1 rules draft\` with a narrow path,
 explicit ensure/breaks sentences, and the guide's source path. Drafts live

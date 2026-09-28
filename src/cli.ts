@@ -2,6 +2,8 @@
 import { readBoundedText } from "./http.ts";
 import { runAuditCli, renderAudit, AuditCliError } from "./audit/cli.ts";
 import { runReviewCli, renderReview, reviewExitCode } from "./review/cli.ts";
+import { runVerifyCli, renderVerify, verifyExitCode } from "./verify/cli.ts";
+import { VerifyError } from "./verify/message.ts";
 import { ReviewError, resolveReviewRoot } from "./review/checkpoint.ts";
 import { ProjectFileError } from "./review/project-files.ts";
 import { runRulesCli } from "./audit/rules-cli.ts";
@@ -66,7 +68,7 @@ function err(text: string): void {
 let currentCommand: string | undefined;
 let jsonRequested = false;
 
-const ERROR_CODES: Readonly<Record<number, string>> = { 1: "failed", 2: "usage", 3: "config", 4: "daemon", 5: "backend", 6: "doctor", 8: "audit_incomplete" };
+const ERROR_CODES: Readonly<Record<number, string>> = { 1: "failed", 2: "usage", 3: "config", 4: "daemon", 5: "backend", 6: "doctor", 7: "claims_contradicted", 8: "audit_incomplete" };
 
 function sentence(message: string): string {
   const text = message.trim().replace(/^usage: /u, "Usage: ");
@@ -795,12 +797,12 @@ async function main(): Promise<void> {
   const beforePaths = parseArgs(separator === -1 ? rawArgs : rawArgs.slice(0, separator));
   // Audit owns everything after -- as literal paths. Do not interpret a file
   // named --help or --version as a top-level control flag.
-  const args = ["audit", "review", "rules"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
+  const args = ["audit", "review", "rules", "verify"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
   const [command] = args.positional;
   const home = sys1Home(process.env);
 
   currentCommand = command;
-  jsonRequested = args.flags.get("json") === true || (["audit", "review", "rules"].includes(command ?? "") && args.flags.get("agent") === true);
+  jsonRequested = args.flags.get("json") === true || (["audit", "review", "rules", "verify"].includes(command ?? "") && args.flags.get("agent") === true);
   if (args.flags.get("version") === true || (command === "version" && args.flags.get("help") !== true)) {
     if (jsonRequested) out(JSON.stringify({ name: "sys1", version: SYS1_VERSION }));
     else out(`sys1 ${SYS1_VERSION}`);
@@ -871,6 +873,19 @@ async function main(): Promise<void> {
         if (error instanceof AuditCliError) fail(error.message, error.exitCode, "sys1 audit --help");
         // Pack errors can contain local guide text through schema diagnostics.
         fail("Audit could not load or evaluate the selected rules", EXIT.config, "sys1 audit --help");
+      }
+      return;
+    }
+    case "verify": {
+      try {
+        const index = rawArgs.indexOf("verify");
+        const report = await runVerifyCli([...rawArgs.slice(0, index), ...rawArgs.slice(index + 1)], home);
+        if (wantsJson(args.flags) || args.flags.has("agent")) out(JSON.stringify(report));
+        else process.stdout.write(renderVerify(report));
+        process.exitCode = verifyExitCode(report);
+      } catch (error) {
+        if (error instanceof VerifyError) fail(error.message, error.exitCode, "sys1 verify --help");
+        fail("Verify could not read the message or its evidence", EXIT.config, "sys1 verify --help");
       }
       return;
     }
