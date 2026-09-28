@@ -9,7 +9,15 @@
     <meta property="og:title" content="Evaluations · Sys1" />
     <meta property="og:description" content="Read Sys1’s own tests of hosted Jev, local Qwen, and Laya, including wrong answers and raw reports, next to external JevBench v1.2.6 scores." />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/docs/evaluations" />
+    <meta property="og:image" content="https://sys1.io/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Evaluations · Sys1" />
+    <meta name="twitter:description" content="Read Sys1’s own tests of hosted Jev, local Qwen, and Laya, including wrong answers and raw reports, next to external JevBench v1.2.6 scores." />
+    <meta name="twitter:image" content="https://sys1.io/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
@@ -65,7 +73,7 @@
         <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#jev-results">Jev results</a><a href="#jevbench">JevBench</a><a href="#laya">Laya study</a><a href="#latest">Qwen results</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Reproduce</a></nav>
       </div>
       <section id="choose" class="section" aria-labelledby="choose-heading">
-        <div class="section-intro"><h2 id="choose-heading">What these studies cover.</h2><p>Sys1 ships two routes, hosted Jev and local Qwen. The studies below test both, plus Laya, a local candidate Sys1 does not bundle.</p></div>
+        <div class="section-intro"><h2 id="choose-heading">Can a local model replace hosted Jev?</h2><p>Not on Sys1’s tests so far. Hosted Jev answered all 20 forms-v1 cases correctly, and local Qwen3 1.7B got 18 right. On the broader 72-case decisions-v2 test, Qwen3 1.7B got 32 right, only five more than a fixed-answer baseline; Qwen3.5 4B got 44 of 72 right on decisions-v3. Jev has no result on either larger test. The studies below also cover Laya, a local candidate Sys1 does not bundle.</p></div>
         <dl class="accounting-list">
           <div><dt>Use Jev for a hosted pilot.</dt><dd>Pin <code>jev-1.13.0</code> to preserve the hosted behavior while adopting the Sys1 client. <code>sys1 jev enable</code> selects hosted-only routing. A provider outage returns an error; it does not silently substitute Qwen.</dd></div>
           <div><dt>Evaluate Qwen for local use.</dt><dd>Keep requests on your machine after model setup. Local probability readout is experimental and is not interchangeable with Jev. Select a model explicitly and check its decisions on representative cases before using them to drive actions.</dd></div>

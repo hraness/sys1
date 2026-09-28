@@ -9,10 +9,15 @@
     <meta property="og:title" content="Docs · Sys1" />
     <meta property="og:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/docs" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://sys1.io/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Docs · Sys1" />
     <meta name="twitter:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
+    <meta name="twitter:image" content="https://sys1.io/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
@@ -28,6 +33,7 @@
   "description": "Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API.",
   "isPartOf": {
     "@type": "WebSite",
+    "@id": "https://sys1.io/#website",
     "name": "Sys1",
     "url": "https://sys1.io/"
   }
@@ -79,7 +85,7 @@
       <section class="docs-hero" aria-labelledby="docs-title">
         <div class="docs-hero-inner">
           <h1 id="docs-title">Sys1 documentation</h1>
-          <p class="docs-lede">Use Sys1 to review Git changes against repository rules and check an agent’s completion claims. Choose Jev, TypeSafe’s hosted decision model, a local model, or your own compatible server. Applications can also use the same yes/no, choice, and score API.</p>
+          <p class="docs-lede">Use Sys1 to review Git changes against repository rules and check an agent’s completion claims. Choose Jev, TypeSafe’s hosted decision model, a local model, or your own compatible server. Applications can call the same yes/no, choice, and score API through Sys1’s open-source, Jev-compatible local gateway or its Node and Bun client.</p>
           <div class="docs-meta"><span>Sys1 0.17.0</span><span>Agent review · claim verification · decision API</span><a href="/docs/evaluations">Read the evaluations</a></div>
         </div>
       </section>
@@ -189,7 +195,7 @@ sys1 verify --message /tmp/final-message.txt \
               <div><dt>Compatible HTTP service</dt><dd>Register a service that implements <code>POST /v1/systemone</code> and <code>GET /v1/models</code>. Select it explicitly; adding a backend does not alter default routing.</dd></div>
               <div><dt>Kev</dt><dd>Kev is a set of trainable decision models that runs as your own server. Register it with <code>--adapter kev</code>. Sys1 handles its required fields, two-decimal probability output, and structured score labels. You own the checkpoint, server, and any training.</dd></div>
             </dl>
-            <p class="docs-footnote">Sys1 adapters return validated Jev-compatible answer shapes. They do not make generic local weights interchangeable with Jev, OpenJev, or another provider's calibration.</p>
+            <p class="docs-footnote">Sys1 adapters return validated Jev-compatible answer shapes. They do not make generic local weights interchangeable with Jev, OpenJev, or another provider's calibration. For background on TypeSafe and Jev, see the <a href="https://hraness.com/typesafe">Hraness TypeSafe dossier</a>.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1#external-system-one-backends">External backend guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1#local-models">Local model lifecycle <span aria-hidden="true">↗</span></a></div>
           </section>
 
