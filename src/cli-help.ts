@@ -3,7 +3,7 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "audit", "review", "rules", "usage", "help", "version",
+  "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "help", "version",
 ] as const;
 
 const DESCRIPTION = `Sys1 helps coding agents review changes against your repository's rules, with
@@ -60,6 +60,8 @@ Review (experimental)
                              Review batches and track investigated candidates
   sys1 rules list|check|draft
                              Inspect rules or draft repository conventions
+  sys1 verify --model <backend/model>
+                             Check an agent's claims against reachable evidence
   sys1 usage [--days <n>]    Count Sys1 use in local agent transcripts
 
 Routing
@@ -153,6 +155,39 @@ Check validates the schema and request compilation without evaluating accuracy.
 Examples
   sys1 rules list --json
   sys1 rules check .sys1/drafts/await-success
+`,
+  verify: `Usage: sys1 verify --model <backend/model> [options]
+
+Check the claims in a coding agent's final message against reachable evidence:
+the Git worktree, linked pull requests, check-command results from a Devin
+session transcript, and fetched live pages. Experimental and advisory.
+
+The message comes from the newest Devin session for this directory, from
+--message <file>, or piped with --message -. Its text is never stored.
+
+Claims checked
+  deployed_or_live   A claimed live change is fetched and judged on the page
+  merged_or_pushed   Unpushed commits and linked pull requests
+  committed          Uncommitted files remaining in the worktree
+  checks_passed      Check-like commands in the final turn, when available
+  complete           Clean worktree when the message claims completion
+
+Options
+  --message <file|->  Read the final message from a file or standard input
+  --url <url>          Fetch this live page; repeat for several pages
+  --model <route>      Exact backend/model, with no fallback
+  --dry-run            Plan claims and evidence without model calls or fetches
+  --timeout-ms <n>     Model-call deadline: 1..120000 ms, default 30000
+  --gateway            Use the loopback gateway (needed for local models)
+  --json, --agent      Print a machine-readable report
+
+Unverifiable evidence is never a contradiction. Exit 0: no claim contradicted.
+Exit 7: at least one claim contradicted reachable evidence. Exit 8: incomplete.
+
+Examples
+  sys1 verify --model typesafe/jev-1.13.0
+  sys1 verify --model typesafe/jev-1.13.0 --url https://example.com
+  git show -1 --format=%B | sys1 verify --message - --model typesafe/jev-1.13.0
 `,
   usage: `Usage: sys1 usage [--days <n>] [--json]
 

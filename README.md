@@ -11,7 +11,7 @@ Jev, a local model on your machine, or a compatible server you run.
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
-Latest release: v0.15.0. Install it from the GitHub release with npm; it runs
+Latest release: v0.16.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
@@ -26,7 +26,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.15.0/hraness-sys1-0.15.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz
 sys1 doctor
 ```
 
@@ -62,6 +62,18 @@ the [agent review guide](docs/review.md) for setup, feedback, rechecks, and rule
 drafts. For a stateless check, use [`sys1 audit`](docs/audit.md). Both report
 skipped evidence and incomplete coverage.
 
+Before reporting completion, an agent can check its final message against
+reachable evidence — unpushed commits, uncommitted files, unmerged pull
+requests, failed check commands, and live pages that lack the claimed change:
+
+```sh
+sys1 verify --model typesafe/jev-1.13.0 --url https://example.com
+```
+
+Verify reads the newest Devin session for the current directory, or a message
+from `--message <file|->`. Contradicted claims exit 7; unreachable evidence is
+never a contradiction. See [the verify guide](docs/verify.md).
+
 ## Use as a module
 
 For a Node 24 or Bun application that calls a running gateway, install the
@@ -69,7 +81,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.15.0/hraness-sys1-0.15.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz
 ```
 
 ```ts

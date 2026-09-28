@@ -5,6 +5,14 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.16.0 - 2026-09-28
+
+Sys1 adds `sys1 verify`, an experimental check of an agent's final message against reachable evidence.
+
+- `sys1 verify --model <backend/model>` reads the newest Devin session for the current directory, a `--message` file, or piped text, and checks claims such as deployed, merged or pushed, committed, checks passed, and complete against the Git worktree, linked pull requests, check-command results in the transcript, and fetched live pages. Contradicted claims exit 7; unverifiable evidence is never a contradiction; incomplete runs exit 8.
+- Live-URL checks accept `--url` for pages the message did not link; fetched pages are judged against the claimed change on the selected route.
+- The installed review skill tells agents to verify before reporting completion. Message and page text are never stored.
+
 ## 0.15.0 - 2026-09-28
 
 Sys1 adds Devin setup for agent review and a read-only `sys1 usage` report on how often coding agents use Sys1, and adopts a new one-line description.
