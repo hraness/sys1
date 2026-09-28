@@ -37,7 +37,6 @@ export const SYS1_STATUS_PAGE = {
     { href: "/docs/evaluations", label: "Evaluations" },
     { href: "/docs/evaluations-history", label: "Evaluation history" },
     { href: "/compare", label: "Compare models" },
-    { href: "/compare-history", label: "Model comparison history" },
     { href: "/skills", label: "System One Skills" },
   ],
   agentIndexHref: "/llms.txt",

@@ -48,6 +48,11 @@ for (const [file,size] of [["icon.png",512],["apple-icon.png",180],["favicon-32.
   const composed = svg(size, `  <rect width="${size}" height="${size}" fill="${source.palette.background}"/>\n  <g transform="translate(${inset} ${inset}) scale(${scale})">\n${duotonePaths}\n  </g>`);
   artifacts.set(`site/${file}`, await sharp(Buffer.from(composed)).flatten({background:source.palette.background}).png({adaptiveFiltering:false,compressionLevel:9}).toBuffer());
 }
+// Social card: the blue compact mark centered on the icon background, with no
+// text, so the render needs no system fonts. Linked from every page's og:image.
+const og = {width:1200,height:630,mark:300} as const;
+const ogCard = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${og.width} ${og.height}" width="${og.width}" height="${og.height}">\n  <rect width="${og.width}" height="${og.height}" fill="${source.palette.background}"/>\n  <g transform="translate(${(og.width-og.mark)/2} ${(og.height-og.mark)/2}) scale(${og.mark/160})">\n${markPath}\n  </g>\n</svg>\n`;
+artifacts.set("site/og.png", await sharp(Buffer.from(ogCard)).flatten({background:source.palette.background}).png({adaptiveFiltering:false,compressionLevel:9}).toBuffer());
 // PNG-backed ICO directory for older browsers, using those same two sizes.
 const icons = [16,32].map(size=>({size,data:artifacts.get(`site/favicon-${size}.png`)!}));
 const directory=Buffer.alloc(6+16*icons.length); directory.writeUInt16LE(1,2); directory.writeUInt16LE(icons.length,4);
@@ -96,7 +101,9 @@ if (check) {
     const metadata = await sharp(committed.get(`site/${file}`)!).metadata();
     if(metadata.format!=="png" || metadata.width!==size || metadata.height!==size) throw new Error(`Invalid icon dimensions: ${file}`);
   }
-  console.log("Verified 9 Sys1 brand assets: source/generator provenance, SVG geometry, raster dimensions and committed hashes.");
+  const card = await sharp(committed.get("site/og.png")!).metadata();
+  if(card.format!=="png" || card.width!==og.width || card.height!==og.height) throw new Error("Invalid social card dimensions: og.png");
+  console.log(`Verified ${saved.artifacts.length + 1} Sys1 brand assets: source/generator provenance, SVG geometry, raster dimensions and committed hashes.`);
   process.exit(0);
 }
 for (const [path,data] of artifacts) {
