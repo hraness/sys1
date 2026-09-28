@@ -61,14 +61,14 @@ try {
             title: document.querySelector("h1")?.textContent?.trim(),
             footer: footer !== null,
             footerPositions: [footer, footer?.querySelector(".hraness-site-footer__inner")].filter((element): element is HTMLElement => element instanceof HTMLElement).map(element => getComputedStyle(element).position),
-            smallHeaderTargets: innerWidth > 600 ? [] : [...document.querySelectorAll<HTMLElement>("header a, header button")].filter(element => { const box = element.getBoundingClientRect(); return box.width > 0 && box.height > 0 && (box.width < 43.5 || box.height < 43.5); }).map(element => element.textContent?.trim() || element.getAttribute("aria-label")),
+            smallHeaderTargets: innerWidth > 600 ? [] : [...document.querySelectorAll<HTMLElement>(".site-header a, .site-header button")].filter(element => { const box = element.getBoundingClientRect(); return box.width > 0 && box.height > 0 && (box.width < 43.5 || box.height < 43.5); }).map(element => element.textContent?.trim() || element.getAttribute("aria-label")),
           };
         });
         await page.screenshot({ path: resolve(artifacts, `${width}-${theme}-${file.replaceAll("/", "_")}.png`), fullPage: true });
         assert.ok(!state.overflow, `${route} ${width} ${theme}: horizontal overflow`);
         assert.ok(state.title && state.footer, `${route}: missing heading/footer`);
         assert.ok(state.footerPositions.every(position => position === "static" || position === "relative"), `${route}: footer outside document flow`);
-        assert.deepEqual(state.smallHeaderTargets, [], `${route}: phone targets below44px`);
+        assert.deepEqual(state.smallHeaderTargets, [], `${route}: navigation targets below 44px`);
         assert.deepEqual(errors, [], `${route}: browser errors`);
         results.push({ route, width, theme });
       }
