@@ -679,9 +679,10 @@ application migration.
 [Claude Code Review](https://support.claude.com/en/articles/14233555-set-up-code-review-for-claude-code)
 are hosted AI reviewers that look for many kinds of bugs. Bugbot and Claude
 Code Review comment on pull requests, and the CodeRabbit CLI also reviews local
-changes. Sys1 checks only the rules you select, can keep your source on your
-machine with a local model, and records whether each candidate was useful. Its
-bundled rules cover two JavaScript and TypeScript checks. For a pure syntax
+changes. For broad bug-finding they cover more than Sys1, whose bundled rules
+cover two JavaScript and TypeScript checks. Sys1 checks only the rules you
+select, can keep your source on your machine with a local model, and lets you
+record whether each candidate was useful. For a pure syntax
 pattern such as an empty catch block, an
 [ESLint](https://eslint.org/docs/latest/rules/no-empty) or
 [Semgrep](https://semgrep.dev) rule is exact and free; use Sys1 for rules that
