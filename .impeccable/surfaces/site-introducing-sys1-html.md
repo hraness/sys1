@@ -30,3 +30,14 @@ FINISH: One batched desktop/mobile/light/dark review after convergence, then one
 ## Evidence and ownership
 
 Individual page admission, source inventory, chart methodology, and lifecycle record: `docs/launch-editorial.md`. Author: Codex AI agent `/root/launch_editorial`. Human authorship and human review are not claimed. Publication byline: Hraness. Independent source/editorial review by Codex AI agent `/root` passed September 28, 2026. Rendered evidence is pending the integration owner.
+
+## Tokens and time — 2026-09-28
+
+At the user's request the title, dek, and opening lead with the token and time
+benefit in plain language, using the System One / System Two framing. A new
+“An agent, a fast model, and a language that remembers” section explains ALGAL
+and how the three parts fit, stating that Sys1 and ALGAL are separate projects
+that share the Jev decision API. The trial section adds that it measured
+answers, not savings. The synced launch-film block is unchanged. Draft and
+revision: Claude Code on 2026-09-28; credit and JSON-LD contributors updated.
+Human review: pending the user.

@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Introducing Sys1 · System One decisions for coding agents</title>
-    <meta name="description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <title>Introducing Sys1 · Fast decisions for coding agents</title>
+    <meta name="description" content="Coding agents spend tokens and time on small yes-or-no calls. Sys1 hands them to Jev, a fast model, so the agent keeps its budget for real work." />
     <link rel="canonical" href="https://sys1.io/introducing-sys1" />
-    <meta property="og:title" content="Introducing Sys1 · System One decisions for coding agents" />
-    <meta property="og:description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <meta property="og:title" content="Introducing Sys1 · Fast decisions for coding agents" />
+    <meta property="og:description" content="Coding agents spend tokens and time on small yes-or-no calls. Sys1 hands them to Jev, a fast model, so the agent keeps its budget for real work." />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/introducing-sys1" />
     <meta property="article:published_time" content="2026-09-28" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Introducing Sys1 · System One decisions for coding agents" />
-    <meta name="twitter:description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <meta name="twitter:title" content="Introducing Sys1 · Fast decisions for coding agents" />
+    <meta name="twitter:description" content="Coding agents spend tokens and time on small yes-or-no calls. Sys1 hands them to Jev, a fast model, so the agent keeps its budget for real work." />
     <!-- sys1-launch-media:start -->
     <meta property="og:image" content="https://sys1.io/media/sys1-launch-share.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -76,7 +76,7 @@
   "url": "https://sys1.io/introducing-sys1",
   "mainEntityOfPage": "https://sys1.io/introducing-sys1",
   "headline": "Introducing Sys1",
-  "description": "Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server.",
+  "description": "Coding agents spend tokens and time on small yes-or-no calls. Sys1 hands them to Jev, a fast model, so the agent keeps its budget for real work.",
   "datePublished": "2026-09-28",
   "dateModified": "2026-09-28",
   "inLanguage": "en",
@@ -100,9 +100,13 @@
     {
       "@type": "SoftwareApplication",
       "name": "Codex AI review agent"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Claude Code AI revision agent"
     }
   ],
-  "creditText": "Drafted with AI from the source code and reviewed by Codex.",
+  "creditText": "Drafted and revised with AI from the source code, and reviewed by AI agents.",
   "about": [
     {
       "@type": "SoftwareApplication",
@@ -190,19 +194,20 @@
       <article class="launch-article" aria-labelledby="launch-title">
         <header class="launch-header">
           <h1 id="launch-title">Introducing Sys1</h1>
-          <p class="launch-dek">Give a coding agent a smaller question to answer: whether a change breaks a repository rule, or whether its final message agrees with the evidence.</p>
+          <p class="launch-dek">Your coding agent is a slow, careful thinker. Sys1 gives it a fast one for the small decisions, so it spends fewer tokens and less time on work that doesn’t need deep thought.</p>
           <p class="launch-byline">Hraness <span aria-hidden="true">·</span> <time datetime="2026-09-28">September 28, 2026</time></p>
           <p class="launch-status">Release at publication: <a href="https://github.com/hraness/sys1/releases/tag/v0.17.0">v0.17.0</a>. <a href="/docs#getting-started">Install from GitHub</a> with Bun. Review and verification are experimental and advisory; local Qwen is experimental, and TypeSafe’s hosted Jev model is opt-in.</p>
         </header>
 
         <div class="launch-opening">
           <div class="launch-prose">
-            <p>A coding agent can edit the right files, pass a test, and still leave a requirement unchecked. Its final message is another thing to inspect: a pushed branch, an open pull request, and a merged change describe different states. Reviewing the code and checking that message are separate jobs, each with evidence the agent can examine.</p>
-            <p>Sys1 helps coding agents review changes against your repository’s rules, with probability-scored answers from hosted Jev, a local model, or your own server. Jev is TypeSafe’s hosted decision model. Sys1 provides the surrounding workflow: choose the evidence, preview what will be sent, ask a specific question, and investigate the answer.</p>
-            <p>The project skills make that sequence reusable in Codex, Claude Code, and Devin. Applications can use the same decision API directly. The questions have a declared answer shape, so a caller can handle a yes/no probability, a choice, or a score without extracting its decision from a paragraph.</p>
+            <p>Watch a coding agent work and you will see it spend real effort on small questions. Did that test fail because of my change? Does this diff break the project’s rule about error handling? Did I actually push? Each one costs a frontier model context and seconds, and the answer is usually yes or no.</p>
+            <p>Psychologists call fast, instinctive thinking System One and slow, deliberate thinking System Two. A coding agent is all System Two. Sys1 adds the other half: it sends those small questions to Jev, TypeSafe’s hosted System One decision model, which returns a probability in under a second. TypeSafe’s published workflow figures put a decision at about $0.0004. The agent keeps its context for the work that needs it.</p>
+            <p>Sys1 ships as project skills for Codex, Claude Code, and Devin, plus a CLI and an API for your own code. This post explains how the pieces fit, where ALGAL comes in, and what a first small trial did and did not show.</p>
           </div>
           <nav class="launch-contents" aria-label="In this article">
-            <a href="#system-one">System One and Jev</a>
+            <a href="#three-parts">The agent, Jev, and ALGAL</a>
+            <a href="#system-one">What a decision looks like</a>
             <a href="#evidence">From changes to evidence</a>
             <a href="#measured">What the trial found</a>
             <a href="#try">Try a checkpoint</a>
@@ -218,11 +223,21 @@
           <figcaption id="film-caption">A 52-second introduction to the workflow. Original motion graphics and instrumental score, rendered for Sys1 with Slopcamera. <a href="/media/sys1-launch-transcript.txt">Read the visual transcript</a>.</figcaption>
         </figure>
 
+        <section class="launch-section" id="three-parts" aria-labelledby="three-parts-heading">
+          <div class="launch-prose">
+            <h2 id="three-parts-heading">An agent, a fast model, and a language that remembers</h2>
+            <p>Sys1 is one part of a three-part system. <strong>The agent</strong> is the large language model you already use. It plans, writes code, and works through the problems that need deliberate reasoning.</p>
+            <p><strong>Jev</strong> handles the reflexes. A question with a declared answer shape (yes or no, a choice among named options, or a score) comes back as probabilities your code can act on, not a paragraph to parse. Sys1 routes the question, checks the answer, and hands the agent a result it can use in one step.</p>
+            <p><strong><a href="https://algal.computer">ALGAL</a></strong> is a programming language for agent programs. An ALGAL program can wait for a person’s approval, resume after a crash, and replay what it did from its receipts. A procedure that proves itself on declared test cases is kept with its evidence and reused. That is what lets a harness get better with use instead of starting from scratch every session.</p>
+            <p>Sys1 already works this way on a small scale. When a review turns up a real mistake, you can draft a repository rule from it, and every later review checks for it. Feedback on each finding is kept, and reviews of unchanged code are reused instead of paid for twice. ALGAL takes the same idea further, to whole procedures. Today, Sys1 and ALGAL are separate open-source projects that call the same Jev decision API.</p>
+          </div>
+        </section>
+
         <section class="launch-section" id="system-one" aria-labelledby="system-one-heading">
           <div class="launch-prose">
-            <h2 id="system-one-heading">A System One decision has a shape</h2>
+            <h2 id="system-one-heading">What a decision looks like</h2>
             <p>In TypeSafe’s <a href="https://docs.typesafe.ai/concepts/system-one">System One approach</a>, an application supplies state and questions, and a model returns structured decisions with probabilities. The caller defines what the possible answers mean. A question can ask whether a condition holds, choose among named alternatives, or score evidence against ordered criteria.</p>
-            <p><a href="https://docs.typesafe.ai/models">Jev</a> is TypeSafe’s hosted model for those decisions. <strong>Sys1 is the runtime and workflow layer around the call.</strong> It exposes a Jev-compatible API, selects the configured backend, and validates an answer against the question that was asked. It also carries cancellation and reports which route answered.</p>
+            <p><a href="https://docs.typesafe.ai/models">Jev</a> is TypeSafe’s hosted model for those decisions. <strong>Sys1 is the layer around the call.</strong> It offers a Jev-compatible API, picks the backend you configured, checks the answer against the question that was asked, and reports which backend answered.</p>
             <p>That distinction matters when choosing where to run a decision. Sys1 can send a request to hosted Jev, an installed Qwen model, or a compatible HTTP service you configure. Enabling Jev selects hosted-only routing. An outage returns an error instead of silently substituting a local model. The local adapter approximates the answer format with generic Qwen models; shared JSON shapes do not establish equal quality or calibration.</p>
             <p>The API calls its three answer types <code>noul</code>, <code>choice</code>, and <code>score</code>. These names describe the data your code receives. Validation can reject an unknown choice or a malformed probability, but the caller still needs evidence that the model makes useful judgments on its own tasks. The <a href="/docs#jev">Jev setup guide</a> explains the connection, and the <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/docs/design.md">runtime design</a> traces the request.</p>
           </div>
@@ -248,7 +263,7 @@
           </figure>
 
           <div class="launch-prose">
-            <p>This workflow keeps the source of a judgment available. A preview makes no model calls, and a checkpoint reports skipped evidence so a partial review is visible. Complete unchanged batches can be reused for up to 24 hours. When a repair changes the evidence, a fresh checkpoint evaluates that change; a changed file alone does not establish that a reported problem was fixed.</p>
+            <p>This workflow also keeps costs down. A preview makes no model calls. An unchanged batch is reused for up to 24 hours instead of being paid for again, and findings the agent has already seen stay out of new output. A checkpoint reports skipped evidence, so a partial review is visible. When a repair changes the evidence, a fresh checkpoint evaluates that change; a changed file alone does not establish that a reported problem was fixed.</p>
             <p>The separate <code>sys1-verify</code> skill checks a proposed completion message. Git state can contradict a claim that all work was committed or pushed. A linked pull request can contradict a claimed merge. A fetched page can be compared with a claim that a change is live. Missing evidence stays unverifiable. File or stdin input works with any agent; check-command results are available through local Devin transcript discovery.</p>
             <p>Both skills install project instructions without adding automatic hooks or activating a backend. Their usefulness depends on the repository’s rules and the selected model. An earlier <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/docs/reviewer-contract-2026-09-27.md">review experiment</a> missed its reproduced defect and flagged two of five control hunks, which is why findings require investigation and ordinary tests remain part of the work.</p>
           </div>
@@ -288,6 +303,7 @@
           <div class="launch-prose">
             <p>Claim support is the most useful next candidate from this small screen. Its baseline predicted insufficient evidence on every example and matched six labels, so this comparison leaves stronger entailment models and better rules untested. The profile judges a claim against the supplied excerpt; it does not verify that the excerpt itself is true.</p>
             <p>The relevance errors also matter. Two responses reached the gateway with provider HTTP 200 and failed response validation. The first failure was a gateway HTTP 502 whose underlying cause was not retained. The original failed request was never retried; a continuation submitted only the 30 previously unsubmitted cases. These observations test the profiles and evaluator, not the installed review skill or production accuracy.</p>
+            <p>This trial measured answers, not savings. Per-decision cost and latency come from TypeSafe’s published figures, and the separate <a href="/skills#shipped">compact check output</a> skill returned 35% less text across 563 real test and build runs. Nobody has yet measured how many tokens a whole agent task saves; that is the next number worth getting.</p>
             <p>The <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">profile evaluator</a> makes a similar comparison available from a source checkout. It validates examples offline before you opt into calls, then records coverage, matched labels, errors, timing, and routes. A next trial can preserve the first result, use stronger baselines, and measure how the decision changes the completed task.</p>
           </div>
         </section>
@@ -307,7 +323,7 @@ sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
           </div>
         </section>
         <footer class="launch-article-footer">
-          <p id="article-disclosure" class="launch-disclosure">Drafted with AI from the source code and reviewed by Codex.</p>
+          <p id="article-disclosure" class="launch-disclosure">Drafted and revised with AI from the source code, and reviewed by AI agents.</p>
           <p><a href="https://github.com/hraness/sys1">Read the source</a> <span aria-hidden="true">·</span> <a href="/docs">Open the documentation</a></p>
         </footer>
       </article>

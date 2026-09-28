@@ -15,7 +15,8 @@ value, portable workflows, and search discovery on 2026-09-28.
 
 ## Product Purpose
 
-Sys1 helps coding agents review changes against repository rules and check
+Sys1 saves coding agents tokens and time by handing small decisions to a fast
+System One model: it reviews changes against repository rules and checks
 completion claims against reachable evidence. Its reusable project skills
 work with Codex, Claude Code, and Devin. The underlying API also gives
 applications one interface for typed decisions across local models, hosted
@@ -84,13 +85,23 @@ hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
 guides; update a brief in the same change as its page.
 
 - The one-line description is the canonical portfolio messaging record:
-  “Sys1 helps coding agents review changes against your repository's rules,
-  with probability-scored answers from hosted Jev, a local model, or your own
-  server.” After the product name (“Sys1: …”, “sys1: …”), use the short form:
-  “helps coding agents review changes against your repository's rules”.
-  Adopted 2026-09-28 at the user's request; review stays experimental and
-  advisory, and the typed yes/no, choice, and score API remains the foundation.
-  Shorten by cutting words, not by substituting internal ones.
+  “Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast
+  hosted model, so the agent saves tokens and time.” After the product name
+  (“Sys1: …”, “sys1: …”), use the short form: “hands your coding agent's small
+  decisions to a fast model, saving tokens and time”. Adopted later on 2026-09-28 at the
+  user's request, replacing the 2026-09-28 review-first line: lead with the
+  token and time benefit. Review stays experimental and advisory, and the typed
+  yes/no, choice, and score API remains the foundation. Shorten by cutting
+  words, not by substituting internal ones.
+- Cost and speed claims cite TypeSafe's published workflow figures (about
+  $0.0004 and 0.4 s a decision; free output tokens) and the System One Skills
+  replay (35% less text across 563 runs). Do not claim a measured whole-task
+  token saving until one exists.
+- ALGAL is a sibling project, not a Sys1 dependency. Describe it as a
+  programming language for agent programs that wait for approval, resume after
+  a crash, and replay from receipts, and whose proven procedures are kept and
+  reused. Say that Sys1 and ALGAL both call the Jev decision API; do not claim
+  that Sys1 runs ALGAL programs.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package
   scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a
   prose spelling.
