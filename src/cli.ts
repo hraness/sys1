@@ -5,6 +5,7 @@ import { runReviewCli, renderReview, reviewExitCode } from "./review/cli.ts";
 import { ReviewError, resolveReviewRoot } from "./review/checkpoint.ts";
 import { ProjectFileError } from "./review/project-files.ts";
 import { runRulesCli } from "./audit/rules-cli.ts";
+import { collectUsage, renderUsage, USAGE_LIMITS } from "./usage.ts";
 import { existsSync } from "node:fs";
 import {
   DEFAULT_CONFIG,
@@ -161,6 +162,7 @@ const VALUE_FLAGS = new Set([
   "--tier",
   "--file",
   "--sha256",
+  "--days",
 ]);
 
 function flagNumber(flags: Map<string, string | boolean>, name: string): number | undefined {
@@ -870,6 +872,18 @@ async function main(): Promise<void> {
         // Pack errors can contain local guide text through schema diagnostics.
         fail("Audit could not load or evaluate the selected rules", EXIT.config, "sys1 audit --help");
       }
+      return;
+    }
+    case "usage": {
+      const unknown = [...args.flags.keys()].filter((flag) => !["days", "json"].includes(flag));
+      if (unknown.length > 0 || args.positional.length > 1) fail("Usage: sys1 usage [--days <n>] [--json]", EXIT.usage);
+      const days = flagNumber(args.flags, "days") ?? 14;
+      if (!Number.isInteger(days) || days < USAGE_LIMITS.minDays || days > USAGE_LIMITS.maxDays) {
+        fail(`--days must be a whole number from ${USAGE_LIMITS.minDays} to ${USAGE_LIMITS.maxDays}`, EXIT.usage);
+      }
+      const report = await collectUsage({ days });
+      if (wantsJson(args.flags)) out(JSON.stringify(report, null, 2));
+      else process.stdout.write(renderUsage(report));
       return;
     }
     case "setup":

@@ -27,14 +27,16 @@ sys1 review setup codex --json
 
 Codex receives `.agents/skills/sys1-review/SKILL.md`. For Claude Code, run
 `sys1 review setup claude-code`; its path is
-`.claude/skills/sys1-review/SKILL.md`. Repeating setup preserves an identical
-file and refuses to overwrite different content, including an older Sys1
-template. Update existing instructions through the repository's normal review.
+`.claude/skills/sys1-review/SKILL.md`. For Devin, run
+`sys1 review setup devin`; its path is `.devin/skills/sys1-review/SKILL.md`.
+Repeating setup preserves an identical file and refuses to overwrite different
+content, including an older Sys1 template. Update existing instructions
+through the repository's normal review.
 Commit the skill if the repository should share it.
 
 Setup installs instructions only. It does not activate models, add hooks, or
-change the repository's required checks. Other agents, including Devin, can use
-the CLI directly; there is no native Devin setup target.
+change the repository's required checks. Other agents can use the CLI
+directly.
 
 ## Preview and run a checkpoint
 
@@ -146,6 +148,22 @@ contain scores and findings.
 Each worktree can store up to 2,000 findings and 64 completed batches, subject
 to size limits. A full store rejects additional finding metadata instead of
 deleting feedback. Use `sys1 audit` when you need a stateless check.
+
+## See how often agents use Sys1
+
+`sys1 usage` reads the local Devin, Claude Code, and Codex transcripts on your
+machine and counts `sys1` subcommands, `system-one-skills check` runs, and loads
+of Sys1 or System One skills, per agent and per day:
+
+```sh
+sys1 usage --days 30 --json
+```
+
+It is read-only, makes no model calls, and prints counts only: no prompt text,
+command text, paths, or source. Counts come from what agents sent to their
+tools, so an agent working on Sys1 itself also adds to them. Devin events are
+dated by session start. Combine it with `sys1 review issues` to see whether
+the checkpoints that ran produced findings worth keeping.
 
 ## Draft a repository rule
 

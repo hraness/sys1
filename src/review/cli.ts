@@ -45,7 +45,7 @@ export async function runReviewCli(argv: string[], home: string, cwd = process.c
   if (command === undefined || !Object.hasOwn(allowed, command)) usage("Use review checkpoint, issues, feedback, recheck, or setup");
   if ([...flags.keys()].some(flag => !allowed[command]!.includes(flag)) || (pathMode && command !== "checkpoint")) usage("Option or paths do not apply to this review command");
   if (command === "setup") {
-    if (positional.length !== 2 || arg === undefined) usage("Use review setup codex or claude-code");
+    if (positional.length !== 2 || arg === undefined) usage("Use review setup codex, claude-code, or devin");
     return installReviewSkill({ repoRoot: await resolveReviewRoot(cwd), target: arg, dryRun: flags.has("dry-run") });
   }
   if (command === "issues") {

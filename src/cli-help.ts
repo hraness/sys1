@@ -3,11 +3,11 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "audit", "review", "rules", "help", "version",
+  "backend", "config", "eval", "audit", "review", "rules", "usage", "help", "version",
 ] as const;
 
-const DESCRIPTION = `Sys1 lets agents ask yes/no, choice, and score questions and get validated
-answers with probabilities from hosted Jev, a local model, or your own server.`;
+const DESCRIPTION = `Sys1 helps coding agents review changes against your repository's rules, with
+probability-scored answers from hosted Jev, a local model, or your own server.`;
 
 export function bareScreen(version: string): string {
   return `${DESCRIPTION}
@@ -60,6 +60,7 @@ Review (experimental)
                              Review batches and track investigated candidates
   sys1 rules list|check|draft
                              Inspect rules or draft repository conventions
+  sys1 usage [--days <n>]    Count Sys1 use in local agent transcripts
 
 Routing
   sys1 backend list|add|check|remove
@@ -97,7 +98,7 @@ const COMMAND_HELP: Readonly<Record<string, string>> = {
        sys1 review issues [--json]
        sys1 review feedback <id> useful|incorrect|unverifiable [--json]
        sys1 review recheck <id> --model <backend/model> [options]
-       sys1 review setup codex|claude-code [--dry-run] [--json]
+       sys1 review setup codex|claude-code|devin [--dry-run] [--json]
 
 Review a batch of Git changes, investigate candidates, and record feedback.
 Experimental and advisory. Hosted Jev is opt-in; local models are experimental.
@@ -152,6 +153,26 @@ Check validates the schema and request compilation without evaluating accuracy.
 Examples
   sys1 rules list --json
   sys1 rules check .sys1/drafts/await-success
+`,
+  usage: `Usage: sys1 usage [--days <n>] [--json]
+
+Count how often coding agents used Sys1 and System One Skills, from the local
+transcripts of Devin, Claude Code, and Codex on this machine. Read-only; makes
+no model calls and sends nothing anywhere.
+
+Counts sys1 subcommands, system-one-skills check runs, and loads of Sys1 or
+System One skills, per agent and per day. Output holds counts only: no prompt
+text, command text, file paths, or source. Devin events are dated by session.
+Counts come from what agents sent to their tools, so work on Sys1 itself (for
+example, writing these command names in a script) also counts.
+
+Options
+  --days <n>   Look back n days: 1..90, default 14
+  --json       Print JSON (the default when an agent runs sys1)
+
+Examples
+  sys1 usage
+  sys1 usage --days 30 --json
 `,
   audit: `Usage: sys1 audit <--staged|--worktree|--since <ref>>
                   --model <backend/model> [options] [-- paths...]

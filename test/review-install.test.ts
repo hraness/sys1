@@ -21,9 +21,15 @@ async function fixture() {
 describe("project review skill", () => {
   test("preview leaves no directories; setup is idempotent for supported targets", async () => {
     const { repo, home } = await fixture();
-    for (const target of ["codex", "claude-code"]) {
+    const paths: Record<string, string> = {
+      codex: ".agents/skills/sys1-review/SKILL.md",
+      "claude-code": ".claude/skills/sys1-review/SKILL.md",
+      devin: ".devin/skills/sys1-review/SKILL.md",
+    };
+    for (const [target, path] of Object.entries(paths)) {
       const preview = await installReviewSkill({ repoRoot: repo, target, dryRun: true });
       expect(preview.status).toBe("planned");
+      expect(preview.path).toBe(path);
       expect(existsSync(join(repo, preview.path))).toBe(false);
       const first = await installReviewSkill({ repoRoot: repo, target });
       expect(first.status).toBe("created");
@@ -32,6 +38,8 @@ describe("project review skill", () => {
     }
     expect(existsSync(home)).toBe(false);
     expect(existsSync(join(repo, ".claude", "settings.json"))).toBe(false);
+    expect(existsSync(join(repo, ".devin", "hooks.v1.json"))).toBe(false);
+    expect(existsSync(join(repo, ".devin", "config.json"))).toBe(false);
   });
   test("preserves edited skill and rejects symlink parent or destination", async () => {
     const { repo, root } = await fixture();

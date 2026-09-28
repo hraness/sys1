@@ -39,8 +39,8 @@ const widest = (text: string) => Math.max(...lines(text).map((line) => line.leng
 describe("sys1 help", () => {
   test("bare invocation is a short start screen", async () => {
     const result = await sys1([]);
-    expect(result).toEqual({ code: 0, stderr: "", stdout: `Sys1 lets agents ask yes/no, choice, and score questions and get validated
-answers with probabilities from hosted Jev, a local model, or your own server.
+    expect(result).toEqual({ code: 0, stderr: "", stdout: `Sys1 helps coding agents review changes against your repository's rules, with
+probability-scored answers from hosted Jev, a local model, or your own server.
 
 Start here
   sys1 setup --dry-run       See what setup would download
