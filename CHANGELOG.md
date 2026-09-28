@@ -5,6 +5,13 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.16.1 - 2026-09-28
+
+Sys1 fixes live-page checks in `sys1 verify` and sharpens the page judgment.
+
+- Pages larger than 24 KiB are truncated to their leading evidence instead of being discarded, so verify no longer reports ordinary pages as unverifiable.
+- The page judgment asks whether the claimed content is visibly present, which separated hidden and absent claims from confirmed ones in a small live-site check.
+
 ## 0.16.0 - 2026-09-28
 
 Sys1 adds `sys1 verify`, an experimental check of an agent's final message against reachable evidence.
