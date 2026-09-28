@@ -1,4 +1,3 @@
-import { readBoundedText } from "../http.ts";
 import type { VerifyTurn } from "./message.ts";
 
 /** Deterministic evidence for claims a final agent message makes. Every check
@@ -153,7 +152,33 @@ export async function fetchPage(
     evidence.status = response.status;
     if (!response.ok) { evidence.failure = `http_${response.status}`; return evidence; }
     try {
-      const text = await readBoundedText(response, EVIDENCE_LIMITS.maxPageBytes, AbortSignal.timeout(timeoutMs));
+      // Truncate long pages at the cap rather than discarding them: the first
+      // bytes carry the visible evidence a claim check needs.
+      if (response.body === null) { evidence.failure = "empty_body"; return evidence; }
+      const reader = response.body.getReader();
+      const chunks: Uint8Array[] = [];
+      let bytes = 0;
+      const deadline = AbortSignal.timeout(timeoutMs);
+      for (;;) {
+        deadline.throwIfAborted();
+        const next = await reader.read();
+        if (next.done) break;
+        bytes += next.value.byteLength;
+        chunks.push(next.value);
+        if (bytes >= EVIDENCE_LIMITS.maxPageBytes) {
+          void reader.cancel().catch(() => {});
+          break;
+        }
+      }
+      reader.releaseLock();
+      const whole = new Uint8Array(Math.min(bytes, EVIDENCE_LIMITS.maxPageBytes));
+      let offset = 0;
+      for (const chunk of chunks) {
+        const room = Math.max(0, whole.byteLength - offset);
+        whole.set(chunk.subarray(0, Math.min(chunk.byteLength, room)), offset);
+        offset += chunk.byteLength;
+      }
+      const text = new TextDecoder().decode(whole);
       evidence.ok = true;
       evidence.excerpt = text.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ")
         .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, EVIDENCE_LIMITS.maxPageBytes);

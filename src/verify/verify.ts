@@ -202,7 +202,7 @@ export async function runVerify(options: VerifyOptions): Promise<VerifyReport> {
             questions: {
               page_reflects: {
                 type: "noul",
-                instructions: "Answer true when the fetched page visibly reflects the newest change the message claims is live. Answer false when the page lacks the claimed change, shows an error or placeholder, or predates it.",
+                instructions: "Does the fetched page show, contain, or make true the thing the message claims about it? Answer true when the claimed state or content is present on the page. Answer false only when it is clearly absent, contradicted, or the page is an error or placeholder.",
               },
             },
           };
