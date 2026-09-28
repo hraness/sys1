@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { launchMedia } from "../media/sys1-launch/site-media.ts";
 
 const site = new URL("../site/", import.meta.url);
 const origin = "https://sys1.io";
@@ -32,33 +33,46 @@ test("every sitemap URL is an indexable page whose canonical, og:url, and titles
   }
 });
 
-test("every indexable page shares the committed 1200x630 social card", () => {
+test("every indexable page has its declared 1200x630 social card", () => {
   const png = readFileSync(new URL("og.png", site));
   expect(png.subarray(1, 4).toString("latin1")).toBe("PNG");
   expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
   for (const path of paths) {
     const html = read(fileFor(path));
-    expect(meta(html, "property", "og:image")).toBe(`${origin}/og.png`);
+    const launchPage = launchMedia.pages.some(page => new URL(page.url).pathname === path);
+    const card = launchPage ? new URL(launchMedia.social.src, origin).href : `${origin}/og.png`;
+    expect([...html.matchAll(/<meta property="og:image" /g)]).toHaveLength(1);
+    expect([...html.matchAll(/<meta name="twitter:image" /g)]).toHaveLength(1);
+    expect(meta(html, "property", "og:image")).toBe(card);
     expect(meta(html, "property", "og:image:width")).toBe("1200");
     expect(meta(html, "property", "og:image:height")).toBe("630");
     expect(meta(html, "name", "twitter:card")).toBe("summary_large_image");
-    expect(meta(html, "name", "twitter:image")).toBe(`${origin}/og.png`);
+    expect(meta(html, "name", "twitter:image")).toBe(card);
     expect(meta(html, "property", "og:site_name")).toBe("Sys1");
   }
 });
 
-test("structured data parses and every WebSite reference resolves to the home graph", () => {
-  const home = JSON.parse(read("index.html").match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)![1]!);
-  const nodes = home["@graph"] as { "@id": string; "@type": string }[];
-  const ids = new Set(nodes.map((node) => node["@id"]));
-  expect(ids.has(`${origin}/#website`)).toBe(true);
-  expect(ids.has("https://hraness.com/#organization")).toBe(true);
+test("structured data parses and entity references resolve across the site", () => {
+  const objects: Record<string, unknown>[] = [];
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) { value.forEach(walk); return; }
+    if (value === null || typeof value !== "object") return;
+    const object = value as Record<string, unknown>;
+    objects.push(object);
+    Object.values(object).forEach(walk);
+  };
   for (const path of paths) {
-    const html = read(fileFor(path));
-    for (const [, block] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
-      const references = [...JSON.stringify(JSON.parse(block!)).matchAll(/"@id":"([^"]+)"/g)].map((match) => match[1]!);
-      for (const id of references) expect(new URL(id).origin === origin ? ids.has(id) || id === `${origin}${path === "/" ? "/" : path}` : id === "https://hraness.com/#organization").toBe(true);
-    }
+    const blocks = [...read(fileFor(path)).matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
+    expect(blocks.length).toBeGreaterThan(0);
+    for (const [, block] of blocks) walk(JSON.parse(block!));
+  }
+  const definitions = new Set(objects.filter(object => typeof object["@type"] === "string").map(object => object["@id"]).filter((id): id is string => typeof id === "string"));
+  for (const id of [`${origin}/#website`, `${origin}/#software`, "https://hraness.com/#organization", `${origin}/introducing-sys1#article`, `${origin}/#launch-film`, `${origin}/introducing-sys1#launch-film`]) expect(definitions.has(id)).toBe(true);
+  for (const object of objects) {
+    if (typeof object["@id"] !== "string") continue;
+    const id = object["@id"];
+    expect(new URL(id).protocol).toBe("https:");
+    expect(definitions.has(id)).toBe(true);
   }
 });
 

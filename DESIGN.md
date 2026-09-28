@@ -1,462 +1,211 @@
 ---
-name: "Sys1 — Hraness Paper"
-description: "The implemented Sys1 visual system: warm Paper surfaces, editorial serif headings, and restrained developer tools."
+name: "Sys1 · Tokyo Night"
+description: "The implemented Sys1 system: paired Tokyo Night colors, Nebula Sans, quiet rules, and readable developer workflows."
 colors:
-  primary: "light-dark(#1e5ae1, #8fb0ff)"
-  primary-soft: "light-dark(#dee5f3, #21232c)"
-  focus: "light-dark(#1e5ae1, #8fb0ff)"
-  background: "light-dark(#f8f7f4, #12100f)"
-  foreground: "light-dark(#1c1917, #f5f2ed)"
-  muted: "light-dark(#6c665f, #aaa29a)"
-  grid: "light-dark(#dfdcd6, #302b27)"
-  line: "light-dark(#b9b3ab, #514a44)"
-  surface: "light-dark(#fffefa, #1d1a18)"
-  surface-hover: "light-dark(#ebe8e3, #292522)"
-  action: "light-dark(#28343e, #eceee6)"
-  action-ink: "light-dark(#fffefa, #20211f)"
-  action-hover: "light-dark(#3a4c5c, #d6dace)"
-  terminal-background: "light-dark(#f3f2ee, #20211f)"
-  terminal-ink: "light-dark(#262923, #e8eae5)"
-  terminal-muted: "light-dark(#596052, #bfc6b6)"
-  terminal-command: "light-dark(#36543d, #c4d9b9)"
+  primary: "light-dark(#1d4e90, #7aa2f7)"
+  primary-foreground: "light-dark(#e1e2e7, #1a1b26)"
+  primary-soft: "light-dark(#ccd6e7, #262b3f)"
+  focus: "light-dark(#1d4e90, #7aa2f7)"
+  background: "light-dark(#e1e2e7, #1a1b26)"
+  foreground: "light-dark(#1c3161, #c0caf5)"
+  muted: "light-dark(#414c76, #a9b1d6)"
+  grid: "light-dark(#c4c8da, #24283b)"
+  line: "light-dark(#b7c1e3, #292e42)"
+  surface: "light-dark(#d0d5e3, #16161e)"
+  surface-hover: "light-dark(#b7c1e3, #292e42)"
 typography:
   display:
-    fontFamily: '"Instrument Serif", Georgia, serif'
-    fontSize: "clamp(2.75rem, 5.1vw, 4rem)"
-    fontWeight: 400
-    lineHeight: 1.06
-    letterSpacing: "-.025em"
+    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "clamp(3rem, 4.5vw, 4.6rem)"
+    fontWeight: 550
+    lineHeight: 1.04
+    letterSpacing: "-.04em"
   headline:
-    fontFamily: '"Instrument Serif", Georgia, serif'
-    fontSize: "clamp(2.4rem, 4vw, 3.25rem)"
-    fontWeight: 400
+    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "clamp(1.75rem, 1.3rem + 1.9vw, 2.75rem)"
+    fontWeight: 550
     lineHeight: 1.08
     letterSpacing: "-.02em"
-  title:
-    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: "1.125rem"
-    fontWeight: 600
-    lineHeight: 1.4
   body:
-    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, sans-serif'
     fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.65
-  summary:
-    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: "1.1rem"
-    fontWeight: 400
-    lineHeight: 1.6
-  action:
-    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: ".95rem"
-    fontWeight: 500
-    lineHeight: 1.4
-  label:
-    fontFamily: '"Nebula Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: ".8rem"
     fontWeight: 400
     lineHeight: 1.65
   code:
     fontFamily: 'ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace'
-    fontSize: ".75rem"
+    fontSize: ".8rem"
     fontWeight: 400
-    lineHeight: 1.85
+    lineHeight: 1.7
 rounded:
   compact: ".375rem"
   control: ".5rem"
-  frame: ".875rem"
+  frame: ".75rem"
 spacing:
-  compact: ".5rem"
   related: ".75rem"
   standard: "1rem"
-  inset-mobile: "1.25rem"
-  inset: "1.5rem"
+  gutter-mobile: "1.25rem"
   gutter: "2rem"
-  group: "2.75rem"
-  section-mobile: "3.75rem"
+  section-mobile: "3.5rem"
   section: "5rem"
 components:
   button-primary:
-    backgroundColor: "{colors.action}"
-    textColor: "{colors.action-ink}"
-    typography: "{typography.action}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.control}"
     padding: ".6rem 1.2rem"
-  button-primary-hover:
-    backgroundColor: "{colors.action-hover}"
   button-secondary:
     backgroundColor: "transparent"
     textColor: "{colors.foreground}"
-    typography: "{typography.action}"
     rounded: "{rounded.control}"
     padding: ".6rem 1.2rem"
-  button-secondary-hover:
-    backgroundColor: "{colors.surface-hover}"
-  appearance-menu:
-    backgroundColor: "{colors.background}"
-    textColor: "{colors.muted}"
-    typography: "{typography.label}"
-    rounded: "{rounded.control}"
-    padding: "0"
-  option-chip:
-    textColor: "{colors.terminal-ink}"
-    rounded: "{rounded.compact}"
-    padding: ".2rem .6rem"
-  request-path:
+  code-frame:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.foreground}"
     rounded: "{rounded.frame}"
-    padding: "1.8rem 2rem"
-  terminal-frame:
-    backgroundColor: "{colors.terminal-background}"
-    textColor: "{colors.terminal-ink}"
-    rounded: "{rounded.frame}"
-  copy-button:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.foreground}"
-    rounded: "{rounded.compact}"
-    padding: ".4rem .65rem"
 ---
 
-# Current design — September 27, 2026
-
-Sys1 is a local decision router for developers and agents. The landing page
-explains typed questions, shows one recorded answer and its limitations,
-and leads to installation or documentation. The recovered pass uses sans
-headings, a single-column hero, flat sections, and persistent phone navigation.
-The proof is the measured repetition0 of inbox-routing-03 in the September20
-decisions-v2 Qwen3 1.7B record; its full answer matches the linked artifact.
-The caption gives the overall32/72 result and states the shortened request.
-Hosted Jev stays opt-in and local models experimental.
-
-Paper/marketing/Lantern snapshots use design-kit0.23.0 source3df4c41; the
-existing shared appearance controller and saved Tokyo Night choice stay.
-Footer0.20.0 uses normal document flow and no active consent runtime. The
-regenerator and immutable hashes are documented in site/vendor/README.md.
-Use desktop/phone light/dark checks before delivery; these are pending.
-
-The historical design below describes earlier releases; its specimen, serif
-heading, hidden phone navigation and sticky footer guidance is superseded.
-
-
-# Design System: Sys1
-
-## Overview
-
-**Creative North Star: "Hraness Paper, as used by Peopleblade"**
-
-Sys1 adopts the user-selected Hraness visual family through its actual shared
-Paper palette and editorial marketing preset. Warm paper, quiet dividing rules,
-regular serif headings, and plain sans-serif controls establish a calm reading
-surface. Code and request/answer specimens give developer content a distinct,
-legible material without turning every section into a card.
-
-This file records the implemented visual system on 2026-09-19. Its source of
-truth is `site/style.css` together with the pinned CSS and fonts under
-`site/vendor/`. `docs/design.md` remains the separate runtime architecture
-document. Page strategy and audience order belong in `PRODUCT.md` and
-`.impeccable/surfaces/site-index-html.md`.
-
-**Key Characteristics:**
-
-- Warm, paired light and dark Paper colors.
-- Instrument Serif headings with Nebula Sans reading and interface text.
-- Generous section spacing, quiet rules, and compact controls.
-- Muted terminal surfaces with restrained depth for the illustrative specimen.
-- Locally served, pinned shared assets and the Hraness attribution footer.
-
-The adoption sources are recorded in [`site/vendor/README.md`](site/vendor/README.md)
-and its directory-local provenance manifests. Paper, the marketing preset, and
-Nebula Sans come from
-[`hraness/design-kit` at `0e089bc`](https://github.com/hraness/design-kit/tree/0e089bc18f9a0409f0e74b1fb7192f468956e386);
-Paper and marketing were adopted via
-[`hraness/peopleblade` at `900f5bf`](https://github.com/hraness/peopleblade/tree/900f5bfd922d603403c780e8431d76fb1ee7677f).
-The footer is
-[`hraness/site-footer` v0.15.0 at `3f29aaa`](https://github.com/hraness/site-footer/tree/3f29aaa1116205b86a0a65d779120532aeb2cc5d).
-The manifests, licenses, font notices, and documented static-footer adapter
-remain part of every adoption or update.
-
-## Colors
-
-Paper combines warm neutrals with a clear blue link/focus accent; specimen
-surfaces add muted green text. The frontmatter preserves the source
-`light-dark(light, dark)` expressions rather than selecting a single theme.
-The sidecar's generated tonal ramps preview each light-branch hue; they are
-swatch aids, not additional colors used by the site.
-
-### Primary
-
-- **Paper blue** (`primary`): links and the emphasized routing step.
-- **Soft paper blue** (`primary-soft`): selection background.
-- **Focus blue** (`focus`): the visible keyboard outline.
-
-### Neutral
-
-- **Warm paper and ink** (`background`, `foreground`): the document and main text.
-- **Muted ink** (`muted`): summaries, supporting prose, navigation, and captions.
-- **Quiet and structural rules** (`grid`, `line`): section dividers and stronger control/frame borders respectively.
-- **Raised paper** (`surface`, `surface-hover`): request-path fill, selected controls, copy controls, and hover feedback.
-- **Slate action** (`action`, `action-ink`, `action-hover`): filled calls to action, with pale fill and dark ink in dark mode.
-- **Terminal paper and ink** (`terminal-background`, `terminal-ink`, `terminal-muted`, `terminal-command`): specimens, code, and install commands.
-
-**The Paired Appearance Rule.** Keep every shared Paper color paired across
-light and dark appearances; inherit the selected color scheme instead of
-introducing a fixed-color island.
-
-The root opts in with `data-hraness-theme="paper"`, `data-palette="paper"`, and
-`data-hraness-marketing-preset="editorial"`. Without JavaScript, Paper follows the operating system. The shared appearance
-menu selects Light, Dark, or System and resolves the preference before styles
-load. Existing `sys1-appearance` choices are preserved. The shared browser
-controller owns keyboard navigation, focus return, cross-tab storage updates,
-system appearance changes, and browser theme-color synchronization. Storage
-failures leave the current visit usable. Forced-colors mode maps the Paper
-roles to system colors and adds visible specimen/button borders.
-
-## Typography
-
-**Display font:** Instrument Serif, with Georgia and serif fallbacks.
-**Body and UI font:** Nebula Sans, followed by the platform sans-serif stack.
-**Code font:** the platform monospace stack.
-
-Display and headline roles use the regular serif face. Titles and controls
-use the loaded Medium and Semibold sans-serif cuts; body text uses Book.
-The frontmatter contains the implemented ramp, tracking, and line heights.
-Headline wrapping is balanced. The body inherits the browser's default size
-with a one-rem reference size; it does not impose a fixed root pixel size.
-
-Supporting text varies by density: section introductions use 1.0625rem,
-navigation uses .9rem, and specimen labels/captions use .75rem. Code is
-slightly larger in the specimen (.76rem) and install block (.78rem) than the
-reusable integration-code role. The compact screen summary becomes 1rem.
-Prose introductions stay within 65ch; wider containers accommodate code and
-comparisons rather than long reading lines.
-
-**The Real Font Rule.** Serve the pinned local font files: Instrument Serif
-regular 400 and Nebula Sans 400, 500, and 600. Keep editorial serif headings
-at 400 instead of synthesizing bold.
-
-Fonts use `font-display: swap`, and the Nebula Book WOFF2 is preloaded. There
-is no runtime font CDN. Retain the included SIL Open Font Licenses and font
-provenance when moving or updating these assets.
-
-## Layout
-
-The content measure is 70rem; the header has a wider 76rem measure. Both
-leave two-rem side gutters on larger screens. Sections have five-rem block
-padding and end with a quiet rule. Text introductions are narrower than the
-content measure. Related controls wrap within flex rows instead of relying
-on fixed viewport widths.
-
-Desktop patterns include a three-column benefits group, two-column
-request/answer specimen, an .85fr/1.4fr integration split, a 1fr/1.25fr/2fr
-comparison, and a 1fr/1.65fr question section. Their internal gaps range from
-1.5rem to 4rem. The specimen, install block, and copy columns retain their own
-bounded measures inside the larger section.
-
-At 800px and below, gutters become 1.25rem and section padding becomes
-3.75rem. Integration and questions stack; the integration modes temporarily
-form three columns. The header hides its first navigation link.
-
-At 640px and below, navigation links are hidden while the brand, start action,
-and appearance control remain. At 560px, benefits, integration modes, comparison rows,
-and the request/answer specimen stack. Request-path arrows rotate with the
-vertical flow, the comparison header is hidden, and the example controls
-grow to a 2.75rem minimum height. Code wraps with `white-space: pre-wrap` and
-`overflow-wrap: anywhere`; it does not require horizontal page scrolling.
-
-The header stays visible at the viewport top and opts into the shared marketing
-header paint. Anchor scrolling is smooth with a six-rem offset, reduced to
-5.5rem on compact screens. The skip link stays above the sticky header. Reduced-motion preference
-changes scrolling to `auto`.
-
-## Elevation & Depth
-
-Most surfaces are flat, separated by tonal fills and thin rules. The wide
-illustrative specimen alone uses the shared terminal shadow, combining a
-subtle inset highlight with soft ambient shadows. Other code/install frames
-use a border. Terminal toolbars use the shared light/dark chrome gradient.
-The sidecar records the exact shadow in its extensions and chrome in its
-component snippets.
-
-**The Specimen Depth Rule.** Reserve the terminal shadow for the featured
-request/answer specimen; use borders and tonal separation for ordinary
-containers.
-
-The hero uses a flat warm surface in both themes. The vendored marketing
-grain, cells, and field gradient remain available upstream assets, but the
-current page does not apply the marketing-field class. Do not describe those
-textures as visible Sys1 decoration or infer a textured-background requirement.
-
-## Shapes
-
-Use the frontmatter's compact radius for option labels and copy controls,
-control radius for buttons and the appearance menu, and frame radius for
-specimens, code, and the request path. Standard rules and control borders are
-one pixel. Corners stay modest; editorial sections remain unboxed.
-
-Interface arrows and disclosures are inline SVGs with current-color strokes,
-rounded line ends and joins, and a 1.6 stroke width. Standard icons are 1.2rem;
-external-link arrows are .9rem. The disclosure switches from plus to minus by
-hiding the vertical path when its native details element opens. Preserve the
-shared footer's own SVG paths and styling.
-
-## Components
-
-### Buttons and links
-
-Filled actions use slate/pale paired colors; secondary actions are transparent
-with a structural border. Both use the action typography and control radius.
-The standard minimum height is 2.875rem, with 2.625rem compact header actions.
-Hover changes background over 140ms ease-out without moving the control.
-Keyboard focus is a two-pixel focus-color outline offset by four pixels.
-Links retain a one-pixel underline treatment with a .2em offset; navigation
-and button links receive their component-specific hover treatment.
-
-### Shared appearance menu and navigation
-
-Use the pinned design-kit `installAppearanceMenus` browser controller and
-`appearance-menu.css`, with the progressive icon trigger as the final header
-action. The menu exposes Light, Dark and System radio items, arrow/Home/End
-and typeahead navigation, Escape dismissal and focus return. The shared CSS
-owns the 2rem desktop and 3rem coarse-pointer trigger sizes and menu styling.
-Keep product SVG rules scoped away from shared control and footer icons.
-The header links remain a simple horizontal row until responsive rules reduce
-them. Keep the skip-to-content link available on keyboard focus.
-
-### Option labels and example selector
-
-Option labels are noninteractive monospace chips with a thin border. The
-example selector is a labelled group of ordinary buttons, using
-`aria-pressed` for the active choice. The selected state has a Paper surface
-and structural border; hover uses the shared hover surface. Selecting a type
-updates the question, state, option labels, JSON answer, and type label. The
-answer region announces the change politely. These are labelled illustrative
-examples held in the page script, with no model call.
-
-### Frames, request path, and code
-
-Frame surfaces share terminal colors, rounded clipping, and a chrome heading
-strip. Code uses the monospace stack and preserves intentional line breaks
-while allowing wrapping. The request-path container is a flat Paper surface
-with a quiet border; routing emphasis uses the primary blue. Preserve the
-desktop-to-stacked flow and arrow orientation.
-
-### Copy feedback and disclosure
-
-Copy controls use the compact radius and hover surface. Copying reports a
-success message in a status region; clipboard failure gives a manual-copy
-instruction. Native `details`/`summary` supplies the disclosure behavior and
-keyboard interaction. Its focus outline remains visible.
-
-### Shared footer and progressive enhancement
-
-The pinned shared footer provides Hraness attribution and social links in
-sticky mode: the inner bar stays at the viewport bottom and its root reserves
-the matching footprint, including the safe area. Do not add another spacer.
-Use its generated markup with the documented static adapter;
-there is no mailing-list form, active consent widget, or external script.
-Do not restyle the vendored snapshot to make a product-local adjustment.
-
-Appearance, example switching, and copy buttons are revealed only when
-JavaScript is available. The initial illustrative answer, installation text,
-links, and native disclosures remain useful without JavaScript. Sidecar
-snippets show the implemented visual states; they do not supply application
-event handlers for these behaviors.
-
-### Model comparison
-
-`site/compare.html` extends the Paper reading surface with captioned data
-tables, contextual evidence rows, native disclosures, and a small cost
-calculator. Wide tables scroll within labelled keyboard-focusable regions;
-supporting grids stack on compact screens. Numeric columns use tabular figures.
-The comparison stylesheet reuses the existing colors, fonts, radii, and
-breakpoints, adding local layout and density rules without new system tokens
-or assets. The shared header, appearance control, and pinned footer remain
-the visual anchors. Surface-specific evidence and interaction rules live in
-`.impeccable/surfaces/site-compare-html.md`.
-
-## Agent skills guide
-
-`site/skills.html` extends the same Paper system in a reading layout, using
-`site/skills.css` for the shipped workflow, scoped evidence comparison,
-research catalog, and installation. A description list explains before/after
-behavior. The evidence table keeps result-text replay and completed-diagnosis
-units separate, within a labelled keyboard-scrollable region. Ten unboxed
-research rows expose their status, proposed payoff, native alternative, and
-current evidence gap; they stack at compact widths. Native disclosures keep
-calculation and failure-cost detail below the primary decision path. The
-shared header, appearance control, copy behavior, code frames, fonts, and
-pinned footer are reused. No system tokens or assets were added. Evidence
-boundaries, source revision, editorial ownership, and finish review live in
-`.impeccable/surfaces/site-skills-html.md`.
-
-## Do's and Don'ts
-
-### Do:
-
-- **Do** inherit the paired Paper palette and test both appearances.
-- **Do** use the actual local fonts and regular Instrument Serif headings.
-- **Do** keep readable measures, quiet section rules, and wrapping code.
-- **Do** preserve native control semantics, visible keyboard focus, and status feedback.
-- **Do** retain pinned shared assets, source hashes, licenses, and the footer adapter provenance.
-
-### Don't:
-
-- **Don't** turn unused vendor textures or tokens into a requirement for new surfaces.
-- **Don't** apply the specimen shadow to every section or frame.
-- **Don't** replace the shared footer's marks with text glyphs or product-local approximations.
-- **Don't** make JavaScript essential for reading the example, installation commands, or disclosures.
-- **Don't** edit immutable vendor snapshots for a product-local layout or copy change.
-
-## Shared control adoption — 2026-09-20
-
-All seven HTML pages use the same shared appearance menu, sticky marketing
-header, and sticky Hraness footer. The appearance browser artifact and CSS are
-pinned to design-kit `3bb93ea414ae4d25b1d0eee06591aebeb1d5d549`; see
-`site/vendor/hraness-appearance/provenance.json` for source and bundle digests.
-The footer remains v0.15.0 and is regenerated with `placement: "sticky"`.
-The existing Paper palette, content and footer privacy behavior are retained.
-
-The adoption review covered 56 route/viewport/appearance combinations across
-all seven pages at 320, 390, 768 and 1280px. Checks covered keyboard selection,
-Escape focus return, saved preference reload, System changes, denied storage,
-no-JavaScript reading, footer hit testing and end-of-page clearance under the
-production CSP. Final screenshots show the shared icon menu and footer in
-Paper light and dark. Product link, icon and focus rules leave shared
-components under their own stylesheet ownership.
-
-## Sys1 identity — 2026-09-21
-
-The boxed-one mark is inspired by the keycap 1 emoji. Use the checked-in,
-path-only SVG at `site/marks/sys1.svg`, beside the text wordmark at 32px; the
-image is decorative within the existing “Sys1 home” link. Its transparent
-numeral remains visible on both Paper appearances. The mark uses the shared
-project blue, while browser and home-screen icons use the same geometry in
-the shared two-tone palette on black. Every page declares the same icon set.
-
-`brand/sys1.source.json` is the editable geometry and palette;
-`scripts/generate-brand-icons.ts` produces the assets and provenance manifest.
-See `brand/README.md` for regeneration, sizes and review expectations. The
-Hraness project grid uses the same mark and padded illustration. These are
-original paths, with no runtime emoji, font or image-model dependency.
-Collapse header navigation at 640px so the added mark leaves room for the
-start action and coarse-pointer appearance control. Keep the start label on
-one line. Other content retains its existing responsive breakpoints.
-
-## Agent skill workflows — 2026-09-28
-
-The homepage now leads with review and completion verification, with the typed
-decision API as a second entry point. The skills page distinguishes the two
-Sys1 project skills from the separate compact-output runtime. Documentation
-uses explicit message files outside the worktree and names the default rule
-coverage, opt-in backends, and advisory limits. Shared styles and assets stay
-under the existing Paper system; no new raster assets were introduced.
-
-Final visual disposition: **ship**. The local browser verifier passed 48
-route, viewport, and appearance combinations, including responsive overflow,
-navigation, controls, headings, and production CSP checks. The integration
-owner inspected desktop and mobile light/dark screenshots of the homepage,
-docs, and skills page. Evidence: `/private/tmp/sys1-portable-skills-browser/`.
-Independent source/copy review and 150 local link/anchor checks passed; the
-sitemap covers all seven canonical pages. No material visual blocker remains.
+# Sys1 design system
+
+Current implementation, September 28, 2026. Sys1 uses Tokyo Night colors and
+Nebula Sans throughout its marketing, documentation, and launch article. The
+homepage leads with agent review and completion verification, then introduces
+the typed decision API. Hosted Jev remains opt-in and local models experimental.
+
+This document describes the shipped HTML/CSS and the launch changes in this
+checkout. It replaces the older warm Paper palette, Instrument Serif headings,
+hidden phone navigation, recorded-answer hero, and sticky-footer guidance.
+Historical implementations remain in Git history. Product priorities and
+navigation belong in [PRODUCT.md](PRODUCT.md); runtime architecture belongs in
+[docs/design.md](docs/design.md).
+
+## Sources and shared assets
+
+The authoritative roles come from
+[palette-system.css](site/vendor/hraness-appearance/palette-system.css), joined
+to product variables by
+[palette-bridge.css](site/vendor/hraness-appearance/palette-bridge.css).
+[style.css](site/style.css) owns the common layout and controls;
+[home.css](site/home.css) and [launch-article.css](site/launch-article.css) own
+surface-specific layouts. The frontmatter records representative desktop
+values; the responsive CSS remains authoritative.
+
+The root retains `data-hraness-theme="paper"` as the shared typography contract,
+with `data-palette="tokyo-night"` selecting colors. It also declares
+`data-hraness-material="lantern"`, `data-hraness-pattern="none"`, and the
+`editorial` marketing preset. The attribute named Paper does not select the
+warm Paper palette. Pages do not require a mesh or grain background.
+
+Paper, marketing, Lantern, and appearance are pinned to design-kit v0.23.0,
+commit `3df4c411c7f5e5cbc02448463571696f0d47cee5`. The normal-flow footer is
+site-footer v0.20.0, commit `4244dc563daf125eadbc66fe2a896311f09afc84`.
+Directory-local provenance manifests bind the admitted assets to source and
+hashes. Preserve those manifests, licenses, font notices, and the static
+footer adapter. Regenerate shared assets through the repository scripts;
+keep product layout changes outside immutable snapshots.
+
+## Color and typography
+
+Keep palette roles paired across light and dark appearance. Links, primary
+buttons, selected demo controls, and matched-result bars use the blue primary
+role. Muted text supplies secondary hierarchy; grid and line roles separate
+sections and controls. Terminal colors inherit surface, foreground, muted,
+and primary roles from the marketing preset.
+
+Nebula Sans Book 400, Medium 500, and Semibold 600 are served locally from
+[fonts.css](site/vendor/nebula-sans/fonts.css), using `font-display: swap`.
+The Book cut is preloaded. Code uses the platform monospace stack. No runtime
+font CDN or Instrument Serif stylesheet is required.
+
+Common heading rules request weight 550 and balanced wrapping. The homepage
+has a compact headline beside the decision demonstration; the article uses a
+larger `clamp(3rem, 6.5vw, 5.75rem)` title. Reference pages use a smaller type
+scale. The body follows the browser's root size instead of setting a fixed
+pixel size. Ordinary introductions stay within 65ch; article prose stays
+within 67ch with a 1.78 line height.
+
+## Layout and navigation
+
+Common sections have a 70rem maximum measure and two-rem side gutters; the
+header uses 76rem. Sections use five-rem vertical padding, reduced to 3.5rem
+at 800px, with 1.25rem side gutters. The launch article uses 68rem and has its
+own prose, figure, and table measures. Related controls wrap naturally.
+
+The header is sticky and the footer remains in ordinary document flow. Below
+720px, navigation moves into its own horizontally scrollable row under the
+brand and actions. Preserve visible access to primary links and 44px phone
+targets. Do not hide primary navigation to make a header fit. Anchor offsets
+account for the taller mobile header, and the skip link sits above it.
+
+The homepage hero, film feature, and trial comparison stack below 760px. The
+API flow becomes two columns. The article's four-step review diagram becomes
+two columns below 680px and one column below 440px. Its verification row
+stacks, and trial bars move below their labels on narrow phones. Wide data
+tables scroll inside labelled, keyboard-focusable containers; they must not
+make the whole page overflow.
+
+## Components and diagrams
+
+Primary buttons use primary and primary-foreground colors; secondary buttons
+use a structural border. Controls have modest radii and a visible focus
+outline. Ordinary sections remain flat, with rules defining groups. The
+hero demonstration has a bounded surface and border. Avoid adding terminal
+shadows or enclosing every paragraph in a card.
+
+The homepage demo provides three authored question forms, selected with
+ordinary buttons and `aria-pressed`. Its polite live region announces the
+answer excerpt. It labels the example as illustrative and makes no model
+calls. Preserve the initial choice example when JavaScript is unavailable.
+Do not label authored numbers as measured model output.
+
+Workflow diagrams keep evidence selection, a chosen backend, response
+validation, and the application's action distinct. The launch chart counts
+all 16 submissions per workflow, including errors, and separates matched
+labels, misses, and request errors with text and shape as well as color.
+Keep its native data table and methodology link alongside the picture.
+
+Installation and API examples use code frames. Most code wraps; `.code-frame`
+blocks preserve lines with local horizontal scrolling. Copy controls report
+success through a status region and provide a manual-copy instruction on
+failure. Use native `details` and `summary` for disclosures.
+
+## Appearance, identity, and accessibility
+
+The pinned shared appearance controller owns Light, Dark, and System choices,
+keyboard menu navigation, focus return, storage updates, and theme-color
+synchronization. It preserves the `sys1-appearance` preference and resolves it
+before styles load. Without JavaScript, the palette follows the operating
+system. Do not replace it with a product-local theme controller.
+
+Use the original boxed-one SVG at [site/marks/sys1.svg](site/marks/sys1.svg)
+within the accessible Sys1 home link. The shared foil wrapper provides the
+brand treatment; keep footer marks under their own stylesheet ownership.
+[brand/README.md](brand/README.md) records icon generation and provenance.
+
+Core reading, links, installation commands, static diagrams, and native
+disclosures work without JavaScript. Reduced motion disables smooth scrolling
+and demo-control transitions. Forced colors preserve meaningful borders,
+focus, selected controls, and chart distinctions. Do not put essential
+information only in an image or color.
+
+The launch film is user-started, with native controls, a poster, captions,
+and a text transcript. It uses `preload="none"` and does not autoplay.
+The article remains complete without playback. Film source and render
+receipts live in [media/sys1-launch](media/sys1-launch).
+
+The footer's static adapter removes the unused consent subtree. It exposes
+Hraness attribution and social links, with no mailing-list form or consent
+runtime. Keep its normal-flow placement and the flex page's short-viewport
+behavior; no fixed bar or compensating spacer is needed.
+
+## Verification and maintenance
+
+Check desktop and phone layouts in both appearances, including navigation,
+all three demo forms, no-JavaScript reading, reduced motion, focus, and media
+controls. Inspect screenshots as well as automated results. Test tables and
+long code at narrow widths without page overflow. Check the article chart's
+numbers against the linked frozen report whenever its source changes.
+
+The repository browser verifier owns the route/viewport/theme sweep; launch
+source review and rendered findings are recorded in
+[docs/launch-editorial.md](docs/launch-editorial.md). Do not reuse a historical
+ship verdict as evidence for a new design change.

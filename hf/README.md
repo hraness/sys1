@@ -17,6 +17,13 @@ answered yes/no, choice, and score questions. The
 [evaluation guide](https://sys1.io/docs/evaluations) explains the studies and
 links their original reports.
 
+Sys1 connects coding-agent workflows and application code to Jev, TypeSafe's
+hosted System One decision model, experimental local Qwen models, or a
+compatible server. [Introducing Sys1](https://sys1.io/introducing-sys1) explains
+the project; the [System One guide](https://sys1.io/docs#system-one) explains the
+question types. Sharing an answer format does not imply equal accuracy or
+calibration across these models.
+
 ## Files and use
 
 `data/benchmarks/` contains the original JSON fixtures and expected answers:

@@ -23,6 +23,25 @@
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://sys1.io/docs/evaluations",
+  "url": "https://sys1.io/docs/evaluations",
+  "name": "Evaluations · Sys1",
+  "description": "Read Sys1’s own tests of hosted Jev, local Qwen, and Laya, including wrong answers and raw reports, next to external JevBench v1.2.6 scores.",
+  "isPartOf": {
+    "@id": "https://sys1.io/#website"
+  },
+  "about": {
+    "@id": "https://sys1.io/#software"
+  },
+  "publisher": {
+    "@id": "https://hraness.com/#organization"
+  }
+}
+    </script>
     <script src="/appearance.js"></script>
     <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
@@ -44,6 +63,7 @@
         <a class="wordmark" href="/" aria-label="Sys1 home"><img class="brand-mark hraness-marketing-brand-mark" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/#how-it-works">How it works</a>
+          <a href="/introducing-sys1">Introducing</a>
           <a href="/docs">Docs</a>
           <a href="/compare">Compare</a>
           <a href="/skills">Skills</a>
@@ -69,7 +89,7 @@
       <div class="comparison-intro">
         <h1>Sys1 evaluations</h1>
         <p class="summary">These are Sys1’s own tests of the models it can use, with raw reports, failure analysis, and the steps to rerun them. The small fixtures show how each adapter behaves. For cross-model accuracy and cost, use the <a href="/compare">model comparison</a>.</p>
-        <p class="comparison-date">Measured September 19–20, 2026 · Full results, including wrong answers, available below</p>
+        <p class="comparison-date">Adapter studies: September 19–20, 2026 · <a href="/introducing-sys1#measured">Workflow screening: September 28, 2026</a></p>
         <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#jev-results">Jev results</a><a href="#jevbench">JevBench</a><a href="#laya">Laya study</a><a href="#latest">Qwen results</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Reproduce</a></nav>
       </div>
       <section id="choose" class="section" aria-labelledby="choose-heading">

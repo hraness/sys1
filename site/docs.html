@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Docs · Sys1</title>
-    <meta name="description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
+    <meta name="description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
     <link rel="canonical" href="https://sys1.io/docs" />
     <meta property="og:title" content="Docs · Sys1" />
-    <meta property="og:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
+    <meta property="og:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/docs" />
@@ -16,7 +16,7 @@
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Docs · Sys1" />
-    <meta name="twitter:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
+    <meta name="twitter:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
     <meta name="twitter:image" content="https://sys1.io/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
@@ -30,7 +30,7 @@
   "@id": "https://sys1.io/docs",
   "url": "https://sys1.io/docs",
   "name": "Docs · Sys1",
-  "description": "Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API.",
+  "description": "Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request.",
   "isPartOf": {
     "@type": "WebSite",
     "@id": "https://sys1.io/#website",
@@ -60,6 +60,7 @@
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/#how-it-works">How it works</a>
+          <a href="/introducing-sys1">Introducing</a>
           <a href="/docs" aria-current="page">Docs</a>
           <a href="/compare">Compare</a>
           <a href="/skills">Skills</a>
@@ -85,7 +86,7 @@
       <section class="docs-hero" aria-labelledby="docs-title">
         <div class="docs-hero-inner">
           <h1 id="docs-title">Sys1 documentation</h1>
-          <p class="docs-lede">Use Sys1 to review Git changes against repository rules and check an agent’s completion claims. Choose Jev, TypeSafe’s hosted decision model, a local model, or your own compatible server. Applications can call the same yes/no, choice, and score API through Sys1’s open-source, Jev-compatible local gateway or its Node and Bun client.</p>
+          <p class="docs-lede">Review Git changes, check an agent’s completion claims, or add typed decisions to an application. Start with Jev, TypeSafe’s hosted decision model, an experimental local Qwen model, or a compatible server you run.</p>
           <div class="docs-meta"><span>Sys1 0.17.0</span><span>Agent review · claim verification · decision API</span><a href="/docs/evaluations">Read the evaluations</a></div>
         </div>
       </section>
@@ -95,11 +96,12 @@
           <p class="docs-sidebar-title">On this page</p>
           <nav class="docs-nav">
             <a href="#getting-started">Getting started</a>
+            <a href="#system-one">Jev and System One</a>
             <a href="#audit">Review with your agent</a>
             <a href="#verify">Verify completion claims</a>
             <a href="#integration">Integration modes</a>
             <a href="#backends">Backends &amp; models</a>
-            <a href="#profiles">Profiles &amp; tuning</a>
+            <a href="#profiles">Profiles and evaluation</a>
             <a href="#research">Evidence &amp; research</a>
           </nav>
           <a class="docs-related" href="/skills">Agent skills and workflows</a>
@@ -117,18 +119,51 @@
 sys1 doctor</code></pre>
               </div>
               <div class="docs-route">
-                <div><h3>Use hosted Jev</h3><p>Provide your TypeSafe API key in the environment, then enable Jev. Sys1 stores the activation flag, not the key. Enabling Jev selects <code>hosted-only</code> routing, so a provider failure does not substitute a local model.</p></div>
-                <pre><code>export TYPESAFE_API_KEY=…
-sys1 jev enable</code></pre>
+                <div><h3>Choose hosted Jev</h3><p>Get a key from <a href="https://console.typesafe.ai/">TypeSafe</a> and provide <code>TYPESAFE_API_KEY</code> privately in your environment. Enabling Jev selects <code>hosted-only</code> routing. Sys1 saves the activation flag; the key stays in the environment.</p></div>
+                <pre><code># After setting TYPESAFE_API_KEY privately:
+sys1 jev enable
+sys1 jev status</code></pre>
               </div>
               <div class="docs-route">
-                <div><h3>Use a local model</h3><p>Setup downloads Qwen3 1.7B. Start the local daemon for application requests or review commands using <code>--gateway</code>. Evaluate this experimental model on your own cases before relying on its answers.</p></div>
+                <div><h3>Or choose a local model</h3><p>Setup downloads Qwen3 1.7B. Start the local daemon for application requests or review commands using <code>--gateway</code>. Evaluate this experimental model on your own cases before relying on its answers.</p></div>
                 <pre><code>sys1 setup --tier quality
 sys1 up
 sys1 status</code></pre>
               </div>
             </div>
             <p class="docs-footnote">Preview the download with <code>sys1 setup --dry-run --json</code>. <code>sys1 doctor</code> reports the runtime, model store, routing, and daemon state. For a client-only install or a source build, see the <a href="https://github.com/hraness/sys1#install">README</a>.</p>
+            <div class="docs-links"><a href="#audit">Set up agent review</a><a href="#verify">Check a completion message</a><a href="#jev">Make a Jev API request</a></div>
+          </section>
+
+          <section id="system-one" class="docs-section" aria-labelledby="system-one-title">
+            <h2 id="system-one-title">Jev and System One models</h2>
+            <p class="docs-intro"><a href="https://docs.typesafe.ai/concepts/system-one">System One models</a> evaluate supplied state and answer questions in a format you define. Jev is TypeSafe’s hosted model. Sys1 connects this decision API to agent workflows and application code, and can route the same request format to other configured backends.</p>
+            <p>Applications can use Sys1’s open-source, Jev-compatible HTTP gateway on <code>127.0.0.1</code>, or call it through the Node and Bun client. Both use <code>POST /v1/systemone</code>.</p>
+            <dl class="docs-definition-list">
+              <div><dt>Noul: yes or no</dt><dd>Ask whether a condition holds. The <code>noul</code> field gives the probability of yes, from zero to one.</dd></div>
+              <div><dt>Choice: named alternatives</dt><dd>Define the allowed answers. Receive the chosen name, the probability of each option, and confidence.</dd></div>
+              <div><dt>Score: an ordered scale</dt><dd>Define ordered criteria. Receive a probability-weighted score on a zero-based scale, the labels, probabilities, and confidence.</dd></div>
+            </dl>
+            <p>Use these answers to prioritize investigation, classify evidence, or choose a workflow in code. Sys1 validates the response against the request. Your application still decides which actions are allowed and checks whether the model works on representative examples.</p>
+            <h3 id="jev">Make your first Jev request</h3>
+            <p>After enabling Jev above, run <code>sys1 up</code> to start the loopback gateway. Save this request as <code>request.json</code>:</p>
+            <div class="docs-code-block"><div class="docs-code-heading"><span>request.json</span><span>Illustrative input</span></div><pre><code>{
+  "model": "typesafe/jev-1.13.0",
+  "state": { "result": "The check exited with code 1." },
+  "questions": {
+    "failed": {
+      "type": "noul",
+      "instructions": "Does the supplied result report a failed check?"
+    }
+  }
+}</code></pre></div>
+            <div class="docs-code-block"><div class="docs-code-heading"><span>Send the request</span></div><pre><code>sys1 eval --file request.json --json</code></pre></div>
+            <p>Read <code>answers.failed.noul</code> as the model’s probability of yes. The example demonstrates the API; use the exit status directly when your code already has it. Review and verify can call Jev without a daemon. The client, <code>sys1 eval</code>, and commands using <code>--gateway</code> need one.</p>
+            <h3>Choose the model and handle failures</h3>
+            <p>The request pins <code>typesafe/jev-1.13.0</code>. A TypeSafe alias such as <code>jev-latest</code> can change; keep a versioned model ID when comparing runs or setting thresholds. Enabling Jev keeps requests on hosted-only routing, so a provider failure returns an error without substituting Qwen. HTTP errors do not trigger a retry.</p>
+            <p>For a missing credential or unavailable gateway, inspect <code>sys1 jev status</code> and <code>sys1 doctor</code>. Restart the daemon after changing its environment. A <code>backend_response_invalid</code> error means Sys1 rejected the returned answer format; keep the error in your evaluation results.</p>
+            <p class="docs-footnote">Jev currently accepts text, including structured text in JSON. TypeSafe documents its model versions, prices, and changing rate limits. A probability is not a guarantee that an individual answer is right; local models using the same format do not inherit Jev’s calibration.</p>
+            <div class="docs-links"><a href="https://docs.typesafe.ai/models">TypeSafe model reference <span aria-hidden="true">↗</span></a><a href="/compare">Compare model evidence and costs</a><a href="/introducing-sys1">Introducing Sys1</a></div>
           </section>
 
           <section id="audit" class="docs-section" aria-labelledby="audit-title">
@@ -200,7 +235,7 @@ sys1 verify --message /tmp/final-message.txt \
           </section>
 
           <section id="profiles" class="docs-section" aria-labelledby="profiles-title">
-            <h2 id="profiles-title">Profiles &amp; tuning</h2>
+            <h2 id="profiles-title">Profiles and evaluation</h2>
             <p class="docs-intro">Give each task a versioned set of questions and a model route. Reuse the same profile from application code or the CLI; each call supplies only the changing state.</p>
             <div class="docs-code-block"><pre><code>const triage = createProfile({
   version: 1, id: "triage", revision: "1",
@@ -212,7 +247,8 @@ sys1 verify --message /tmp/final-message.txt \
 const result = await client.evaluate(triage.request(ticket));</code></pre></div>
             <p>Import <code>createProfile</code> from <code>@hraness/sys1/client</code>. Save the definition as JSON for <code>sys1 eval --profile triage.json</code>, with <code>{"state": ...}</code> on stdin. Profiles also work with Jev and built-in local model routes.</p>
             <p>Start by improving instructions and criteria against fixed application examples. If fine-tuning helps, train Kev separately, calibrate and evaluate the checkpoint, then publish a new profile revision pointing at its server. Profiles do not collect training data or start training jobs.</p>
-            <p>From a source checkout with Bun and project dependencies, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate a profile on labeled examples</a>, including experimental failure triage, excerpt relevance, and claim support; these experiments are separate from the installed project skills.</p>
+            <p>From a source checkout with Bun and project dependencies, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate a profile on labeled examples</a>. The included experiments cover failure triage, excerpt relevance, and claim support. They are separate from the installed project skills.</p>
+            <p>The <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 screening trial</a> submitted 48 synthetic cases to Jev 1.13.0 once each. Claim support matched 16/16 labels, triage matched 16/16 and tied its deterministic baseline, and relevance matched 13/16 with three errors. Claim support’s literal-match baseline scored 6/16 and is a weak comparator. Use the findings to choose a larger trial on your own tasks.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev setup, prompt tuning, and fine-tuning guide <span aria-hidden="true">↗</span></a></div>
           </section>
 
@@ -220,6 +256,7 @@ const result = await client.evaluate(triage.request(ticket));</code></pre></div>
             <h2 id="research-title">Evidence &amp; research</h2>
             <p class="docs-intro">Each evaluation is dated and keeps its raw reports, workloads, runtime details, and caveats. A result describes the build it tested, not later releases.</p>
             <div class="docs-research-list">
+              <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md"><span><strong>Workflow screening: September 28</strong><small>48 frozen synthetic cases · baseline comparisons and response errors</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations"><span><strong>Model evaluations</strong><small>JevBench v1.2.6 · Jev, Qwen, and direct Laya study</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations-history"><span><strong>Evaluation history</strong><small>Earlier CUA, Needle, forms-v1, and local adapter results</small></span><span aria-hidden="true">↗</span></a>
               <a href="/skills"><span><strong>Agent skills</strong><small>Review instructions, claim verification, and optional compact check output</small></span><span aria-hidden="true">↗</span></a>

@@ -1,0 +1,19 @@
+Introducing Sys1
+
+A 52-second motion film with original instrumental music and no spoken narration.
+
+0:00–0:06. The Sys1 mark and name appear on a light blue-gray background. The text reads: “Introducing Sys1. Review changes. Check completion claims.” Sys1 provides skills for coding agents and a typed decision API.
+
+0:06–0:12. Two columns labeled “Repository rules” and “Change evidence” connect to a focused question. The text reads: “Give your coding agent a repeatable check.”
+
+0:12–0:20. An illustrative code excerpt accepts input and saves it. A repository rule asks for untrusted input to be checked before persistence. The relevant code is underlined. The sequence reads: “Select rules and paths. Preview the request. Then choose the model call.” The result prompts the reader to investigate the finding. Review is advisory.
+
+0:20–0:28. An illustrative completion claim, “All tests passed,” is compared with a supported session transcript showing one test failed. Plain-message input has no test-command transcript and cannot establish this verdict. Lines connect the claim and evidence to the verdict “Contradicted.” Unavailable evidence remains unverifiable. Verification is advisory.
+
+0:28–0:35. The frame changes to dark blue. Three answer forms appear: yes/no, choice, and score. The text reads: “Typed decisions for your application. Validated answers through one API.” State and questions lead to probabilities.
+
+0:35–0:42. A Sys1 node branches to hosted Jev, experimental local Qwen, and a compatible server. Jev is TypeSafe's hosted decision model and is opt-in. Local Qwen runs on the user's machine and remains experimental. Compatible servers require explicit configuration. Hosted Jev is disabled in fresh configuration.
+
+0:42–0:46. Three reusable profiles appear: failure triage, excerpt relevance, and claim support. These are source-checkout experiments.
+
+0:46–0:52. The Sys1 name returns. The final card reads: “Introducing Sys1. Review changes. Check completion claims. sys1.io. MIT source.” The original instrumental score resolves and fades out.

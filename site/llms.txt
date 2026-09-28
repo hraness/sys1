@@ -4,12 +4,13 @@
 
 Install the `sys1-review` project skill for Codex, Claude Code, or Devin to preview Git changes, run reusable rules, investigate candidates, and record feedback. The independent `sys1-verify` project skill runs `sys1 verify` to compare an agent's completion message with reachable Git, pull-request, and page evidence. Install it with `sys1 verify setup codex`, `claude-code`, or `devin`. Both commands are experimental and advisory: model scores are not calibrated defect probabilities, and missing evidence does not prove completion.
 
-Jev is TypeSafe's hosted decision model. Sys1 uses its System One API and also supports experimental local Qwen models or compatible HTTP servers. Hosted Jev requires explicit activation and an environment credential; selected source or message context goes to the selected backend. The same yes/no, choice, and score API is available through a Node or Bun client, an embedded Bun router, or a loopback HTTP daemon. Sys1 is MIT licensed.
+System One models evaluate supplied state and return typed decisions and probabilities. Jev is TypeSafe's hosted model in that category. Sys1 is the separate open-source toolkit that uses the System One API and also supports experimental local Qwen models or compatible HTTP servers. Hosted Jev requires explicit activation and an environment credential; selected source or message context goes to the selected backend. The same yes/no, choice, and score API is available through a Node or Bun client, an embedded Bun router, or a loopback HTTP daemon. A validated response can still be wrong; quality and calibration differ by model. Sys1 is MIT licensed.
 
 Latest release: v0.17.0.
 
 ## Start with an agent workflow
 
+- [Introducing Sys1](https://sys1.io/introducing-sys1): Why the project exists, how evidence becomes a decision, and what the latest experiments show.
 - [Agent skills](https://sys1.io/skills): Choose project review instructions, completion checks, or a separate compact-output skill.
 - [Getting started](https://sys1.io/docs#getting-started): Install Sys1 and choose hosted Jev or a local model.
 - [Agent review](https://sys1.io/docs#audit): Install the project skill, preview selected changes, and investigate findings.
@@ -19,9 +20,11 @@ Latest release: v0.17.0.
 
 ## Build with the decision API
 
+- [Jev and System One models](https://sys1.io/docs#system-one): Define state and questions using Noul, Choice, and Score; distinguish the model from the Sys1 toolkit.
+- [First Jev request](https://sys1.io/docs#jev): Start the gateway, submit a version-pinned request, interpret its probability, and diagnose errors.
 - [Integration modes](https://sys1.io/docs#integration): Use the Node or Bun client, embedded Bun router, or local HTTP daemon.
 - [Backends and models](https://sys1.io/docs#backends): Hosted Jev, local models, and compatible servers.
-- [Profiles and tuning](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
+- [Profiles and evaluation](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
 - [Evaluations](https://sys1.io/docs/evaluations): Dated adapter reports with their workloads and limitations.
 - [Compare models](https://sys1.io/compare): External JevBench results and workload cost.
 
@@ -32,6 +35,8 @@ Latest release: v0.17.0.
 ## Source-checkout experiments
 
 These experimental profiles and their evaluator require a Sys1 source checkout, Bun, and project dependencies. They are separate from the installed review and verification skills.
+
+The September 28, 2026 Jev 1.13.0 trial submitted 48 frozen synthetic cases once each: claim support matched 16/16 labels, failure triage matched 16/16 and tied error signatures, and excerpt relevance matched 13/16 with three errors. The claim-support literal-match baseline scored 6/16 and is deliberately weak. The results motivate a larger trial; they do not establish production accuracy or probability calibration.
 
 - [Workflow profiles](https://sys1.io/skills#workflows): Explore failure triage, excerpt relevance, and support for claims using caller-supplied text.
 - [Profile evaluation](https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md): Validate labeled examples offline, then opt into model calls with request limits and per-question reports.

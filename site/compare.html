@@ -23,6 +23,25 @@
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://sys1.io/compare",
+  "url": "https://sys1.io/compare",
+  "name": "Compare models · Sys1",
+  "description": "See how the models Sys1 can use score on JevBench, where each one runs, and what your monthly workload would cost on each.",
+  "isPartOf": {
+    "@id": "https://sys1.io/#website"
+  },
+  "about": {
+    "@id": "https://sys1.io/#software"
+  },
+  "publisher": {
+    "@id": "https://hraness.com/#organization"
+  }
+}
+    </script>
     <script src="/appearance.js"></script>
     <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
@@ -45,6 +64,7 @@
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/#how-it-works">How it works</a>
+          <a href="/introducing-sys1">Introducing</a>
           <a href="/docs">Docs</a>
           <a href="/compare" aria-current="page">Compare</a>
           <a href="/skills">Skills</a>
@@ -146,6 +166,7 @@
         <div class="source-list">
           <a href="https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/RESULTS-v1.2.md"><strong>Full JevBench results</strong><span>All systems, scoring, timing, and cost assumptions · v1.2.6</span></a>
           <a href="/docs/evaluations"><strong>Sys1 adapter studies</strong><span>Original Jev, Qwen, and Laya runs, raw reports, and limitations</span></a>
+          <a href="/introducing-sys1#measured"><strong>Sys1 workflow screening</strong><span>48 synthetic examples of failure triage, excerpt relevance, and claim support · September 28, 2026</span></a>
           <a href="/docs/evaluations-history"><strong>Earlier research</strong><span>Archived specialist adapters and publisher measurements</span></a>
         </div>
         <details class="comparison-detail"><summary>About the accuracy chart on openjev.com<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14"/><path class="disclosure-vertical" d="M12 5v14"/></svg></summary><div class="detail-body"><p><a href="https://openjev.com/">openjev.com is SemIf</a>, formerly called OpenJev. Its authored, perturbed, and TypeSafe-subset results use different methods and adapters. It is separate from the razorback16 DiffusionGemma server. Sys1 can run some of the same Qwen model families, but those figures do not measure Sys1’s quantized GGUF path, so we do not transfer them into this chart.</p></div></details>

@@ -33,11 +33,12 @@ export const SYS1_STATUS_PAGE = {
   // Every page the site serves, for "Did you mean". They are never listed.
   routes: [
     { href: "/", label: "Sys1" },
+    { href: "/introducing-sys1", label: "Introducing Sys1" },
     { href: "/docs", label: "Docs" },
     { href: "/docs/evaluations", label: "Evaluations" },
     { href: "/docs/evaluations-history", label: "Evaluation history" },
     { href: "/compare", label: "Compare models" },
-    { href: "/skills", label: "System One Skills" },
+    { href: "/skills", label: "Agent skills" },
   ],
   agentIndexHref: "/llms.txt",
   rootElement: "div",

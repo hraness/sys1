@@ -69,3 +69,6 @@
 .docs-content { font-size: 1rem; line-height: 1.75; }
 .docs-content :is(h2, h3) { font-family: var(--font-text); letter-spacing: -.025em; }
 .docs-content pre { border-radius: .875rem; border: 1px solid var(--grid); }
+.docs-content > .docs-section > p { max-width: 68ch; }
+.docs-section h3[id] { scroll-margin-top: 5rem; }
+.docs-section > h3 { margin-top: 2.5rem; }

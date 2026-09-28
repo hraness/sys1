@@ -1,0 +1,32 @@
+---
+version: 1
+slug: "site-introducing-sys1-html"
+primary_target: "site/introducing-sys1.html"
+related_targets: ["site/launch-article.css", "docs/launch-editorial.md"]
+---
+
+# Introducing Sys1
+
+Mode: Read. Developers evaluating whether small structured model decisions can improve the review and completion steps of an agent's work.
+
+## Direction
+
+THESIS: Explain the path from selected source to an investigated decision, then use the original 48-case trial to show which new workflows warrant more work.
+
+OWN-WORLD: Inherit the actual site's Tokyo Night light/dark tokens, Nebula Sans typography, restrained rules, shared header, appearance control, and pinned footer. The historical Paper and Instrument Serif descriptions do not override the current CSS and font assets.
+
+STORY: Start with the agent's handoff and product purpose. Distinguish the System One approach, TypeSafe's hosted Jev model, and Sys1's integration. Follow a review through evidence and investigation. Inspect the measured profile results. Preview one repository check.
+
+FIRST VIEWPORT: The literal title, a substantial thesis paragraph, the Hraness byline and date, and one visible release/status sentence. No decorative eyebrow or large unsupported metric. The optional film follows the introductory explanation and does not autoplay.
+
+FORM: A generous single reading column with broader diagram and chart figures. A narrow section index accompanies the opening on wide displays and becomes a wrapping row on mobile. Diagram steps are semantic HTML with connecting rules, so reading order and mobile layout do not depend on image rendering. The chart uses six labeled count bars and an accessible data table in a native disclosure, with distinct marks for errors and incorrect baseline answers.
+
+SIGNATURE: The evidence figure traces a review from a selected Git diff through a preview and model judgment to an agent investigation; a second row shows the separate completion check against reachable evidence. The original trial follows as an open, ruled comparison rather than promotional statistic cards.
+
+MOTION: Native film controls own the only extended motion. Static article reading and charts require no animation or JavaScript; reduced-motion users receive the same content.
+
+FINISH: One batched desktop/mobile/light/dark review after convergence, then one repair confirmation if required. No browser process belongs to this writer while the film renderer is active. Independent source and voice review is required before the public disclosure names a reviewer.
+
+## Evidence and ownership
+
+Individual page admission, source inventory, chart methodology, and lifecycle record: `docs/launch-editorial.md`. Author: Codex AI agent `/root/launch_editorial`. Human authorship and human review are not claimed. Publication byline: Hraness. Independent source/editorial review by Codex AI agent `/root` passed September 28, 2026. Rendered evidence is pending the integration owner.

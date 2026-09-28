@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-28T21:17:22Z",
+  "title": "Introducing Sys1",
+  "assets": {
+    "video": {
+      "path": "site/media/sys1-launch.mp4",
+      "bytes": 3132193,
+      "sha256": "638570d71ff06a9c1609256428e003bf31af10f0d31d11da90f4838ae5dc9438",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 52
+    },
+    "poster": {
+      "path": "site/media/sys1-launch-poster.jpg",
+      "bytes": 88241,
+      "sha256": "958494b0fbc4cd0c6b4285f65422d3cb6872362c9641c764ef3e35d6d44f8c7c",
+      "width": 1920,
+      "height": 1080
+    },
+    "social": {
+      "path": "site/media/sys1-launch-share.jpg",
+      "bytes": 46904,
+      "sha256": "2af57ae2e4356d8170209e418a084e7dc00acea9f2e50d7762898669e8aec4e2",
+      "width": 1200,
+      "height": 630
+    },
+    "captions": {
+      "path": "site/media/sys1-launch.vtt",
+      "bytes": 1008,
+      "sha256": "eed082294c8e6a4e4272afa46b8fc0d8d46ed0abedc28ef63e7c2379c11258c8"
+    },
+    "transcript": {
+      "path": "site/media/sys1-launch-transcript.txt",
+      "bytes": 2127,
+      "sha256": "69d47c4a903f43f56bb9fb53002b0497073826a11aa64c0a32191577c81fb283"
+    }
+  },
+  "toolchain": {
+    "slopcamera": "3.4.0",
+    "ffmpeg": "7.1.5",
+    "python": "3.14.6",
+    "numpy": "2.5.3"
+  },
+  "authoredSources": [
+    {
+      "path": "media/sys1-launch/scene.template.html",
+      "bytes": 9350,
+      "sha256": "1047ada79fda459e05f72d5490b7f2fa8845edae95c479e84adebf04a7d9e29f"
+    },
+    {
+      "path": "media/sys1-launch/build-source.py",
+      "bytes": 1126,
+      "sha256": "b06e1b535179748be23fb3390270ea7f5907f7db9f5bfd299c5e77f47d5a9e14"
+    },
+    {
+      "path": "media/sys1-launch/score.py",
+      "bytes": 2427,
+      "sha256": "e52d7d91dc9a4da3c4d5ae0b833844c5f6aceff32255e592793f089b493506b5"
+    },
+    {
+      "path": "media/sys1-launch/master.json",
+      "bytes": 395,
+      "sha256": "34e5bc9bd070350f8ef585960645a336b08a6a899ae6801bf442a54e925c813f"
+    },
+    {
+      "path": "media/sys1-launch/preview.json",
+      "bytes": 459,
+      "sha256": "0c358c5438c06ab9ace92e128ead0b58972a42214c399a1985ec6dd27dc50890"
+    },
+    {
+      "path": "media/sys1-launch/storyboard.md",
+      "bytes": 3191,
+      "sha256": "2611730a9a33767ffe9cf56fb985b60f5324cb43c5a3bd09a9e5df417f54323f"
+    }
+  ],
+  "renderedDocumentSha256": "56e3f2a4c9fa8ffdb8150814af65e135c6b53762075272173f3ab18bca32aafb",
+  "nativeMaster": {
+    "width": 3840,
+    "height": 2160,
+    "fps": 24,
+    "frameCount": 1248,
+    "durationSeconds": 52,
+    "bytes": 5058573,
+    "sha256": "3addfff7fdda1e482ed7c60dfe090249960cd5175e222a1b9f5871127ffd07f7",
+    "slopcameraReceiptSha256": "4042c41adbccf407b340982f940e0e4537406cae1fd94510be2390528ae260cf",
+    "projectId": "project_html_4e6b6e42dc704e41b8116b6fb7a85042"
+  },
+  "preview": {
+    "width": 1920,
+    "height": 1080,
+    "frameCount": 8,
+    "sha256": "3151938c19ed37a57e35fe71869902ef6299987957bdfe8290834fec2a62334b",
+    "slopcameraReceiptSha256": "bed270df712994831df6036908ee38040e05b7a6a46ee1bf2e92171939bdd7db",
+    "sourceTimesSeconds": [
+      3,
+      10,
+      17,
+      25,
+      33,
+      40,
+      45,
+      50
+    ]
+  },
+  "derivatives": {
+    "video": "Lanczos scale to 1920x1080; libx264 slow CRF 22, yuv420p; original master AAC copied; faststart MP4.",
+    "poster": "Final reviewed native 1080p preview frame, JPEG quality 2.",
+    "social": "Final reviewed native 1080p preview frame; crop 1920x1008 at y=36; Lanczos scale to 1200x630; JPEG quality 2."
+  },
+  "validation": {
+    "fullVideoAndAudioDecode": "Passed with no FFmpeg error output.",
+    "video": {
+      "codec": "h264",
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "frameCount": 1248,
+      "durationSeconds": 52,
+      "faststart": true
+    },
+    "audio": {
+      "codec": "aac",
+      "channels": 2,
+      "sampleRateHz": 48000,
+      "durationSeconds": 52,
+      "integratedLufs": -15.67,
+      "truePeakDbtp": -3.35,
+      "loudnessRangeLu": 2.6,
+      "clipping": false
+    }
+  },
+  "review": {
+    "record": "media/sys1-launch/receipts/review.json",
+    "sourceAndCaptionReview": "Independent Codex agent review against current product source.",
+    "visualReview": "Film agent and integration agent reviewed all eight settled scene frames; film agent reviewed 32 final-video temporal samples including first, last, scene boundaries and entrances. Integration agent independently approved the exact social crop.",
+    "limitations": [
+      "No listening review was performed; audio was checked by complete decode and loudness/peak measurement.",
+      "Visual review used stills and temporal frame samples, not a human playback session."
+    ]
+  },
+  "rights": {
+    "motion": "Original code-native motion under the repository MIT license.",
+    "music": "Original deterministic oscillator score; no samples or third-party music.",
+    "font": "Existing Nebula Sans assets in site/vendor/nebula-sans/ with included SIL Open Font License and provenance."
+  }
+}
