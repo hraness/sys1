@@ -85,7 +85,7 @@ pre code { font-size: inherit; }
 .ecosystem-header, .ecosystem-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 2fr); gap: 2rem; }
 .ecosystem-header { padding-bottom: .8rem; color: var(--muted); font-size: .8rem; border-bottom: 1px solid var(--line); }
 .ecosystem-row { padding-block: 1.4rem; border-bottom: 1px solid var(--grid); font-size: .94rem; }
-.ecosystem-row a { color: var(--foreground); font-size: 1rem; font-weight: 500; }
+.ecosystem-row a, .ecosystem-row strong { color: var(--foreground); font-size: 1rem; font-weight: 500; }
 .ecosystem-row a:hover { color: var(--primary); }
 .project-kind { display: block; color: var(--muted); font-size: .8rem; margin-top: .15rem; }
 .ecosystem-row p { margin: 0; color: var(--muted); }

@@ -39,8 +39,8 @@ const widest = (text: string) => Math.max(...lines(text).map((line) => line.leng
 describe("sys1 help", () => {
   test("bare invocation is a short start screen", async () => {
     const result = await sys1([]);
-    expect(result).toEqual({ code: 0, stderr: "", stdout: `Sys1 helps coding agents review changes against your repository's rules, with
-probability-scored answers from hosted Jev, a local model, or your own server.
+    expect(result).toEqual({ code: 0, stderr: "", stdout: `Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted
+model, so the agent saves tokens and time.
 
 Start here
   sys1 setup --dry-run       See what setup would download

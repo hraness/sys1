@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sys1 · Agent code review with Jev or a local model</title>
-    <meta name="description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
+    <title>Sys1 · Save your coding agent tokens and time</title>
+    <meta name="description" content="Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time." />
     <link rel="canonical" href="https://sys1.io/" />
-    <meta property="og:title" content="Sys1 · Agent code review with Jev or a local model" />
-    <meta property="og:description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
+    <meta property="og:title" content="Sys1 · Save your coding agent tokens and time" />
+    <meta property="og:description" content="Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sys1 · Agent code review with Jev or a local model" />
-    <meta name="twitter:description" content="Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server." />
+    <meta name="twitter:title" content="Sys1 · Save your coding agent tokens and time" />
+    <meta name="twitter:description" content="Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time." />
     <!-- sys1-launch-media:start -->
     <meta property="og:image" content="https://sys1.io/media/sys1-launch-share.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -89,7 +89,7 @@
       "@id": "https://sys1.io/#software",
       "url": "https://sys1.io/",
       "name": "Sys1",
-      "description": "Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server.",
+      "description": "Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Linux, Windows",
       "softwareVersion": "0.17.0",
@@ -151,13 +151,13 @@
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-copy">
         <a class="launch-note" href="/introducing-sys1">Introducing Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-        <h1 id="hero-heading">Review your <span class="hero-phrase">agent’s changes.</span></h1>
-        <p class="summary">Sys1 is an open-source CLI and agent skill for Codex, Claude Code, and Devin. Give your agent reusable instructions to review repository changes and check completion claims, using hosted Jev or a backend you run.</p>
+        <h1 id="hero-heading">Stop spending big-model tokens <span class="hero-phrase">on small decisions.</span></h1>
+        <p class="summary">Coding agents burn minutes and context on questions with short answers. Does this diff break a rule? Did that test really fail? Is the branch actually pushed? Sys1 hands those questions to Jev, TypeSafe’s fast hosted decision model. It answers in under a second for a fraction of a cent and gives your agent a probability instead of a paragraph. It works with Codex, Claude Code, and Devin.</p>
         <div class="actions">
           <a class="button" href="#install">Install Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
           <a class="text-link" href="/skills">Choose a workflow</a>
         </div>
-        <p class="hero-note">v0.17.0 · MIT · Review and verify are experimental and advisory. Local models are experimental; hosted Jev is opt-in.</p>
+        <p class="hero-note">v0.17.0 · MIT · Open source. Review and verify are experimental and advisory. Hosted Jev is opt-in; an experimental local model runs on your machine.</p>
         </div>
         <figure class="decision-demo" data-decision-demo>
           <div class="decision-board">
@@ -178,7 +178,7 @@
       </section>
 
       <section class="section launch-feature" aria-labelledby="launch-heading">
-        <div><h2 id="launch-heading">Meet Sys1.</h2><p>See how a repository rule becomes a question, how a model answers, and where your agent takes over.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
+        <div><h2 id="launch-heading">Meet Sys1.</h2><p>Why a fast model beside a smart one saves tokens and time, how ALGAL fits in, and what our first trial did and did not show.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
         <figure>
           <video controls playsinline preload="none" width="1920" height="1080" poster="/media/sys1-launch-poster.jpg" aria-label="Introducing Sys1 launch film" aria-describedby="film-caption">
             <source src="/media/sys1-launch.mp4" type="video/mp4" />
@@ -189,23 +189,37 @@
         </figure>
       </section>
 
+      <section id="system" class="section" aria-labelledby="system-heading">
+        <div class="section-intro">
+          <h2 id="system-heading">Three parts, one system.</h2>
+          <p>People think at two speeds: slow and deliberate for hard problems, fast and instinctive for everything else. Coding agents only have the slow speed. Sys1 adds the fast one, and ALGAL gives the system a way to keep what works.</p>
+        </div>
+        <div class="ecosystem-table" role="table" aria-label="The three parts of the system">
+          <div class="ecosystem-header" role="row"><span role="columnheader">Part</span><span role="columnheader">What it does</span><span role="columnheader">What you get</span></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><strong>Your coding agent</strong><span class="project-kind">The large language model</span></div><p role="cell">Plans, writes code, and reasons through the problems that need it.</p><p role="cell">Its context and budget stay on real work instead of routine checks.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://docs.typesafe.ai/models">Jev</a><span class="project-kind">The fast decision model</span></div><p role="cell">Answers yes/no, choice, and score questions with probabilities. Sys1 routes each question and checks every answer.</p><p role="cell">About $0.0004 and 0.4 seconds a decision, from TypeSafe’s published workflow figures. Output tokens are free.</p></div>
+          <div class="ecosystem-row" role="row"><div role="cell"><a href="https://algal.computer">ALGAL</a><span class="project-kind">The language that remembers</span></div><p role="cell">A programming language for agent programs that wait for approval, resume after a crash, and replay from receipts.</p><p role="cell">A procedure that proves itself on tested cases becomes a reusable program, so the harness improves with use.</p></div>
+        </div>
+        <p class="section-footnote">Sys1 already learns on a small scale: draft a rule from a mistake your agent made, and every later review checks for it. Sys1 and ALGAL are separate open-source projects today that call the same Jev decision API. We have measured cost per decision and output size, not whole-task token savings yet.</p>
+      </section>
+
       <section id="how-it-works" class="section" aria-labelledby="review-heading">
         <div class="section-intro">
-          <h2 id="review-heading">Give your agent a review checkpoint.</h2>
-          <p>Project skills give Codex, Claude Code, or Devin the same repeatable workflow. Install the instructions in your repository, then choose when your agent uses them.</p>
+          <h2 id="review-heading">Cheap checks your agent runs itself.</h2>
+          <p>Install a project skill for Codex, Claude Code, or Devin. Your agent asks Jev the small questions and saves its own reasoning for the findings worth a closer look.</p>
         </div>
         <dl class="workflow-list">
-          <div><dt>Review the change<code>sys1-review</code></dt><dd><p>Preview a batch of Git changes, check it against repository rules, investigate candidates, and record feedback. Two bundled rules check JavaScript and TypeScript for newly empty catch blocks and removed test assertions. Add your own rules for other checks.</p><a href="/docs#audit">Set up agent review →</a></dd></div>
-          <div><dt>Check the completion claim<code>sys1-verify</code></dt><dd><p>Compare an agent’s saved completion message with reachable Git, pull-request, and page evidence. Unavailable evidence stays unverifiable. The skill works with a message from any coding agent.</p><a href="/docs#verify">Verify a completion claim →</a></dd></div>
-          <div><dt>Keep the full log out of context<code>system-one-verify · separate tool</code></dt><dd><p>Run a known noisy test or build once, return a compact result, and keep the full log on disk. This separate skill from System One Skills needs neither Sys1 nor a model backend.</p><a href="/skills#shipped">Use compact check output →</a></dd></div>
+          <div><dt>Review the change<code>sys1-review</code></dt><dd><p>Check a batch of Git changes against your repository’s rules. The preview is free, an unchanged batch costs no new requests for 24 hours, and findings you have already seen stay out of the output. Turn a real mistake into a new rule. Two bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript.</p><a href="/docs#audit">Set up agent review →</a></dd></div>
+          <div><dt>Check the completion claim<code>sys1-verify</code></dt><dd><p>Before your agent says “done,” compare its message with Git, pull requests, and live pages. A claimed push with nothing pushed shows up as a contradiction. Missing evidence stays unverifiable. Works with a message from any coding agent.</p><a href="/docs#verify">Verify a completion claim →</a></dd></div>
+          <div><dt>Keep the full log out of context<code>system-one-verify · separate tool</code></dt><dd><p>Run a noisy test or build once, hand your agent a short result, and keep the full log on disk. Across 563 real runs it returned 35% less text. This separate skill from System One Skills needs neither Sys1 nor a model.</p><a href="/skills#shipped">Use compact check output →</a></dd></div>
         </dl>
         <p class="section-footnote">Review scores rank candidates; they are not calibrated defect probabilities. Keep your repository’s tests and review.</p>
       </section>
 
       <section id="decision-api" class="section" aria-labelledby="how-heading">
         <div class="section-intro">
-          <h2 id="how-heading">Build with System One decisions.</h2>
-          <p>System One models answer small, structured questions with probabilities. Jev is TypeSafe’s hosted model for this approach. Sys1 puts that decision interface inside an agent workflow or your own application.</p>
+          <h2 id="how-heading">Put fast decisions in your own code.</h2>
+          <p>System One models answer small, structured questions with probabilities. Jev is TypeSafe’s hosted model for this approach. Ask a yes/no, choice, or score question and get numbers your code can act on, not text to parse.</p>
           <p>Call <code>POST /v1/systemone</code> through a loopback gateway or use the Node and Bun client. Choose hosted Jev, experimental local Qwen, or an OpenJev server you run. Local answers approximate Jev; they are not calibrated Jev output. <a href="/docs#system-one">Understand System One and Jev</a>.</p>
         </div>
         <ol class="api-flow" aria-label="How an application uses Sys1">

@@ -1,7 +1,7 @@
 {
   "name": "@hraness/sys1",
   "version": "0.17.0",
-  "description": "Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server.",
+  "description": "Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time.",
   "type": "module",
   "license": "MIT",
   "packageManager": "bun@1.3.14",

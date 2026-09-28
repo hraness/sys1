@@ -6,8 +6,8 @@ export const SYS1_COMMANDS = [
   "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "help", "version",
 ] as const;
 
-const DESCRIPTION = `Sys1 helps coding agents review changes against your repository's rules, with
-probability-scored answers from hosted Jev, a local model, or your own server.`;
+const DESCRIPTION = `Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted
+model, so the agent saves tokens and time.`;
 
 export function bareScreen(version: string): string {
   return `${DESCRIPTION}

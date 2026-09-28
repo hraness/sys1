@@ -1,8 +1,15 @@
 # Sys1
 
-Sys1 helps coding agents review changes against your repository's rules, with
-probability-scored answers from hosted Jev, a local model, or your own server.
-Review and final-message verification are experimental and advisory.
+**Stop spending big-model tokens on small decisions.**
+
+Coding agents burn minutes and context on questions with short answers. Does
+this diff break a rule? Did that test really fail? Is the branch actually
+pushed? Sys1 hands those questions to Jev, TypeSafe's fast hosted decision
+model. It answers in under a second for about $0.0004 a decision (TypeSafe's
+published workflow figures) and gives your agent a probability instead of a
+paragraph. It ships as project
+skills for Codex, Claude Code, and Devin, plus a CLI and an API. Review and
+final-message verification are experimental and advisory.
 
 Underneath, Sys1 lets agents and applications ask yes/no, choice, and score
 questions and get validated answers with probabilities. You choose who answers:
@@ -17,6 +24,23 @@ Latest release: v0.17.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Introducing Sys1](https://sys1.io/introducing-sys1) · [Documentation](https://sys1.io/docs) · [Agent skills](https://sys1.io/skills) · [Model comparison](https://sys1.io/compare)
+
+## Three parts: the agent, Jev, and ALGAL
+
+People think at two speeds: slow and deliberate for hard problems, fast and
+instinctive for the rest. Coding agents only have the slow speed.
+
+| Part | What it does | What you get |
+| --- | --- | --- |
+| Your coding agent (the LLM) | Plans, writes code, and reasons through hard problems. | Its context and budget stay on real work. |
+| [Jev](https://docs.typesafe.ai/models), through Sys1 | Answers yes/no, choice, and score questions with probabilities; Sys1 routes each question and checks every answer. | About $0.0004 and 0.4 s a decision on TypeSafe's published figures. Output tokens are free. |
+| [ALGAL](https://algal.computer) | A programming language for agent programs that wait for approval, resume after a crash, and replay from receipts. | A procedure that proves itself on tested cases becomes a reusable program, so the harness improves with use. |
+
+Sys1 already learns on a small scale: draft a [rule](docs/review.md#draft-a-repository-rule)
+from a mistake your agent made and every later review checks for it; unchanged
+reviews are reused for 24 hours instead of paid for again. Sys1 and ALGAL are
+separate open-source projects today that call the same Jev decision API. We
+have measured cost per decision and output size, not whole-task token savings.
 
 ## Jev, System One models, and Sys1
 

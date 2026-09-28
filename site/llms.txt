@@ -1,6 +1,6 @@
 # Sys1
 
-> Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server.
+> Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time.
 
 Install the `sys1-review` project skill for Codex, Claude Code, or Devin to preview Git changes, run reusable rules, investigate candidates, and record feedback. The independent `sys1-verify` project skill runs `sys1 verify` to compare an agent's completion message with reachable Git, pull-request, and page evidence. Install it with `sys1 verify setup codex`, `claude-code`, or `devin`. Both commands are experimental and advisory: model scores are not calibrated defect probabilities, and missing evidence does not prove completion.
 

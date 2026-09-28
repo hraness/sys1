@@ -185,3 +185,19 @@ remaining source/copy blocker was found. Factual confidence is now 2 and the
 revised page's admission total is 12/12. This records editorial/source
 admission; aggregate validation, publication, and production evidence remain
 with the integration owner's ordinary delivery workflow.
+
+## Tokens and time — 2026-09-28
+
+Supersedes the “Agent workflows and discovery” hero and metadata at the user's
+request: the copy read as too technical and hid the key benefit. The title is
+“Sys1 · Save your coding agent tokens and time”; the description is the new
+PRODUCT.md one-liner verbatim. The H1 is “Stop spending big-model tokens on
+small decisions.” and the summary names three concrete small questions.
+A new “Three parts, one system.” section before “How it works” reuses the
+existing ecosystem-table layout for the agent, Jev, and ALGAL, and states that
+Sys1 and ALGAL are separate projects sharing the Jev decision API and that
+whole-task token savings are not yet measured. Cost figures cite TypeSafe's
+published workflow numbers; the 35% figure is the System One Skills replay.
+One CSS change: `.ecosystem-row strong` matches the linked part names. Visual
+structure, tokens, demo behavior, and footer are unchanged. Draft: Claude Code
+on 2026-09-28. Human review: pending the user.
