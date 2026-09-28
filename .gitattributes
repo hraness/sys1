@@ -4,6 +4,9 @@
 /benchmarks/laya/** text eol=lf
 /benchmarks/reviewer/** text eol=lf
 /benchmarks/reviewer-next/** text eol=lf
+/benchmarks/workflows/** text eol=lf
+/examples/workflows/** text eol=lf
+/scripts/workflow-baselines.ts text eol=lf
 
 # Canonical brand provenance uses byte hashes across all CI platforms.
 /brand/*.json text eol=lf

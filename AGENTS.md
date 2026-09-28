@@ -56,6 +56,10 @@
 - `scripts/` holds the dist build, isolated exact-tarball package smoke,
   cross-platform release install verification, and `release-notes.ts`, which
   renders and verifies the GitHub Release page from `CHANGELOG.md`.
+- `scripts/evaluate-profile.ts` runs source-checkout profile experiments with
+  offline validation and opt-in calls. `examples/workflows/` and
+  `benchmarks/workflows/` contain frozen profiles, development and screening
+  examples, and baseline provenance; `docs/profile-evaluation.md` is the guide.
 - `CHANGELOG.md` holds one section per version; the release workflow copies
   that section onto the release page and fails when it is missing.
 - `site/` is the static sys1.io landing page; it has no product-runtime

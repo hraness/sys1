@@ -520,6 +520,10 @@ the definition as JSON for `sys1 eval --profile triage.json`, which accepts
 only `{"state": ...}` on stdin or `--file`.
 [Start from the ticket-triage profile](examples/ticket-triage.profile.json).
 
+From a source checkout, [evaluate profiles on labeled examples](docs/profile-evaluation.md)
+with an offline preview, request limits, and per-question results. Experimental
+examples cover failure triage, excerpt relevance, and claim support.
+
 For a direct Kev endpoint, use `createClient({ baseUrl: "http://127.0.0.1:8009",
 adapter: "kev" })` with an ordinary request containing `model: "kev-latest"`.
 When calling the Sys1 gateway, leave the client adapter unset. Routing metadata

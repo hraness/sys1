@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "corpus": "workflow-synthetic-screening-2026-09-28",
+  "frozen_at": "2026-09-28T18:04:50.001815+00:00",
+  "status": "frozen-before-live-calls",
+  "purpose": "Synthetic workflow screening with separate illustrative development examples.",
+  "authoring": {
+    "profiles": "Unchanged prototype-1 profiles copied from the September 28 exploration.",
+    "development": "The original eight illustrative examples per profile, copied byte-for-byte.",
+    "screening": "Eight new examples per workflow authored by a separate Codex worker in this task. The worker read the frozen rubrics and development examples to avoid reusing their scenarios; no model predictions were available. These are held out from profile changes for this screening run.",
+    "baselines": "Written by the same Codex worker before live calls or model outputs. Baselines see only state; IDs and expected labels are used only for reporting. Rules were not tuned against baseline accuracy.",
+    "author": "Codex worker trial_cases",
+    "model_calls_before_freeze": 0,
+    "rights": "Original synthetic text; no private logs, third-party source excerpts, or credentials."
+  },
+  "partitions": {
+    "development": {
+      "cases_per_workflow": 8,
+      "use": "Illustrative development examples; exclude from held-out screening summaries."
+    },
+    "screening": {
+      "cases_per_workflow": 8,
+      "use": "Independent authored synthetic challenge cases in different source families; freeze before predictions."
+    }
+  },
+  "baseline_methods": {
+    "failure-triage": "Diagnostic error-signature matching; success or missing exit status and zero or multiple matched categories return unknown.",
+    "evidence-relevance": "Unweighted task-token overlap after a fixed stop-word list: 0 overlap -> 0; below 0.3 -> 1; below 0.65 -> 2; otherwise -> 3.",
+    "claim-support": "Weak literal full-claim match after normalization, then one added or removed not; otherwise insufficient_evidence. Cannot reliably resolve paraphrases, quotes, numbers, scope, or compound claims."
+  },
+  "limitations": [
+    "48 authored examples total, including 24 development examples and 24 screening examples. The screening set is small and synthetic, not a population-quality benchmark.",
+    "The screening author saw the rubrics and development cases. Independent authoring and distinct fictional source families do not provide blind population sampling.",
+    "Each workflow has eight screening cases. Accuracy describes these cases only; it does not establish calibration, workflow time saved, correction effort, source-location recall, or real-task effectiveness.",
+    "Relevance labels assess coverage, not truth or source reliability. All excerpts remain available to the caller.",
+    "The literal claim baseline is deliberately weak and may accept quoted claims or miss contradictions. A model outperforming it is not sufficient evidence of practical value.",
+    "After any predictions are inspected, preserve these files and report revisions as new experiments instead of tuning this screening set."
+  ],
+  "files": [
+    {
+      "path": "examples/workflows/failure-triage.profile.json",
+      "role": "profile",
+      "workflow": "failure-triage",
+      "sha256": "da067bf8efb546af6c1c13940f48a5ce36e67c59661c1a708b0790f37efa16bd",
+      "bytes": 2276
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.development.json",
+      "role": "development",
+      "workflow": "failure-triage",
+      "sha256": "845b622b9c15990fc59f69e8d6ba45fd7cac7a9d10113dd5667805420259cf03",
+      "bytes": 3334
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.screening.json",
+      "role": "screening",
+      "workflow": "failure-triage",
+      "sha256": "e2d1513c24a8e80233899c31fb6f2c1c401fffc2b8405b27335de90a687464d1",
+      "bytes": 4023
+    },
+    {
+      "path": "examples/workflows/evidence-relevance.profile.json",
+      "role": "profile",
+      "workflow": "evidence-relevance",
+      "sha256": "a4e0ccfea3cf5f4951c5ffd838f9acfaaa33135e8e6bf20a6bdc4b448120ae0d",
+      "bytes": 1392
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.development.json",
+      "role": "development",
+      "workflow": "evidence-relevance",
+      "sha256": "8ae95310eeb368c5ca4533f3e58e459ef8d8da3c65a6148f6d1b11253a2b7e7e",
+      "bytes": 2608
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.screening.json",
+      "role": "screening",
+      "workflow": "evidence-relevance",
+      "sha256": "b6eaf330a0910e4c0f555c82d0632c1978a4fe1de7f498864eaa555cec0201f2",
+      "bytes": 3187
+    },
+    {
+      "path": "examples/workflows/claim-support.profile.json",
+      "role": "profile",
+      "workflow": "claim-support",
+      "sha256": "d63ab5b57de84c9cca1aac72da766e5bbf0a6eff42710b91f84617f487585c3b",
+      "bytes": 1500
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.development.json",
+      "role": "development",
+      "workflow": "claim-support",
+      "sha256": "e8c5998b1b0f7309e3ee8c770bc933121bbcf2af46559ffac2227ae644cfcf19",
+      "bytes": 2455
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.screening.json",
+      "role": "screening",
+      "workflow": "claim-support",
+      "sha256": "2f065f444b355ac19281411a41f613e0de974e413f1a72c5038518295aabbf7a",
+      "bytes": 3048
+    },
+    {
+      "path": "scripts/workflow-baselines.ts",
+      "role": "baseline",
+      "sha256": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "bytes": 7562
+    },
+    {
+      "path": "benchmarks/workflows/README.md",
+      "role": "methodology",
+      "sha256": "235e3c9c8d23eb070ec02d6619476967942a2cc4d7ab42413b0b0d055da0f07d",
+      "bytes": 2872
+    }
+  ],
+  "units": [
+    {
+      "id": "source-type-error-with-quoted-instruction",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "typescript-account-check"
+    },
+    {
+      "id": "assertion-mismatch",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "cart-discount-test"
+    },
+    {
+      "id": "missing-declared-dependency",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "markdown-doc-generator"
+    },
+    {
+      "id": "repository-access-denied",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "private-repository-access"
+    },
+    {
+      "id": "unsupported-runtime",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "node-build-tool"
+    },
+    {
+      "id": "dns-failure",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "test-api-dns"
+    },
+    {
+      "id": "independent-parallel-failures",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "parallel-source-access-checks"
+    },
+    {
+      "id": "missing-diagnostic-context",
+      "workflow": "failure-triage",
+      "partition": "development",
+      "source_family": "repository-validation-summary"
+    },
+    {
+      "id": "triage-screen-python-parser",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "python-inventory-loader",
+      "label_reason": "Python parser explicitly stops before the import job runs."
+    },
+    {
+      "id": "triage-screen-http-contract-test",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "local-billing-contract-test",
+      "label_reason": "Only the failed HTTP-status assertion is diagnosed; the response rules out a transport failure."
+    },
+    {
+      "id": "triage-screen-ruby-bundle",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "ruby-catalog-bundle",
+      "label_reason": "Bundler identifies an absent locked gem."
+    },
+    {
+      "id": "triage-screen-archive-filesystem",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "local-tar-archive",
+      "label_reason": "The operating system denies reading the archive."
+    },
+    {
+      "id": "triage-screen-jvm-bytecode",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "jvm-schema-checker",
+      "label_reason": "Class-file and runtime versions are incompatible before program startup."
+    },
+    {
+      "id": "triage-screen-tls-handshake",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "weather-feed-tls",
+      "label_reason": "Connection closes during TLS with no HTTP response."
+    },
+    {
+      "id": "triage-screen-successful-security-examples",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "security-manual-render",
+      "label_reason": "Successful exit status makes diagnostic-looking sample text irrelevant to failure triage."
+    },
+    {
+      "id": "triage-screen-independent-rust-and-payments",
+      "workflow": "failure-triage",
+      "partition": "screening",
+      "source_family": "independent-rust-payment-jobs",
+      "label_reason": "Two independent failures are present without a first cause."
+    },
+    {
+      "id": "unrelated-recipe",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "cake-recipe"
+    },
+    {
+      "id": "lexical-near-miss",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "coffee-java-word-overlap"
+    },
+    {
+      "id": "background-only",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "readiness-definition"
+    },
+    {
+      "id": "supporting-cause-only",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "readiness-port-mismatch"
+    },
+    {
+      "id": "direct-port-answer",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "readiness-port-guide"
+    },
+    {
+      "id": "quoted-score-instruction-only",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "unrelated-score-comment"
+    },
+    {
+      "id": "direct-answer-with-quoted-instruction",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "readiness-guide-with-comment"
+    },
+    {
+      "id": "partial-command-answer",
+      "workflow": "evidence-relevance",
+      "partition": "development",
+      "source_family": "preview-command"
+    },
+    {
+      "id": "relevance-screen-library-two-rules",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "willow-library-visitor-policy",
+      "label_reason": "Both visitor-card and seat-booking questions are answered."
+    },
+    {
+      "id": "relevance-screen-museum-hours-gap",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "harbor-museum-calendar",
+      "label_reason": "Opening time is supplied, while holiday status is absent."
+    },
+    {
+      "id": "relevance-screen-garden-context",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "apple-orchard-establishment-guide",
+      "label_reason": "Terminology and scope are relevant but no watering advice is given."
+    },
+    {
+      "id": "relevance-screen-join-different-domain",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "carpentry-join-description",
+      "label_reason": "Join and duplicate refer to woodworking rather than SQL."
+    },
+    {
+      "id": "relevance-screen-unverified-direct-fact",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "cedar-hall-notice-transcription",
+      "label_reason": "The requested entrance is named; authenticity is outside the rubric."
+    },
+    {
+      "id": "relevance-screen-rain-and-wind",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "lake-sailing-forecast",
+      "label_reason": "Rain chance is supplied, while maximum wind speed is absent."
+    },
+    {
+      "id": "relevance-screen-queue-terminology",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "image-queue-overview",
+      "label_reason": "Queue terminology is defined but neither incident fact is supplied."
+    },
+    {
+      "id": "relevance-screen-restated-question-injection",
+      "workflow": "evidence-relevance",
+      "partition": "screening",
+      "source_family": "printer-recycling-question-spam",
+      "label_reason": "The excerpt repeats the question and requests a score without giving evidence."
+    },
+    {
+      "id": "explicit-support",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "explicit-negation",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "supported-negative-claim",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "different-version",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "unrelated-excerpt",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "quoted-instruction",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "partial-multipart-support",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "contradiction-with-missing-detail",
+      "workflow": "claim-support",
+      "partition": "development",
+      "source_family": "fable-notes-manual"
+    },
+    {
+      "id": "support-screen-negative-sync-policy",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "harbor-sync-local-file-policy",
+      "label_reason": "Every local file staying in place explicitly supports the negative deletion claim."
+    },
+    {
+      "id": "support-screen-numeric-contradiction",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "cedar-api-plan-table",
+      "label_reason": "The free-plan quota contradicts the claimed number; missing webhook detail does not override this."
+    },
+    {
+      "id": "support-screen-version-gap",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "prism-recorder-archived-manual",
+      "label_reason": "The excerpt covers only an earlier version and does not establish behavior of version 5.0."
+    },
+    {
+      "id": "support-screen-compound-transit",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "lumen-transit-timetable",
+      "label_reason": "Sunday service is established but bicycle permission is missing."
+    },
+    {
+      "id": "support-screen-measurement-unit",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "orchard-sensor-output-reference",
+      "label_reason": "Both requested measurements and units are explicit."
+    },
+    {
+      "id": "support-screen-platform-scope",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "atlas-desk-platform-reference",
+      "label_reason": "The same version and tablet scope explicitly lack keyboard shortcuts."
+    },
+    {
+      "id": "support-screen-quoted-claim-injection",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "meadow-archive-support-ticket",
+      "label_reason": "An unanswered question and a label instruction establish no backup configuration."
+    },
+    {
+      "id": "support-screen-negative-claim-opposed",
+      "workflow": "claim-support",
+      "partition": "screening",
+      "source_family": "river-kit-registration-guide",
+      "label_reason": "Mandatory registration for local export explicitly contradicts the negative claim."
+    }
+  ],
+  "revisions": [
+    {
+      "at": "2026-09-28T18:09:11.644206+00:00",
+      "kind": "code-only-interoperability-and-documentation",
+      "model_calls_before_revision": 0,
+      "changes": "Baseline CLI accepts the evaluator's optional split/family identifiers and preserves them in output; identifiers use the same format. Added the screening README. No prediction rule, rubric, profile, fixture, expected label, or source family changed.",
+      "baseline_sha256_before": "1d5e4e6a7a93c608bc2e9881ba7fa47b02c71b2523aee4da114054eebbb56984",
+      "baseline_sha256_after": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "validation": "Strict isolated TypeScript compilation passed. Tagged fixtures are accepted by both tools, metadata survives baseline output, predictions are unchanged, and both tools reject an invalid family identifier."
+    }
+  ]
+}

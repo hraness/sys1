@@ -1,5 +1,10 @@
 # Reproduce the decision evaluation
 
+For the experimental failure-triage, excerpt-relevance, and claim-support
+profiles, use the [profile evaluation guide](../docs/profile-evaluation.md).
+Their development and screening fixtures live in `workflows/`; the historical
+decision studies below retain their original runners and grading.
+
 For cross-model Jev-class comparisons, use the pinned external [JevBench v1.2.6](https://github.com/fstandhartinger/jevbench/tree/v1.2.6) scorecard and its [immutable result artifact](https://github.com/fstandhartinger/jevbench/blob/275763201a29d6083d4ee1431d709c296ef81281/results/v1.2/jevbench-v1.2-results.json). This repository's fixtures answer a narrower question: whether a specific Sys1 adapter, model pin, and local/hosted transport behave as expected. They are not a replacement leaderboard and their scores must not be blended with JevBench.
 
 `decisions-v2.json` contains 72 public synthetic cases: 24 choices, 24 yes/no

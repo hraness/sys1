@@ -114,6 +114,10 @@ With `--profile`, the input is an object containing only `state`. Questions and 
 
 ## Improve prompts before training
 
+The [profile evaluator](profile-evaluation.md) runs a fixed profile against
+labeled examples from a source checkout. Validate the dataset offline before
+making a limited set of calls to your configured gateway.
+
 Start with a labelled dataset representing your application's actual decisions. Freeze train, development, calibration, and final test partitions before comparing candidates. Group duplicate tickets, related documents, and variants of the same example into one partition to avoid leakage.
 
 Use development examples to compare small, explicit profile revisions: clearer instructions, distinct option descriptions, consistent state fields, and an `other` or `unknown` option where that is a legitimate outcome. Change one factor at a time. Compare both errors and abstention behavior; a high returned confidence is not a measured correctness rate. Option order can affect Kev's answer, so test reordered options while preserving their names.
