@@ -34,7 +34,8 @@ function imageObject() {
   };
 }
 
-function videoObject(pageUrl: string) {
+function videoObject(page: typeof media.pages[number]) {
+  const pageUrl = page.url;
   return {
     "@context": "https://schema.org", "@type": "VideoObject", "@id": `${pageUrl}#launch-film`,
     name: media.name, description: media.description, thumbnailUrl: url(media.poster.src),
@@ -43,7 +44,9 @@ function videoObject(pageUrl: string) {
     inLanguage: "en", creditText: media.credit,
     caption: { "@type": "MediaObject", contentUrl: url(media.captions.src), encodingFormat: media.captions.contentType, inLanguage: "en" },
     associatedMedia: { "@type": "MediaObject", name: "Visual transcript", contentUrl: url(media.transcript.src), encodingFormat: media.transcript.contentType, inLanguage: "en" },
-    isPartOf: { "@id": pageUrl },
+    isPartOf: { "@id": page.article ? `${pageUrl}#article` : url("/#website") },
+    about: { "@id": url("/#software") },
+    publisher: { "@id": "https://hraness.com/#organization" },
   };
 }
 
@@ -54,6 +57,8 @@ function projectPage(source: string, page: typeof media.pages[number]): string {
   const body = source.slice(split);
   assert.ok(head.includes(`<link rel="canonical" href="${page.url}"`), `${page.file}: canonical differs from media record`);
   head = head.replace(/    <!-- sys1-launch-media:start -->[\s\S]*?    <!-- sys1-launch-media:end -->\n/gu, "")
+    // Registered pages use the reviewed film crop instead of the site's generic card.
+    .replace(/^[ \t]*<meta (?:property="og:image(?::[^"]+)?"|name="twitter:image(?::[^"]+)?")[^>]*>\r?\n/gmu, "")
     .replace(/(<meta name="twitter:card" content=")[^"]+("\s*\/>)/u, "$1summary_large_image$2");
   assert.ok(head.includes('name="twitter:card" content="summary_large_image"'), `${page.file}: missing Twitter card`);
   if (page.article) {
@@ -63,7 +68,7 @@ function projectPage(source: string, page: typeof media.pages[number]): string {
       if (typeof value !== "object" || value === null || !("@type" in value) || value["@type"] !== "BlogPosting") return original;
       assert.ok(!found, "Duplicate BlogPosting");
       found = true;
-      return `<script type="application/ld+json">\n${json({ ...value, image: imageObject() })}\n    </script>`;
+      return `<script type="application/ld+json">\n${json({ ...value, image: imageObject(), isPartOf: { "@id": url("/#website") }, video: { "@id": `${page.url}#launch-film` } })}\n    </script>`;
     });
     assert.ok(found, `${page.file}: missing BlogPosting`);
   }
@@ -76,7 +81,7 @@ function projectPage(source: string, page: typeof media.pages[number]): string {
     `    <meta property="og:image:alt" content="${escape(media.social.alt)}" />`,
     `    <meta name="twitter:image" content="${url(media.social.src)}" />`,
     `    <meta name="twitter:image:alt" content="${escape(media.social.alt)}" />`,
-    `    <script type="application/ld+json" data-sys1-launch-video>\n${json(videoObject(page.url))}\n    </script>`,
+    `    <script type="application/ld+json" data-sys1-launch-video>\n${json(videoObject(page))}\n    </script>`,
     end,
   ].join("\n");
   // Insert before the icon without changing reviewed body, navigation, or copy.
@@ -163,9 +168,12 @@ export async function checkLaunchMedia(): Promise<void> {
     assert.equal([...html.matchAll(/name="twitter:image"/gu)].length, 1, `${page.file}: duplicate or missing Twitter image`);
     assert.equal([...html.matchAll(/"@type": "VideoObject"/gu)].length, 1, `${page.file}: duplicate or missing video schema`);
   }
-  // Prove optionality on a real, intentionally image-free documentation page.
+  // Documentation may keep the generic brand card without inheriting editorial media.
   const docs = await readFile(resolve(root, "site/docs.html"), "utf8");
-  assert.ok(!/property="og:image"|name="twitter:image"|"@type"\s*:\s*"(?:ImageObject|VideoObject)"/u.test(docs), "Documentation should remain image-free");
+  assert.ok(!/sys1-launch-media:start|\/media\/sys1-launch|"@type"\s*:\s*"(?:ImageObject|VideoObject)"/u.test(docs), "Documentation must not inherit launch media");
+  for (const [, src] of docs.matchAll(/<meta (?:property="og:image"|name="twitter:image") content="([^"]+)"/gu)) {
+    assert.equal(src, url("/og.png"), "Documentation may only use its generic brand card");
+  }
 }
 
 if (import.meta.main) {

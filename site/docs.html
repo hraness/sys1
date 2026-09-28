@@ -9,10 +9,15 @@
     <meta property="og:title" content="Docs · Sys1" />
     <meta property="og:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/docs" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://sys1.io/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Docs · Sys1" />
     <meta name="twitter:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
+    <meta name="twitter:image" content="https://sys1.io/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
@@ -28,6 +33,7 @@
   "description": "Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request.",
   "isPartOf": {
     "@type": "WebSite",
+    "@id": "https://sys1.io/#website",
     "name": "Sys1",
     "url": "https://sys1.io/"
   }
@@ -132,6 +138,7 @@ sys1 status</code></pre>
           <section id="system-one" class="docs-section" aria-labelledby="system-one-title">
             <h2 id="system-one-title">Jev and System One models</h2>
             <p class="docs-intro"><a href="https://docs.typesafe.ai/concepts/system-one">System One models</a> evaluate supplied state and answer questions in a format you define. Jev is TypeSafe’s hosted model. Sys1 connects this decision API to agent workflows and application code, and can route the same request format to other configured backends.</p>
+            <p>Applications can use Sys1’s open-source, Jev-compatible HTTP gateway on <code>127.0.0.1</code>, or call it through the Node and Bun client. Both use <code>POST /v1/systemone</code>.</p>
             <dl class="docs-definition-list">
               <div><dt>Noul: yes or no</dt><dd>Ask whether a condition holds. The <code>noul</code> field gives the probability of yes, from zero to one.</dd></div>
               <div><dt>Choice: named alternatives</dt><dd>Define the allowed answers. Receive the chosen name, the probability of each option, and confidence.</dd></div>
@@ -223,7 +230,7 @@ sys1 verify --message /tmp/final-message.txt \
               <div><dt>Compatible HTTP service</dt><dd>Register a service that implements <code>POST /v1/systemone</code> and <code>GET /v1/models</code>. Select it explicitly; adding a backend does not alter default routing.</dd></div>
               <div><dt>Kev</dt><dd>Kev is a set of trainable decision models that runs as your own server. Register it with <code>--adapter kev</code>. Sys1 handles its required fields, two-decimal probability output, and structured score labels. You own the checkpoint, server, and any training.</dd></div>
             </dl>
-            <p class="docs-footnote">Sys1 adapters return validated Jev-compatible answer shapes. They do not make generic local weights interchangeable with Jev, OpenJev, or another provider's calibration.</p>
+            <p class="docs-footnote">Sys1 adapters return validated Jev-compatible answer shapes. They do not make generic local weights interchangeable with Jev, OpenJev, or another provider's calibration. For background on TypeSafe and Jev, see the <a href="https://hraness.com/typesafe">Hraness TypeSafe dossier</a>.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1#external-system-one-backends">External backend guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1#local-models">Local model lifecycle <span aria-hidden="true">↗</span></a></div>
           </section>
 

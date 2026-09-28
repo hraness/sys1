@@ -199,7 +199,7 @@ test("a different physical directory at the same path cannot replace the capture
 });
 
 test("all static routes point palette and Lantern styles at their distinct owners", async () => {
-  for (const page of ["index", "docs", "skills", "compare", "compare-history", "docs/evaluations", "docs/evaluations-history"]) {
+  for (const page of ["index", "docs", "skills", "compare", "docs/evaluations", "docs/evaluations-history"]) {
     const html = await readFile(new URL(`../site/${page}.html`, import.meta.url), "utf8");
     expect(html).toContain('href="/vendor/hraness-appearance/palette-bridge.css"');
     expect(html).toContain('href="/vendor/hraness-lantern/lantern-material.css"');

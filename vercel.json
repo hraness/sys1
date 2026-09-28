@@ -5,6 +5,13 @@
   "buildCommand": "true",
   "outputDirectory": "site",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/compare-history",
+      "destination": "/docs/evaluations-history",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

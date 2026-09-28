@@ -757,6 +757,22 @@ and reproduction; they are not the cross-model leaderboard. No local candidate
 is generally qualified, and the original fixtures do not justify an automatic
 application migration.
 
+## Compared with other review tools
+
+[CodeRabbit](https://www.coderabbit.ai/cli),
+[Cursor Bugbot](https://cursor.com/help/ai-features/bugbot), and
+[Claude Code Review](https://support.claude.com/en/articles/14233555-set-up-code-review-for-claude-code)
+are hosted AI reviewers that look for many kinds of bugs. Bugbot and Claude
+Code Review comment on pull requests, and the CodeRabbit CLI also reviews local
+changes. For broad bug-finding they cover more than Sys1, whose bundled rules
+cover two JavaScript and TypeScript checks. Sys1 checks only the rules you
+select, can keep your source on your machine with a local model, and lets you
+record whether each candidate was useful. For a pure syntax
+pattern such as an empty catch block, an
+[ESLint](https://eslint.org/docs/latest/rules/no-empty) or
+[Semgrep](https://semgrep.dev) rule is exact and free; use Sys1 for rules that
+need judgment. Checked September 2026.
+
 ## Related
 
 [System One Skills](https://github.com/hraness/system-one-skills) is a separate

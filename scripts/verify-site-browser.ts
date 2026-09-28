@@ -19,6 +19,8 @@ const server = production ? undefined : Bun.serve({
     let pathname: string;
     try { pathname = decodeURIComponent(new URL(request.url).pathname); }
     catch { return new Response("Bad path", { status: 400 }); }
+    const redirect = config.redirects?.find((item: { source: string }) => item.source === pathname);
+    if (redirect) return new Response(null, { status: redirect.permanent ? 308 : 307, headers: { ...headers, location: redirect.destination } });
     const clean = pathname.endsWith("/") ? `${pathname}index.html` : /\.[^/]+$/u.test(pathname) ? pathname : `${pathname}.html`;
     const path = resolve(site, `.${clean}`);
     if (!path.startsWith(`${site}${sep}`)) return new Response("Forbidden", { status: 403 });
@@ -31,6 +33,11 @@ let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
 const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
 try {
+  for (const redirect of config.redirects ?? []) {
+    const response = await fetch(new URL(redirect.source, origin), { redirect: "manual" });
+    assert.equal(response.status, redirect.permanent ? 308 : 307);
+    assert.equal(new URL(response.headers.get("location")!, origin).pathname, redirect.destination);
+  }
   browser = await chromium.launch();
   for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
