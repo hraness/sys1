@@ -1,0 +1,2134 @@
+{
+  "schema_version": 1,
+  "status": "incomplete",
+  "failure": "gateway_http_error",
+  "experiment": "workflow-synthetic-screening-2026-09-28",
+  "provenance": {
+    "repository": "https://github.com/hraness/sys1",
+    "base_commit": "e153df3ad2aeb5549c0eb8859466f069bc9c5931",
+    "version": "0.17.0",
+    "source_status": "Base release plus uncommitted experimental evaluator and frozen workflow fixtures; exact source-file hashes below.",
+    "compiler": {
+      "bun": "1.3.14",
+      "target": "bun",
+      "minify": true,
+      "external": [
+        "node-llama-cpp"
+      ],
+      "sourcemap": "none"
+    },
+    "manifest_sha256": "c9be70943375de49f836a2ba1b8c1a4c90a179adf50e4b9bc383742b9d18db9d",
+    "harness_sha256": "4d4ce5abc62a6e00fb3d0829d6ed89bab61aad8c1d3d7589520a47861cf5cbdc",
+    "source_hashes": {
+      "bun.lock": "9e3dac2f06278251899f70752e9bdb557a105cffe682e6733f69b68d90118274",
+      "package.json": "9961e76bccb830c2037757f9bb2f165bdc8ce8b6d21a51934d22ca74bf4c1e7c",
+      "scripts/evaluate-profile.ts": "ea8769beaa5bf7b0bad2c4c72f9a238142bcb6109c92863e6f24c64cc9009e4f",
+      "scripts/workflow-baselines.ts": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "src/audit/benchmark.ts": "7f9e100ab7e98017d17bad93cbb64b5361c94487e0b4802b24585cb52dfb721f",
+      "src/audit/cli.ts": "c7fed5fbf70ed48faf38116f23ed8aa4cf94778fc3856605269c49a0454c0c52",
+      "src/audit/compile.ts": "296f4fa629c969ed36f503e59cb0e658725218f0da97c859fbd077215d7d41fc",
+      "src/audit/diff.ts": "c78f65ad753f1c219d7fbdfbd3c140b7a1672b0cdf41e709f75a31ac36f38761",
+      "src/audit/evaluate.ts": "d6266082623237b2d129420e16c71cb89cda20dc51510712a8b32f377bb9870c",
+      "src/audit/pack.ts": "480ede7bf7f95e36a8806e060a71f277d78153542d5d9d28935e875a1329655a",
+      "src/audit/rules-cli.ts": "9c289eea93ec97d859e67f46fde05a8973f9f01e43375749104194d4cdc092f5",
+      "src/audit/schema.ts": "65bc170dc0f190e83ca03211fc1a2e8be47270b0dde01222398ae3ce175459f2",
+      "src/audit/select.ts": "0c083958901a32b1f5181e24bb002471132dc91d10041a257cff8b4dec8d4d37",
+      "src/backends.ts": "a56d247afdd4190ea3806ae56580aafe2d052688a8c40ebe8d7d8a1ed19ddd8f",
+      "src/cli-help.ts": "869edeb75f6781a6fa847e0975039a0033ded07be52e3c8b8867ae900289e6ed",
+      "src/cli-style.ts": "aa3bad6cc893b283bd166dd5fe7c5a0f44491f35741257f1dadd3f1e364b8d0b",
+      "src/cli.ts": "7e64b7500da8302efda6fa2165ca3c37a0e22e7edc501941453bd5f09860f12c",
+      "src/client.ts": "2990d3930303cd397bba5db52a34411faf2b25c0adc6fa30873a9b87eea4cb70",
+      "src/config.ts": "4ca9349c5ed1317120134509c6750b64d072b4496e67a3a9b0183e3dba015aca",
+      "src/daemon.ts": "2b73d9fdf22e66445eb25ad0aaa0c4986e0a066bb7eb9f7327903e119ff6a2c5",
+      "src/defaults.ts": "3aad6df4f5daf3d2ba864d0e1a7faaabe67ea8c2c2015e6ce62d82b0a06e2b63",
+      "src/doctor.ts": "53c57f3649a4e0b7a0b81094b6cdc5f3b2536e49b3674e8936a7528cc4bfa886",
+      "src/gateway.ts": "e7c2fafd3566d8ccd92e57cc96c36ca5ee8dcf2b8c098eea33df6ef936854644",
+      "src/http.ts": "fedb91473976d397d7444ec5f1c4c777e9af9f38ee9c0fd37d54fffc49d9b14a",
+      "src/index.ts": "c517b07496fc8944818a1cf122934866e3b10f3900309acb968e25de152416fb",
+      "src/kev.ts": "d667ec0b967a70461c5c5b6b684b051a3989b289040c15427ad9edbd56a2292c",
+      "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+      "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+      "src/local/engine-ipc.ts": "380127a1256b7eb496ba770fe9a8b3487a6c9e1ed232ff936bd5e0eb5a6cc984",
+      "src/local/engine-types.ts": "5288ea1abb8e1356baed05228dc69d8d3dcdc378dedc92dc33342776750fb474",
+      "src/local/engine-worker.ts": "4bce446ee115c15516740e4422a425c0a401e7795d8c362c630a3c25ad16f3f2",
+      "src/local/engine.ts": "8f39f2293b2975d298711e9b91839f718fc2be1618a973a80b5d082d6f3904dc",
+      "src/local/input.ts": "a7a2236a75da4f18169c39288fbad6f97e357511d057bd88d1d2ef34124c21a9",
+      "src/local/runner.ts": "9e9e6fbf89c0e62fb681a75b86a75ccd417893978255ed773a25f975c9c2295c",
+      "src/local/store.ts": "caa431c3e27420c2c154ec57f1523fdc09b6085be6e298c7fee5a3900a36565b",
+      "src/profile.ts": "c23e6dcf534ee99d4a2848839a597ccdca0dce9471f3a810bcdf966985bdeb49",
+      "src/protocol.ts": "e546f90c7d84b83f440eeaf147999b09ac80c59704486aee5917f48789146ef4",
+      "src/qualification.ts": "c731268f266f3d586c36af2734ef485df46fd1768b817bfaeacb45f5515c227d",
+      "src/response.ts": "ea2971e9a6f0ca153e6cb5dbad0d0a545e360474e87db31a8d53724c4cc2f41c",
+      "src/review/checkpoint.ts": "ef690e06a374fba6f2698d3aeb3f540b1dfc061f57bc087e8536dc21ad60d00f",
+      "src/review/cli.ts": "544a35050a08cb1c107f637b5fafbf5de2fb10eac5ef2c7b067cdccedf484cd0",
+      "src/review/install.ts": "be1512f948ed7fb67ebebe3b3886d46e42a8bd28a2aad4e5cd66ad549e86994b",
+      "src/review/project-files.ts": "38a85daeb1d384062bc3275f983f46ef4de5c982061512f57b6e809194e5b164",
+      "src/review/state.ts": "5068528e1ab5add7ffaebe453b52ad40b45c8b8b0b81c872df38c1ef1f6ba75c",
+      "src/router.ts": "499526d5792ea065cfb48d08428490ce2ca08f40bc2f0160994161da9be7ddbb",
+      "src/runtime.ts": "a9bb4393efe333e3ad997c90d738cbbd42dedb4eaa96c95c72a0c79adeb0137b",
+      "src/usage.ts": "1ced902c9234cd5acfc0e0433a4a3b9c8c80aad88b66217b05768c1af0627751",
+      "src/verify/cli.ts": "643db7068c459f5d31d4cc1116ea61ace0dbbb58f12a7df6a9846858b245db27",
+      "src/verify/evidence.ts": "23c84423cd25b983f3d2714bddd51fc567191f5d886a3b52e481b64f08e04557",
+      "src/verify/install.ts": "28830c166a4cfdd4d7969390381c96c61ef02baec7783149e174c6db7f39ec8c",
+      "src/verify/message.ts": "6ee299ab8ae20b869a00249e33426a390c01906c8dfc1b6e25229c51116e49f6",
+      "src/verify/verify.ts": "855faff662276bf53ddaf0f5b188b62ed1e583777d8e70aa56f2c5a2d084c3cd"
+    },
+    "frozen_files": [
+      {
+        "path": "examples/workflows/failure-triage.profile.json",
+        "role": "profile",
+        "workflow": "failure-triage",
+        "sha256": "da067bf8efb546af6c1c13940f48a5ce36e67c59661c1a708b0790f37efa16bd",
+        "bytes": 2276
+      },
+      {
+        "path": "benchmarks/workflows/failure-triage.development.json",
+        "role": "development",
+        "workflow": "failure-triage",
+        "sha256": "845b622b9c15990fc59f69e8d6ba45fd7cac7a9d10113dd5667805420259cf03",
+        "bytes": 3334
+      },
+      {
+        "path": "benchmarks/workflows/failure-triage.screening.json",
+        "role": "screening",
+        "workflow": "failure-triage",
+        "sha256": "e2d1513c24a8e80233899c31fb6f2c1c401fffc2b8405b27335de90a687464d1",
+        "bytes": 4023
+      },
+      {
+        "path": "examples/workflows/evidence-relevance.profile.json",
+        "role": "profile",
+        "workflow": "evidence-relevance",
+        "sha256": "a4e0ccfea3cf5f4951c5ffd838f9acfaaa33135e8e6bf20a6bdc4b448120ae0d",
+        "bytes": 1392
+      },
+      {
+        "path": "benchmarks/workflows/evidence-relevance.development.json",
+        "role": "development",
+        "workflow": "evidence-relevance",
+        "sha256": "8ae95310eeb368c5ca4533f3e58e459ef8d8da3c65a6148f6d1b11253a2b7e7e",
+        "bytes": 2608
+      },
+      {
+        "path": "benchmarks/workflows/evidence-relevance.screening.json",
+        "role": "screening",
+        "workflow": "evidence-relevance",
+        "sha256": "b6eaf330a0910e4c0f555c82d0632c1978a4fe1de7f498864eaa555cec0201f2",
+        "bytes": 3187
+      },
+      {
+        "path": "examples/workflows/claim-support.profile.json",
+        "role": "profile",
+        "workflow": "claim-support",
+        "sha256": "d63ab5b57de84c9cca1aac72da766e5bbf0a6eff42710b91f84617f487585c3b",
+        "bytes": 1500
+      },
+      {
+        "path": "benchmarks/workflows/claim-support.development.json",
+        "role": "development",
+        "workflow": "claim-support",
+        "sha256": "e8c5998b1b0f7309e3ee8c770bc933121bbcf2af46559ffac2227ae644cfcf19",
+        "bytes": 2455
+      },
+      {
+        "path": "benchmarks/workflows/claim-support.screening.json",
+        "role": "screening",
+        "workflow": "claim-support",
+        "sha256": "2f065f444b355ac19281411a41f613e0de974e413f1a72c5038518295aabbf7a",
+        "bytes": 3048
+      },
+      {
+        "path": "scripts/workflow-baselines.ts",
+        "role": "baseline",
+        "sha256": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+        "bytes": 7562
+      },
+      {
+        "path": "benchmarks/workflows/README.md",
+        "role": "methodology",
+        "sha256": "235e3c9c8d23eb070ec02d6619476967942a2cc4d7ab42413b0b0d055da0f07d",
+        "bytes": 2872
+      }
+    ],
+    "bundle_sha256": "7af19c806cdcac41fda84b5fde46845c090d3a8503f88f8f4b5aa7b2d64e65ad"
+  },
+  "inputs": {
+    "profiles": 3,
+    "splits": 6,
+    "cases": 48,
+    "frozen_at": "2026-09-28T18:04:50.001815+00:00",
+    "manifest_status": "frozen-before-live-calls",
+    "fixture_metadata": "Evaluator split/family fields are attached from the frozen manifest; state, expected labels and profile requests are unchanged. Raw-file hashes remain recorded separately."
+  },
+  "execution": {
+    "harness_version": 4,
+    "configuration_hashes": {
+      "runtime_raw_sha256": "af2e6766a34644f9dbaba8e9517e3f17d4732ffe63cf55b1148108d2f09d9769",
+      "runtime_canonical_sha256": "8e812519751e3ad970202f2ec0cabd97d0ab2e57dcb00119c9af9e9810da3e1c",
+      "expected_canonical_sha256": "8e812519751e3ad970202f2ec0cabd97d0ab2e57dcb00119c9af9e9810da3e1c"
+    },
+    "started_at": "2026-09-28T19:27:54.263Z",
+    "finished_at": "2026-09-28T19:28:00.377Z",
+    "bun": "1.3.14",
+    "platform": "linux",
+    "arch": "x64",
+    "vercel_region": null,
+    "vercel_environment": "preview",
+    "configured_model": "typesafe/jev-1.13.0",
+    "routing_policy": "hosted-only",
+    "local_enabled": false,
+    "provider_origin": "https://api.typesafe.ai",
+    "retries": 0,
+    "max_model_calls": 48,
+    "max_probe_calls": 96,
+    "global_deadline_ms": 840000,
+    "evaluator_timeout_ms": 30000,
+    "gateway_timeout_ms": 20000,
+    "probe_timeout_ms": 1500,
+    "latency_boundary": "Each evaluator case measures local client + owned loopback gateway + provider discovery and inference + response validation; excludes deployment, build, bundling, input validation, gateway startup and deterministic baseline calculation.",
+    "region_note": "vercel_region is the build runtime environment value when supplied; null means unavailable, not inferred from project configuration.",
+    "gateway_stopped": true,
+    "report_note": "Actual model submissions are provider_model_posts. Evaluator attempted can also include a subsequent local abort after an error. No source state, questions, raw provider bodies or credentials are included."
+  },
+  "network": {
+    "provider_model_posts": 18,
+    "provider_probe_gets": 36,
+    "blocked_calls": 0
+  },
+  "summary": {
+    "planned": 48,
+    "attempted": 19,
+    "completed": 17,
+    "errors": 2,
+    "skipped": 29
+  },
+  "batches": [
+    {
+      "workflow": "failure-triage",
+      "split": "development",
+      "baseline": {
+        "workflow": "failure-triage",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 8,
+        "accuracy": 1,
+        "predictions": [
+          {
+            "id": "source-type-error-with-quoted-instruction",
+            "split": "development",
+            "family": "typescript-account-check",
+            "expected": {
+              "investigation": "inspect_source"
+            },
+            "predicted": {
+              "investigation": "inspect_source"
+            },
+            "correct": true
+          },
+          {
+            "id": "assertion-mismatch",
+            "split": "development",
+            "family": "cart-discount-test",
+            "expected": {
+              "investigation": "inspect_assertion"
+            },
+            "predicted": {
+              "investigation": "inspect_assertion"
+            },
+            "correct": true
+          },
+          {
+            "id": "missing-declared-dependency",
+            "split": "development",
+            "family": "markdown-doc-generator",
+            "expected": {
+              "investigation": "inspect_dependencies"
+            },
+            "predicted": {
+              "investigation": "inspect_dependencies"
+            },
+            "correct": true
+          },
+          {
+            "id": "repository-access-denied",
+            "split": "development",
+            "family": "private-repository-access",
+            "expected": {
+              "investigation": "inspect_access"
+            },
+            "predicted": {
+              "investigation": "inspect_access"
+            },
+            "correct": true
+          },
+          {
+            "id": "unsupported-runtime",
+            "split": "development",
+            "family": "node-build-tool",
+            "expected": {
+              "investigation": "inspect_environment"
+            },
+            "predicted": {
+              "investigation": "inspect_environment"
+            },
+            "correct": true
+          },
+          {
+            "id": "dns-failure",
+            "split": "development",
+            "family": "test-api-dns",
+            "expected": {
+              "investigation": "inspect_connectivity"
+            },
+            "predicted": {
+              "investigation": "inspect_connectivity"
+            },
+            "correct": true
+          },
+          {
+            "id": "independent-parallel-failures",
+            "split": "development",
+            "family": "parallel-source-access-checks",
+            "expected": {
+              "investigation": "unknown"
+            },
+            "predicted": {
+              "investigation": "unknown"
+            },
+            "correct": true
+          },
+          {
+            "id": "missing-diagnostic-context",
+            "split": "development",
+            "family": "repository-validation-summary",
+            "expected": {
+              "investigation": "unknown"
+            },
+            "predicted": {
+              "investigation": "unknown"
+            },
+            "correct": true
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "failure-triage",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "88c0ebcbe26b88a99a0c500c1dbfc47d748465bb647c55c2b121e4878e0ce053"
+        },
+        "fixtures_sha256": "767bfa78e01d495ec7788e9caf56b93b4b92eb3ea0b0593b65557a8c2ca1525e",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 839990
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 8,
+          "completed": 8,
+          "errors": 0,
+          "skipped": 0,
+          "questions": {
+            "correct": 8,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 8,
+            "unknown_calls": 0,
+            "input_tokens": 5989,
+            "output_tokens": 642
+          },
+          "elapsed_ms": 2726.382678
+        },
+        "cases": [
+          {
+            "id": "source-type-error-with-quoted-instruction",
+            "split": "development",
+            "family": "typescript-account-check",
+            "request_sha256": "bd84fbc9ff82c78ed8c7f379a3aef528b8c2201ff8bd1cd24c051f5fc44d54d9",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 426.00624000000005,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 765,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.99,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.01
+                ],
+                "confidence": 0.99,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "assertion-mismatch",
+            "split": "development",
+            "family": "cart-discount-test",
+            "request_sha256": "71087aeb59f6d0e7d3acdef14d8f8d208e274c97148ce02e23097f3e35073c5a",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 337.234242,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 755,
+              "output_tokens": 82
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "missing-declared-dependency",
+            "split": "development",
+            "family": "markdown-doc-generator",
+            "request_sha256": "9bddee841b84f705cca98c558a106220b707b646687848cdc93962f6efe37b5e",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 306.7829109999999,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 741,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "repository-access-denied",
+            "split": "development",
+            "family": "private-repository-access",
+            "request_sha256": "63b3c6872b78dd3e6d03274681db1d499d6cbb4aea4b801598f8129451d6af14",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 361.03136500000005,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 747,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "unsupported-runtime",
+            "split": "development",
+            "family": "node-build-tool",
+            "request_sha256": "c1da94a450a95fe0e09adfe5237319664025182b06a24747a56d967a4e9ed878",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 327.650077,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 745,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "dns-failure",
+            "split": "development",
+            "family": "test-api-dns",
+            "request_sha256": "11ed875f0781091d852977c7516008e3eb58068a8f95ef3ad75e1f8edf8af54c",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 329.6950089999998,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 741,
+              "output_tokens": 82
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "independent-parallel-failures",
+            "split": "development",
+            "family": "parallel-source-access-checks",
+            "request_sha256": "1abd7f6713ebe701772e2bf30aafddfcdb8e31453def94fb75efbc7a1abe5124",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 287.6095009999999,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 773,
+              "output_tokens": 79
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.01,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.99
+                ],
+                "confidence": 0.99,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "missing-diagnostic-context",
+            "split": "development",
+            "family": "repository-validation-summary",
+            "request_sha256": "fd9b9b3cf19a15f1ef8da9fa90778c5a1aedf3408c87e95596dd6a102d9c3a6a",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 350.125235,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 722,
+              "output_tokens": 79
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "failure-triage",
+      "split": "screening",
+      "baseline": {
+        "workflow": "failure-triage",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 8,
+        "accuracy": 1,
+        "predictions": [
+          {
+            "id": "triage-screen-python-parser",
+            "split": "screening",
+            "family": "python-inventory-loader",
+            "expected": {
+              "investigation": "inspect_source"
+            },
+            "predicted": {
+              "investigation": "inspect_source"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-http-contract-test",
+            "split": "screening",
+            "family": "local-billing-contract-test",
+            "expected": {
+              "investigation": "inspect_assertion"
+            },
+            "predicted": {
+              "investigation": "inspect_assertion"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-ruby-bundle",
+            "split": "screening",
+            "family": "ruby-catalog-bundle",
+            "expected": {
+              "investigation": "inspect_dependencies"
+            },
+            "predicted": {
+              "investigation": "inspect_dependencies"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-archive-filesystem",
+            "split": "screening",
+            "family": "local-tar-archive",
+            "expected": {
+              "investigation": "inspect_access"
+            },
+            "predicted": {
+              "investigation": "inspect_access"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-jvm-bytecode",
+            "split": "screening",
+            "family": "jvm-schema-checker",
+            "expected": {
+              "investigation": "inspect_environment"
+            },
+            "predicted": {
+              "investigation": "inspect_environment"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-tls-handshake",
+            "split": "screening",
+            "family": "weather-feed-tls",
+            "expected": {
+              "investigation": "inspect_connectivity"
+            },
+            "predicted": {
+              "investigation": "inspect_connectivity"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-successful-security-examples",
+            "split": "screening",
+            "family": "security-manual-render",
+            "expected": {
+              "investigation": "unknown"
+            },
+            "predicted": {
+              "investigation": "unknown"
+            },
+            "correct": true
+          },
+          {
+            "id": "triage-screen-independent-rust-and-payments",
+            "split": "screening",
+            "family": "independent-rust-payment-jobs",
+            "expected": {
+              "investigation": "unknown"
+            },
+            "predicted": {
+              "investigation": "unknown"
+            },
+            "correct": true
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "failure-triage",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "88c0ebcbe26b88a99a0c500c1dbfc47d748465bb647c55c2b121e4878e0ce053"
+        },
+        "fixtures_sha256": "a3c35f579dca0373532b7a94b4ee215fe5881430a0b1aa1d5b13c3ba22597e88",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 837261
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 8,
+          "completed": 8,
+          "errors": 0,
+          "skipped": 0,
+          "questions": {
+            "correct": 8,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 8,
+            "unknown_calls": 0,
+            "input_tokens": 6155,
+            "output_tokens": 642
+          },
+          "elapsed_ms": 2686.9550299999996
+        },
+        "cases": [
+          {
+            "id": "triage-screen-python-parser",
+            "split": "screening",
+            "family": "python-inventory-loader",
+            "request_sha256": "b81a81e3cc43828c24ef6a7f4c004f0e50ae4248100920e43df5bbe315cbfe24",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 357.65466800000013,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 768,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-http-contract-test",
+            "split": "screening",
+            "family": "local-billing-contract-test",
+            "request_sha256": "86adc21343a973801a36788cc5018a42e34a790261072f9d3621d34b377c7c6f",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 341.812543,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 781,
+              "output_tokens": 82
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0.99,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0.01
+                ],
+                "confidence": 0.98,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-ruby-bundle",
+            "split": "screening",
+            "family": "ruby-catalog-bundle",
+            "request_sha256": "45748d6ee0162507ababd2b65e616bb0d5812d155f049eeee682c7e47bf3f58c",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 332.1456919999996,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 771,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-archive-filesystem",
+            "split": "screening",
+            "family": "local-tar-archive",
+            "request_sha256": "2dfae44acc08d55021eb9014151d3b75b8a07e3dc26004d20ab5cb994e93ac91",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 344.99979299999995,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 748,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-jvm-bytecode",
+            "split": "screening",
+            "family": "jvm-schema-checker",
+            "request_sha256": "2a8b243871535edaccff89c5d700e0e15a93f9f7ee46383f8ad3854dde0863b3",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 370.60833300000013,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 775,
+              "output_tokens": 80
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-tls-handshake",
+            "split": "screening",
+            "family": "weather-feed-tls",
+            "request_sha256": "b83203600c4e7ab697d23a6761fa9c9780786c8c44646ba9ff2d246d86048a96",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 299.29355100000066,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 765,
+              "output_tokens": 82
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-successful-security-examples",
+            "split": "screening",
+            "family": "security-manual-render",
+            "request_sha256": "3ef56ee16ddf8fdb6ebd6a345737ea4eb76a8e357b12e1d036de8670b122a268",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 314.7889670000004,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 752,
+              "output_tokens": 79
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "triage-screen-independent-rust-and-payments",
+            "split": "screening",
+            "family": "independent-rust-payment-jobs",
+            "request_sha256": "7a0f1f8cb9b1671a0285ff3ae2018fce89bad66ef90de0a4ecca6bd7cb4cefef",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 325.5477799999999,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 795,
+              "output_tokens": 79
+            },
+            "questions": {
+              "investigation": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "baseline": {
+        "workflow": "evidence-relevance",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 6,
+        "accuracy": 0.75,
+        "predictions": [
+          {
+            "id": "unrelated-recipe",
+            "split": "development",
+            "family": "cake-recipe",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 0
+            },
+            "correct": true
+          },
+          {
+            "id": "lexical-near-miss",
+            "split": "development",
+            "family": "coffee-java-word-overlap",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "background-only",
+            "split": "development",
+            "family": "readiness-definition",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 1
+            },
+            "correct": true
+          },
+          {
+            "id": "supporting-cause-only",
+            "split": "development",
+            "family": "readiness-port-mismatch",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": true
+          },
+          {
+            "id": "direct-port-answer",
+            "split": "development",
+            "family": "readiness-port-guide",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": true
+          },
+          {
+            "id": "quoted-score-instruction-only",
+            "split": "development",
+            "family": "unrelated-score-comment",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 0
+            },
+            "correct": true
+          },
+          {
+            "id": "direct-answer-with-quoted-instruction",
+            "split": "development",
+            "family": "readiness-guide-with-comment",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": true
+          },
+          {
+            "id": "partial-command-answer",
+            "split": "development",
+            "family": "preview-command",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "evidence-relevance",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "47c2c5075aa737eccf4ad9e05d762355de6f052c4ec14d725a975907ee5846e8"
+        },
+        "fixtures_sha256": "4da81d09e5cf7c1cd761348d62a07e7e964be386d9d325a0f355af167fe41e76",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 834572
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 3,
+          "completed": 1,
+          "errors": 2,
+          "skipped": 5,
+          "questions": {
+            "correct": 1,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 1,
+            "unknown_calls": 2,
+            "input_tokens": 542,
+            "output_tokens": 19
+          },
+          "elapsed_ms": 681.9138620000003
+        },
+        "cases": [
+          {
+            "id": "unrelated-recipe",
+            "split": "development",
+            "family": "cake-recipe",
+            "request_sha256": "4f0649484b6774918e0eca7193dfb5be75795f49725c45ff26c61627f5baba44",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 323.41748800000005,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 542,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          },
+          {
+            "id": "lexical-near-miss",
+            "split": "development",
+            "family": "coffee-java-word-overlap",
+            "request_sha256": "93bdba8bf6ffe5f0246c5aa5082f0d46a6161ef3bdb151348361067825c08726",
+            "status": "error",
+            "skip_reason": null,
+            "elapsed_ms": 357.99348499999996,
+            "error": "http_error",
+            "http_status": 502,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "background-only",
+            "split": "development",
+            "family": "readiness-definition",
+            "request_sha256": "7e2770a365124d727f3c472ed1b34a68dd92ab8a0c6116e545a4b4c0dc3ea562",
+            "status": "error",
+            "skip_reason": null,
+            "elapsed_ms": 0.42701599999963946,
+            "error": "aborted",
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "supporting-cause-only",
+            "split": "development",
+            "family": "readiness-port-mismatch",
+            "request_sha256": "e6c1368f8baf82780ba7bca3e22eb3a1273c15019e0ade9aedb412d96f1237a7",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "direct-port-answer",
+            "split": "development",
+            "family": "readiness-port-guide",
+            "request_sha256": "b5b611050d6eca98fe8e3930198fe1709103db5c02a1250f284fcc6916bcb70e",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "quoted-score-instruction-only",
+            "split": "development",
+            "family": "unrelated-score-comment",
+            "request_sha256": "6737a960167067f186bcd301ac1b7e9b0f396922619f0daae54e62b89bbe7e22",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "direct-answer-with-quoted-instruction",
+            "split": "development",
+            "family": "readiness-guide-with-comment",
+            "request_sha256": "d92ea80ca3305a7f25a03641146d6718ede5c7288a075b70bf1c793df2580ffa",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "partial-command-answer",
+            "split": "development",
+            "family": "preview-command",
+            "request_sha256": "d5110929960db162dbc18c6fcb5950141327f6ee92d17446a37a0fff8c83440d",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "baseline": {
+        "workflow": "evidence-relevance",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 0,
+        "accuracy": 0,
+        "predictions": [
+          {
+            "id": "relevance-screen-library-two-rules",
+            "split": "screening",
+            "family": "willow-library-visitor-policy",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-museum-hours-gap",
+            "split": "screening",
+            "family": "harbor-museum-calendar",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 1
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-garden-context",
+            "split": "screening",
+            "family": "apple-orchard-establishment-guide",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-join-different-domain",
+            "split": "screening",
+            "family": "carpentry-join-description",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-unverified-direct-fact",
+            "split": "screening",
+            "family": "cedar-hall-notice-transcription",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-rain-and-wind",
+            "split": "screening",
+            "family": "lake-sailing-forecast",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-queue-terminology",
+            "split": "screening",
+            "family": "image-queue-overview",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-restated-question-injection",
+            "split": "screening",
+            "family": "printer-recycling-question-spam",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "evidence-relevance",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "47c2c5075aa737eccf4ad9e05d762355de6f052c4ec14d725a975907ee5846e8"
+        },
+        "fixtures_sha256": "a002dab9d04fcaee90863dc4b41cf978963064ff396049f5b2ebcfb683d61e8a",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 833889
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 0,
+          "completed": 0,
+          "errors": 0,
+          "skipped": 8,
+          "questions": {
+            "correct": 0,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          "elapsed_ms": 0.04630799999995361
+        },
+        "cases": [
+          {
+            "id": "relevance-screen-library-two-rules",
+            "split": "screening",
+            "family": "willow-library-visitor-policy",
+            "request_sha256": "aef14e4dd038cf1a57d607b6594b042dd34607c99746b931895b482c296c6ef4",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-museum-hours-gap",
+            "split": "screening",
+            "family": "harbor-museum-calendar",
+            "request_sha256": "6806342aed5db51cf16044712a8989c2063f7e89bc686a9b252c13a2c0e28b37",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-garden-context",
+            "split": "screening",
+            "family": "apple-orchard-establishment-guide",
+            "request_sha256": "8d75adc7c223b786b23f4ba1164a2a817edb90a0902f7e99e8e5b30bf50eb417",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-join-different-domain",
+            "split": "screening",
+            "family": "carpentry-join-description",
+            "request_sha256": "77d616dad336820dfb3a9a2f403b22827b9303910a70ab9422a76b47fcc35cba",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-unverified-direct-fact",
+            "split": "screening",
+            "family": "cedar-hall-notice-transcription",
+            "request_sha256": "b8066fbd116bb8d7aa5c4026d8691403049ac9d8253d0b3a667d21954fee0d09",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-rain-and-wind",
+            "split": "screening",
+            "family": "lake-sailing-forecast",
+            "request_sha256": "fe3c5dae9823157c284095ce5cfa854aaf5b28cc31a8c26745db5fad5865624f",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-queue-terminology",
+            "split": "screening",
+            "family": "image-queue-overview",
+            "request_sha256": "112bcd030c5f88dbdc9150980294650e73fcde92a0329d655e89355b54218385",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-restated-question-injection",
+            "split": "screening",
+            "family": "printer-recycling-question-spam",
+            "request_sha256": "b08ab2b5b16985df8538396f5ca6e8d0998ab9a6683015c546544824813fa626",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "baseline": {
+        "workflow": "claim-support",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 3,
+        "accuracy": 0.375,
+        "predictions": [
+          {
+            "id": "explicit-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "explicit-negation",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "supported-negative-claim",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "different-version",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "unrelated-excerpt",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "quoted-instruction",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "partial-multipart-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "contradiction-with-missing-detail",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "claim-support",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "f1344b8b436b765e6abaec93fbb5e26efd3a7178f341e27eeb5d90b4115c47ae"
+        },
+        "fixtures_sha256": "bdb80038ced09923b47a9e08616200a6bfb7e43e632d8a9c15eeb8cfa9f8387f",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 833888
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 0,
+          "completed": 0,
+          "errors": 0,
+          "skipped": 8,
+          "questions": {
+            "correct": 0,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          "elapsed_ms": 0.05395399999997608
+        },
+        "cases": [
+          {
+            "id": "explicit-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "1f51860ef93a8a9f38ad8c7977e656ded0860fc653c40b2d5ec7b1505cf01a95",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "explicit-negation",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "41b7f43ba2fc54b7e23a87e65038ab9b2eb6a3cdd98a8121b92b9142d67fdc94",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "supported-negative-claim",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "c1692640abb18ef28347223577c3eb1f609773aaff0ce46ec2252690914a4dc9",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "different-version",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "5e96a6b733f86aae81190473d9087857e84e74ae539e4b080e6da507c60aac01",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "unrelated-excerpt",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "2562ba13e4b61b1d8e99d8f39e5fce76393fd897db77a0257513776ab262e9f0",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "quoted-instruction",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "e6f262d812cb745b2376a3feef374836999f644f12af58c8c09e3030225f5614",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "partial-multipart-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "fe09fa500606eb054c251bac9dcb3df917abe88eaf8a6bc3c86ad9ecba1dd895",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "contradiction-with-missing-detail",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "8eda060edd77dd906574b4388e4d743416f15840c9916fdf7dac70f6f6ed1890",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "baseline": {
+        "workflow": "claim-support",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 3,
+        "accuracy": 0.375,
+        "predictions": [
+          {
+            "id": "support-screen-negative-sync-policy",
+            "split": "screening",
+            "family": "harbor-sync-local-file-policy",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-numeric-contradiction",
+            "split": "screening",
+            "family": "cedar-api-plan-table",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-version-gap",
+            "split": "screening",
+            "family": "prism-recorder-archived-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-compound-transit",
+            "split": "screening",
+            "family": "lumen-transit-timetable",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-measurement-unit",
+            "split": "screening",
+            "family": "orchard-sensor-output-reference",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-platform-scope",
+            "split": "screening",
+            "family": "atlas-desk-platform-reference",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-quoted-claim-injection",
+            "split": "screening",
+            "family": "meadow-archive-support-ticket",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-negative-claim-opposed",
+            "split": "screening",
+            "family": "river-kit-registration-guide",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "claim-support",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "f1344b8b436b765e6abaec93fbb5e26efd3a7178f341e27eeb5d90b4115c47ae"
+        },
+        "fixtures_sha256": "15781500e114f22bb29e964cf58b1d08c35805ea7206ae333839dc8446f43da0",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 833887
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 0,
+          "completed": 0,
+          "errors": 0,
+          "skipped": 8,
+          "questions": {
+            "correct": 0,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          "elapsed_ms": 0.03892999999970925
+        },
+        "cases": [
+          {
+            "id": "support-screen-negative-sync-policy",
+            "split": "screening",
+            "family": "harbor-sync-local-file-policy",
+            "request_sha256": "480037f7ccc3365537482afb1243d94f3ad7a7e5afd42d57de0e05a83335fe9c",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-numeric-contradiction",
+            "split": "screening",
+            "family": "cedar-api-plan-table",
+            "request_sha256": "b6489475dbd85982fe35493453c9b567410584676b547299431087818f1f9147",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-version-gap",
+            "split": "screening",
+            "family": "prism-recorder-archived-manual",
+            "request_sha256": "bd2cc65ce898cd0a0277a76618607b584e48084c0bf06323ca3e42a6de4a57d1",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-compound-transit",
+            "split": "screening",
+            "family": "lumen-transit-timetable",
+            "request_sha256": "0e1cab4513a845bcf44fcce5ee1836d9dac23bc7593417734b18dbd50e5dfcf3",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-measurement-unit",
+            "split": "screening",
+            "family": "orchard-sensor-output-reference",
+            "request_sha256": "3eb1f96d1ca5d409d866e8c2e6127f2c18124f31c16871d43bfda5fc8aa340fb",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-platform-scope",
+            "split": "screening",
+            "family": "atlas-desk-platform-reference",
+            "request_sha256": "bb0e423b82960b74a260f101d0de4288b1b1a01fd14e934c16903c10b5ebf83e",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-quoted-claim-injection",
+            "split": "screening",
+            "family": "meadow-archive-support-ticket",
+            "request_sha256": "b26e0fcab7acf8a50e0e6a02cd65237c9a79d2b0ca6d2f35a5cf1554f7affc28",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "support-screen-negative-claim-opposed",
+            "split": "screening",
+            "family": "river-kit-registration-guide",
+            "request_sha256": "a4e1fa3a5054f3cd06c601a34efb64f6ede4daf08a63daf43144c6126f0f1435",
+            "status": "skipped",
+            "skip_reason": "aborted",
+            "elapsed_ms": null,
+            "error": null,
+            "http_status": null,
+            "route": null,
+            "usage": null,
+            "questions": null
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "48 authored examples total, including 24 development examples and 24 screening examples. The screening set is small and synthetic, not a population-quality benchmark.",
+    "The screening author saw the rubrics and development cases. Independent authoring and distinct fictional source families do not provide blind population sampling.",
+    "Each workflow has eight screening cases. Accuracy describes these cases only; it does not establish calibration, workflow time saved, correction effort, source-location recall, or real-task effectiveness.",
+    "Relevance labels assess coverage, not truth or source reliability. All excerpts remain available to the caller.",
+    "The literal claim baseline is deliberately weak and may accept quoted claims or miss contradictions. A model outperforming it is not sufficient evidence of practical value.",
+    "After any predictions are inspected, preserve these files and report revisions as new experiments instead of tuning this screening set."
+  ]
+}

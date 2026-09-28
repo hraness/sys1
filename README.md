@@ -26,6 +26,7 @@ on Bun 1.3.14 or newer.
 | Run one review without saved history | [`sys1 audit`](docs/audit.md) | A stateless diff check with a preview, request cap, and skipped-evidence report. |
 | Reuse a repository convention | [`sys1 rules`](docs/review.md#draft-a-repository-rule) | A draft you can inspect, test on examples, and activate for future reviews. |
 | Add decisions to an application | [Node/Bun client](#use-as-a-module) or [HTTP API](#the-endpoint) | Yes/no, choice, and score answers with a selected model and validated response shape. |
+| Try a decision workflow from source | [Profile evaluator](docs/profile-evaluation.md) | Compare failure triage, excerpt relevance, or claim support with labeled examples from a source checkout. |
 
 The review and verification skills work in Git repositories with Codex,
 Claude Code, or Devin; other agents can use the same CLI. Their workflows do
@@ -522,7 +523,11 @@ only `{"state": ...}` on stdin or `--file`.
 
 From a source checkout, [evaluate profiles on labeled examples](docs/profile-evaluation.md)
 with an offline preview, request limits, and per-question results. Experimental
-examples cover failure triage, excerpt relevance, and claim support.
+[profiles](examples/workflows) cover failure triage, excerpt relevance, and claim
+support. These experiments require Bun and the project dependencies; they are
+separate from the installed review and verification skills. Read the
+[September 28, 2026 trial](benchmarks/workflows/results/2026-09-28.md) for the
+method, recorded outcomes, and limits.
 
 For a direct Kev endpoint, use `createClient({ baseUrl: "http://127.0.0.1:8009",
 adapter: "kev" })` with an ordinary request containing `model: "kev-latest"`.

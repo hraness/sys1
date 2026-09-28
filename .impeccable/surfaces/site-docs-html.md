@@ -136,3 +136,27 @@ remaining source/copy blocker was found. Factual confidence is now 2 and the
 revised page's admission total is 12/12. This records editorial/source
 admission; aggregate validation, publication, and production evidence remain
 with the integration owner's ordinary delivery workflow.
+
+## Source evaluator link, September 28, 2026
+
+The profiles section links the source evaluator guide and names the source
+checkout, Bun, and dependency requirements. It distinguishes the experiments
+from installed project skills. Drafted by Codex agent /root/trial_cases from
+the evaluator guide; no human review. Independent copy review and the converged
+browser check remain with the integration owner.
+
+The Codex integration agent independently checked the added descriptions and
+links against the profile definitions and evaluator source. No unsupported
+quality claim or installable-skill claim was found. Focused static checks passed;
+the final browser and production checks are recorded with delivery evidence.
+
+## Historical evaluation scope, September 28, 2026
+
+The related `site/docs/evaluations.html` page now scopes its completed hosted
+result to the September 20 forms-v1 study and names the separate decisions-v2
+test explicitly. A short link introduces the September 28 source workflow
+trial without combining datasets, dates, or metrics. Historical measurements
+and report links remain unchanged. Sources: the existing forms-v1 and
+decisions-v2 reports and the frozen workflow profiles. Drafter/source pass:
+Codex agent /root/trial_cases; no human review. Root owns independent copy
+review and the final browser check.

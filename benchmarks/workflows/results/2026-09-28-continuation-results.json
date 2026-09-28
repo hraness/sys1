@@ -1,0 +1,2112 @@
+{
+  "schema_version": 1,
+  "status": "completed_with_case_errors",
+  "failure": null,
+  "experiment": "workflow-synthetic-screening-2026-09-28",
+  "provenance": {
+    "repository": "https://github.com/hraness/sys1",
+    "base_commit": "e153df3ad2aeb5549c0eb8859466f069bc9c5931",
+    "version": "0.17.0",
+    "source_status": "Source bytes are identical to the original frozen trial, including the evaluator and fixtures that have since been committed. V5 changes only the continuation harness; exact source-file hashes below.",
+    "compiler": {
+      "bun": "1.3.14",
+      "target": "bun",
+      "minify": true,
+      "external": [
+        "node-llama-cpp"
+      ],
+      "sourcemap": "none"
+    },
+    "manifest_sha256": "c9be70943375de49f836a2ba1b8c1a4c90a179adf50e4b9bc383742b9d18db9d",
+    "harness_sha256": "c69fb48f23ccfd40242a8bd6fcfe2cfcc1be44794852918dc2ffd9b3f6b21a5a",
+    "source_hashes": {
+      "bun.lock": "9e3dac2f06278251899f70752e9bdb557a105cffe682e6733f69b68d90118274",
+      "package.json": "9961e76bccb830c2037757f9bb2f165bdc8ce8b6d21a51934d22ca74bf4c1e7c",
+      "scripts/evaluate-profile.ts": "ea8769beaa5bf7b0bad2c4c72f9a238142bcb6109c92863e6f24c64cc9009e4f",
+      "scripts/workflow-baselines.ts": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "src/audit/benchmark.ts": "7f9e100ab7e98017d17bad93cbb64b5361c94487e0b4802b24585cb52dfb721f",
+      "src/audit/cli.ts": "c7fed5fbf70ed48faf38116f23ed8aa4cf94778fc3856605269c49a0454c0c52",
+      "src/audit/compile.ts": "296f4fa629c969ed36f503e59cb0e658725218f0da97c859fbd077215d7d41fc",
+      "src/audit/diff.ts": "c78f65ad753f1c219d7fbdfbd3c140b7a1672b0cdf41e709f75a31ac36f38761",
+      "src/audit/evaluate.ts": "d6266082623237b2d129420e16c71cb89cda20dc51510712a8b32f377bb9870c",
+      "src/audit/pack.ts": "480ede7bf7f95e36a8806e060a71f277d78153542d5d9d28935e875a1329655a",
+      "src/audit/rules-cli.ts": "9c289eea93ec97d859e67f46fde05a8973f9f01e43375749104194d4cdc092f5",
+      "src/audit/schema.ts": "65bc170dc0f190e83ca03211fc1a2e8be47270b0dde01222398ae3ce175459f2",
+      "src/audit/select.ts": "0c083958901a32b1f5181e24bb002471132dc91d10041a257cff8b4dec8d4d37",
+      "src/backends.ts": "a56d247afdd4190ea3806ae56580aafe2d052688a8c40ebe8d7d8a1ed19ddd8f",
+      "src/cli-help.ts": "869edeb75f6781a6fa847e0975039a0033ded07be52e3c8b8867ae900289e6ed",
+      "src/cli-style.ts": "aa3bad6cc893b283bd166dd5fe7c5a0f44491f35741257f1dadd3f1e364b8d0b",
+      "src/cli.ts": "7e64b7500da8302efda6fa2165ca3c37a0e22e7edc501941453bd5f09860f12c",
+      "src/client.ts": "2990d3930303cd397bba5db52a34411faf2b25c0adc6fa30873a9b87eea4cb70",
+      "src/config.ts": "4ca9349c5ed1317120134509c6750b64d072b4496e67a3a9b0183e3dba015aca",
+      "src/daemon.ts": "2b73d9fdf22e66445eb25ad0aaa0c4986e0a066bb7eb9f7327903e119ff6a2c5",
+      "src/defaults.ts": "3aad6df4f5daf3d2ba864d0e1a7faaabe67ea8c2c2015e6ce62d82b0a06e2b63",
+      "src/doctor.ts": "53c57f3649a4e0b7a0b81094b6cdc5f3b2536e49b3674e8936a7528cc4bfa886",
+      "src/gateway.ts": "e7c2fafd3566d8ccd92e57cc96c36ca5ee8dcf2b8c098eea33df6ef936854644",
+      "src/http.ts": "fedb91473976d397d7444ec5f1c4c777e9af9f38ee9c0fd37d54fffc49d9b14a",
+      "src/index.ts": "c517b07496fc8944818a1cf122934866e3b10f3900309acb968e25de152416fb",
+      "src/kev.ts": "d667ec0b967a70461c5c5b6b684b051a3989b289040c15427ad9edbd56a2292c",
+      "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+      "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+      "src/local/engine-ipc.ts": "380127a1256b7eb496ba770fe9a8b3487a6c9e1ed232ff936bd5e0eb5a6cc984",
+      "src/local/engine-types.ts": "5288ea1abb8e1356baed05228dc69d8d3dcdc378dedc92dc33342776750fb474",
+      "src/local/engine-worker.ts": "4bce446ee115c15516740e4422a425c0a401e7795d8c362c630a3c25ad16f3f2",
+      "src/local/engine.ts": "8f39f2293b2975d298711e9b91839f718fc2be1618a973a80b5d082d6f3904dc",
+      "src/local/input.ts": "a7a2236a75da4f18169c39288fbad6f97e357511d057bd88d1d2ef34124c21a9",
+      "src/local/runner.ts": "9e9e6fbf89c0e62fb681a75b86a75ccd417893978255ed773a25f975c9c2295c",
+      "src/local/store.ts": "caa431c3e27420c2c154ec57f1523fdc09b6085be6e298c7fee5a3900a36565b",
+      "src/profile.ts": "c23e6dcf534ee99d4a2848839a597ccdca0dce9471f3a810bcdf966985bdeb49",
+      "src/protocol.ts": "e546f90c7d84b83f440eeaf147999b09ac80c59704486aee5917f48789146ef4",
+      "src/qualification.ts": "c731268f266f3d586c36af2734ef485df46fd1768b817bfaeacb45f5515c227d",
+      "src/response.ts": "ea2971e9a6f0ca153e6cb5dbad0d0a545e360474e87db31a8d53724c4cc2f41c",
+      "src/review/checkpoint.ts": "ef690e06a374fba6f2698d3aeb3f540b1dfc061f57bc087e8536dc21ad60d00f",
+      "src/review/cli.ts": "544a35050a08cb1c107f637b5fafbf5de2fb10eac5ef2c7b067cdccedf484cd0",
+      "src/review/install.ts": "be1512f948ed7fb67ebebe3b3886d46e42a8bd28a2aad4e5cd66ad549e86994b",
+      "src/review/project-files.ts": "38a85daeb1d384062bc3275f983f46ef4de5c982061512f57b6e809194e5b164",
+      "src/review/state.ts": "5068528e1ab5add7ffaebe453b52ad40b45c8b8b0b81c872df38c1ef1f6ba75c",
+      "src/router.ts": "499526d5792ea065cfb48d08428490ce2ca08f40bc2f0160994161da9be7ddbb",
+      "src/runtime.ts": "a9bb4393efe333e3ad997c90d738cbbd42dedb4eaa96c95c72a0c79adeb0137b",
+      "src/usage.ts": "1ced902c9234cd5acfc0e0433a4a3b9c8c80aad88b66217b05768c1af0627751",
+      "src/verify/cli.ts": "643db7068c459f5d31d4cc1116ea61ace0dbbb58f12a7df6a9846858b245db27",
+      "src/verify/evidence.ts": "23c84423cd25b983f3d2714bddd51fc567191f5d886a3b52e481b64f08e04557",
+      "src/verify/install.ts": "28830c166a4cfdd4d7969390381c96c61ef02baec7783149e174c6db7f39ec8c",
+      "src/verify/message.ts": "6ee299ab8ae20b869a00249e33426a390c01906c8dfc1b6e25229c51116e49f6",
+      "src/verify/verify.ts": "855faff662276bf53ddaf0f5b188b62ed1e583777d8e70aa56f2c5a2d084c3cd"
+    },
+    "frozen_files": [
+      {
+        "path": "examples/workflows/failure-triage.profile.json",
+        "role": "profile",
+        "workflow": "failure-triage",
+        "sha256": "da067bf8efb546af6c1c13940f48a5ce36e67c59661c1a708b0790f37efa16bd",
+        "bytes": 2276
+      },
+      {
+        "path": "benchmarks/workflows/failure-triage.development.json",
+        "role": "development",
+        "workflow": "failure-triage",
+        "sha256": "845b622b9c15990fc59f69e8d6ba45fd7cac7a9d10113dd5667805420259cf03",
+        "bytes": 3334
+      },
+      {
+        "path": "benchmarks/workflows/failure-triage.screening.json",
+        "role": "screening",
+        "workflow": "failure-triage",
+        "sha256": "e2d1513c24a8e80233899c31fb6f2c1c401fffc2b8405b27335de90a687464d1",
+        "bytes": 4023
+      },
+      {
+        "path": "examples/workflows/evidence-relevance.profile.json",
+        "role": "profile",
+        "workflow": "evidence-relevance",
+        "sha256": "a4e0ccfea3cf5f4951c5ffd838f9acfaaa33135e8e6bf20a6bdc4b448120ae0d",
+        "bytes": 1392
+      },
+      {
+        "path": "benchmarks/workflows/evidence-relevance.development.json",
+        "role": "development",
+        "workflow": "evidence-relevance",
+        "sha256": "8ae95310eeb368c5ca4533f3e58e459ef8d8da3c65a6148f6d1b11253a2b7e7e",
+        "bytes": 2608
+      },
+      {
+        "path": "benchmarks/workflows/evidence-relevance.screening.json",
+        "role": "screening",
+        "workflow": "evidence-relevance",
+        "sha256": "b6eaf330a0910e4c0f555c82d0632c1978a4fe1de7f498864eaa555cec0201f2",
+        "bytes": 3187
+      },
+      {
+        "path": "examples/workflows/claim-support.profile.json",
+        "role": "profile",
+        "workflow": "claim-support",
+        "sha256": "d63ab5b57de84c9cca1aac72da766e5bbf0a6eff42710b91f84617f487585c3b",
+        "bytes": 1500
+      },
+      {
+        "path": "benchmarks/workflows/claim-support.development.json",
+        "role": "development",
+        "workflow": "claim-support",
+        "sha256": "e8c5998b1b0f7309e3ee8c770bc933121bbcf2af46559ffac2227ae644cfcf19",
+        "bytes": 2455
+      },
+      {
+        "path": "benchmarks/workflows/claim-support.screening.json",
+        "role": "screening",
+        "workflow": "claim-support",
+        "sha256": "2f065f444b355ac19281411a41f613e0de974e413f1a72c5038518295aabbf7a",
+        "bytes": 3048
+      },
+      {
+        "path": "scripts/workflow-baselines.ts",
+        "role": "baseline",
+        "sha256": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+        "bytes": 7562
+      },
+      {
+        "path": "benchmarks/workflows/README.md",
+        "role": "methodology",
+        "sha256": "235e3c9c8d23eb070ec02d6619476967942a2cc4d7ab42413b0b0d055da0f07d",
+        "bytes": 2872
+      }
+    ],
+    "bundle_sha256": "88f7d73e63e867942e21c347dbc322328763b2e17e4b77c27f8148f0f4ba02e3"
+  },
+  "continuation": {
+    "schema_version": 1,
+    "previous_report_sha256": "317c357e5cac975f29608e2b35959c117d0d6ab34c143e3bbb7686ef88df7386",
+    "previous_bundle_sha256": "7af19c806cdcac41fda84b5fde46845c090d3a8503f88f8f4b5aa7b2d64e65ad",
+    "previous_provider_model_posts": 18,
+    "previous_provider_probe_gets": 36,
+    "cumulative_model_cap": 48,
+    "cumulative_probe_cap": 96,
+    "excluded_provider_request_hashes": [
+      "294248e92ffe952a28c9518c7d584a15aecad0f9280e079eb4fe0c4149a22895",
+      "51952e70e298cd759863d9efc25418829b47a62feeee297905409b926b7db40a",
+      "9e71b844c12e634d6c6135c29d8c8b6e08ec8eb4109549b5615ecd22db73986f",
+      "2960c8a69e402b71eb6d1fffd5498b1bcc8811764fdf820c7f3c9c263436c1d6",
+      "9c036a50268b9eb8ec816435ed240ac9aeb90748abdbec2118e46d53a4499c3d",
+      "0cc297e7acd84dfbf3520ae59733c45740a9807e4ad1a4a2340bf28c7d8ba862",
+      "ceb5fe31e3dc3bcfd1f4b0418a59ed45ed9a695ebf7178e16b9c9c86c0f53d98",
+      "bdaf224cc4025175b8ca292476e153ae00616f96894d2b1e5f9115189e1c8a8d",
+      "820794d27ad78cfd1c530395c4c135ecfdff8e3c009c2da0c1b2c747b243cdae",
+      "da1d3895e8c6d64fcb23be69d0158503aad5c8a6069a105bb4e2d54533043d4d",
+      "7586565370dee287aec6f2c671ad680dd21966d370e1f7af821c239bc425abd3",
+      "3c2a72324362289339948da777ab2583b820629c5b356e9000d66a5dbc15e98c",
+      "b2c60da7499da37a3bf693d6d7d3882981f4327417b0dc3540d614e11d163fce",
+      "fd199778e122caede4dd3aa3b4a2ed2796e7d74ba51d81b7496b6b62d3de2aec",
+      "b997a971060e9b9526830b7b4872632d27c87b628d551ae9df4cdea4353b9338",
+      "bd13b53bd1cee9cbb3a816875e2fb3f3eb2c1c011228fb8d4e0564a30b1998b1",
+      "4c28afc2c397e0f05cb406292bc821ab75cbba27843f3b18cec7c1545e57892a",
+      "314a7f55ccba6e8e3d691221b00ffdf684963c82e796a278db0cf6dfb6802bcd"
+    ],
+    "eligible_provider_request_hashes": [
+      "1258990d6192fa42eb34d121016c7c109d5f9361c78bc60f82ff8b2c15106d8b",
+      "65a3b9989b0a141aa86ea45a4b40f821e9e7dc9268c676b3326abf2c2781e374",
+      "352aa00301bedf97a40faf8c1e0d5739531e74e6acaa9194f98e2b457d33819f",
+      "32de8aa0db87f35ae6d7b15f0ec0f01da51326a79a4516e14e5d0a1482e29415",
+      "b24c1c8d84121f9ebfcd4239017f9e85dea4d0c2ee46d948be809102c2283aba",
+      "12e4d6c7aa730a3497075eeffefb45a74de8d010f9d967e1225e75f8a7bcc2d4",
+      "decc0f7dcad75c79ccbfdaad55f330b337a700819d9b2e7b4bc8e7ddd77c06c5",
+      "7e9d50028782988d40530314bd89fadb803ac2b4a0ec1d8d34dd40014b6b07a2",
+      "6fb5c169b408a30df65d6ae7217745f46460b0dc0da6c0cfa25511185cbb6ea3",
+      "808b0ddcfcfd0215d750e4a461dd350ef7d7cf70a5051a57ada6e83336c26657",
+      "a6e1f8ab216fab7edf490aa60c269823b54c90673c462156d950813e201149c9",
+      "9a25cbdd909f0ea61cd2146213c0808d55617e0de0dfa8a4e3f528cf4f1fdab4",
+      "4c44f8fefa2d17a655f767c01f48bb4f9e54d25ac689d1bcb770c68a4e7ddfd1",
+      "fbc7c2d21500773c6e924a3e41ca8e684950a251dc59259e309de177ae77d145",
+      "52255b2c1594d2ba864358a7a8ba22548a197833844c0baa0e433c427f04caeb",
+      "e685676a9c47b2724e9602e8562f39d4e66ce08ffc9ae837724c2c6b74422f39",
+      "2e2c3b8b759e1260e02e5bcc52a22fdfc0f0038c7f7f501f687840a7a337242c",
+      "51d33efb8f6b6edad3099a61630eefb0f8012d3ff94452e0c958b518ed64a2cf",
+      "8898f58681ec2b171dd30cc1d57aca0c567ff77a131d82c6e5e85653d7c1ec63",
+      "59921e8ac9348fc961afebc9b04ec0dda327e0bb7bba5b218009133e0e24b622",
+      "f6179600e0663bdb9a9210bdf1ac1fe44480ea2b1cda51375ea25cf16e24cc6d",
+      "31076ad7f2fa25e2647c36359b60b92cf87f239fce1757de6f7a32cbcce0af37",
+      "9c651da1de7b7381e5587beb6c3c4cdcfc4c2f38bf3d45faa89c4b1cb5b9fa7b",
+      "7e35749025413609992acef70aa3951ad4fcacc1a51b6ad4d0e10b2b968b33be",
+      "778efd16a496dc241c60952b19ab028592b2ddaceda93dfd43a646d532bf390e",
+      "10c9f923c64e38089407c0a14895a5d88ab33f079dc478cd50a21783be471099",
+      "b611fb08fb4a64349b8f0e627343eca395eaa77d293d3ef42063927c9f71f316",
+      "537f10fb24f035d4de884f4d9f8392666608e549b1ac7daedfcf92cd2bc88368",
+      "9c6ddd0529f617d487c19653a622ecd2fbe57ec6bb9fa2536c0e6588d7b04b8f",
+      "cccac6948724b0ed6e0d9d2c2b456e8fee24f25f88bb65b2e5b2bd7316cebf23"
+    ],
+    "protocol": "Resume only never-submitted frozen cases; continue definitive per-case HTTP/contract errors; stop auth, transport, identity, deadline, cap or guard failures. Original report is unchanged."
+  },
+  "inputs": {
+    "profiles": 2,
+    "splits": 4,
+    "cases": 30,
+    "original_profiles": 3,
+    "original_splits": 6,
+    "original_cases": 48,
+    "frozen_at": "2026-09-28T18:04:50.001815+00:00",
+    "manifest_status": "frozen-before-live-calls",
+    "fixture_metadata": "Evaluator split/family fields are attached from the frozen manifest; state, expected labels and profile requests are unchanged. Raw-file hashes remain recorded separately."
+  },
+  "execution": {
+    "harness_version": 5,
+    "configuration_hashes": {
+      "runtime_raw_sha256": "af2e6766a34644f9dbaba8e9517e3f17d4732ffe63cf55b1148108d2f09d9769",
+      "runtime_canonical_sha256": "8e812519751e3ad970202f2ec0cabd97d0ab2e57dcb00119c9af9e9810da3e1c",
+      "expected_canonical_sha256": "8e812519751e3ad970202f2ec0cabd97d0ab2e57dcb00119c9af9e9810da3e1c"
+    },
+    "started_at": "2026-09-28T19:50:55.790Z",
+    "finished_at": "2026-09-28T19:51:06.683Z",
+    "bun": "1.3.14",
+    "platform": "linux",
+    "arch": "x64",
+    "vercel_region": null,
+    "vercel_environment": "preview",
+    "configured_model": "typesafe/jev-1.13.0",
+    "routing_policy": "hosted-only",
+    "local_enabled": false,
+    "provider_origin": "https://api.typesafe.ai",
+    "retries": 0,
+    "max_model_calls": 30,
+    "max_probe_calls": 60,
+    "global_deadline_ms": 840000,
+    "evaluator_timeout_ms": 30000,
+    "gateway_timeout_ms": 20000,
+    "probe_timeout_ms": 1500,
+    "latency_boundary": "Each evaluator case measures local client + owned loopback gateway + provider discovery and inference + response validation; excludes deployment, build, bundling, input validation, gateway startup and deterministic baseline calculation.",
+    "region_note": "vercel_region is the build runtime environment value when supplied; null means unavailable, not inferred from project configuration.",
+    "gateway_stopped": true,
+    "report_note": "Actual model submissions are provider_model_posts. Evaluator attempted can also include a subsequent local abort after an error. No source state, questions, raw provider bodies or credentials are included."
+  },
+  "network": {
+    "provider_model_posts": 30,
+    "provider_probe_gets": 60,
+    "blocked_calls": 0,
+    "previous_provider_model_posts": 18,
+    "cumulative_provider_model_posts": 48,
+    "previous_provider_probe_gets": 36,
+    "cumulative_provider_probe_gets": 96
+  },
+  "request_observations": [
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "background-only",
+      "evaluator_request_sha256": "7e2770a365124d727f3c472ed1b34a68dd92ab8a0c6116e545a4b4c0dc3ea562",
+      "provider_request_sha256": "1258990d6192fa42eb34d121016c7c109d5f9361c78bc60f82ff8b2c15106d8b",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "supporting-cause-only",
+      "evaluator_request_sha256": "e6c1368f8baf82780ba7bca3e22eb3a1273c15019e0ade9aedb412d96f1237a7",
+      "provider_request_sha256": "65a3b9989b0a141aa86ea45a4b40f821e9e7dc9268c676b3326abf2c2781e374",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "direct-port-answer",
+      "evaluator_request_sha256": "b5b611050d6eca98fe8e3930198fe1709103db5c02a1250f284fcc6916bcb70e",
+      "provider_request_sha256": "352aa00301bedf97a40faf8c1e0d5739531e74e6acaa9194f98e2b457d33819f",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "quoted-score-instruction-only",
+      "evaluator_request_sha256": "6737a960167067f186bcd301ac1b7e9b0f396922619f0daae54e62b89bbe7e22",
+      "provider_request_sha256": "32de8aa0db87f35ae6d7b15f0ec0f01da51326a79a4516e14e5d0a1482e29415",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "direct-answer-with-quoted-instruction",
+      "evaluator_request_sha256": "d92ea80ca3305a7f25a03641146d6718ede5c7288a075b70bf1c793df2580ffa",
+      "provider_request_sha256": "b24c1c8d84121f9ebfcd4239017f9e85dea4d0c2ee46d948be809102c2283aba",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 502,
+      "gateway_error_type": "backend_response_invalid"
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "partial-command-answer",
+      "evaluator_request_sha256": "d5110929960db162dbc18c6fcb5950141327f6ee92d17446a37a0fff8c83440d",
+      "provider_request_sha256": "12e4d6c7aa730a3497075eeffefb45a74de8d010f9d967e1225e75f8a7bcc2d4",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-library-two-rules",
+      "evaluator_request_sha256": "aef14e4dd038cf1a57d607b6594b042dd34607c99746b931895b482c296c6ef4",
+      "provider_request_sha256": "decc0f7dcad75c79ccbfdaad55f330b337a700819d9b2e7b4bc8e7ddd77c06c5",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-museum-hours-gap",
+      "evaluator_request_sha256": "6806342aed5db51cf16044712a8989c2063f7e89bc686a9b252c13a2c0e28b37",
+      "provider_request_sha256": "7e9d50028782988d40530314bd89fadb803ac2b4a0ec1d8d34dd40014b6b07a2",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-garden-context",
+      "evaluator_request_sha256": "8d75adc7c223b786b23f4ba1164a2a817edb90a0902f7e99e8e5b30bf50eb417",
+      "provider_request_sha256": "6fb5c169b408a30df65d6ae7217745f46460b0dc0da6c0cfa25511185cbb6ea3",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-join-different-domain",
+      "evaluator_request_sha256": "77d616dad336820dfb3a9a2f403b22827b9303910a70ab9422a76b47fcc35cba",
+      "provider_request_sha256": "808b0ddcfcfd0215d750e4a461dd350ef7d7cf70a5051a57ada6e83336c26657",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 502,
+      "gateway_error_type": "backend_response_invalid"
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-unverified-direct-fact",
+      "evaluator_request_sha256": "b8066fbd116bb8d7aa5c4026d8691403049ac9d8253d0b3a667d21954fee0d09",
+      "provider_request_sha256": "a6e1f8ab216fab7edf490aa60c269823b54c90673c462156d950813e201149c9",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-rain-and-wind",
+      "evaluator_request_sha256": "fe3c5dae9823157c284095ce5cfa854aaf5b28cc31a8c26745db5fad5865624f",
+      "provider_request_sha256": "9a25cbdd909f0ea61cd2146213c0808d55617e0de0dfa8a4e3f528cf4f1fdab4",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-queue-terminology",
+      "evaluator_request_sha256": "112bcd030c5f88dbdc9150980294650e73fcde92a0329d655e89355b54218385",
+      "provider_request_sha256": "4c44f8fefa2d17a655f767c01f48bb4f9e54d25ac689d1bcb770c68a4e7ddfd1",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "id": "relevance-screen-restated-question-injection",
+      "evaluator_request_sha256": "b08ab2b5b16985df8538396f5ca6e8d0998ab9a6683015c546544824813fa626",
+      "provider_request_sha256": "fbc7c2d21500773c6e924a3e41ca8e684950a251dc59259e309de177ae77d145",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "explicit-support",
+      "evaluator_request_sha256": "1f51860ef93a8a9f38ad8c7977e656ded0860fc653c40b2d5ec7b1505cf01a95",
+      "provider_request_sha256": "52255b2c1594d2ba864358a7a8ba22548a197833844c0baa0e433c427f04caeb",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "explicit-negation",
+      "evaluator_request_sha256": "41b7f43ba2fc54b7e23a87e65038ab9b2eb6a3cdd98a8121b92b9142d67fdc94",
+      "provider_request_sha256": "e685676a9c47b2724e9602e8562f39d4e66ce08ffc9ae837724c2c6b74422f39",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "supported-negative-claim",
+      "evaluator_request_sha256": "c1692640abb18ef28347223577c3eb1f609773aaff0ce46ec2252690914a4dc9",
+      "provider_request_sha256": "2e2c3b8b759e1260e02e5bcc52a22fdfc0f0038c7f7f501f687840a7a337242c",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "different-version",
+      "evaluator_request_sha256": "5e96a6b733f86aae81190473d9087857e84e74ae539e4b080e6da507c60aac01",
+      "provider_request_sha256": "51d33efb8f6b6edad3099a61630eefb0f8012d3ff94452e0c958b518ed64a2cf",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "unrelated-excerpt",
+      "evaluator_request_sha256": "2562ba13e4b61b1d8e99d8f39e5fce76393fd897db77a0257513776ab262e9f0",
+      "provider_request_sha256": "8898f58681ec2b171dd30cc1d57aca0c567ff77a131d82c6e5e85653d7c1ec63",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "quoted-instruction",
+      "evaluator_request_sha256": "e6f262d812cb745b2376a3feef374836999f644f12af58c8c09e3030225f5614",
+      "provider_request_sha256": "59921e8ac9348fc961afebc9b04ec0dda327e0bb7bba5b218009133e0e24b622",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "partial-multipart-support",
+      "evaluator_request_sha256": "fe09fa500606eb054c251bac9dcb3df917abe88eaf8a6bc3c86ad9ecba1dd895",
+      "provider_request_sha256": "f6179600e0663bdb9a9210bdf1ac1fe44480ea2b1cda51375ea25cf16e24cc6d",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "id": "contradiction-with-missing-detail",
+      "evaluator_request_sha256": "8eda060edd77dd906574b4388e4d743416f15840c9916fdf7dac70f6f6ed1890",
+      "provider_request_sha256": "31076ad7f2fa25e2647c36359b60b92cf87f239fce1757de6f7a32cbcce0af37",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-negative-sync-policy",
+      "evaluator_request_sha256": "480037f7ccc3365537482afb1243d94f3ad7a7e5afd42d57de0e05a83335fe9c",
+      "provider_request_sha256": "9c651da1de7b7381e5587beb6c3c4cdcfc4c2f38bf3d45faa89c4b1cb5b9fa7b",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-numeric-contradiction",
+      "evaluator_request_sha256": "b6489475dbd85982fe35493453c9b567410584676b547299431087818f1f9147",
+      "provider_request_sha256": "7e35749025413609992acef70aa3951ad4fcacc1a51b6ad4d0e10b2b968b33be",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-version-gap",
+      "evaluator_request_sha256": "bd2cc65ce898cd0a0277a76618607b584e48084c0bf06323ca3e42a6de4a57d1",
+      "provider_request_sha256": "778efd16a496dc241c60952b19ab028592b2ddaceda93dfd43a646d532bf390e",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-compound-transit",
+      "evaluator_request_sha256": "0e1cab4513a845bcf44fcce5ee1836d9dac23bc7593417734b18dbd50e5dfcf3",
+      "provider_request_sha256": "10c9f923c64e38089407c0a14895a5d88ab33f079dc478cd50a21783be471099",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-measurement-unit",
+      "evaluator_request_sha256": "3eb1f96d1ca5d409d866e8c2e6127f2c18124f31c16871d43bfda5fc8aa340fb",
+      "provider_request_sha256": "b611fb08fb4a64349b8f0e627343eca395eaa77d293d3ef42063927c9f71f316",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-platform-scope",
+      "evaluator_request_sha256": "bb0e423b82960b74a260f101d0de4288b1b1a01fd14e934c16903c10b5ebf83e",
+      "provider_request_sha256": "537f10fb24f035d4de884f4d9f8392666608e549b1ac7daedfcf92cd2bc88368",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-quoted-claim-injection",
+      "evaluator_request_sha256": "b26e0fcab7acf8a50e0e6a02cd65237c9a79d2b0ca6d2f35a5cf1554f7affc28",
+      "provider_request_sha256": "9c6ddd0529f617d487c19653a622ecd2fbe57ec6bb9fa2536c0e6588d7b04b8f",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "id": "support-screen-negative-claim-opposed",
+      "evaluator_request_sha256": "a4e1fa3a5054f3cd06c601a34efb64f6ede4daf08a63daf43144c6126f0f1435",
+      "provider_request_sha256": "cccac6948724b0ed6e0d9d2c2b456e8fee24f25f88bb65b2e5b2bd7316cebf23",
+      "submitted": true,
+      "provider_http_status": 200,
+      "gateway_http_status": 200,
+      "gateway_error_type": null
+    }
+  ],
+  "summary": {
+    "planned": 30,
+    "attempted": 30,
+    "completed": 28,
+    "errors": 2,
+    "skipped": 0
+  },
+  "batches": [
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "baseline": {
+        "workflow": "evidence-relevance",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 6,
+        "correct": 5,
+        "accuracy": 0.8333333333333334,
+        "predictions": [
+          {
+            "id": "background-only",
+            "split": "development",
+            "family": "readiness-definition",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 1
+            },
+            "correct": true
+          },
+          {
+            "id": "supporting-cause-only",
+            "split": "development",
+            "family": "readiness-port-mismatch",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": true
+          },
+          {
+            "id": "direct-port-answer",
+            "split": "development",
+            "family": "readiness-port-guide",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": true
+          },
+          {
+            "id": "quoted-score-instruction-only",
+            "split": "development",
+            "family": "unrelated-score-comment",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 0
+            },
+            "correct": true
+          },
+          {
+            "id": "direct-answer-with-quoted-instruction",
+            "split": "development",
+            "family": "readiness-guide-with-comment",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": true
+          },
+          {
+            "id": "partial-command-answer",
+            "split": "development",
+            "family": "preview-command",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "evidence-relevance",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "47c2c5075aa737eccf4ad9e05d762355de6f052c4ec14d725a975907ee5846e8"
+        },
+        "fixtures_sha256": "37f358fd779789ce82edec6c137b87fcd332431c11f8276aca47cc9cd56e06d2",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 839990
+        },
+        "summary": {
+          "planned": 6,
+          "attempted": 6,
+          "completed": 5,
+          "errors": 1,
+          "skipped": 0,
+          "questions": {
+            "correct": 5,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 5,
+            "unknown_calls": 1,
+            "input_tokens": 2749,
+            "output_tokens": 95
+          },
+          "elapsed_ms": 2314.717498
+        },
+        "cases": [
+          {
+            "id": "background-only",
+            "split": "development",
+            "family": "readiness-definition",
+            "request_sha256": "7e2770a365124d727f3c472ed1b34a68dd92ab8a0c6116e545a4b4c0dc3ea562",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 430.485826,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 552,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0.98,
+                  0.02,
+                  0
+                ],
+                "confidence": 0.98,
+                "score_absolute_error": 0.020000000000000018
+              }
+            }
+          },
+          {
+            "id": "supporting-cause-only",
+            "split": "development",
+            "family": "readiness-port-mismatch",
+            "request_sha256": "e6c1368f8baf82780ba7bca3e22eb3a1273c15019e0ade9aedb412d96f1237a7",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 480.01388499999996,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 558,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          },
+          {
+            "id": "direct-port-answer",
+            "split": "development",
+            "family": "readiness-port-guide",
+            "request_sha256": "b5b611050d6eca98fe8e3930198fe1709103db5c02a1250f284fcc6916bcb70e",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 338.078438,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 548,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          },
+          {
+            "id": "quoted-score-instruction-only",
+            "split": "development",
+            "family": "unrelated-score-comment",
+            "request_sha256": "6737a960167067f186bcd301ac1b7e9b0f396922619f0daae54e62b89bbe7e22",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 370.362748,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 547,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          },
+          {
+            "id": "direct-answer-with-quoted-instruction",
+            "split": "development",
+            "family": "readiness-guide-with-comment",
+            "request_sha256": "d92ea80ca3305a7f25a03641146d6718ede5c7288a075b70bf1c793df2580ffa",
+            "status": "error",
+            "skip_reason": null,
+            "elapsed_ms": 370.52581699999996,
+            "error": "http_error",
+            "http_status": 502,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "partial-command-answer",
+            "split": "development",
+            "family": "preview-command",
+            "request_sha256": "d5110929960db162dbc18c6fcb5950141327f6ee92d17446a37a0fff8c83440d",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 325.00907499999994,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 544,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "baseline": {
+        "workflow": "evidence-relevance",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 0,
+        "accuracy": 0,
+        "predictions": [
+          {
+            "id": "relevance-screen-library-two-rules",
+            "split": "screening",
+            "family": "willow-library-visitor-policy",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-museum-hours-gap",
+            "split": "screening",
+            "family": "harbor-museum-calendar",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 1
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-garden-context",
+            "split": "screening",
+            "family": "apple-orchard-establishment-guide",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-join-different-domain",
+            "split": "screening",
+            "family": "carpentry-join-description",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-unverified-direct-fact",
+            "split": "screening",
+            "family": "cedar-hall-notice-transcription",
+            "expected": {
+              "relevance": 3
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-rain-and-wind",
+            "split": "screening",
+            "family": "lake-sailing-forecast",
+            "expected": {
+              "relevance": 2
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-queue-terminology",
+            "split": "screening",
+            "family": "image-queue-overview",
+            "expected": {
+              "relevance": 1
+            },
+            "predicted": {
+              "relevance": 2
+            },
+            "correct": false
+          },
+          {
+            "id": "relevance-screen-restated-question-injection",
+            "split": "screening",
+            "family": "printer-recycling-question-spam",
+            "expected": {
+              "relevance": 0
+            },
+            "predicted": {
+              "relevance": 3
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "evidence-relevance",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "47c2c5075aa737eccf4ad9e05d762355de6f052c4ec14d725a975907ee5846e8"
+        },
+        "fixtures_sha256": "a002dab9d04fcaee90863dc4b41cf978963064ff396049f5b2ebcfb683d61e8a",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 837673
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 8,
+          "completed": 7,
+          "errors": 1,
+          "skipped": 0,
+          "questions": {
+            "correct": 7,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 7,
+            "unknown_calls": 1,
+            "input_tokens": 3927,
+            "output_tokens": 133
+          },
+          "elapsed_ms": 3038.906859
+        },
+        "cases": [
+          {
+            "id": "relevance-screen-library-two-rules",
+            "split": "screening",
+            "family": "willow-library-visitor-policy",
+            "request_sha256": "aef14e4dd038cf1a57d607b6594b042dd34607c99746b931895b482c296c6ef4",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 365.12465299999985,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 575,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.01,
+                  0,
+                  0,
+                  0.99
+                ],
+                "confidence": 0.97,
+                "score_absolute_error": 0.029999999999999805
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-museum-hours-gap",
+            "split": "screening",
+            "family": "harbor-museum-calendar",
+            "request_sha256": "6806342aed5db51cf16044712a8989c2063f7e89bc686a9b252c13a2c0e28b37",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 378.89897999999994,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 557,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0.98,
+                  0.02
+                ],
+                "confidence": 0.98,
+                "score_absolute_error": 0.020000000000000018
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-garden-context",
+            "split": "screening",
+            "family": "apple-orchard-establishment-guide",
+            "request_sha256": "8d75adc7c223b786b23f4ba1164a2a817edb90a0902f7e99e8e5b30bf50eb417",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 365.36889900000006,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 560,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0.96,
+                  0.04,
+                  0
+                ],
+                "confidence": 0.96,
+                "score_absolute_error": 0.040000000000000036
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-join-different-domain",
+            "split": "screening",
+            "family": "carpentry-join-description",
+            "request_sha256": "77d616dad336820dfb3a9a2f403b22827b9303910a70ab9422a76b47fcc35cba",
+            "status": "error",
+            "skip_reason": null,
+            "elapsed_ms": 372.743375,
+            "error": "http_error",
+            "http_status": 502,
+            "route": null,
+            "usage": null,
+            "questions": null
+          },
+          {
+            "id": "relevance-screen-unverified-direct-fact",
+            "split": "screening",
+            "family": "cedar-hall-notice-transcription",
+            "request_sha256": "b8066fbd116bb8d7aa5c4026d8691403049ac9d8253d0b3a667d21954fee0d09",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 367.98789399999987,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 555,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  0.05,
+                  0.95
+                ],
+                "confidence": 0.95,
+                "score_absolute_error": 0.04999999999999982
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-rain-and-wind",
+            "split": "screening",
+            "family": "lake-sailing-forecast",
+            "request_sha256": "fe3c5dae9823157c284095ce5cfa854aaf5b28cc31a8c26745db5fad5865624f",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 407.96479100000033,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 559,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": 0
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-queue-terminology",
+            "split": "screening",
+            "family": "image-queue-overview",
+            "request_sha256": "112bcd030c5f88dbdc9150980294650e73fcde92a0329d655e89355b54218385",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 382.70225200000004,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 564,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.02,
+                  0.92,
+                  0.06,
+                  0
+                ],
+                "confidence": 0.92,
+                "score_absolute_error": 0.040000000000000036
+              }
+            }
+          },
+          {
+            "id": "relevance-screen-restated-question-injection",
+            "split": "screening",
+            "family": "printer-recycling-question-spam",
+            "request_sha256": "b08ab2b5b16985df8538396f5ca6e8d0998ab9a6683015c546544824813fa626",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 398.0115730000007,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 557,
+              "output_tokens": 19
+            },
+            "questions": {
+              "relevance": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.8,
+                  0.18,
+                  0,
+                  0.02
+                ],
+                "confidence": 0.76,
+                "score_absolute_error": 0.24
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "baseline": {
+        "workflow": "claim-support",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 3,
+        "accuracy": 0.375,
+        "predictions": [
+          {
+            "id": "explicit-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "explicit-negation",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "supported-negative-claim",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "different-version",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "unrelated-excerpt",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "quoted-instruction",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "partial-multipart-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "contradiction-with-missing-detail",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "claim-support",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "f1344b8b436b765e6abaec93fbb5e26efd3a7178f341e27eeb5d90b4115c47ae"
+        },
+        "fixtures_sha256": "bdb80038ced09923b47a9e08616200a6bfb7e43e632d8a9c15eeb8cfa9f8387f",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 834633
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 8,
+          "completed": 8,
+          "errors": 0,
+          "skipped": 0,
+          "questions": {
+            "correct": 8,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 8,
+            "unknown_calls": 0,
+            "input_tokens": 4728,
+            "output_tokens": 403
+          },
+          "elapsed_ms": 2776.755367999999
+        },
+        "cases": [
+          {
+            "id": "explicit-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "1f51860ef93a8a9f38ad8c7977e656ded0860fc653c40b2d5ec7b1505cf01a95",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 339.46879100000024,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 586,
+              "output_tokens": 47
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0.99,
+                  0,
+                  0.01
+                ],
+                "confidence": 0.99,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "explicit-negation",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "41b7f43ba2fc54b7e23a87e65038ab9b2eb6a3cdd98a8121b92b9142d67fdc94",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 361.2330380000003,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 586,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "supported-negative-claim",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "c1692640abb18ef28347223577c3eb1f609773aaff0ce46ec2252690914a4dc9",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 395.5087450000001,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 594,
+              "output_tokens": 47
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0
+                ],
+                "confidence": 0.99,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "different-version",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "5e96a6b733f86aae81190473d9087857e84e74ae539e4b080e6da507c60aac01",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 299.83506599999964,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 588,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0.07,
+                  0.93
+                ],
+                "confidence": 0.9,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "unrelated-excerpt",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "2562ba13e4b61b1d8e99d8f39e5fce76393fd897db77a0257513776ab262e9f0",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 370.2730650000003,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 591,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "quoted-instruction",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "e6f262d812cb745b2376a3feef374836999f644f12af58c8c09e3030225f5614",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 377.2564309999998,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 602,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "partial-multipart-support",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "fe09fa500606eb054c251bac9dcb3df917abe88eaf8a6bc3c86ad9ecba1dd895",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 323.6783230000001,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 591,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "contradiction-with-missing-detail",
+            "split": "development",
+            "family": "fable-notes-manual",
+            "request_sha256": "8eda060edd77dd906574b4388e4d743416f15840c9916fdf7dac70f6f6ed1890",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 309.380728000001,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 590,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "baseline": {
+        "workflow": "claim-support",
+        "baseline_revision": "synthetic-screening-1",
+        "cases": 8,
+        "correct": 3,
+        "accuracy": 0.375,
+        "predictions": [
+          {
+            "id": "support-screen-negative-sync-policy",
+            "split": "screening",
+            "family": "harbor-sync-local-file-policy",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-numeric-contradiction",
+            "split": "screening",
+            "family": "cedar-api-plan-table",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-version-gap",
+            "split": "screening",
+            "family": "prism-recorder-archived-manual",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-compound-transit",
+            "split": "screening",
+            "family": "lumen-transit-timetable",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-measurement-unit",
+            "split": "screening",
+            "family": "orchard-sensor-output-reference",
+            "expected": {
+              "support": "supported"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-platform-scope",
+            "split": "screening",
+            "family": "atlas-desk-platform-reference",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          },
+          {
+            "id": "support-screen-quoted-claim-injection",
+            "split": "screening",
+            "family": "meadow-archive-support-ticket",
+            "expected": {
+              "support": "insufficient_evidence"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": true
+          },
+          {
+            "id": "support-screen-negative-claim-opposed",
+            "split": "screening",
+            "family": "river-kit-registration-guide",
+            "expected": {
+              "support": "contradicted"
+            },
+            "predicted": {
+              "support": "insufficient_evidence"
+            },
+            "correct": false
+          }
+        ]
+      },
+      "evaluator": {
+        "schema_version": 1,
+        "mode": "run",
+        "profile": {
+          "id": "claim-support",
+          "revision": "prototype-1",
+          "model": "typesafe/jev-1.13.0",
+          "sha256": "f1344b8b436b765e6abaec93fbb5e26efd3a7178f341e27eeb5d90b4115c47ae"
+        },
+        "fixtures_sha256": "15781500e114f22bb29e964cf58b1d08c35805ea7206ae333839dc8446f43da0",
+        "limits": {
+          "max_requests": 8,
+          "timeout_ms": 30000,
+          "deadline_ms": 831855
+        },
+        "summary": {
+          "planned": 8,
+          "attempted": 8,
+          "completed": 8,
+          "errors": 0,
+          "skipped": 0,
+          "questions": {
+            "correct": 8,
+            "incorrect": 0,
+            "unresolved": 0
+          },
+          "usage": {
+            "known_calls": 8,
+            "unknown_calls": 0,
+            "input_tokens": 4808,
+            "output_tokens": 403
+          },
+          "elapsed_ms": 2746.208272
+        },
+        "cases": [
+          {
+            "id": "support-screen-negative-sync-policy",
+            "split": "screening",
+            "family": "harbor-sync-local-file-policy",
+            "request_sha256": "480037f7ccc3365537482afb1243d94f3ad7a7e5afd42d57de0e05a83335fe9c",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 301.152379000001,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 601,
+              "output_tokens": 47
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-numeric-contradiction",
+            "split": "screening",
+            "family": "cedar-api-plan-table",
+            "request_sha256": "b6489475dbd85982fe35493453c9b567410584676b547299431087818f1f9147",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 334.8813680000003,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 608,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-version-gap",
+            "split": "screening",
+            "family": "prism-recorder-archived-manual",
+            "request_sha256": "bd2cc65ce898cd0a0277a76618607b584e48084c0bf06323ca3e42a6de4a57d1",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 284.2626769999988,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 595,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-compound-transit",
+            "split": "screening",
+            "family": "lumen-transit-timetable",
+            "request_sha256": "0e1cab4513a845bcf44fcce5ee1836d9dac23bc7593417734b18dbd50e5dfcf3",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 351.9949039999992,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 606,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0.01,
+                  0.99
+                ],
+                "confidence": 0.98,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-measurement-unit",
+            "split": "screening",
+            "family": "orchard-sensor-output-reference",
+            "request_sha256": "3eb1f96d1ca5d409d866e8c2e6127f2c18124f31c16871d43bfda5fc8aa340fb",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 363.0673119999992,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 601,
+              "output_tokens": 47
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  1,
+                  0,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-platform-scope",
+            "split": "screening",
+            "family": "atlas-desk-platform-reference",
+            "request_sha256": "bb0e423b82960b74a260f101d0de4288b1b1a01fd14e934c16903c10b5ebf83e",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 350.4287750000003,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 588,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-quoted-claim-injection",
+            "split": "screening",
+            "family": "meadow-archive-support-ticket",
+            "request_sha256": "b26e0fcab7acf8a50e0e6a02cd65237c9a79d2b0ca6d2f35a5cf1554f7affc28",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 394.15313100000094,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 608,
+              "output_tokens": 53
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  0,
+                  1
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          },
+          {
+            "id": "support-screen-negative-claim-opposed",
+            "split": "screening",
+            "family": "river-kit-registration-guide",
+            "request_sha256": "a4e1fa3a5054f3cd06c601a34efb64f6ede4daf08a63daf43144c6126f0f1435",
+            "status": "completed",
+            "skip_reason": null,
+            "elapsed_ms": 366.0834590000013,
+            "error": null,
+            "http_status": null,
+            "route": {
+              "backend": "typesafe",
+              "attempts": 1,
+              "model": "jev-1.13.0"
+            },
+            "usage": {
+              "input_tokens": 601,
+              "output_tokens": 50
+            },
+            "questions": {
+              "support": {
+                "outcome": "correct",
+                "probabilities": [
+                  0,
+                  1,
+                  0
+                ],
+                "confidence": 1,
+                "score_absolute_error": null
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "48 authored examples total, including 24 development examples and 24 screening examples. The screening set is small and synthetic, not a population-quality benchmark.",
+    "The screening author saw the rubrics and development cases. Independent authoring and distinct fictional source families do not provide blind population sampling.",
+    "Each workflow has eight screening cases. Accuracy describes these cases only; it does not establish calibration, workflow time saved, correction effort, source-location recall, or real-task effectiveness.",
+    "Relevance labels assess coverage, not truth or source reliability. All excerpts remain available to the caller.",
+    "The literal claim baseline is deliberately weak and may accept quoted claims or miss contradictions. A model outperforming it is not sufficient evidence of practical value.",
+    "After any predictions are inspected, preserve these files and report revisions as new experiments instead of tuning this screening set."
+  ]
+}

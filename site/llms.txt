@@ -29,6 +29,14 @@ Latest release: v0.17.0.
 
 - [system-one-verify](https://sys1.io/skills#shipped): Run a known noisy test or build once, return a short result, and retain its full local log. It belongs to System One Skills, needs no Sys1 backend, and is different from `sys1 verify`.
 
+## Source-checkout experiments
+
+These experimental profiles and their evaluator require a Sys1 source checkout, Bun, and project dependencies. They are separate from the installed review and verification skills.
+
+- [Workflow profiles](https://sys1.io/skills#workflows): Explore failure triage, excerpt relevance, and support for claims using caller-supplied text.
+- [Profile evaluation](https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md): Validate labeled examples offline, then opt into model calls with request limits and per-question reports.
+- [September 28, 2026 trial](https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md): Method, recorded outcomes, and limits of the synthetic screening experiments.
+
 ## Source
 
 - [GitHub](https://github.com/hraness/sys1): Source, releases, and the endpoint reference in the README.

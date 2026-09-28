@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "experiment": "workflow-synthetic-screening-2026-09-28",
+  "status": "incomplete",
+  "failure": "gateway_http_error",
+  "source_results_sha256": "b3008f7c0df1287eee372f371c4bd1edc390aba20021d574586a4fac56c52006",
+  "method": "Recomputed from individual public case records and frozen expected labels; errors and skipped cases are not graded incorrect. Development and screening remain separate.",
+  "summary": {
+    "planned": 48,
+    "attempted": 19,
+    "completed": 17,
+    "errors": 2,
+    "skipped": 29
+  },
+  "network": {
+    "provider_model_posts": 18,
+    "provider_probe_gets": 36,
+    "blocked_calls": 0
+  },
+  "observed_successful_route": {
+    "backend": "typesafe",
+    "model": "jev-1.13.0",
+    "attempts": 1
+  },
+  "usage_reported_by_completed_calls": {
+    "known_calls": 17,
+    "input_tokens": 12686,
+    "output_tokens": 1303,
+    "unknown_evaluator_attempts": 2
+  },
+  "usage_note": "Unknown evaluator attempts include one HTTP error and one local abort; this is not a count of two additional model submissions. Failed-request token use and dollar cost are unavailable.",
+  "recorded_wall_interval_ms": 6114.0,
+  "batches": [
+    {
+      "workflow": "failure-triage",
+      "split": "development",
+      "planned": 8,
+      "attempted": 8,
+      "completed": 8,
+      "errors": 0,
+      "skipped": 0,
+      "completed_questions": {
+        "correct": 8,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 8
+      },
+      "completed_case_time_ms": {
+        "count": 8,
+        "minimum": 287.6095009999999,
+        "median": 333.4646254999999,
+        "maximum": 426.00624000000005
+      }
+    },
+    {
+      "workflow": "failure-triage",
+      "split": "screening",
+      "planned": 8,
+      "attempted": 8,
+      "completed": 8,
+      "errors": 0,
+      "skipped": 0,
+      "completed_questions": {
+        "correct": 8,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 8
+      },
+      "completed_case_time_ms": {
+        "count": 8,
+        "minimum": 299.29355100000066,
+        "median": 336.9791174999998,
+        "maximum": 370.60833300000013
+      }
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "planned": 8,
+      "attempted": 3,
+      "completed": 1,
+      "errors": 2,
+      "skipped": 5,
+      "completed_questions": {
+        "correct": 1,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 6
+      },
+      "completed_case_time_ms": {
+        "count": 1,
+        "minimum": 323.41748800000005,
+        "median": 323.41748800000005,
+        "maximum": 323.41748800000005
+      }
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "screening",
+      "planned": 8,
+      "attempted": 0,
+      "completed": 0,
+      "errors": 0,
+      "skipped": 8,
+      "completed_questions": {
+        "correct": 0,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 0
+      },
+      "completed_case_time_ms": {
+        "count": 0,
+        "minimum": null,
+        "median": null,
+        "maximum": null
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "development",
+      "planned": 8,
+      "attempted": 0,
+      "completed": 0,
+      "errors": 0,
+      "skipped": 8,
+      "completed_questions": {
+        "correct": 0,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 3
+      },
+      "completed_case_time_ms": {
+        "count": 0,
+        "minimum": null,
+        "median": null,
+        "maximum": null
+      }
+    },
+    {
+      "workflow": "claim-support",
+      "split": "screening",
+      "planned": 8,
+      "attempted": 0,
+      "completed": 0,
+      "errors": 0,
+      "skipped": 8,
+      "completed_questions": {
+        "correct": 0,
+        "incorrect": 0,
+        "unresolved": 0
+      },
+      "baseline": {
+        "planned": 8,
+        "correct": 3
+      },
+      "completed_case_time_ms": {
+        "count": 0,
+        "minimum": null,
+        "median": null,
+        "maximum": null
+      }
+    }
+  ],
+  "errors": [
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "lexical-near-miss",
+      "error": "http_error",
+      "http_status": 502,
+      "elapsed_ms": 357.99348499999996
+    },
+    {
+      "workflow": "evidence-relevance",
+      "split": "development",
+      "id": "background-only",
+      "error": "aborted",
+      "http_status": null,
+      "elapsed_ms": 0.42701599999963946
+    }
+  ]
+}

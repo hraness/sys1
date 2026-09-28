@@ -79,7 +79,7 @@
           <p>Sys1 ships <code>sys1-review</code> for code-review candidates and <code>sys1-verify</code> for completion claims. Install either project skill for Codex, Claude Code, or Devin. The separate <code>system-one-verify</code> skill only captures and shortens test or build output; it needs no Sys1 backend or API key.</p>
           <div class="actions skills-actions"><a class="button" href="#review">Set up agent review</a><a class="button button-secondary" href="#shipped">Keep check output short</a></div>
         </div>
-        <nav class="skills-contents" aria-label="On this page"><a href="#review">Review changes</a><a href="#verify">Verify claims</a><a href="#shipped">Compact check output</a><a href="#evidence">Output study</a><a href="#install">Install output skill</a></nav>
+        <nav class="skills-contents" aria-label="On this page"><a href="#review">Review changes</a><a href="#verify">Verify claims</a><a href="#workflows">Try workflow profiles</a><a href="#shipped">Compact check output</a><a href="#evidence">Output study</a><a href="#install">Install output skill</a></nav>
       </section>
 
       <section id="review" class="section" aria-labelledby="review-heading">
@@ -103,6 +103,17 @@ sys1 verify --message /tmp/final-message.txt \
   --model typesafe/jev-1.13.0 --dry-run --json</code></pre></div>
         <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. The skill can be installed independently of <code>sys1-review</code>. Save the message outside the Git worktree (<code>/tmp/final-message.txt</code> here; choose an equivalent path on Windows). Run inside the task repository, inspect the preview, and repeat without <code>--dry-run</code> to send the message and any fetched page text to the selected backend. Devin can supply the message and recent check-command results from a local session; other agents pass a file or stdin.</p>
         <p class="skills-prose">This command is experimental and advisory. Contradictions exit 7; missing evidence is reported as unverifiable. A result without contradictions does not prove that the work is finished. <a href="/docs#verify">Evidence sources and limits</a>.</p>
+      </section>
+
+      <section id="workflows" class="section" aria-labelledby="workflows-heading">
+        <div class="section-intro"><h2 id="workflows-heading">Try decision workflows from source</h2><p>Use experimental profiles to explore decisions during an agent's work. Each profile fixes the questions and model route while accepting new input. These experiments require a Sys1 source checkout, Bun, and the project dependencies; they are separate from the installed review and verification skills.</p></div>
+        <dl class="skills-mechanism">
+          <div><dt><a href="https://github.com/hraness/sys1/blob/main/examples/workflows/failure-triage.profile.json">Failure triage</a></dt><dd>Suggest a read-only investigation from a failed command's diagnostics, such as checking an assertion, dependency, or access requirement.</dd></div>
+          <div><dt><a href="https://github.com/hraness/sys1/blob/main/examples/workflows/evidence-relevance.profile.json">Excerpt relevance</a></dt><dd>Rate how directly an excerpt addresses a task, from unrelated text to a direct answer.</dd></div>
+          <div><dt><a href="https://github.com/hraness/sys1/blob/main/examples/workflows/claim-support.profile.json">Claim support</a></dt><dd>Compare a claim with a supplied excerpt and identify support, contradiction, or insufficient evidence. The result does not verify the excerpt's accuracy.</dd></div>
+        </dl>
+        <p class="skills-prose">The profile evaluator checks labeled examples offline before you opt into model calls. Its reports retain errors and skipped examples alongside per-question results. The included synthetic examples are small screening sets; evaluate a profile on your own tasks before relying on it.</p>
+        <div class="install-links skills-links"><a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">Run a profile evaluation</a><a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 trial</a></div>
       </section>
 
       <section id="shipped" class="section" aria-labelledby="shipped-heading">

@@ -215,3 +215,23 @@ remaining source/copy blocker was found. Factual confidence is now 2 and the
 revised page's admission total is 12/12. This records editorial/source
 admission; aggregate validation, publication, and production evidence remain
 with the integration owner's ordinary delivery workflow.
+
+## Source workflow experiments, September 28, 2026
+
+The page links three experimental profiles for failure triage, excerpt
+relevance, and claim support, plus the source evaluator and dated trial report.
+The section describes caller-supplied inputs and advisory outputs without
+claiming task improvements. It states the source checkout, Bun, and dependency
+requirements beside the examples and distinguishes them from installed project
+skills. Existing description-list styles and the page contents provide the
+layout and navigation; no CSS or interaction changes are needed.
+
+Drafted by Codex agent /root/trial_cases from the profile definitions and
+evaluator guide. No human review. Independent copy review and the converged
+browser check remain with the integration owner. No new result figures are
+published by this section.
+
+The Codex integration agent independently checked the added descriptions and
+links against the profile definitions and evaluator source. No unsupported
+quality claim or installable-skill claim was found. Focused static checks passed;
+the final browser and production checks are recorded with delivery evidence.
