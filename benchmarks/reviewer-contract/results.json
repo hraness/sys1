@@ -1,0 +1,258 @@
+{
+  "schema": 1,
+  "source_commit": "7305524daed2712dd71084b4c697f35eab457167",
+  "route": "typesafe/jev-1.13.0",
+  "question_format": 2,
+  "freeze_sha256": "cc007041a031d90dd4a5415253a949cdc32dda182b5b1cdd56dbc79c7f6e9155",
+  "max_requests": 6,
+  "thresholds": {
+    "high": 0.9,
+    "medium": 0.8
+  },
+  "source_digests": {
+    "bun.lock": "9e3dac2f06278251899f70752e9bdb557a105cffe682e6733f69b68d90118274",
+    "package.json": "a8fe15d01daca65d2079f722cbe869582a093be1b414fda85885650594d51c53",
+    "src/audit/benchmark.ts": "7f9e100ab7e98017d17bad93cbb64b5361c94487e0b4802b24585cb52dfb721f",
+    "src/audit/cli.ts": "c7fed5fbf70ed48faf38116f23ed8aa4cf94778fc3856605269c49a0454c0c52",
+    "src/audit/compile.ts": "296f4fa629c969ed36f503e59cb0e658725218f0da97c859fbd077215d7d41fc",
+    "src/audit/diff.ts": "c78f65ad753f1c219d7fbdfbd3c140b7a1672b0cdf41e709f75a31ac36f38761",
+    "src/audit/evaluate.ts": "d6266082623237b2d129420e16c71cb89cda20dc51510712a8b32f377bb9870c",
+    "src/audit/pack.ts": "480ede7bf7f95e36a8806e060a71f277d78153542d5d9d28935e875a1329655a",
+    "src/audit/rules-cli.ts": "9c289eea93ec97d859e67f46fde05a8973f9f01e43375749104194d4cdc092f5",
+    "src/audit/schema.ts": "65bc170dc0f190e83ca03211fc1a2e8be47270b0dde01222398ae3ce175459f2",
+    "src/audit/select.ts": "0c083958901a32b1f5181e24bb002471132dc91d10041a257cff8b4dec8d4d37",
+    "src/backends.ts": "a56d247afdd4190ea3806ae56580aafe2d052688a8c40ebe8d7d8a1ed19ddd8f",
+    "src/cli-help.ts": "0177076239fc49563704c7a9ac90ec810bb60dd15e71b87ea7a385c3d36dfd7e",
+    "src/cli-style.ts": "aa3bad6cc893b283bd166dd5fe7c5a0f44491f35741257f1dadd3f1e364b8d0b",
+    "src/cli.ts": "6561ee1a3d8ecbacb9285cdc5e2cbe4fea982db33224a9ec0f945c8c21a1f759",
+    "src/client.ts": "2990d3930303cd397bba5db52a34411faf2b25c0adc6fa30873a9b87eea4cb70",
+    "src/config.ts": "4ca9349c5ed1317120134509c6750b64d072b4496e67a3a9b0183e3dba015aca",
+    "src/daemon.ts": "2b73d9fdf22e66445eb25ad0aaa0c4986e0a066bb7eb9f7327903e119ff6a2c5",
+    "src/defaults.ts": "3aad6df4f5daf3d2ba864d0e1a7faaabe67ea8c2c2015e6ce62d82b0a06e2b63",
+    "src/doctor.ts": "53c57f3649a4e0b7a0b81094b6cdc5f3b2536e49b3674e8936a7528cc4bfa886",
+    "src/gateway.ts": "c3c93fe8d5a269d3344c60d463935df5f2db0bc7d7a99b9061aea47aeb7cbfdc",
+    "src/http.ts": "fedb91473976d397d7444ec5f1c4c777e9af9f38ee9c0fd37d54fffc49d9b14a",
+    "src/index.ts": "c517b07496fc8944818a1cf122934866e3b10f3900309acb968e25de152416fb",
+    "src/kev.ts": "d667ec0b967a70461c5c5b6b684b051a3989b289040c15427ad9edbd56a2292c",
+    "src/local/decide.ts": "5daa9a8501dec110680e0ea1513888b2a72bcce1cc1f5232b5c1e1977da8f107",
+    "src/local/engine-core.ts": "e3498d4cb2800d351f4b50abc3b1099e89aa9712cbaf1232f7a46415f6537ac9",
+    "src/local/engine-ipc.ts": "380127a1256b7eb496ba770fe9a8b3487a6c9e1ed232ff936bd5e0eb5a6cc984",
+    "src/local/engine-types.ts": "5288ea1abb8e1356baed05228dc69d8d3dcdc378dedc92dc33342776750fb474",
+    "src/local/engine-worker.ts": "4bce446ee115c15516740e4422a425c0a401e7795d8c362c630a3c25ad16f3f2",
+    "src/local/engine.ts": "8f39f2293b2975d298711e9b91839f718fc2be1618a973a80b5d082d6f3904dc",
+    "src/local/input.ts": "a7a2236a75da4f18169c39288fbad6f97e357511d057bd88d1d2ef34124c21a9",
+    "src/local/runner.ts": "9e9e6fbf89c0e62fb681a75b86a75ccd417893978255ed773a25f975c9c2295c",
+    "src/local/store.ts": "caa431c3e27420c2c154ec57f1523fdc09b6085be6e298c7fee5a3900a36565b",
+    "src/profile.ts": "c23e6dcf534ee99d4a2848839a597ccdca0dce9471f3a810bcdf966985bdeb49",
+    "src/protocol.ts": "e546f90c7d84b83f440eeaf147999b09ac80c59704486aee5917f48789146ef4",
+    "src/qualification.ts": "c731268f266f3d586c36af2734ef485df46fd1768b817bfaeacb45f5515c227d",
+    "src/response.ts": "ea2971e9a6f0ca153e6cb5dbad0d0a545e360474e87db31a8d53724c4cc2f41c",
+    "src/review/checkpoint.ts": "ef690e06a374fba6f2698d3aeb3f540b1dfc061f57bc087e8536dc21ad60d00f",
+    "src/review/cli.ts": "6f08c68b304284f15c3d31eb2ca6f6f7d3c921751a82342780a383ae2eb61833",
+    "src/review/install.ts": "e89722097fe8434b0e3f014d68800fe5d94488d5e387d8a1d2777249fb339741",
+    "src/review/project-files.ts": "38a85daeb1d384062bc3275f983f46ef4de5c982061512f57b6e809194e5b164",
+    "src/review/state.ts": "5068528e1ab5add7ffaebe453b52ad40b45c8b8b0b81c872df38c1ef1f6ba75c",
+    "src/router.ts": "499526d5792ea065cfb48d08428490ce2ca08f40bc2f0160994161da9be7ddbb",
+    "src/runtime.ts": "a9bb4393efe333e3ad997c90d738cbbd42dedb4eaa96c95c72a0c79adeb0137b"
+  },
+  "units": [
+    {
+      "id": "sys1-response-finality-introduction-h1",
+      "group": "introduction",
+      "expected": "violation",
+      "unit_id": "a289de84337dc5dedd50ac1bbc2fc88cbe81ecb5fdddb10d8653ab33c0e4630b",
+      "old_range": {
+        "start": 0,
+        "count": 0
+      },
+      "new_range": {
+        "start": 1,
+        "count": 198
+      },
+      "request_sha256": "b3b2bc01e2b4a9c191435aec9122b29929253f3cec7638fd4f0b697ad0625d49",
+      "wire_request_sha256": "4d9cc57bdff6ab2944c697b2d51f12cbc7d8902fe9983b84109a924cd0b5b34c",
+      "state_sha256": "97630bb063568f37620a43004c38db7d87d8388f18559d23d4f97a6f6f5bfc0e",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 7129,
+      "request_bytes": 8344
+    },
+    {
+      "id": "sys1-response-finality-repair-h1",
+      "group": "repair",
+      "expected": "no-new-violation",
+      "unit_id": "de18097c18981239f85d1e8f154642773fa458fdc9a19e994c1b023b16772b5c",
+      "old_range": {
+        "start": 1,
+        "count": 24
+      },
+      "new_range": {
+        "start": 1,
+        "count": 39
+      },
+      "request_sha256": "184a07c46e7d44d02ac96b4062e17e9756d84239dbebb345ad3e7913e953b83b",
+      "wire_request_sha256": "c681f50796481d00f0df951499f10d51897d0a0f106ea19bb0cb256bcaf41e09",
+      "state_sha256": "9281838c4b9367571a4af47c91175998f28248b992d60a39fc83372a04234cd4",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 2060,
+      "request_bytes": 3275
+    },
+    {
+      "id": "sys1-response-finality-repair-h2",
+      "group": "repair",
+      "expected": "no-new-violation",
+      "unit_id": "001ec0b946ee8115bc21bc09209617a5e2986b28471f0597ab164caa50f01bcb",
+      "old_range": {
+        "start": 85,
+        "count": 46
+      },
+      "new_range": {
+        "start": 100,
+        "count": 46
+      },
+      "request_sha256": "c2036daf64c10a1f30abf9f97c4f92fc3e20bf55e54133dbea0e1547be72a9b5",
+      "wire_request_sha256": "5cf7eda8e10ae8909a2d7280b4d1c26679512f2f82c0642da4d1ff1e03ed1516",
+      "state_sha256": "8fd9277b9fc757280f04f83cee4fccdb587090a5100ed8886abc0ed52fe35b44",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 2243,
+      "request_bytes": 3458
+    },
+    {
+      "id": "sys1-response-finality-repair-h3",
+      "group": "repair",
+      "expected": "no-new-violation",
+      "unit_id": "f24593a52efa5d43e83c23ccf6a372b53006532ef21c346e9be7b7704d2d265c",
+      "old_range": {
+        "start": 135,
+        "count": 186
+      },
+      "new_range": {
+        "start": 150,
+        "count": 224
+      },
+      "request_sha256": "736027a816c5af2514d4dc4c93143c570db61d4b94dc31d3aca0a5b3b444070c",
+      "wire_request_sha256": "9befb8e7756a1d1bcd20c934d4097fdeaf261c05ceb1dabc75ed24a96d3e1062",
+      "state_sha256": "e7a296e705fbe978609f670a18aaab60618f1095dbcbca5ab634e714428d37fc",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 9296,
+      "request_bytes": 10511
+    },
+    {
+      "id": "sys1-response-finality-control-h1",
+      "group": "clean",
+      "expected": "no-new-violation",
+      "unit_id": "610c53e9a9f2c0cc03cf9c2d85650a977a6b9850ff5800c8ae2b4ad0aa2944d9",
+      "old_range": {
+        "start": 12,
+        "count": 30
+      },
+      "new_range": {
+        "start": 12,
+        "count": 31
+      },
+      "request_sha256": "b64899a7ecc98a40d4e9a0e4fc98922e453829d4b69be1f030942c03f0a805e3",
+      "wire_request_sha256": "b0a654d4c45d7aa611151552f25534a0a544782a4226842a53faec88b94144e9",
+      "state_sha256": "6537d292600d28060d7841b18a1da3b199a3d90c1067d222d0f69c9f0a953a5f",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 1512,
+      "request_bytes": 2727
+    },
+    {
+      "id": "sys1-response-finality-control-h2",
+      "group": "clean",
+      "expected": "no-new-violation",
+      "unit_id": "ea34458ad7e66e41cf947004afdf59c2b0afef85e1026c47e8db939ba7caef89",
+      "old_range": {
+        "start": 179,
+        "count": 30
+      },
+      "new_range": {
+        "start": 180,
+        "count": 31
+      },
+      "request_sha256": "555c8fb39ea92049b8634ce265bf9f305b1fd3b826df5581ec788daa0852c8c7",
+      "wire_request_sha256": "cc5216fac0b709eaa32f5ae7d9a391e61ff8259986223bc046586197442cbd34",
+      "state_sha256": "6cd9131d3587415211c71bf2b514a6f20b59470f01e25d737321a608df5dbed0",
+      "questions_sha256": "356effe7b9e59bbb90be691fcef9aa0857fd31affef7cb2bc2ec71409249c5ba",
+      "state_bytes": 1484,
+      "request_bytes": 2699
+    }
+  ],
+  "results": [
+    {
+      "id": "sys1-response-finality-introduction-h1",
+      "request_sha256": "b3b2bc01e2b4a9c191435aec9122b29929253f3cec7638fd4f0b697ad0625d49",
+      "status": "evaluated",
+      "model_score": 0.030000000000000027,
+      "flagged": false,
+      "elapsed_ms": 408,
+      "usage": {
+        "input_tokens": 2626,
+        "output_tokens": 26
+      }
+    },
+    {
+      "id": "sys1-response-finality-repair-h1",
+      "request_sha256": "184a07c46e7d44d02ac96b4062e17e9756d84239dbebb345ad3e7913e953b83b",
+      "status": "evaluated",
+      "model_score": 0.72,
+      "flagged": false,
+      "elapsed_ms": 215,
+      "usage": {
+        "input_tokens": 1120,
+        "output_tokens": 26
+      }
+    },
+    {
+      "id": "sys1-response-finality-repair-h2",
+      "request_sha256": "c2036daf64c10a1f30abf9f97c4f92fc3e20bf55e54133dbea0e1547be72a9b5",
+      "status": "evaluated",
+      "model_score": 0.84,
+      "flagged": true,
+      "elapsed_ms": 229,
+      "usage": {
+        "input_tokens": 1125,
+        "output_tokens": 26
+      }
+    },
+    {
+      "id": "sys1-response-finality-repair-h3",
+      "request_sha256": "736027a816c5af2514d4dc4c93143c570db61d4b94dc31d3aca0a5b3b444070c",
+      "status": "evaluated",
+      "model_score": 0.06999999999999995,
+      "flagged": false,
+      "elapsed_ms": 238,
+      "usage": {
+        "input_tokens": 2995,
+        "output_tokens": 26
+      }
+    },
+    {
+      "id": "sys1-response-finality-control-h1",
+      "request_sha256": "b64899a7ecc98a40d4e9a0e4fc98922e453829d4b69be1f030942c03f0a805e3",
+      "status": "evaluated",
+      "model_score": 0.78,
+      "flagged": false,
+      "elapsed_ms": 214,
+      "usage": {
+        "input_tokens": 935,
+        "output_tokens": 26
+      }
+    },
+    {
+      "id": "sys1-response-finality-control-h2",
+      "request_sha256": "555c8fb39ea92049b8634ce265bf9f305b1fd3b826df5581ec788daa0852c8c7",
+      "status": "evaluated",
+      "model_score": 0.83,
+      "flagged": true,
+      "elapsed_ms": 246,
+      "usage": {
+        "input_tokens": 889,
+        "output_tokens": 26
+      }
+    }
+  ],
+  "calls": 6,
+  "dispatches": 6,
+  "complete": true,
+  "elapsed_ms": 1558
+}

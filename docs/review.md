@@ -5,6 +5,10 @@ them, and record whether they helped. This workflow is experimental and
 advisory. Its scores rank candidates; they are not calibrated probabilities of
 a defect. Keep the repository's normal tests and review.
 
+The [contract-based experiment](reviewer-contract-2026-09-27.md) missed its
+reproduced defect and flagged two of five control hunks. Investigate every
+candidate before treating it as a defect.
+
 Run these commands inside a Git worktree. Choose an enabled backend and its
 exact model. For Jev, TypeSafe's hosted decision model, provide
 `TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Selected source
@@ -146,7 +150,10 @@ deleting feedback. Use `sys1 audit` when you need a stateless check.
 ## Draft a repository rule
 
 Start with a recurring mistake, an actual violation, and a clean counterexample.
-Use the repository guide's wording and narrow the file selection. For a guide
+Use the repository guide's wording and narrow the file selection. Match the
+rule's paths to the code responsible for meeting the requirement, even when
+the requirement comes from a different caller or consumer. Confirm that the
+checkpoint preview includes the intended code and rule. For a guide
 at `docs/auth.md` that requires token persistence before login reports success:
 
 ```sh
@@ -183,3 +190,5 @@ not a held-out accuracy estimate. The [dated evaluation](reviewer-evaluation-202
 reports detections, misses, clean controls, and workflow checks.
 The [focused-review follow-up](reviewer-followup-2026-09-27.md) compares specific
 requirements with added source context and records the remaining limitations.
+The [contract-based experiment](reviewer-contract-2026-09-27.md) tests a rule
+written from an existing requirement before its author saw the defect.
