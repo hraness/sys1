@@ -2,19 +2,37 @@
 
 Sys1 helps coding agents review changes against your repository's rules, with
 probability-scored answers from hosted Jev, a local model, or your own server.
-Review is experimental and advisory.
+Review and final-message verification are experimental and advisory.
 
 Underneath, Sys1 lets agents ask yes/no, choice, and score questions and get
 validated answers with probabilities. You choose who answers: TypeSafe's hosted
-Jev, a local model on your machine, or a compatible server you run.
+[Jev](https://docs.typesafe.ai/models), a local model on your machine, or a
+compatible server you run.
 
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 
-Latest release: v0.16.0. Install it from the GitHub release with npm; it runs
+Latest release: v0.17.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
 [Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
+
+## Choose a workflow
+
+| Task | Start here | What you get |
+| --- | --- | --- |
+| Review an agent's code changes | [`sys1 review`](docs/review.md) | Candidates tied to selected rules and diff evidence, with feedback and reuse of unchanged reviews. |
+| Check a completion message | [`sys1 verify`](docs/verify.md) | A comparison of claimed commits, pushes, checks, and live changes with reachable evidence. |
+| Run one review without saved history | [`sys1 audit`](docs/audit.md) | A stateless diff check with a preview, request cap, and skipped-evidence report. |
+| Reuse a repository convention | [`sys1 rules`](docs/review.md#draft-a-repository-rule) | A draft you can inspect, test on examples, and activate for future reviews. |
+| Add decisions to an application | [Node/Bun client](#use-as-a-module) or [HTTP API](#the-endpoint) | Yes/no, choice, and score answers with a selected model and validated response shape. |
+
+The review and verification skills work in Git repositories with Codex,
+Claude Code, or Devin; other agents can use the same CLI. Their workflows do
+not depend on a specific framework or hosting provider. The bundled review
+rules cover two narrow JavaScript and TypeScript changes: newly empty catch
+blocks and removed test assertions. Add and evaluate your own rules for other
+conventions or languages.
 
 ## Install
 
@@ -26,7 +44,7 @@ with Bun.
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
 sys1 doctor
 ```
 
@@ -42,7 +60,13 @@ ln -sf "$PWD/dist/cli.js" ~/.local/bin/sys1
 
 ## Review changes with your agent (experimental)
 
-Install a project skill and preview a batch before sending source to a backend:
+The project skill teaches an agent when to preview a review, investigate a
+candidate, record feedback, and check its completion message. It installs
+instructions in your repository, without activating a model or adding hooks.
+
+First [enable hosted Jev](#add-hosted-jev) with `TYPESAFE_API_KEY` available in
+your environment, or choose another configured backend. Install the skill and
+preview selected files before sending source to that backend:
 
 ```sh
 sys1 review setup codex
@@ -50,29 +74,43 @@ sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
   --max-requests 10 --dry-run --json -- src test
 ```
 
-Use `setup claude-code` for Claude Code or `setup devin` for Devin. Hosted Jev
-must already be enabled with an environment credential. Inspect the preview,
-then repeat without `--dry-run` to run the checkpoint. Investigate candidates,
-record feedback, and recheck the original evidence. Repeated complete batches
-reuse their review for up to 24 hours; setup installs no automatic hooks. Add
-`--rule <id>` to focus a checkpoint on a rule from `sys1 rules list`.
+Use `setup claude-code` for Claude Code or `setup devin` for Devin. Inspect the
+preview, then repeat without `--dry-run` to run the checkpoint. Investigate
+candidates, record feedback, and recheck the original evidence. Repeated
+complete batches reuse their review for up to 24 hours. Add `--rule <id>` to
+focus a checkpoint on a rule from `sys1 rules list`.
 
 Findings are advisory, and scores are not calibrated defect probabilities. See
 the [agent review guide](docs/review.md) for setup, feedback, rechecks, and rule
 drafts. For a stateless check, use [`sys1 audit`](docs/audit.md). Both report
 skipped evidence and incomplete coverage.
 
-Before reporting completion, an agent can check its final message against
-reachable evidence — unpushed commits, uncommitted files, unmerged pull
-requests, failed check commands, and live pages that lack the claimed change:
+## Check an agent's completion message
+
+Install the standalone verification skill when you want completion checks
+without the review workflow:
 
 ```sh
-sys1 verify --model typesafe/jev-1.13.0 --url https://example.com
+sys1 verify setup codex
 ```
 
-Verify reads the newest Devin session for the current directory, or a message
-from `--message <file|->`. Contradicted claims exit 7; unreachable evidence is
-never a contradiction. See [the verify guide](docs/verify.md).
+Use `setup claude-code` or `setup devin` for those agents. The installed
+instructions tell the agent to save its proposed final message and compare
+its claims with the repository, linked pull requests, and live pages. Save the
+draft outside the Git worktree so it does not appear as an uncommitted change.
+You can also run the command directly:
+
+```sh
+sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0
+```
+
+Use `--message -` for piped text and `--url https://example.com` to include a
+live page the message does not link. Without `--message`, verify reads the
+newest matching local Devin session, including that turn's check-command
+results. File and stdin input work with any agent; check-command results are
+available only through Devin transcript discovery. Contradicted claims exit 7;
+missing evidence is unverifiable. A clean report does not prove task completion.
+See [the verification guide](docs/verify.md) for evidence and limits.
 
 ## Use as a module
 
@@ -81,7 +119,7 @@ release package without the optional native runtime:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
 ```
 
 ```ts
@@ -520,6 +558,12 @@ sys1 pull [MODEL]|pull --list
 sys1 model list|verify|remove
 sys1 models
 sys1 eval
+sys1 audit --staged|--worktree|--since <ref> --model <backend/model>
+sys1 review checkpoint|issues|feedback|recheck|setup
+sys1 rules list|check|draft
+sys1 verify setup codex|claude-code|devin
+sys1 verify --model <backend/model> [--message <file|->]
+sys1 usage [--days <n>]
 sys1 backend list|add|check|remove
 sys1 config path|get|set|unset
 sys1 --version|--help

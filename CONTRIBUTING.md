@@ -14,8 +14,14 @@ Requires Bun ≥ 1.3.14 (`bun install`).
 bun run check
 ```
 
-Runs the typechecker, deterministic tests, the dist build, and an isolated
-import/CLI execution check against the actual packed tarball.
+Runs the typechecker, current release-reference and brand checks, deterministic
+tests, the dist build, and an isolated import/CLI execution check against the
+actual packed tarball.
+
+When bumping `package.json`, run `bun run release:sync` to update the current
+runtime version, README and site installation references, then add the matching
+changelog section. Historical reports retain their original versions. The
+aggregate check rejects stale current release references.
 
 After that gate, `bun run check:native` packs the existing dist, installs it in
 a disposable prefix with the pinned native dependency, and runs `sys1 doctor`.

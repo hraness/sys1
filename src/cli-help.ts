@@ -62,6 +62,8 @@ Review (experimental)
                              Inspect rules or draft repository conventions
   sys1 verify --model <backend/model>
                              Check an agent's claims against reachable evidence
+  sys1 verify setup codex|claude-code|devin
+                             Install a portable final-message review skill
   sys1 usage [--days <n>]    Count Sys1 use in local agent transcripts
 
 Routing
@@ -157,13 +159,19 @@ Examples
   sys1 rules check .sys1/drafts/await-success
 `,
   verify: `Usage: sys1 verify --model <backend/model> [options]
+       sys1 verify setup codex|claude-code|devin [--dry-run] [--json]
 
 Check the claims in a coding agent's final message against reachable evidence:
 the Git worktree, linked pull requests, check-command results from a Devin
 session transcript, and fetched live pages. Experimental and advisory.
 
-The message comes from the newest Devin session for this directory, from
---message <file>, or piped with --message -. Its text is never stored.
+Pass --message <file> or pipe the intended final message with --message -.
+Keep a message file outside the Git worktree so it is not unfinished work.
+Without --message, Sys1 selects the newest Devin session for this directory
+or an ancestor; this may be another task. Message text is never stored.
+Files and stdin supply no command transcript; checks_passed is unverifiable.
+Setup installs a project skill and preserves edited files. It makes no model
+calls and does not enable models or automatic hooks.
 
 Claims checked
   deployed_or_live   A claimed live change is fetched and judged on the page
@@ -183,11 +191,15 @@ Options
 
 Unverifiable evidence is never a contradiction. Exit 0: no claim contradicted.
 Exit 7: at least one claim contradicted reachable evidence. Exit 8: incomplete.
+Evaluation sends message text and page excerpts to the selected backend.
+Scores are uncalibrated. At most five model requests run per evaluation.
 
 Examples
-  sys1 verify --model typesafe/jev-1.13.0
-  sys1 verify --model typesafe/jev-1.13.0 --url https://example.com
-  git show -1 --format=%B | sys1 verify --message - --model typesafe/jev-1.13.0
+  sys1 verify setup codex --dry-run
+  sys1 verify --message /tmp/message.txt --model typesafe/jev-1.13.0 --dry-run
+  sys1 verify --message /tmp/message.txt --model typesafe/jev-1.13.0 \\
+    --url https://example.com
+  cat /tmp/message.txt | sys1 verify --message - --model typesafe/jev-1.13.0
 `,
   usage: `Usage: sys1 usage [--days <n>] [--json]
 

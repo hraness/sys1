@@ -884,7 +884,7 @@ async function main(): Promise<void> {
         else process.stdout.write(renderVerify(report));
         process.exitCode = verifyExitCode(report);
       } catch (error) {
-        if (error instanceof VerifyError) fail(error.message, error.exitCode, "sys1 verify --help");
+        if (error instanceof VerifyError || error instanceof ReviewError || error instanceof ProjectFileError) fail(error.message, error.exitCode, "sys1 verify --help");
         fail("Verify could not read the message or its evidence", EXIT.config, "sys1 verify --help");
       }
       return;

@@ -8,19 +8,30 @@ web
 
 ## Users
 
-The homepage addresses developers building agents and applications first, while
-also serving people running agents locally with a simple local quickstart.
-This audience order was confirmed by the user on 2026-09-19.
+The homepage addresses developers using coding agents to review repository
+changes and check completion claims. It also serves application developers
+who need the underlying typed decision API. The user requested clearer skill
+value, portable workflows, and search discovery on 2026-09-28.
 
 ## Product Purpose
 
-Sys1 gives applications one interface for bounded typed decisions across local
-models, hosted Jev, and operator-configured compatible HTTP services. The
-application supplies state and questions; Sys1 returns validated yes/no,
-choice, or score answers with routing metadata.
+Sys1 helps coding agents review changes against repository rules and check
+completion claims against reachable evidence. Its reusable project skills
+work with Codex, Claude Code, and Devin. The underlying API also gives
+applications one interface for typed decisions across local models, hosted
+Jev, and operator-configured compatible HTTP services: the application supplies
+state and questions, and Sys1 returns validated yes/no, choice, or score answers.
 
 ## Capabilities and Constraints
 
+- Project-local review and verification skills install instructions only;
+  they do not add hooks, activate backends, or call models during setup.
+- Review accepts staged, working-tree, or committed Git changes and explicit
+  rules and paths. The bundled rules target JavaScript/TypeScript; other
+  languages need suitable repository rules. Findings remain advisory.
+- Verification accepts a message file or stdin from any agent. Optional Devin
+  discovery selects the newest matching-directory session, not necessarily the
+  current agent session. Plain-message input has no check-command transcript.
 - A portable Node 24/Bun client, embedded Bun router, and loopback HTTP daemon
   expose the same decision contract.
 - Explicitly installed local GGUF models run through node-llama-cpp.
@@ -47,7 +58,7 @@ CUA-S1/Needle measurements remain available; those adapters were removed in 0.9.
 
 ## Evidence on Hand
 
-README.md, source, docs/DESIGN.md (runtime architecture), release workflows,
+README.md, source, docs/design.md (runtime architecture), release workflows,
 and deterministic/native-install checks document implemented capabilities.
 The comparison page charts external JevBench results for the supported routes
 and has a workload cost calculator. `/docs/evaluations` holds Sys1's own adapter

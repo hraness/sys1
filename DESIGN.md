@@ -154,7 +154,7 @@ legible material without turning every section into a card.
 
 This file records the implemented visual system on 2026-09-19. Its source of
 truth is `site/style.css` together with the pinned CSS and fonts under
-`site/vendor/`. `docs/DESIGN.md` remains the separate runtime architecture
+`site/vendor/`. `docs/design.md` remains the separate runtime architecture
 document. Page strategy and audience order belong in `PRODUCT.md` and
 `.impeccable/surfaces/site-index-html.md`.
 
@@ -443,3 +443,20 @@ original paths, with no runtime emoji, font or image-model dependency.
 Collapse header navigation at 640px so the added mark leaves room for the
 start action and coarse-pointer appearance control. Keep the start label on
 one line. Other content retains its existing responsive breakpoints.
+
+## Agent skill workflows — 2026-09-28
+
+The homepage now leads with review and completion verification, with the typed
+decision API as a second entry point. The skills page distinguishes the two
+Sys1 project skills from the separate compact-output runtime. Documentation
+uses explicit message files outside the worktree and names the default rule
+coverage, opt-in backends, and advisory limits. Shared styles and assets stay
+under the existing Paper system; no new raster assets were introduced.
+
+Final visual disposition: **ship**. The local browser verifier passed 48
+route, viewport, and appearance combinations, including responsive overflow,
+navigation, controls, headings, and production CSP checks. The integration
+owner inspected desktop and mobile light/dark screenshots of the homepage,
+docs, and skills page. Evidence: `/private/tmp/sys1-portable-skills-browser/`.
+Independent source/copy review and 150 local link/anchor checks passed; the
+sitemap covers all seven canonical pages. No material visual blocker remains.

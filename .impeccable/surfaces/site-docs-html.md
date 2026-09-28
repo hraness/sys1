@@ -82,3 +82,57 @@ command. Explain source transmission, 24-hour reuse, local metadata, and recheck
 limits without accuracy claims. The native setup targets are Codex and Claude
 Code. Preserve the existing layout and primary navigation. Release labels and
 archive URLs follow package.json at 0.13.0. No Markdown twin exists for this page.
+
+## Review and verify setup — 2026-09-28
+
+The docs remain Read in the current implemented Paper design. Prioritize the
+reader’s first steps: install the CLI, select hosted Jev or local Qwen, install
+the project instructions, then preview a check. Keep #audit for compatibility
+and add #verify for completion claims. `sys1-review` and `sys1-verify` each
+support Codex, Claude Code, and Devin. The latter installation examples must
+join with their runtime implementation before publication. Agent-independent
+message files are the default example; automatic Devin transcript selection
+and unavailable evidence are explained explicitly. API, profiles, model
+selection, and research retain their own sections.
+
+Editorial admission: revise the existing documentation hub. Reader job: set up
+one workflow and follow the correct detailed reference. Non-obvious answer:
+installation, backend activation, source preview, and model evaluation are
+separate actions; an unverifiable completion claim does not pass as evidence.
+Original contribution: executable setup sequences tied to the CLI and project
+skills. Neighbors: / explains adoption, /skills chooses workflows, repository
+review/verify guides cover full command behavior. The hub supplies the concise
+installation path without duplicating those references. Scores: utility 2,
+original evidence 2, factual confidence 1 pending joined `verify setup` source,
+host fit 2, voice 2, maintenance 2 (11/12). Owner: Sys1 maintainer. Sources:
+package.json, src/review/, src/verify/, docs/review.md, docs/verify.md, and
+TypeSafe’s models documentation, checked 2026-09-28. Drafter/source pass:
+Codex agent /root/site_value. Human review: none. Independent source and
+rendered desktop/mobile review: pending integration owner. Reassess on the
+next release or 2026-10-26. No CSS or assets changed.
+
+Independent source/copy review: Codex agent /root/readme_docs on 2026-09-28.
+One finding repaired: disclose the two bundled JavaScript/TypeScript rules
+beside generic review-workflow guidance, so portability does not imply broad
+built-in language coverage. Other checked claims, Jev terminology, metadata,
+and advisory/privacy boundaries aligned source. Runtime setup convergence and
+rendered review remain with the integration owner.
+
+Integration-owner visual review: Codex /root reported a passing 48-combination
+browser check and inspected desktop/mobile homepage, docs, and skills captures
+on 2026-09-28, with no blocker. Evidence:
+`/private/tmp/sys1-portable-skills-browser/results.json`. The owner also checked
+150 internal links and all seven sitemap canonical URLs, then collected the
+browser and server. No additional visual iteration was requested. The
+independent source/copy reviewer reported no remaining public-copy blockers.
+Runtime-source fixes and release validation remain owned by the integration
+owner; the prior pending visual-review note is now resolved.
+
+Joined runtime source review: Codex /root/site_value inspected the standalone
+verify installer, CLI dispatch, embedded skills, and corrected per-PR merge
+checks on 2026-09-28. The setup commands described above now exist in source;
+the worker's focused suite reported 30 passing tests and no failures. No
+remaining source/copy blocker was found. Factual confidence is now 2 and the
+revised page's admission total is 12/12. This records editorial/source
+admission; aggregate validation, publication, and production evidence remain
+with the integration owner's ordinary delivery workflow.

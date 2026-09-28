@@ -374,15 +374,19 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
         throw new Error("packed audit and review must select only the requested active rule");
       }
     }
-    for (const target of ["codex", "claude-code"]) {
-      const setupArgs = [process.execPath, installedCli, "review", "setup", target, "--json"];
-      const installed = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), "review skill setup");
-      const repeated = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), "review skill repeat setup");
-      if (installed["status"] !== "created" || repeated["status"] !== "unchanged" || typeof installed["path"] !== "string") {
-        throw new Error("packed review skill setup must be idempotent");
-      }
-      if (!readFileSync(join(auditRepo, installed["path"]), "utf8").includes("sys1 review checkpoint")) {
-        throw new Error("packed review skill is missing its runnable command");
+    for (const command of ["review", "verify"]) {
+      for (const target of ["codex", "claude-code", "devin"]) {
+        const setupArgs = [process.execPath, installedCli, command, "setup", target, "--json"];
+        const preview = record(JSON.parse(await run([...setupArgs, "--dry-run"], { cwd: auditRepo, env })), `${command} skill preview`);
+        if (preview["status"] !== "planned") throw new Error(`packed ${command} skill setup must preview`);
+        const installed = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), `${command} skill setup`);
+        const repeated = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), `${command} skill repeat setup`);
+        if (installed["status"] !== "created" || repeated["status"] !== "unchanged" || typeof installed["path"] !== "string") {
+          throw new Error(`packed ${command} skill setup must be idempotent`);
+        }
+        if (!readFileSync(join(auditRepo, installed["path"]), "utf8").includes(`sys1 ${command} ${command === "review" ? "checkpoint" : "--message"}`)) {
+          throw new Error(`packed ${command} skill is missing its runnable command`);
+        }
       }
     }
     const rules = record(JSON.parse(await run([process.execPath, installedCli, "rules", "list", "--json"], { cwd: auditRepo, env })), "rule list");

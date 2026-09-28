@@ -57,6 +57,8 @@ describe("sys1 verify argument parsing", () => {
   test("rejects unknown and repeated-singular flags", () => {
     expect(() => parseVerifyArgs(["--model", "a/b", "--bogus"])).toThrow(VerifyError);
     expect(() => parseVerifyArgs(["--model", "a/b", "--url"])).toThrow(VerifyError);
+    expect(() => parseVerifyArgs(["--model", "a/b", "--model", "c/d"])).toThrow(VerifyError);
+    expect(() => parseVerifyArgs(["--model", "a/b", "--dry-run", "--dry-run"])).toThrow(VerifyError);
   });
   test("collects repeated urls and bounds the timeout", () => {
     const args = parseVerifyArgs(["--model", "a/b", "--url", "https://a.example", "--url=https://b.example", "--timeout-ms", "5000"]);
@@ -183,6 +185,93 @@ describe("claim verification", () => {
     expect(report.claims.find(item => item.kind === "deployed_or_live")!.verdict).toBe("unverifiable");
     expect(report.contradictions).toBe(0);
     expect(verifyExitCode(report)).toBe(0);
+  });
+
+  test("a linked open PR does not contradict an opened or pushed claim", async () => {
+    const dir = await repoDir();
+    const file = join(dir, "m.txt");
+    for (const text of ["Opened", "Pushed commits to", "Enabled auto-merge for"]) {
+      await writeFile(file, `${text} https://github.com/example/project/pull/3.`);
+      let prCalls = 0;
+      const report = await runVerify(options({
+        cwd: dir, messageFile: file,
+        decider: fakeDecider({ claim_merged_or_pushed: text.startsWith("Pushed") ? 0.95 : 0.01, claim_merged_0: 0.01, "*": 0.01 }),
+        run: async (command, cwd, timeout) => {
+          if (command[0] === "gh") { prCalls++; return { code: 0, out: JSON.stringify({ state: "OPEN", mergedAt: null }) }; }
+          return cleanRunner(command, cwd, timeout);
+        },
+      }));
+      expect(report.contradictions).toBe(0);
+      expect(prCalls).toBe(0);
+      expect(report.claims).toHaveLength(Object.keys(CLAIMS).length);
+    }
+  });
+
+  test("an asserted merge is contradicted by an open linked PR", async () => {
+    const dir = await repoDir();
+    const file = join(dir, "m.txt");
+    await writeFile(file, "Merged https://github.com/example/project/pull/3.");
+    const report = await runVerify(options({
+      cwd: dir, messageFile: file,
+      decider: fakeDecider({ claim_merged_or_pushed: 0.95, claim_merged_0: 0.95, "*": 0.01 }),
+      run: async (command, cwd, timeout) => command[0] === "gh"
+        ? { code: 0, out: JSON.stringify({ state: "OPEN", mergedAt: null }) }
+        : cleanRunner(command, cwd, timeout),
+    }));
+    expect(report.claims.find(claim => claim.kind === "merged_or_pushed")?.verdict).toBe("contradicted");
+    expect(verifyExitCode(report)).toBe(7);
+  });
+
+  test("merge evidence is matched to the claimed PR in a mixed message", async () => {
+    const dir = await repoDir();
+    const file = join(dir, "m.txt");
+    await writeFile(file, "Merged https://github.com/example/project/pull/3. Opened https://github.com/example/project/pull/4.");
+    const checked: string[] = [];
+    const report = await runVerify(options({
+      cwd: dir, messageFile: file,
+      decider: fakeDecider({ claim_merged_or_pushed: 0.95, claim_merged_0: 0.95, claim_merged_1: 0.01, "*": 0.01 }),
+      run: async (command, cwd, timeout) => {
+        if (command[0] === "gh") {
+          checked.push(command[3]!);
+          return { code: 0, out: JSON.stringify(command[3]?.endsWith("/3") ? { state: "MERGED", mergedAt: "2026-09-28" } : { state: "OPEN", mergedAt: null }) };
+        }
+        return cleanRunner(command, cwd, timeout);
+      },
+    }));
+    expect(checked).toEqual(["https://github.com/example/project/pull/3"]);
+    expect(report.claims.find(claim => claim.kind === "merged_or_pushed")?.verdict).toBe("confirmed");
+    expect(report.contradictions).toBe(0);
+  });
+
+  test("unavailable merge evidence is unverifiable and preserves other contradictions", async () => {
+    const dir = await repoDir();
+    const file = join(dir, "m.txt");
+    await writeFile(file, "Merged https://github.com/example/project/pull/3.");
+    for (const ahead of [0, 2]) {
+      const report = await runVerify(options({
+        cwd: dir, messageFile: file,
+        decider: fakeDecider({ claim_merged_or_pushed: 0.95, claim_merged_0: 0.95, "*": 0.01 }),
+        run: async (command, cwd, timeout) => {
+          if (command[0] === "gh") return { code: 1, out: "" };
+          if (command.includes("rev-list")) return { code: 0, out: String(ahead) };
+          return cleanRunner(command, cwd, timeout);
+        },
+      }));
+      const claim = report.claims.find(claim => claim.kind === "merged_or_pushed")!;
+      expect(claim.verdict).toBe(ahead === 0 ? "unverifiable" : "contradicted");
+      expect(claim.evidence.join(" ")).toContain("merge evidence unavailable");
+    }
+  });
+
+  test("a plain message never provides check-command evidence", async () => {
+    const dir = await repoDir();
+    const file = join(dir, "m.txt");
+    await writeFile(file, "All tests passed: bun test, exit code 0.");
+    const report = await runVerify(options({
+      cwd: dir, messageFile: file, decider: fakeDecider({ claim_checks_passed: 0.99, "*": 0.01 }),
+    }));
+    expect(report.claims.find(claim => claim.kind === "checks_passed")?.verdict).toBe("unverifiable");
+    expect(report.contradictions).toBe(0);
   });
 
   test("a failed check command in the turn contradicts checks_passed", async () => {

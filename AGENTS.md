@@ -39,6 +39,10 @@
   feedback and original-evidence rechecks, private worktree metadata, and
   embedded project-skill templates. Keep source, raw answers, rule prose, and
   scores out of persistent review metadata; changed evidence never means fixed.
+- `src/verify/` owns completion-message selection, bounded evidence collection,
+  advisory claim checks, and the portable verification skill. A linked open PR
+  is not evidence that a message claimed it was merged; unavailable evidence
+  must remain unverifiable.
 - `src/client.ts` is the portable Node/Bun client and `/client` export.
 - `src/kev.ts` adapts explicit Kev endpoints, retaining two-decimal output and
   restoring Score legends only after validating their native rendering.

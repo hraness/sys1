@@ -3,13 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>System One Skills · Sys1</title>
-    <meta name="description" content="system-one-verify runs a noisy test or build once, gives your agent a short result, and keeps the full log. On 563 replayed outputs it cut the text by 35.20%." />
+    <title>Agent skills · Sys1</title>
+    <meta name="description" content="Choose skills for agent code review, completion checks, and compact test output. Sys1 works with Codex, Claude Code, and Devin." />
     <link rel="canonical" href="https://sys1.io/skills" />
-    <meta property="og:title" content="System One Skills · Sys1" />
-    <meta property="og:description" content="system-one-verify runs a noisy test or build once, gives your agent a short result, and keeps the full log. On 563 replayed outputs it cut the text by 35.20%." />
+    <meta property="og:title" content="Agent skills · Sys1" />
+    <meta property="og:description" content="Choose skills for agent code review, completion checks, and compact test output. Sys1 works with Codex, Claude Code, and Devin." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/skills" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Agent skills · Sys1" />
+    <meta name="twitter:description" content="Choose skills for agent code review, completion checks, and compact test output. Sys1 works with Codex, Claude Code, and Devin." />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
@@ -21,9 +24,9 @@
         "@type": "WebPage",
         "@id": "https://sys1.io/skills",
         "url": "https://sys1.io/skills",
-        "name": "System One Skills · Sys1",
-        "description": "system-one-verify runs a noisy test or build once, gives your agent a short result, and keeps the full log. On 563 replayed outputs it cut the text by 35.20%.",
-        "dateModified": "2026-09-23"
+        "name": "Agent skills · Sys1",
+        "description": "Choose skills for agent code review, completion checks, and compact test output. Sys1 works with Codex, Claude Code, and Devin.",
+        "dateModified": "2026-09-28"
       }
     </script>
     <script src="/appearance.js"></script>
@@ -53,7 +56,7 @@
           <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
         <div class="header-actions">
-          <a class="button button-small" href="#install">Install skill</a>
+          <a class="button button-small" href="#review">Set up review</a>
           <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
             <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
             <div class="hraness-design-theme-toggle__popover" hidden>
@@ -71,28 +74,51 @@
     <main id="main" tabindex="-1">
       <section class="section skills-intro" aria-labelledby="skills-heading">
         <div class="section-intro">
-          <h1 id="skills-heading">Keep noisy test logs out of your agent’s context.</h1>
-          <p><code>system-one-verify</code> is a skill for Devin, Claude Code, and Codex. It runs a test or build once, saves the full log on disk, and replaces long output with the exit status and a short excerpt. In a replay of 563 real validation outputs from one developer’s Codex and Devin sessions, the skill cut the text the agent would see by 35.20%. That figure counts text, not billed tokens, and the skill has not been shown to make tasks faster.</p>
-          <p>It is the only shipped skill. Ten more ideas are research candidates that still need evidence. If your test runner has a quiet mode that keeps what you need, use that first.</p>
-          <div class="actions skills-actions"><a class="button" href="#shipped">When to use it</a><a class="button button-secondary" href="#evidence">See the results</a></div>
+          <h1 id="skills-heading">Skills for reviewing agent work.</h1>
+          <p>Give an agent reusable instructions for reviewing Git changes, checking its completion claims, or keeping noisy test output short. These workflows fit different repositories: you choose the files, rules, model, and check command.</p>
+          <p>Sys1 ships <code>sys1-review</code> for code-review candidates and <code>sys1-verify</code> for completion claims. Install either project skill for Codex, Claude Code, or Devin. The separate <code>system-one-verify</code> skill only captures and shortens test or build output; it needs no Sys1 backend or API key.</p>
+          <div class="actions skills-actions"><a class="button" href="#review">Set up agent review</a><a class="button button-secondary" href="#shipped">Keep check output short</a></div>
         </div>
-        <nav class="skills-contents" aria-label="On this page"><a href="#shipped">When to use it</a><a href="#evidence">Results</a><a href="#catalog">Research candidates</a><a href="#install">Install</a></nav>
+        <nav class="skills-contents" aria-label="On this page"><a href="#review">Review changes</a><a href="#verify">Verify claims</a><a href="#shipped">Compact check output</a><a href="#evidence">Output study</a><a href="#install">Install output skill</a></nav>
+      </section>
+
+      <section id="review" class="section" aria-labelledby="review-heading">
+        <div class="section-intro"><h2 id="review-heading">Review a batch of changes</h2><p><code>sys1-review</code> tells your agent when to preview a checkpoint, investigate findings in the code, and record feedback. Install the same workflow for Codex, Claude Code, or Devin, then choose the changes and rules for your repository.</p></div>
+        <p class="skills-prose">The bundled rules check newly empty catch blocks and removed test assertions in JavaScript and TypeScript. Add and evaluate repository rules for other conventions or languages.</p>
+        <div class="code-example skills-command"><div class="code-heading"><span>Run inside your Git repository after installing Sys1</span></div><pre><code>sys1 review setup codex --dry-run --json
+sys1 review setup codex
+sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
+  --max-requests 10 --dry-run --json -- src test</code></pre></div>
+        <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup writes project instructions and installs no automatic hooks. The CLI is also available to other agents.</p>
+        <p class="skills-prose">The example selects Jev, TypeSafe’s hosted decision model. Enable it and provide your own environment credential before evaluating. The preview lists the selected source, rules, skips, and request count; repeat without <code>--dry-run</code> when the selected source is ready to send. You can also select an experimental local model or a compatible server.</p>
+        <p class="skills-prose">Review is experimental and advisory. Its scores rank candidates, not calibrated defect probabilities. Keep your tests and ordinary review, investigate candidates before changing code, and record whether they were useful, incorrect, or unverifiable.</p>
+        <div class="install-links skills-links"><a href="/docs#getting-started">Install Sys1 and choose a backend</a><a href="/docs#audit">Review workflow</a><a href="https://github.com/hraness/sys1/blob/main/docs/review.md#draft-a-repository-rule">Write a repository rule</a></div>
+      </section>
+
+      <section id="verify" class="section" aria-labelledby="verify-heading">
+        <div class="section-intro"><h2 id="verify-heading">Check the completion message</h2><p>The <code>sys1-verify</code> project skill runs <code>sys1 verify</code> to compare an agent’s claims with reachable evidence from Git, linked pull requests, and fetched pages. Use it to investigate claims that work was committed, merged, or made live.</p></div>
+        <div class="code-example skills-command"><div class="code-heading"><span>Install the skill, then preview a saved message</span></div><pre><code>sys1 verify setup codex --dry-run --json
+sys1 verify setup codex
+sys1 verify --message /tmp/final-message.txt \
+  --model typesafe/jev-1.13.0 --dry-run --json</code></pre></div>
+        <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. The skill can be installed independently of <code>sys1-review</code>. Save the message outside the Git worktree (<code>/tmp/final-message.txt</code> here; choose an equivalent path on Windows). Run inside the task repository, inspect the preview, and repeat without <code>--dry-run</code> to send the message and any fetched page text to the selected backend. Devin can supply the message and recent check-command results from a local session; other agents pass a file or stdin.</p>
+        <p class="skills-prose">This command is experimental and advisory. Contradictions exit 7; missing evidence is reported as unverifiable. A result without contradictions does not prove that the work is finished. <a href="/docs#verify">Evidence sources and limits</a>.</p>
       </section>
 
       <section id="shipped" class="section" aria-labelledby="shipped-heading">
-        <div class="section-intro"><h2 id="shipped-heading">When to use system-one-verify</h2><p><code>system-one-verify</code> ships in version 0.4.1. Use it when a check is already known to produce at least 8 KiB of output and you need its pass/fail result. It makes no model calls and needs no API key.</p></div>
+        <div class="section-intro"><h2 id="shipped-heading">Keep noisy check output short</h2><p>The separate System One Skills package ships <code>system-one-verify</code> in version 0.4.1. Use it when a check is already known to produce at least 8 KiB of output and you need its pass/fail result. It makes no model calls and needs no API key.</p></div>
         <dl class="skills-mechanism">
           <div><dt>Before</dt><dd>The agent receives a long result full of passing-test lines or repeated build output.</dd></div>
           <div><dt>With the skill</dt><dd>The same command runs once. The agent gets the exit status, a short excerpt, the number of bytes left out, and the saved log path.</dd></div>
           <div><dt>When detail matters</dt><dd>Read the relevant lines from the private local log. Follow-up reads cost tokens and can erase the initial saving.</dd></div>
         </dl>
         <div class="skills-fit"><div><h3>Use it for a status decision.</h3><p>A known noisy test or build has finished; the agent needs to know whether the required check passed and keep the evidence available.</p></div><div><h3>Use native tools for diagnosis.</h3><p>Prefer a useful quiet reporter for routine checks, and focused log reads when investigating failures, warnings, or coverage. Do not run a check twice just to choose.</p></div></div>
-        <p class="skills-prose"><strong>What we test:</strong> the command runs once, keeps its exit status and complete log, passes short output through unchanged, and reports a timeout or capture failure as a failure. The v0.4.1 runtime suite has 43 tests. They do not show better diagnoses or faster tasks. <a href="https://github.com/hraness/system-one-skills/blob/v0.4.1/tests/check-runtime.test.ts">Runtime tests</a>.</p>
+        <p class="skills-prose"><strong>Runtime checks:</strong> the command runs once, keeps its exit status and complete log, passes short output through unchanged, and reports a timeout or capture failure as a failure. The v0.4.1 runtime suite has 43 tests. They do not show better diagnoses or faster tasks. <a href="https://github.com/hraness/system-one-skills/blob/v0.4.1/tests/check-runtime.test.ts">Runtime tests</a>.</p>
         <p class="skills-prose"><strong>Limits:</strong> in one real failed check, replayed through the v0.4.0 reducer, the short result kept all seven failing test names and their shared error message but only one of the seven test call sites. The full log had all of them. Only aggregate counts and a digest of the replayed sessions are public. <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/FAILURE-EVIDENCE.md">Failed-check replay</a>.</p>
       </section>
 
       <section id="evidence" class="section" aria-labelledby="evidence-heading">
-        <div class="section-intro"><h2 id="evidence-heading">What the 35.20% measures</h2><p>We replayed 563 real validation outputs and compared the text the agent would see with and without the skill. The table splits the result by agent. Claude Code had no qualifying outputs in this window.</p></div>
+        <div class="section-intro"><h2 id="evidence-heading">The compact-output study</h2><p>The September 20, 2026 System One Skills study replayed 563 validation outputs from one developer’s Codex and Devin sessions. The short results contained 35.20% fewer UTF-8 text bytes. This is evidence about <code>system-one-verify</code> output; it measures neither Sys1 review accuracy nor task speed. Claude Code had no qualifying outputs in this window.</p></div>
         <div class="scorecard-grid" aria-label="System One Skills scorecard">
           <article class="scorecard-card"><p class="scorecard-label">All observed providers</p><strong class="scorecard-value">35.20%</strong><p>1,163,594 → 754,006 UTF-8 bytes across 563 outputs.</p></article>
           <article class="scorecard-card"><p class="scorecard-label">Compacted outputs</p><strong class="scorecard-value">90.61%</strong><p>28 outputs crossed the guard; 535 short outputs passed through unchanged.</p></article>
@@ -109,8 +135,8 @@
           <tr><th scope="row">Claude Code<span>No qualifying output in this window</span></th><td>0</td><td>—</td><td><strong>No result</strong></td><td>—</td></tr>
         </tbody></table></div>
         <div class="candidate-scorecard">
-          <h3>How often the other candidates could help</h3>
-          <p class="skills-prose">This screen counts real tool outputs of at least 256 <code>o200k_base</code> text tokens. It assumes a 128-token skill cost, a 128-token margin, and that a skill could delete everything else. We use it to choose the next experiment. It does not measure a saving, a task result, or correctness.</p>
+          <h3>System One Skills research candidates</h3>
+          <p class="skills-prose">This screen counts real tool outputs of at least 256 <code>o200k_base</code> text tokens. It assumes a 128-token skill cost, a 128-token margin, and that a skill could delete everything else. It helps select a next experiment. It does not measure a saving, a task result, or correctness.</p>
           <div class="skills-table-scroll" role="region" aria-label="Research candidate headroom screen" tabindex="0"><table class="skills-table"><caption>Retrospective headroom screen: 960 calls in four workflows, plus 128 calls from the CI pilot</caption><thead><tr><th scope="col">Candidate</th><th scope="col">Observed calls</th><th scope="col">Calls with 256-token headroom</th><th scope="col">Decision</th></tr></thead><tbody>
             <tr><th scope="row"><code>system-one-explore</code></th><td>573</td><td>213 (37.17%)</td><td>Test focused search and location recall</td></tr>
             <tr><th scope="row"><code>system-one-ci</code></th><td>128</td><td>—</td><td>Native run watching preferred</td></tr>
@@ -120,7 +146,7 @@
             <tr><th scope="row"><code>system-one-research</code></th><td>95 shared web calls</td><td>54 (56.84%)</td><td>Same cohort as fetch; no separate result</td></tr>
             <tr><th scope="row"><code>system-one-triage</code>, <code>system-one-writing</code>, <code>system-one-evolve</code>, <code>system-one</code></th><td>—</td><td>—</td><td>No dedicated labeled cohort</td></tr>
           </tbody></table></div>
-          <p class="skills-prose">None of the ten has a measured result. Fetch and research share one set of 95 web calls, so do not add their numbers together. The <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/SCORECARD.md">full scorecard</a> has the provider splits, native controls, missing-output accounting, and the rules a candidate must meet.</p>
+          <p class="skills-prose">At the linked September 20 source revision, none of the ten candidates had a measured result. Fetch and research share one set of 95 web calls, so do not add their numbers together. The <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/SCORECARD.md">full scorecard</a> has the provider splits, native controls, missing-output accounting, and the rules a candidate must meet.</p>
         </div>
         <p class="skills-prose"><strong>Try native quiet output first.</strong> A useful quiet reporter can beat an extra wrapper. The skill helps only with known noisy checks, where the short result and the saved log are worth the local overhead.</p>
         <div class="question-list skills-notes">
@@ -130,9 +156,9 @@
       </section>
 
       <section id="catalog" class="section" aria-labelledby="catalog-heading">
-        <div class="section-intro"><h2 id="catalog-heading">Research candidates</h2><p>Ten more skill ideas are research candidates. None is installed or available as a command, and none has a measured result. Each would have to beat a native tool, such as focused <code>rg</code> searches or <code>gh run watch</code>, on a correct, completed task.</p></div>
+        <div class="section-intro"><h2 id="catalog-heading">Further compact-output research</h2><p>The System One Skills v0.4.1 catalog records ten more ideas. That release installs none of them. Each proposed skill would need evidence that it improves a completed task over native tools, such as focused <code>rg</code> searches or <code>gh run watch</code>.</p></div>
         <p class="skills-prose">The <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/SKILL-CATALOG.md">skill catalog</a> lists each candidate’s proposed payoff, the native tool it has to beat, and the evidence it still needs.</p>
-        <p class="skills-prose"><strong>Next experiments:</strong> a compact failure summary that keeps every reported failure location with a line index into the full log, and focused search that returns the source lines a task needs. To ship, a candidate needs a defined task, an independent correctness check, a strong native baseline, every overhead and follow-up cost counted, and measured completion time. The benchmark harness that compares candidates with native workflows has no results yet. <a href="https://github.com/hraness/system-one-skills/blob/6f69658/bench/TRIALS.md">Trial protocol</a> · <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/BENCHMARK-HARNESS.md">Benchmark protocol</a>.</p>
+        <p class="skills-prose"><strong>Proposed next experiments at that revision:</strong> a compact failure summary that keeps every reported failure location with a line index into the full log, and focused search that returns the source lines a task needs. To ship, a candidate needs a defined task, an independent correctness check, a strong native baseline, every overhead and follow-up cost counted, and measured completion time. The benchmark harness that compares candidates with native workflows has no results yet. <a href="https://github.com/hraness/system-one-skills/blob/6f69658/bench/TRIALS.md">Trial protocol</a> · <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/BENCHMARK-HARNESS.md">Benchmark protocol</a>.</p>
         <div class="question-list skills-notes"><details><summary>What the file-read screen found<svg class="disclosure-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path class="disclosure-vertical" d="M12 5v14"/></svg></summary><div class="skills-note-body"><p>A retrospective screen of 1,200 file reads found 74 reads repeating the exact query and output within the same session. Those repeats contained 12,485 of 1,143,648 observed read-output text tokens: just 1.09% before any reuse overhead or freshness checks. This is an optimistic deletion ceiling, not measured savings. Necessary rereads cannot be assumed redundant, and no read-cache skill ships. <a href="https://github.com/hraness/system-one-skills/blob/6f69658/docs/CANDIDATE-OPPORTUNITIES.md">Screen methods and limits</a>.</p></div></details></div>
       </section>
 
@@ -144,7 +170,7 @@ system-one-skills install-skills --target .agents/skills</code></pre></div>
         <p class="skills-prose">Use <code>.claude/skills</code> or <code>.devin/skills</code> for those agents. Keep your repository’s scheduler and required checks.</p>
         <div class="code-example skills-command"><div class="code-heading"><span>Run a check already known to be noisy</span></div><pre><code>system-one-skills check --timeout-ms 900000 -- bun test</code></pre></div>
         <div class="install-links skills-links"><a href="https://github.com/hraness/system-one-skills#commands">Command reference</a><a href="https://github.com/hraness/system-one-skills/releases/tag/v0.4.1">Release &amp; checksums</a></div>
-        <p class="skills-prose"><a href="/">Sys1</a> is a separate project for yes/no, choice, and score decisions from local or hosted models. System One Skills does not need Sys1, and installing one does not configure the other.</p>
+        <p class="skills-prose">System One Skills does not need Sys1. Its <code>system-one-verify</code> skill captures command output; Sys1’s <code>sys1 verify</code> checks a completion message using a model. Installing either package does not configure the other.</p>
         <p class="section-footnote">Figures from System One Skills at <a href="https://github.com/hraness/system-one-skills/commit/6f69658">6f69658</a>, published September 20, 2026.</p>
       </section>
     </main>

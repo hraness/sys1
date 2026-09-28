@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sys1",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "description": "Sys1 helps coding agents review changes against your repository's rules, with probability-scored answers from hosted Jev, a local model, or your own server.",
   "type": "module",
   "license": "MIT",
@@ -45,10 +45,12 @@
     "check:native": "bun scripts/check-native.ts",
     "test": "bun test ./src ./test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check": "bun run typecheck && bun run brand:check && bun run test && bun run build:dist && bun run check:package",
+    "check": "bun run typecheck && bun run check:release-info && bun run brand:check && bun run test && bun run build:dist && bun run check:package",
     "prepack": "bun run check",
     "brand:generate": "bun scripts/generate-brand-icons.ts",
-    "brand:check": "bun scripts/generate-brand-icons.ts --check"
+    "brand:check": "bun scripts/generate-brand-icons.ts --check",
+    "release:sync": "bun scripts/sync-public-release.ts --write",
+    "check:release-info": "bun scripts/sync-public-release.ts --check"
   },
   "dependencies": {
     "zod": "4.6.2"
@@ -65,5 +67,16 @@
   },
   "trustedDependencies": [
     "node-llama-cpp"
+  ],
+  "keywords": [
+    "coding-agents",
+    "agent-skills",
+    "code-review",
+    "jev",
+    "system-one",
+    "typescript",
+    "codex",
+    "claude-code",
+    "devin"
   ]
 }

@@ -5,6 +5,16 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.17.0 - 2026-09-28
+
+Sys1 adds a portable verification skill and clearer guides for reviewing changes and checking completion claims with coding agents.
+
+- `sys1 verify setup codex|claude-code|devin` installs project instructions for checking a final-message file or stdin, with a dry-run preview and protection for existing user edits. Setup makes no model calls, adds no hooks, and changes no backend settings.
+- Review instructions explain how to choose task-owned paths and repository rules across languages, and verification instructions distinguish explicit messages from optional Devin session discovery and transcript evidence.
+- Verification distinguishes a claim that a pull request was merged from a message that only says it was opened or pushed, so an open linked PR does not by itself create a contradiction.
+- The README, homepage, documentation, skills guide, and machine-readable guide explain each workflow, its limits, and the Jev integration. Page metadata, a sitemap, and crawler instructions improve discovery without changing model-quality claims.
+- `bun run release:sync` updates current public release references from the package version, and the repository check detects stale installation links while preserving historical reports.
+
 ## 0.16.1 - 2026-09-28
 
 Sys1 fixes live-page checks in `sys1 verify` and sharpens the page judgment.

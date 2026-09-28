@@ -4,17 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Docs · Sys1</title>
-    <meta name="description" content="Install Sys1, pick hosted Jev or a local model, and call it from a Node or Bun client, an embedded Bun router, or a local HTTP daemon." />
+    <meta name="description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
     <link rel="canonical" href="https://sys1.io/docs" />
     <meta property="og:title" content="Docs · Sys1" />
-    <meta property="og:description" content="Install Sys1, pick hosted Jev or a local model, and call it from a Node or Bun client, an embedded Bun router, or a local HTTP daemon." />
+    <meta property="og:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sys1.io/docs" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Docs · Sys1" />
+    <meta name="twitter:description" content="Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API." />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://sys1.io/docs",
+  "url": "https://sys1.io/docs",
+  "name": "Docs · Sys1",
+  "description": "Install Sys1 for agent code review with Jev or a local model. Set up repository rules, verify completion claims, or call the decision API.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Sys1",
+    "url": "https://sys1.io/"
+  }
+}
+    </script>
     <script src="/appearance.js"></script>
     <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
@@ -26,7 +44,7 @@
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
     <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/docs.css?v=0.16.0" />
+    <link rel="stylesheet" href="/docs.css?v=0.16.1" />
     <script src="/site.js" defer></script>
   </head>
   <body>
@@ -61,8 +79,8 @@
       <section class="docs-hero" aria-labelledby="docs-title">
         <div class="docs-hero-inner">
           <h1 id="docs-title">Sys1 documentation</h1>
-          <p class="docs-lede">Sys1 gives an agent or application one request format for yes/no, choice, and score decisions. Start with a local model, turn on hosted Jev when you want it, embed the router in a Bun app, or connect a compatible HTTP service.</p>
-          <div class="docs-meta"><span>Sys1 0.16.0</span><span>Node client · Bun router · loopback HTTP</span><a href="/docs/evaluations">Read the evaluations</a></div>
+          <p class="docs-lede">Use Sys1 to review Git changes against repository rules and check an agent’s completion claims. Choose Jev, TypeSafe’s hosted decision model, a local model, or your own compatible server. Applications can also use the same yes/no, choice, and score API.</p>
+          <div class="docs-meta"><span>Sys1 0.17.0</span><span>Agent review · claim verification · decision API</span><a href="/docs/evaluations">Read the evaluations</a></div>
         </div>
       </section>
 
@@ -71,48 +89,78 @@
           <p class="docs-sidebar-title">On this page</p>
           <nav class="docs-nav">
             <a href="#getting-started">Getting started</a>
+            <a href="#audit">Review with your agent</a>
+            <a href="#verify">Verify completion claims</a>
             <a href="#integration">Integration modes</a>
             <a href="#backends">Backends &amp; models</a>
             <a href="#profiles">Profiles &amp; tuning</a>
-            <a href="#audit">Review with your agent</a>
             <a href="#research">Evidence &amp; research</a>
           </nav>
-          <a class="docs-related" href="/skills">Related: System One Skills</a>
+          <a class="docs-related" href="/skills">Agent skills and workflows</a>
         </aside>
 
         <div class="docs-content">
           <section id="getting-started" class="docs-section" aria-labelledby="getting-started-title">
             <h2 id="getting-started-title">Getting started</h2>
-            <p class="docs-intro">Pick the route that matches where your decision should run. Local Qwen is experimental; hosted Jev is opt-in and stays hosted-only when enabled.</p>
+            <p class="docs-intro">Install the CLI with Bun 1.3.14 or newer available, then choose where requests run. Hosted Jev is opt-in. Local Qwen models and the review and verify commands are experimental.</p>
             <div class="docs-route-list">
               <div class="docs-route">
-                <div><h3>Local, with Qwen</h3><p>Install and select the experimental Qwen3 1.7B quality tier. The choice is persisted and is never silently replaced by a smaller installed model.</p></div>
+                <div><h3>Install the release</h3><p>The GitHub release installs the CLI on macOS, Linux, or Windows. <code>--allow-scripts=node-llama-cpp</code> permits the native inference package’s install script. Installation does not download model weights.</p></div>
+                <pre><code>npm install --global --allow-scripts=node-llama-cpp \
+  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
+sys1 doctor</code></pre>
+              </div>
+              <div class="docs-route">
+                <div><h3>Use hosted Jev</h3><p>Provide your TypeSafe API key in the environment, then enable Jev. Sys1 stores the activation flag, not the key. Enabling Jev selects <code>hosted-only</code> routing, so a provider failure does not substitute a local model.</p></div>
+                <pre><code>export TYPESAFE_API_KEY=…
+sys1 jev enable</code></pre>
+              </div>
+              <div class="docs-route">
+                <div><h3>Use a local model</h3><p>Setup downloads Qwen3 1.7B. Start the local daemon for application requests or review commands using <code>--gateway</code>. Evaluate this experimental model on your own cases before relying on its answers.</p></div>
                 <pre><code>sys1 setup --tier quality
 sys1 up
 sys1 status</code></pre>
               </div>
-              <div class="docs-route">
-                <div><h3>Hosted, with Jev</h3><p>Set the credential in your environment, then enable Jev. Sys1 stores the activation flag, not the key, and a provider failure does not fall back to local inference.</p></div>
-                <pre><code>export TYPESAFE_API_KEY=…
-sys1 jev enable
-sys1 up</code></pre>
-              </div>
-              <div class="docs-route">
-                <div><h3>Install the pinned release</h3><p>Install the release file from GitHub when you want the CLI without building from source. <code>--allow-scripts=node-llama-cpp</code> lets only the native inference package run its install script.</p></div>
-                <pre><code>npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz
-sys1 doctor</code></pre>
-              </div>
             </div>
-            <p class="docs-footnote">Use <code>sys1 setup --dry-run --json</code> to inspect the local recommendation before downloading weights. Use <code>sys1 doctor</code> to inspect runtime, model store, routing, and daemon state.</p>
+            <p class="docs-footnote">Preview the download with <code>sys1 setup --dry-run --json</code>. <code>sys1 doctor</code> reports the runtime, model store, routing, and daemon state. For a client-only install or a source build, see the <a href="https://github.com/hraness/sys1#install">README</a>.</p>
+          </section>
+
+          <section id="audit" class="docs-section" aria-labelledby="audit-title">
+            <h2 id="audit-title">Review changes with your agent</h2>
+            <p class="docs-intro">The <code>sys1-review</code> project skill guides an agent through selecting a batch of Git changes, applying reusable rules, investigating candidates, and recording feedback. Its instructions work with Codex, Claude Code, and Devin; other agents can call the CLI directly.</p>
+            <p>The bundled rules check newly empty catch blocks and removed test assertions in JavaScript and TypeScript. Add and evaluate repository rules for other conventions or languages.</p>
+            <pre><code>sys1 review setup codex --dry-run --json
+sys1 review setup codex
+sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
+  --max-requests 10 --dry-run --json -- src test</code></pre>
+            <p>Run setup inside your repository. Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup installs a skill file and no automatic hooks. In the checkpoint preview, inspect selected files, rules, skipped evidence, and request count. With Jev enabled and the source ready to send, repeat without <code>--dry-run</code>.</p>
+            <p>Use <code>--worktree</code> for current files or <code>--since &lt;ref&gt;</code> for committed changes. Paths after <code>--</code> keep the selection within your task. Find active rules with <code>sys1 rules list</code>; repeat <code>--rule &lt;id&gt;</code> to choose checks. Repository-specific rule packs can cover conventions in your own code and guides.</p>
+            <pre><code>sys1 review issues --json
+sys1 review feedback &lt;finding-id&gt; useful --json</code></pre>
+            <p>Investigate each candidate in the code before marking it <code>useful</code>, <code>incorrect</code>, or <code>unverifiable</code>. Findings are advisory, and scores are not calibrated defect probabilities. Keep your normal tests and review.</p>
+            <p>Complete unchanged batches can reuse their review for up to 24 hours. Local metadata preserves feedback without storing source or model answers. Recheck evaluates available original evidence; changed or missing evidence does not establish a fix. A new checkpoint and relevant tests check the repaired batch.</p>
+            <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Agent review guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">Stateless audit and rule packs <span aria-hidden="true">↗</span></a><a href="/skills">Choose an agent workflow</a></div>
+          </section>
+
+          <section id="verify" class="docs-section" aria-labelledby="verify-title">
+            <h2 id="verify-title">Verify completion claims</h2>
+            <p class="docs-intro">The <code>sys1-verify</code> project skill guides an agent through checking a completion message. Its <code>sys1 verify</code> command compares that message with reachable evidence. It can identify unpushed commits, uncommitted files, unmerged linked pull requests, or a fetched page that lacks the claimed change.</p>
+            <pre><code>sys1 verify setup codex --dry-run --json
+sys1 verify setup codex
+sys1 verify --message /tmp/final-message.txt \
+  --model typesafe/jev-1.13.0 --dry-run --json</code></pre>
+            <p>Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. The skill can be installed alongside <code>sys1-review</code> or on its own. Save the message outside your Git worktree, for example at <code>/tmp/final-message.txt</code> on macOS or Linux, then run the preview inside the repository. On Windows, choose an equivalent external path. It reads local Git state and makes no model calls or page fetches. Inspect the plan and repeat without <code>--dry-run</code>; message text and any fetched page text go to the selected backend.</p>
+            <p>Without <code>--message</code>, Sys1 finds the newest matching local Devin session and reads its final message and recent check-command results. Codex, Claude Code, and other agents supply a file or pipe text with <code>--message -</code>. Automatic test-result evidence currently comes from Devin transcripts only.</p>
+            <p>Exit 7 means a claim contradicts reachable evidence; exit 8 means the run was incomplete. Missing or unreachable evidence is <code>unverifiable</code>. Exit 0 means no contradiction was found, including when evidence is unavailable; it does not prove completion or deployment correctness.</p>
+            <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/verify.md">Verify command and evidence limits <span aria-hidden="true">↗</span></a><a href="/skills#shipped">Compact noisy test output with a separate skill</a></div>
           </section>
 
           <section id="integration" class="docs-section" aria-labelledby="integration-title">
             <h2 id="integration-title">Integration modes</h2>
-            <p class="docs-intro">The request and response contract stays the same while the lifecycle belongs to the mode you choose.</p>
+            <p class="docs-intro">Use the same request and answer format from application code. Choose whether your app calls a server, runs the router itself, or connects to a local daemon.</p>
             <div class="docs-mode-list">
               <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre><code>npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.16.0/hraness-sys1-0.16.0.tgz</code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
+  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz</code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Embedded Bun router</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Embedded guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Loopback HTTP</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="https://github.com/hraness/sys1#the-endpoint">HTTP reference <span aria-hidden="true">↗</span></a></div>
             </div>
@@ -134,7 +182,7 @@ sys1 doctor</code></pre>
             <h2 id="backends-title">Backends &amp; models</h2>
             <p class="docs-intro">Every backend accepts the same request and returns the same answer format. That says nothing about how well it answers, so keep the model identity and routing policy visible in your app.</p>
             <dl class="docs-definition-list">
-              <div><dt>Hosted Jev 1.13.0</dt><dd>TypeSafe’s hosted decision model. Enabling Jev selects <code>hosted-only</code>; the credential remains environment-only. Network-inclusive timing and provider capacity are outside local measurements.</dd></div>
+              <div><dt>Hosted Jev 1.13.0</dt><dd><a href="https://docs.typesafe.ai/models">TypeSafe’s hosted System One decision model</a>. Sys1 sends requests to its <code>POST /v1/systemone</code> API. Enabling Jev selects <code>hosted-only</code>; the credential remains environment-only. Network-inclusive timing and provider capacity are outside local measurements.</dd></div>
               <div><dt>Local Qwen3 1.7B</dt><dd>Selected by the quality setup tier and run through the pinned llama.cpp adapter. Local probability readout is experimental and must be evaluated on your own representative cases.</dd></div>
               <div><dt>Local Qwen3 0.6B</dt><dd>Explicit compact diagnostic tier. It is not a memory-driven fallback and cannot silently replace the configured local model.</dd></div>
               <div><dt>Local Qwen3.5 4B</dt><dd>Larger experimental model, a 2.55 GiB download. Install it with <code>sys1 pull qwen3.5-4b</code>; it answers only when you select it.</dd></div>
@@ -161,27 +209,13 @@ const result = await client.evaluate(triage.request(ticket));</code></pre></div>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev setup, prompt tuning, and fine-tuning guide <span aria-hidden="true">↗</span></a></div>
           </section>
 
-          <section id="audit" class="docs-section" aria-labelledby="audit-title">
-            <h2 id="audit-title">Review changes with your agent</h2>
-            <p class="docs-intro">Install project instructions, check a batch of Git changes, investigate candidates, and record feedback. The review commands apply reusable rules and report evidence they could not check.</p>
-            <pre><code>sys1 review setup codex
-sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
-  --max-requests 10 --dry-run --json -- src test
-sys1 review issues --json</code></pre>
-            <p>Use <code>setup claude-code</code> for Claude Code or <code>setup devin</code> for Devin. Inspect the preview, then repeat the checkpoint without <code>--dry-run</code> to evaluate it. Enable hosted Jev and provide its environment credential first. Selected source context goes to that backend. Setup installs no automatic hooks.</p>
-            <p>To focus a checkpoint, add <code>--rule &lt;id&gt;</code>. Repeat <code>--rule</code> to select more checks, or inspect active IDs with <code>sys1 rules list</code>. The preview reports only the selected rules.</p>
-            <p>Findings are experimental and advisory; scores are not calibrated defect probabilities. Complete unchanged batches can reuse their review for up to 24 hours. Local metadata preserves feedback without storing source or model answers. Recheck evaluates available original evidence; changed or missing evidence does not establish a fix.</p>
-            <p>Before reporting completion, <code>sys1 verify --model typesafe/jev-1.13.0</code> checks the agent's final message against reachable evidence: unpushed commits, uncommitted files, unmerged pull requests, failed check commands, and fetched pages that lack the claimed change. Contradicted claims exit 7; unreachable evidence is never a contradiction.</p>
-            <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Agent review guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">Stateless audit and rule packs <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1/blob/main/docs/verify.md">Verify an agent's claims <span aria-hidden="true">↗</span></a></div>
-          </section>
-
           <section id="research" class="docs-section docs-research" aria-labelledby="research-title">
             <h2 id="research-title">Evidence &amp; research</h2>
             <p class="docs-intro">Each evaluation is dated and keeps its raw reports, workloads, runtime details, and caveats. A result describes the build it tested, not later releases.</p>
             <div class="docs-research-list">
               <a href="/docs/evaluations"><span><strong>Model evaluations</strong><small>JevBench v1.2.6 · Jev, Qwen, and direct Laya study</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations-history"><span><strong>Evaluation history</strong><small>Earlier CUA, Needle, forms-v1, and local adapter results</small></span><span aria-hidden="true">↗</span></a>
-              <a href="/skills"><span><strong>System One Skills</strong><small>A separate skill that keeps noisy test logs out of agent context</small></span><span aria-hidden="true">↗</span></a>
+              <a href="/skills"><span><strong>Agent skills</strong><small>Review instructions, claim verification, and optional compact check output</small></span><span aria-hidden="true">↗</span></a>
             </div>
             <p class="docs-footnote">For current defaults, use the sections above. Before you make a quality or cost decision, check the fixture and raw report behind the result.</p>
           </section>
@@ -189,7 +223,7 @@ sys1 review issues --json</code></pre>
       </div>
 
       <section class="docs-closing" aria-label="Next step">
-        <p>Try one decision locally, then measure the model on your own cases before you rely on it.</p>
+        <p>Preview one batch of changes, inspect what will be sent, then evaluate the findings against your code.</p>
         <a class="button" href="/#install">Get Sys1 <span aria-hidden="true">→</span></a>
       </section>
     </main>

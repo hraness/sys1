@@ -4,6 +4,8 @@ import { gatewayUrl } from "../daemon.ts";
 import { createRouter } from "../runtime.ts";
 import { runVerify, type VerifyReport } from "./verify.ts";
 import { VerifyError } from "./message.ts";
+import { resolveReviewRoot } from "../review/checkpoint.ts";
+import { installVerifySkill } from "./install.ts";
 
 function usage(message: string): never {
   throw new VerifyError("usage", message, 2);
@@ -26,6 +28,7 @@ export function parseVerifyArgs(argv: string[]): VerifyCliArgs {
     const arg = argv[index]!;
     if (!arg.startsWith("--")) usage("Use sys1 verify with options only; see sys1 verify --help");
     const [name, ...rest] = arg.slice(2).split("=");
+    if (name !== "url" && flags.has(name!)) usage(`--${name} may appear only once`);
     const read = (): string => {
       const value = rest.length > 0 ? rest.join("=") : argv[++index];
       if (value === undefined || value === "" || value.startsWith("--")) usage(`--${name} needs a value`);
@@ -65,7 +68,21 @@ export function parseVerifyArgs(argv: string[]): VerifyCliArgs {
   };
 }
 
-export async function runVerifyCli(argv: string[], home: string, cwd = process.cwd()): Promise<VerifyReport> {
+export type VerifyCliReport = VerifyReport | Awaited<ReturnType<typeof installVerifySkill>>;
+
+export async function runVerifyCli(argv: string[], home: string, cwd = process.cwd()): Promise<VerifyCliReport> {
+  const firstArgument = argv.find(arg => !["--json", "--agent", "--dry-run"].includes(arg));
+  if (firstArgument === "setup") {
+    const flags = new Set<string>();
+    const positional: string[] = [];
+    for (const arg of argv) {
+      if (!arg.startsWith("--")) { positional.push(arg); continue; }
+      if (!["--dry-run", "--json", "--agent"].includes(arg) || flags.has(arg)) usage("Verify setup accepts only --dry-run, --json, or --agent, once each");
+      flags.add(arg);
+    }
+    if (positional.length !== 2 || positional[0] !== "setup") usage("Use verify setup codex, claude-code, or devin");
+    return installVerifySkill({ repoRoot: await resolveReviewRoot(cwd), target: positional[1]!, dryRun: flags.has("--dry-run") });
+  }
   const args = parseVerifyArgs(argv);
   const base = { home, cwd, route: args.model, urls: args.urls, timeoutMs: args.timeoutMs, dryRun: args.dryRun,
     ...(args.messageFile === undefined ? {} : { messageFile: args.messageFile }) };
@@ -85,12 +102,14 @@ export async function runVerifyCli(argv: string[], home: string, cwd = process.c
   }
 }
 
-export function verifyExitCode(report: VerifyReport): number {
+export function verifyExitCode(report: VerifyCliReport): number {
+  if ("command" in report) return 0;
   if (report.status === "incomplete") return 8;
   return report.contradictions > 0 ? 7 : 0;
 }
 
-export function renderVerify(report: VerifyReport): string {
+export function renderVerify(report: VerifyCliReport): string {
+  if ("command" in report) return `Verify skill ${report.status}: ${report.path}\n`;
   const lines = [`Verify ${report.status}: ${report.contradictions} contradict${report.contradictions === 1 ? "ion" : "ions"}, ${report.requests} request${report.requests === 1 ? "" : "s"}.`];
   for (const claim of report.claims) {
     const probability = claim.probability === null ? "" : ` p=${claim.probability.toFixed(2)}`;
