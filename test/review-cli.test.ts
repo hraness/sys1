@@ -1,11 +1,15 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { configSchema, saveConfig } from "../src/config.ts";
 
 const CLI = fileURLToPath(new URL("../src/cli.ts", import.meta.url));
+// These workflows launch several CLI processes and collect real Git snapshots.
+// Keep their integration budget separate from single-invocation tests and
+// product deadlines so shared-runner process/IO overhead has bounded headroom.
+const CLI_WORKFLOW_TIMEOUT_MS = 20_000;
 const scratch: string[] = [];
 afterEach(() => { for (const root of scratch.splice(0)) rmSync(root, { recursive: true, force: true }); });
 function fixture() {
@@ -37,10 +41,10 @@ describe("review command", () => {
       expect(result.code).toBe(0); expect(result.err).toBe("");
       expect(JSON.parse(result.out).version).toBe(1);
     }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
   test("literal path flags do not become help/version and invalid commands stay JSON", async () => {
     const { repo, home } = fixture();
-    for (const path of ["--help", "--version"]) {
+    for (const path of ["--help", "--version", "--rule"]) {
       writeFileSync(join(repo, path), "path is literal\n");
       const result = await invoke(["review", "checkpoint", "--worktree", "--model", "fake/v1", "--dry-run", "--json", "--", path], repo, home);
       expect(result.code).toBe(0); expect(JSON.parse(result.out).status).toBe("planned");
@@ -52,11 +56,57 @@ describe("review command", () => {
       ["review", "checkpoint", "--worktree", "--model", "fake/v1", "code.ts"],
       ["review", "checkpoint", "--worktree", "--model", "fake/v1", "--max-requests", "201"],
       ["review", "setup", "codex", "--gateway"], ["review", "issues", "--", "code.ts"],
+      ["review", "recheck", "a".repeat(16), "--model", "fake/v1", "--rule", "core-new-empty-catch"],
+      ["review", "setup", "codex", "--rule", "core-new-empty-catch"],
       ["rules", "list", "--ensure", "anything"],
     ]) {
       const result = await invoke(["--agent", ...args], repo, home);
       expect(result.code).toBe(2); expect(JSON.parse(result.out)).toMatchObject({ ok: false, error: { code: "usage" } });
     }
+  }, CLI_WORKFLOW_TIMEOUT_MS);
+  test("audit and checkpoint select the same exact rules, including repeated and equals options", async () => {
+    const { repo, home } = fixture();
+    writeFileSync(join(repo, "code.test.ts"), "test('example', () => { expect(true).toBe(true); });\n");
+    const all = ["core-new-empty-catch", "core-removed-test-assertions"];
+    for (const [selection, expected] of [
+      [[], all],
+      [["--rule", all[1]!], [all[1]!]],
+      [[`--rule=${all[1]}`, "--rule", all[0]!, "--rule", all[1]!], all],
+    ]) {
+      for (const command of [["audit"], ["review", "checkpoint"]]) {
+        const result = await invoke([...command, "--worktree", "--model", "fake/v1", "--dry-run", "--json", ...selection!, "--", "code.test.ts"], repo, home);
+        expect(result.code).toBe(0);
+        const parsed = JSON.parse(result.out);
+        const report = parsed.audit ?? parsed;
+        expect(report.rules.map((rule: { id: string }) => rule.id)).toEqual(expected);
+        expect(report.planned_requests).toBe(1);
+        expect(report.skipped).toEqual([]);
+        expect(existsSync(join(home, "review"))).toBe(false);
+      }
+    }
+  }, CLI_WORKFLOW_TIMEOUT_MS);
+  const invalidRuleSelections: [string, string[]][] = [
+    ["unknown rule", ["--rule", "missing-rule"]],
+    ["known and unknown rules", ["--rule", "core-new-empty-catch", "--rule=missing-rule"]],
+    ["malformed rule", ["--rule=BAD"]],
+    ["empty rule", ["--rule="]],
+  ];
+  const invalidRuleCases = [["audit"], ["review", "checkpoint"]].flatMap(command =>
+    [false, true].flatMap(empty => invalidRuleSelections.map(([name, selection]) =>
+      [`${command.join(" ")} rejects ${name} with ${empty ? "no diff" : "a changed file"}`, command, empty, selection] as const)));
+  test.each(invalidRuleCases)("%s before any backend request or state write", async (_name, command, empty, selection) => {
+    const { repo, home } = fixture();
+    if (empty) rmSync(join(repo, "code.ts"));
+    let requests = 0;
+    const backend = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch() { requests++; return new Response("", { status: 500 }); } });
+    try {
+      saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", model: "v1", base_url: `http://127.0.0.1:${backend.port}` }] }));
+      const result = await invoke([...command, "--worktree", "--model", "fake/v1", "--json", ...selection], repo, home);
+      expect(result.code).toBe(2);
+      expect(JSON.parse(result.out)).toMatchObject({ ok: false, error: { code: "usage" } });
+      expect(existsSync(join(home, "review"))).toBe(false);
+      expect(requests).toBe(0);
+    } finally { await backend.stop(true); }
   });
   test("full loop records feedback, avoids repeat inference, and never calls changed evidence fixed", async () => {
     const { repo, home } = fixture();
@@ -67,11 +117,12 @@ describe("review command", () => {
       if (path !== "/v1/systemone") return new Response("", { status: 404 });
       calls++;
       const body = await request.json() as { questions: Record<string, { type: string }> };
+      expect(Object.keys(body.questions)).toEqual(["core-new-empty-catch"]);
       return Response.json({ model: "v1", answers: Object.fromEntries(Object.entries(body.questions).map(([id]) => [id, { type: "noul", noul: 0.01 }])), usage: { input_tokens: 10, output_tokens: 1 } });
     } });
     saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", model: "v1", base_url: `http://127.0.0.1:${backend.port}` }] }));
     try {
-      const checkpoint = ["review", "checkpoint", "--worktree", "--model", "fake/v1", "--json", "--", "code.ts"];
+      const checkpoint = ["review", "checkpoint", "--worktree", "--model", "fake/v1", "--rule", "core-new-empty-catch", "--json", "--", "code.ts"];
       const first = await invoke(checkpoint, repo, home);
       expect(first.code).toBe(0);
       const observed = JSON.parse(first.out);
@@ -89,5 +140,5 @@ describe("review command", () => {
       const changed = await invoke(["review", "recheck", id, "--model", "fake/v1", "--json"], repo, home);
       expect(changed.code).toBe(8); expect(JSON.parse(changed.out).status).toBe("superseded"); expect(calls).toBe(2);
     } finally { backend.stop(true); }
-  });
+  }, CLI_WORKFLOW_TIMEOUT_MS);
 });

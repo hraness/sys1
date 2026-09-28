@@ -361,6 +361,19 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     if (review["status"] !== "planned" || review["requests"] !== 0 || !Array.isArray(review["findings"])) {
       throw new Error("packed review must preview without inference");
     }
+    writeFileSync(join(auditRepo, "example.test.ts"), "test('example', () => { expect(true).toBe(true); });\n");
+    for (const command of [["audit"], ["review", "checkpoint"]]) {
+      const selected = record(JSON.parse(await run([
+        process.execPath, installedCli, ...command, "--worktree", "--model", "typesafe/jev-1.13.0",
+        "--rule", "core-removed-test-assertions", "--dry-run", "--json", "--", "example.test.ts",
+      ], { cwd: auditRepo, env })), "selected review preview");
+      const selectedAudit = command[0] === "audit" ? selected : record(selected["audit"], "selected audit");
+      const selectedRules = selectedAudit["rules"];
+      if (selectedAudit["requests"] !== 0 || !Array.isArray(selectedRules) || selectedRules.length !== 1
+        || record(selectedRules[0], "selected rule")["id"] !== "core-removed-test-assertions") {
+        throw new Error("packed audit and review must select only the requested active rule");
+      }
+    }
     for (const target of ["codex", "claude-code"]) {
       const setupArgs = [process.execPath, installedCli, "review", "setup", target, "--json"];
       const installed = record(JSON.parse(await run(setupArgs, { cwd: auditRepo, env })), "review skill setup");

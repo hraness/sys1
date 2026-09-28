@@ -1,0 +1,324 @@
+{
+  "verified_at": "2026-09-27T23:25:43.051Z",
+  "freeze_sha256": "6a4cc642198bc79ce738bcbda74ecf8758b2e858b8112f663068817693b454b0",
+  "model_destination": "https://api.typesafe.ai/v1/systemone",
+  "max_hosted_requests": 40,
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/077fd940ccd9fd8324c32e8a688ca44693212a56/src/status-page.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "09144edf86017c34c3bc31c9d9f03ed0e6afbda99bd7506ee3747e0a52c33a4c",
+      "bytes": 8130
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/077fd940ccd9fd8324c32e8a688ca44693212a56/src/status-page.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "b3da0c667f6c66b4dc44fd1d509d6137cbacbfb4c0b24f853ac38ac70cdfcacc",
+      "bytes": 13179
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/fd47d9229e590dc956a08ccc4df00625846991ee/src/status-page.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "d35bb04c1069f3a0eee4cfa0c608c1136a03569afc483c6e8bcd317459b84a66",
+      "bytes": 7377
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/fd47d9229e590dc956a08ccc4df00625846991ee/src/status-page.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "3b23c0e8ae6f8bb7d25f20bc0552d1808844d93fd44dc473fdb392ebb4e61ace",
+      "bytes": 11764
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/79b08398d94ccfa9d50ac122e38b2916c1f21b0d/src/browser.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "276e711dfba434acdef641b0d6f6dd03bcf31ebba2e1de0ee6d8a1c5d9aba113",
+      "bytes": 169481
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/79b08398d94ccfa9d50ac122e38b2916c1f21b0d/src/browser.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "2ad816df2b1b15e585e832bbf03756ef3dea9dfe8400c041ba07fe3f20f52ce6",
+      "bytes": 142304
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/79b08398d94ccfa9d50ac122e38b2916c1f21b0d/src/web-session-cleanup-admission.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "9d87f880158c775d20c4844f3858c02a5410970c43e470e21ad708f6c7635048",
+      "bytes": 73954
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/79b08398d94ccfa9d50ac122e38b2916c1f21b0d/src/web-session-cleanup-admission.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "7ca776fda00ff8ba95351da1b994739e58eb597b9d32196217ad4fb53bdd5602",
+      "bytes": 74155
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/fccd37840420c9ff75ce39eab4efef8f0e9442c7/src/browser.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "6ba085b454235a6f6f3eab41b52cba9e63e34cc860e8661f5a947747c4ba00f9",
+      "bytes": 169777
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/fccd37840420c9ff75ce39eab4efef8f0e9442c7/src/browser.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "766241be24cfdc4a69c03f8f3152c09e87c49881b932643754a5b9913c5f2eb8",
+      "bytes": 144311
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/fccd37840420c9ff75ce39eab4efef8f0e9442c7/src/web-session-cleanup-admission.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "1dc378e404e8c93f4b11290be6cd10857d856997b5149858b7b85d1579fdf644",
+      "bytes": 77426
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/fccd37840420c9ff75ce39eab4efef8f0e9442c7/src/web-session-cleanup-admission.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "a19459048471a69a9c3796088437e9fc5c72c2820e69ea49e50565137e89acc2",
+      "bytes": 75399
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/audit/evaluate.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "afa2a515e43b24cf52efb3dc954c1a59b0a228197c5c2d7a66cd995f82edefba",
+      "bytes": 10257
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/audit/rules-cli.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/cli-help.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "f06436281b22d7958b91f107cf7509a0a21cd52d53595d5596f0bf38ed3d2b9b",
+      "bytes": 8091
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/cli.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "1e6fc6fa42f111e90b9b443ecee0e66710da0e268a04d56e32f34b0044534c9c",
+      "bytes": 36429
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/gateway.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "83b9a3315a6c324277ad2a4f4dc9341cc83415a1383659ef0cf586914c82a435",
+      "bytes": 19113
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/review/checkpoint.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/review/cli.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/review/install.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/review/project-files.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/src/review/state.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/review-checkpoint.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/review-cli.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/review-install.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/review-project-files.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/review-state.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/3d2faecdfcce3057c93720a5f5b7bac52341a5ad/test/reviewer-corpus.test.ts",
+      "unauthenticated": true,
+      "status": 404,
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/audit/evaluate.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "d6266082623237b2d129420e16c71cb89cda20dc51510712a8b32f377bb9870c",
+      "bytes": 10389
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/audit/rules-cli.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "9c289eea93ec97d859e67f46fde05a8973f9f01e43375749104194d4cdc092f5",
+      "bytes": 3959
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/cli-help.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "948b90637d3b337f0fe3cf2ea92ed2486ecff6579852875f7c40b3495bca5433",
+      "bytes": 11310
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/cli.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "6561ee1a3d8ecbacb9285cdc5e2cbe4fea982db33224a9ec0f945c8c21a1f759",
+      "bytes": 38105
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/gateway.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "4c523ec28d30297ab2cb152f05750da76162834fad1fe89d38d9a208cc1ce2b5",
+      "bytes": 19113
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/review/checkpoint.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "ef690e06a374fba6f2698d3aeb3f540b1dfc061f57bc087e8536dc21ad60d00f",
+      "bytes": 12719
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/review/cli.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "e07b0768fe6bac8aaf4bdf73dbec11a428a7370f23bc76534403591074cc78e6",
+      "bytes": 7488
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/review/install.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "4e573bd9bf4b263c7b68ab5f672fe74c3e7f648320d985ba5cc4e159d59486d4",
+      "bytes": 4050
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/review/project-files.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "38a85daeb1d384062bc3275f983f46ef4de5c982061512f57b6e809194e5b164",
+      "bytes": 4369
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/src/review/state.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "5068528e1ab5add7ffaebe453b52ad40b45c8b8b0b81c872df38c1ef1f6ba75c",
+      "bytes": 12020
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/review-checkpoint.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "6b961fc2a1da848449ca3bef293476c5d11b6109f241767020198bdcec7ecb3c",
+      "bytes": 12637
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/review-cli.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "ae0581da44bf3e654bd20628bdd7fd94655affe1b895359feacdb3fe1abbfaa9",
+      "bytes": 5619
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/review-install.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "5110ff0c31cf0f72b50bbb40546fda8c52d2003f2d636256702993c243139c8e",
+      "bytes": 5132
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/review-project-files.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "a8092ae8b12e7ed68b354a842e9fc915d48cefa7f4ac0406537368028f6df692",
+      "bytes": 4131
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/review-state.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "04498deb876de50111cedd64b758f4bc5b329f2792d571c24dff21274f2b9d13",
+      "bytes": 8501
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/test/reviewer-corpus.test.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "b84b9dc41d83543a1d49f9a317b4c0dd4ee4ef9e510a07de1ad20f003ddffb1a",
+      "bytes": 5899
+    }
+  ],
+  "payload_scope": "Only unified diffs compiled from these verified public commit blobs, repository-relative file names, and the two bundled public core rules. No worktree edits, local absolute paths, credentials, environment, or private source is in model state.",
+  "rule_source": {
+    "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/packs/core/pack.yaml",
+    "unauthenticated": true,
+    "status": 200,
+    "bytes": 2739,
+    "sha256": "db095dbdcd34bb06f2e8b009bf893e046c6b6907970d7d3d0446bef2813bca52"
+  }
+}

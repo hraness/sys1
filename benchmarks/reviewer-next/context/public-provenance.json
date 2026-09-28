@@ -1,0 +1,91 @@
+{
+  "verified_at": "2026-09-27T23:12:26.932689+00:00",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/a09aa4137e55546219b141808db90a4461c514a6/src/accounts-auth.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+      "bytes": 5600
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/ghostget/42fbc4d05e5011c5112fee1f4afbb7e81072e1f5/src/accounts-auth.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+      "bytes": 7295
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/898d80364085a41c858350f1b492ac28b5a0384b/src/react/theme.tsx",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+      "bytes": 12623
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/f335cf879a692b193ace8a64ba55eab7e3a85fe2/src/react/theme.tsx",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+      "bytes": 12786
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/f335cf879a692b193ace8a64ba55eab7e3a85fe2/src/react/theme-resolution.ts",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+      "bytes": 454
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/c7d8300abc5217355e88736547f1d2f2ae6521bc/src/react/design-palette.tsx",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+      "bytes": 7568
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hraness/design-kit/850a0d3e98a5d897ba8951544b0caafc007fd7f3/src/react/design-palette.tsx",
+      "unauthenticated": true,
+      "status": 200,
+      "sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+      "bytes": 9511
+    }
+  ],
+  "diffs_reconstructed_from_unauthenticated_public_bytes": [
+    {
+      "id": "ghostget-login-before",
+      "state_sha256": "ad6a6ee90d8c2dcf317a72972bee702d151fff92862ac1d76c260cd07904b826"
+    },
+    {
+      "id": "ghostget-login-after",
+      "state_sha256": "ee13eafef01bcfe7aeb236d45322aad18fe2a5807a1aa343153db73161db0ca2"
+    },
+    {
+      "id": "design-kit-forced-before",
+      "state_sha256": "8bff3e26364386d5de884072f26750a5ea3220dd0d1179f13605c85e1222cef6"
+    },
+    {
+      "id": "design-kit-forced-after",
+      "state_sha256": "11d1d58439896a715fb416f1d9c437f5887f1475744333f695ff66dbfe5682dc"
+    },
+    {
+      "id": "design-kit-label-before",
+      "state_sha256": "2c44b00af7ddddf33a90a5dfde9e6be4c8395b63b24917bee3d09f23c407908e"
+    },
+    {
+      "id": "design-kit-label-after",
+      "state_sha256": "17f3217556af83bfa9dae8a643658549fc71f9bfd8a56a1ca8d638b7d5fe43ec"
+    }
+  ],
+  "model_destination": "https://api.typesafe.ai/v1/systemone",
+  "model": "jev-1.13.0",
+  "maximum_model_requests": 24,
+  "payload_scope": "Only these verified public source bytes, immutable public source windows, public discovery pack wording, and task-authored question text; no worktree source, local paths, environment, credentials, or private repository data is in model state.",
+  "question_pack": {
+    "url": "https://raw.githubusercontent.com/hraness/sys1/6759898c0dae3a032015a87f1786e8ff0a232af8/benchmarks/reviewer/reviewer-candidates/pack.yaml",
+    "unauthenticated": true,
+    "status": 200,
+    "sha256": "de0a1e0b83c277611c78fac6ee20001ddd0f6a252f6fa141ee2a8fac81992ea8",
+    "bytes": 4762
+  }
+}

@@ -1,0 +1,535 @@
+{
+  "version": 1,
+  "purpose": "discovery-only-context-and-question-diagnosis",
+  "route": "typesafe/jev-1.13.0",
+  "cap": 24,
+  "thresholds": {
+    "medium": 0.8,
+    "high": 0.9
+  },
+  "retries": 0,
+  "request_timeout_ms": 20000,
+  "overall_timeout_ms": 600000,
+  "script_sha256": "0c40668b186c0636f45807b1756c5d7cfb9a45dcd16e42a52abb7d5a45a5b18e",
+  "manifest_sha256": "f00c23123ffd0c40c44dee4b74c2c203670f885d70960faec90d6576802c22f8",
+  "variants": [
+    "original-window",
+    "specific-window",
+    "original-full-context",
+    "claim-window"
+  ],
+  "limitations": [
+    "Known discovery misses and their repairs; no held-out input read.",
+    "Original and full-context variants ask the original four questions together; specific and claim variants ask one targeted question.",
+    "Full context preserves the original replayed diff and adds complete same-commit after files, not a real before/after repair diff; its prefix scopes surrounding code as support only.",
+    "Claim and specific questions were authored with knowledge of these bugs; this diagnoses verification, not autonomous discovery.",
+    "No thresholds are tuned after predictions. Scores are uncalibrated."
+  ],
+  "requests": [
+    {
+      "id": "ghostget-login-before",
+      "family": "ghostget-login",
+      "variant": "original-window",
+      "label": "violation",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+          "sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "bytes": 5600
+        }
+      ],
+      "request_sha256": "38ffd2281832ee0456ffaf22cdea342e44274d63b07ed68f7a115dfd8ddd0591",
+      "state_sha256": "89f866316694373849ad5eb30b50aa8d998c653937b942e765c7493ac9e10d5f",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 923,
+      "question_count": 4
+    },
+    {
+      "id": "ghostget-login-after",
+      "family": "ghostget-login",
+      "variant": "original-window",
+      "label": "clean",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "42fbc4d05e5011c5112fee1f4afbb7e81072e1f5",
+          "sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+          "bytes": 7295
+        }
+      ],
+      "request_sha256": "35e39bcfd4ae6d5726a65640b267b9788b5069724f8464c000f0c206a1fdca2d",
+      "state_sha256": "2559b98ec3b163df616c2353aa3d04d9608532083962ce781e2d339ebefd336f",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1417,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-forced-before",
+      "family": "design-kit-forced",
+      "variant": "original-window",
+      "label": "violation",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+          "sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "bytes": 12623
+        }
+      ],
+      "request_sha256": "2c63597369447535aa0ec4cab80b7920b4875b8cf07d8ae5419197c775fe719b",
+      "state_sha256": "16d7c79479b3058b925432d3877f0e6b33f30349b0625aa87594edc5b6d3a8c3",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1015,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-forced-after",
+      "family": "design-kit-forced",
+      "variant": "original-window",
+      "label": "clean",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+          "bytes": 12786
+        },
+        {
+          "path": "src/react/theme-resolution.ts",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+          "bytes": 454
+        }
+      ],
+      "request_sha256": "f3761817660151f19c3a1c1d42f97252765a03c866e022d708523c24b5fc69ff",
+      "state_sha256": "3ac952612146f3e90dca894810ae771426ef9651ef8a642d01e0fd6cf03f7e22",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1597,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-label-before",
+      "family": "design-kit-label",
+      "variant": "original-window",
+      "label": "violation",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+          "sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+          "bytes": 7568
+        }
+      ],
+      "request_sha256": "f5f8f1d375f895387a0f8a0b7cfea1016a528c8356161a53e54fdc34c7ab128a",
+      "state_sha256": "9357193c571bcddab816449669e096c0eb30d1add529523dd9ab46977134dc27",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 3840,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-label-after",
+      "family": "design-kit-label",
+      "variant": "original-window",
+      "label": "clean",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "850a0d3e98a5d897ba8951544b0caafc007fd7f3",
+          "sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+          "bytes": 9511
+        }
+      ],
+      "request_sha256": "4c59276e8120846c1ef5960fc121b1bae76843926b78b4a4256ad1c67fa212d5",
+      "state_sha256": "0703fb7f2b137477e859fce9018aabe44e4d9fa9af44421814a4c852456cc492",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 5884,
+      "question_count": 4
+    },
+    {
+      "id": "ghostget-login-before",
+      "family": "ghostget-login",
+      "variant": "specific-window",
+      "label": "violation",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+          "sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "bytes": 5600
+        }
+      ],
+      "request_sha256": "1963e80c3af66ff3cd4a90f0c0e6431199cd7c35ef03ce96d684c17728b01f80",
+      "state_sha256": "89f866316694373849ad5eb30b50aa8d998c653937b942e765c7493ac9e10d5f",
+      "questions_sha256": "6e487922c5a68c132deed860785d2bc7985cae283f87efd9cfb18c82f468aebb",
+      "state_bytes": 923,
+      "question_count": 1
+    },
+    {
+      "id": "ghostget-login-after",
+      "family": "ghostget-login",
+      "variant": "specific-window",
+      "label": "clean",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "42fbc4d05e5011c5112fee1f4afbb7e81072e1f5",
+          "sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+          "bytes": 7295
+        }
+      ],
+      "request_sha256": "1415bb3f48eb9f6c7375f66cf2890de2e12cb7341a63873f7858fe00b0e54301",
+      "state_sha256": "2559b98ec3b163df616c2353aa3d04d9608532083962ce781e2d339ebefd336f",
+      "questions_sha256": "6e487922c5a68c132deed860785d2bc7985cae283f87efd9cfb18c82f468aebb",
+      "state_bytes": 1417,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-forced-before",
+      "family": "design-kit-forced",
+      "variant": "specific-window",
+      "label": "violation",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+          "sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "bytes": 12623
+        }
+      ],
+      "request_sha256": "649ff812c6bcfdd3ed3929e5d8cc369f2e547ed88294b88f8130ad57883af4ed",
+      "state_sha256": "16d7c79479b3058b925432d3877f0e6b33f30349b0625aa87594edc5b6d3a8c3",
+      "questions_sha256": "67379ae74b0e5b56aacaaaea245f11438000636b54432c88d7765b9f7145a141",
+      "state_bytes": 1015,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-forced-after",
+      "family": "design-kit-forced",
+      "variant": "specific-window",
+      "label": "clean",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+          "bytes": 12786
+        },
+        {
+          "path": "src/react/theme-resolution.ts",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+          "bytes": 454
+        }
+      ],
+      "request_sha256": "768e1d8bb76f13936c4b00d1a650ddd67c1ef0093de0254e01b9ed9e689c6ae3",
+      "state_sha256": "3ac952612146f3e90dca894810ae771426ef9651ef8a642d01e0fd6cf03f7e22",
+      "questions_sha256": "67379ae74b0e5b56aacaaaea245f11438000636b54432c88d7765b9f7145a141",
+      "state_bytes": 1597,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-label-before",
+      "family": "design-kit-label",
+      "variant": "specific-window",
+      "label": "violation",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+          "sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+          "bytes": 7568
+        }
+      ],
+      "request_sha256": "729ac5d9bcd155a3e19f89fde8f4889b448ec42b37982eb57c36290c8aaba7f4",
+      "state_sha256": "9357193c571bcddab816449669e096c0eb30d1add529523dd9ab46977134dc27",
+      "questions_sha256": "76f116edf133041057a16fddb45d81126705c39a79764efdf8615f8fd1f9a114",
+      "state_bytes": 3840,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-label-after",
+      "family": "design-kit-label",
+      "variant": "specific-window",
+      "label": "clean",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "850a0d3e98a5d897ba8951544b0caafc007fd7f3",
+          "sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+          "bytes": 9511
+        }
+      ],
+      "request_sha256": "a7d8da398c64e9fd88c9c51057e876d5712b3d3336b3c59c7052183c49b27248",
+      "state_sha256": "0703fb7f2b137477e859fce9018aabe44e4d9fa9af44421814a4c852456cc492",
+      "questions_sha256": "76f116edf133041057a16fddb45d81126705c39a79764efdf8615f8fd1f9a114",
+      "state_bytes": 5884,
+      "question_count": 1
+    },
+    {
+      "id": "ghostget-login-before",
+      "family": "ghostget-login",
+      "variant": "original-full-context",
+      "label": "violation",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+          "sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "bytes": 5600
+        }
+      ],
+      "request_sha256": "f74d372097811aca9a626b50f01eed3e20cd79273b55ff548f90a40bfd48eaf7",
+      "state_sha256": "760d67c63c904e014c23c5c5c0570ae9ecccb4a2efc91d3438090ec512611378",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 6910,
+      "question_count": 4
+    },
+    {
+      "id": "ghostget-login-after",
+      "family": "ghostget-login",
+      "variant": "original-full-context",
+      "label": "clean",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "42fbc4d05e5011c5112fee1f4afbb7e81072e1f5",
+          "sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+          "bytes": 7295
+        }
+      ],
+      "request_sha256": "bcdfe1eeec8bfe44e56f80208ea10c85b96029226ddfc963175a5433483e88db",
+      "state_sha256": "5231466ed86ea9de727a270d485b36127850f655ea0de60dcd2b6c2ba13131b8",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 9163,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-forced-before",
+      "family": "design-kit-forced",
+      "variant": "original-full-context",
+      "label": "violation",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+          "sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "bytes": 12623
+        }
+      ],
+      "request_sha256": "34e78c66dac42a2bfa404f79b6bff91a9793662095c0d8320f6dec540f5d17bc",
+      "state_sha256": "b1f41b6c43c5f720d1749667bb7266471dc3b474c5eef5959c84f0c4c2eef7b5",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 14374,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-forced-after",
+      "family": "design-kit-forced",
+      "variant": "original-full-context",
+      "label": "clean",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+          "bytes": 12786
+        },
+        {
+          "path": "src/react/theme-resolution.ts",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+          "bytes": 454
+        }
+      ],
+      "request_sha256": "fde73faa00cab6704a0281b3065b3869e016dac7c2df2e6dda72d122d8ff1b04",
+      "state_sha256": "64d84679134a92acd6ea99aa75f31ab9bf55312d6ce61b90ec0a454a2bf3dca7",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 15639,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-label-before",
+      "family": "design-kit-label",
+      "variant": "original-full-context",
+      "label": "violation",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+          "sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+          "bytes": 7568
+        }
+      ],
+      "request_sha256": "db95d585f4d837ae705b36b77f0b7a9453a266de4f28c252afe067bfc46ff82d",
+      "state_sha256": "1d39094d33ab666f695bc955944faec7346a4407b64b5b87011c66922a198722",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 11787,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-label-after",
+      "family": "design-kit-label",
+      "variant": "original-full-context",
+      "label": "clean",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "850a0d3e98a5d897ba8951544b0caafc007fd7f3",
+          "sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+          "bytes": 9511
+        }
+      ],
+      "request_sha256": "f4a06e70cfb0880889c43dc068552cf3ce57d5383cf8bd82ac9f5542b1125ec2",
+      "state_sha256": "68069de8a9d412d89cb97e93628d138434f7bac02b801e9c1a259154e1d02dfc",
+      "questions_sha256": "251f306c5f4b7bb1dddeaf9002d67e97f133a2ac07f546bc446dfcd6366f6349",
+      "state_bytes": 15833,
+      "question_count": 4
+    },
+    {
+      "id": "ghostget-login-before",
+      "family": "ghostget-login",
+      "variant": "claim-window",
+      "label": "violation",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "a09aa4137e55546219b141808db90a4461c514a6",
+          "sha256": "ac81a4846fcdeba4d10eea7b7a28e844c8561dfa757e989d6f6875d71d5f5498",
+          "bytes": 5600
+        }
+      ],
+      "request_sha256": "e8034352b5ec24b60967b3385b084bb44e5c813fc9420393172149a1cff82775",
+      "state_sha256": "89f866316694373849ad5eb30b50aa8d998c653937b942e765c7493ac9e10d5f",
+      "questions_sha256": "79ea9154dd61ab28be52daa1768637e3c6ffefacf2dd2db22830daad9f2d1934",
+      "state_bytes": 923,
+      "question_count": 1
+    },
+    {
+      "id": "ghostget-login-after",
+      "family": "ghostget-login",
+      "variant": "claim-window",
+      "label": "clean",
+      "target": "required-work-before-success",
+      "source_files": [
+        {
+          "path": "src/accounts-auth.ts",
+          "commit": "42fbc4d05e5011c5112fee1f4afbb7e81072e1f5",
+          "sha256": "f02f1fcfe006af53b5dc57239fc731fd0b7d9e2d94dce63feaa63c8b2031275a",
+          "bytes": 7295
+        }
+      ],
+      "request_sha256": "71fc0f228cffc99c973e6481742d16fea08c5a8b66fc45ff95eac8948acfcf48",
+      "state_sha256": "2559b98ec3b163df616c2353aa3d04d9608532083962ce781e2d339ebefd336f",
+      "questions_sha256": "79ea9154dd61ab28be52daa1768637e3c6ffefacf2dd2db22830daad9f2d1934",
+      "state_bytes": 1417,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-forced-before",
+      "family": "design-kit-forced",
+      "variant": "claim-window",
+      "label": "violation",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "898d80364085a41c858350f1b492ac28b5a0384b",
+          "sha256": "55e48f7916bd2afd665e8ca4a754b28220503dd25fd49d89e2663818b57c0531",
+          "bytes": 12623
+        }
+      ],
+      "request_sha256": "d02163ad246b50a60e8faf9ec2940cf31003f35ca532e57a808902fc7c442841",
+      "state_sha256": "16d7c79479b3058b925432d3877f0e6b33f30349b0625aa87594edc5b6d3a8c3",
+      "questions_sha256": "32e37ed1336a0511ebe72bb70e9a817e231b810738ae988e9051b451d3d06186",
+      "state_bytes": 1015,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-forced-after",
+      "family": "design-kit-forced",
+      "variant": "claim-window",
+      "label": "clean",
+      "target": "explicit-override-precedence",
+      "source_files": [
+        {
+          "path": "src/react/theme.tsx",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "580dc3bb1d33404210132ecca9c8ed8f2baec62fe997a53a5babf0b4a7bf0726",
+          "bytes": 12786
+        },
+        {
+          "path": "src/react/theme-resolution.ts",
+          "commit": "f335cf879a692b193ace8a64ba55eab7e3a85fe2",
+          "sha256": "93c271a192d803b227ba8e7c3a0907a1ce757d9f4b3e40605fa1ec7370aacd4c",
+          "bytes": 454
+        }
+      ],
+      "request_sha256": "58061d2a565c3da678734de57a7fa774fc6f0689a97ff1dc17f2a2658688cefe",
+      "state_sha256": "3ac952612146f3e90dca894810ae771426ef9651ef8a642d01e0fd6cf03f7e22",
+      "questions_sha256": "32e37ed1336a0511ebe72bb70e9a817e231b810738ae988e9051b451d3d06186",
+      "state_bytes": 1597,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-label-before",
+      "family": "design-kit-label",
+      "variant": "claim-window",
+      "label": "violation",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "c7d8300abc5217355e88736547f1d2f2ae6521bc",
+          "sha256": "ac19d91f9469783ae20fd40dcdbfae95e4a3cb8e4d7bd2b2fec004f2d1b68bfa",
+          "bytes": 7568
+        }
+      ],
+      "request_sha256": "f1ac51364adaf62b6ee86c68bde4513438f5f15e444dc1f7f2cc853ad89435d0",
+      "state_sha256": "9357193c571bcddab816449669e096c0eb30d1add529523dd9ab46977134dc27",
+      "questions_sha256": "1b93357b4ae20df50a330da39f5f0c5f47418a15a6809d3044b0d121020c73e5",
+      "state_bytes": 3840,
+      "question_count": 1
+    },
+    {
+      "id": "design-kit-label-after",
+      "family": "design-kit-label",
+      "variant": "claim-window",
+      "label": "clean",
+      "target": "preserve-native-activation",
+      "source_files": [
+        {
+          "path": "src/react/design-palette.tsx",
+          "commit": "850a0d3e98a5d897ba8951544b0caafc007fd7f3",
+          "sha256": "85c79e12052f77fe5e0b9a7043ce1e79c126f8a7a9f75b3128196b8b78550929",
+          "bytes": 9511
+        }
+      ],
+      "request_sha256": "155d14b75b5e541a371d086207ea50544d901a351def9521a2b8e7fdf72c678f",
+      "state_sha256": "0703fb7f2b137477e859fce9018aabe44e4d9fa9af44421814a4c852456cc492",
+      "questions_sha256": "1b93357b4ae20df50a330da39f5f0c5f47418a15a6809d3044b0d121020c73e5",
+      "state_bytes": 5884,
+      "question_count": 1
+    }
+  ],
+  "frozen_at": "2026-09-27T23:10:10.386Z"
+}

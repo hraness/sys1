@@ -3,6 +3,7 @@ import { loadConfig } from "../config.ts";
 import { gatewayUrl } from "../daemon.ts";
 import { createRouter } from "../runtime.ts";
 import { loadPacks, packRoots } from "../audit/pack.ts";
+import { RuleSelectionError, selectRules } from "../audit/select.ts";
 import { BUILTIN_RULES } from "../audit/rules-cli.ts";
 import { AUDIT_LIMITS } from "../audit/evaluate.ts";
 import { renderAudit } from "../audit/cli.ts";
@@ -16,7 +17,8 @@ export async function runReviewCli(argv: string[], home: string, cwd = process.c
   const flags = new Map<string, string | true>();
   const positional: string[] = [];
   const paths: string[] = [];
-  const values = new Set(["since", "model", "max-requests", "timeout-ms"]);
+  const ruleIds: string[] = [];
+  const values = new Set(["since", "model", "max-requests", "timeout-ms", "rule"]);
   const booleans = new Set(["worktree", "staged", "dry-run", "gateway", "json", "agent"]);
   let pathMode = false;
   for (let index = 0; index < argv.length; index++) {
@@ -25,11 +27,12 @@ export async function runReviewCli(argv: string[], home: string, cwd = process.c
     if (arg === "--") { pathMode = true; continue; }
     if (!arg.startsWith("--")) { positional.push(arg); continue; }
     const [name, ...rest] = arg.slice(2).split("=");
-    if (name === undefined || flags.has(name)) usage("Review options must be known and appear once");
+    if (name === undefined || (name !== "rule" && flags.has(name))) usage("Review options must be known and appear once, except --rule");
     if (values.has(name)) {
       const value = rest.length > 0 ? rest.join("=") : argv[++index];
       if (value === undefined || !value || value.startsWith("--")) usage(`--${name} needs a value`);
       flags.set(name, value);
+      if (name === "rule") ruleIds.push(value);
     } else if (booleans.has(name) && rest.length === 0) flags.set(name, true);
     else usage("Unknown review option");
   }
@@ -71,7 +74,11 @@ export async function runReviewCli(argv: string[], home: string, cwd = process.c
   if (command === "recheck" && (positional.length !== 2 || arg === undefined)) usage("Use review recheck <id> --model <backend/model>");
   const base: ReviewRuntimeOptions = {
     home, cwd, route, maxRequests, timeoutMs, dryRun: flags.has("dry-run"),
-    loadRules: repoRoot => loadPacks(packRoots({ repoRoot, sys1Home: home, builtinDir: BUILTIN_RULES })),
+    loadRules: async repoRoot => {
+      const activeRules = await loadPacks(packRoots({ repoRoot, sys1Home: home, builtinDir: BUILTIN_RULES }));
+      try { return selectRules(activeRules, ruleIds.length ? ruleIds : undefined); }
+      catch (error) { if (error instanceof RuleSelectionError) usage(error.message); throw error; }
+    },
   };
   const execute = async (options: ReviewRuntimeOptions) => {
     if (command === "recheck") return { command: "recheck" as const, ...await recheckReview({ ...options, id: arg! }) };

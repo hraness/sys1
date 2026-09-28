@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "purpose": "fresh-clean-controls-original-broad-questions",
+  "route": "typesafe/jev-1.13.0",
+  "cap": 12,
+  "question_format": 2,
+  "thresholds": {
+    "medium": 0.8,
+    "high": 0.9
+  },
+  "retries": 0,
+  "request_timeout_ms": 20000,
+  "overall_timeout_ms": 600000,
+  "script_sha256": "fc718e3f7b95e25dc8ce57c73321544d7a93f1682c130030e82e29c99eaac539",
+  "manifest_sha256": "205acda32abf7014629d96988cb7d28df122ac8c5c7630b07d560df74bab34ea",
+  "fixtures_sha256": "b9bb6c1ae847bd1ebe4f75e1e3ca61af57cd521ce7cd6161977760837bb26a63",
+  "diagnostics_sha256": "be32154ce2a197c2cb7339076639a84da424b5edcf190bf4cf25ee96b94c3dd9",
+  "rules": [
+    {
+      "id": "required-work-before-success",
+      "revision": "8b366d5e531cda8278e1868a8b9992934931b5f45e6bfae08385f80531870ebe"
+    },
+    {
+      "id": "validate-path-components",
+      "revision": "0c96910acf56271445fe86366c7354c57cda43dc74bb3ec724d1fbc70c4c48b3"
+    },
+    {
+      "id": "explicit-override-precedence",
+      "revision": "23f154e7388fa238996dd57f88c9da2d776e0b24a88da4a5b4bf8c5e423d48e9"
+    },
+    {
+      "id": "preserve-native-activation",
+      "revision": "946eb6eba07fb577c7014e755a46c2f6c780384c5bef75b8ab23c14116029a6d"
+    }
+  ],
+  "limitations": [
+    "Ten target-rule clean controls; no admitted positive examples or recall estimate.",
+    "Original unchanged four broad discovery questions, not the narrower discovery-only claim strategy.",
+    "Two release timing diagnostics and all non-target outputs have no admitted labels and are excluded from metrics.",
+    "Seven snapshot-as-additions controls and three actual diffs; small purposive sample, not random production traffic.",
+    "No thresholds are tuned after predictions. Model scores are uncalibrated."
+  ],
+  "requests": [
+    {
+      "id": "design-kit-share-await",
+      "role": "primary",
+      "target": "required-work-before-success",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "3d21ec24ded95cee24e23d806863b854c01d1d5d6f40afb0a5c687246745e68f",
+      "state_sha256": "44abcb9fb1c458d7d24ee3c1c6dc60f747d35705c7fe5e23eb424d285c33d8c9",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 2961,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-download-revocation",
+      "role": "primary",
+      "target": "required-work-before-success",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "31ae730bd4bc366fd2a25fa90565b2badea3b217754ed952455d243d8a09883c",
+      "state_sha256": "a21383c5612a76ad25c78f8e258e16bc6fe0c559fa71d39734a96f6c4764e312",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1452,
+      "question_count": 4
+    },
+    {
+      "id": "wordcell-bundle-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "5d10ca3a21b45d22adb513eaea578371540e4dc63dab06b600d4a0a49208a67d",
+      "state_sha256": "c1c42dd92343c1a1bcce2c7645ec7e4233552f4da38e16d9da8269f11f1c5b79",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1481,
+      "question_count": 4
+    },
+    {
+      "id": "wordcell-http-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "3a95d27de0f09f63956d77465c6a3ff4667f1506d435200e8db9fdf56f2ff608",
+      "state_sha256": "85f210e1bfc0ea74a0767171b0d97da405e3358d43cf172a4cc44ff925c10dd9",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 5430,
+      "question_count": 4
+    },
+    {
+      "id": "ghostget-artifact-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "d61eca09e20ddd97982734ebaa02bd0b5dfd28228d941cf7724ac3f0a833391a",
+      "state_sha256": "cdbce36898f6ae2b9f478989bbcdde9d71c259e58b60417ceefcf292d97886e6",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 1378,
+      "question_count": 4
+    },
+    {
+      "id": "sys1-state-home-override",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "9cd3ce042d17ae638cc297a72c989eefa6cd873806540b14e71fdd9ae0147c45",
+      "state_sha256": "bce8d8d99c040ab0b94bc178ac6a79061af918f56588922228f491960c58a459",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 317,
+      "question_count": 4
+    },
+    {
+      "id": "sys1-explicit-backend-pin",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "0e389b03be2659d5ac6124588b4ff24f079dbbfac2e5de98c47ee31aaaeeee9b",
+      "state_sha256": "926cf72d76c2ce83d48dad6dd15a689991f75028a78c52a9cdb9dfa310fbae3e",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 8038,
+      "question_count": 4
+    },
+    {
+      "id": "slopcamera-requested-aspect",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "24f89cc8464998b8bc1c0e68fbdc566d630d0db111e385617370d4888e555915",
+      "state_sha256": "6289ee58f6727d56a674e4522b9457c18ff68896228cb526f43b3d79f0235d0a",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 2204,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-fader-presentation",
+      "role": "primary",
+      "target": "preserve-native-activation",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "6e62562e88cfdd9225ff5089e42a4396e477131418566c6b6dd366ec7fd7a782",
+      "state_sha256": "b04e9f98c0617978045fc200c2404c094070a8724f046fbda4272e4542a8fdff",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 4972,
+      "question_count": 4
+    },
+    {
+      "id": "design-kit-playback-presentation",
+      "role": "primary",
+      "target": "preserve-native-activation",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "fc594a7e712f058d7de343647b50a819c290dd9789920c69c4843b1bdfdeccd7",
+      "state_sha256": "4139cc262fc88489acc593871b5d91fdfc7426d998252336315138a45f076de8",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 3869,
+      "question_count": 4
+    },
+    {
+      "id": "wordcell-release-before",
+      "role": "diagnostic",
+      "target": "required-work-before-success",
+      "admitted_label": null,
+      "diagnostic_hypothesis": "violation",
+      "request_sha256": "b0c61ccc903e0f6f8d3ab9fb2761ef384798ee82d8d2acc9002ad66512c3d583",
+      "state_sha256": "5a0c07a89c7cd2abafce91b51de86fa493879be484c32c2530a0166e3cb87288",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 15449,
+      "question_count": 4
+    },
+    {
+      "id": "wordcell-release-after",
+      "role": "diagnostic",
+      "target": "required-work-before-success",
+      "admitted_label": null,
+      "diagnostic_hypothesis": "clean",
+      "request_sha256": "5d6614627c6ddfc0d7df3efa88a1569d9fcac6abb18bbd4e846c2d2847d88bd6",
+      "state_sha256": "4495131c302133466b2fc6bb8db56f110d83f262cbecf5393e5c8d4e310fd582",
+      "questions_sha256": "2604d84e646de42d4c0490432a9421ea62cd7d965a04bf77e151546a13ed33cc",
+      "state_bytes": 17246,
+      "question_count": 4
+    }
+  ],
+  "frozen_at": "2026-09-27T23:27:49.414Z"
+}

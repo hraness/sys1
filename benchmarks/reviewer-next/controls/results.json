@@ -1,0 +1,530 @@
+{
+  "version": 1,
+  "complete": true,
+  "route": "typesafe/jev-1.13.0",
+  "cap": 12,
+  "script_sha256": "fc718e3f7b95e25dc8ce57c73321544d7a93f1682c130030e82e29c99eaac539",
+  "freeze_sha256": "188208075fe67cab89b116d2fc5ce38906567b0857b915397cae88ecfccb6030",
+  "requests": 12,
+  "dispatches": 12,
+  "elapsed_ms": 2778,
+  "results": [
+    {
+      "id": "design-kit-share-await",
+      "role": "primary",
+      "target": "required-work-before-success",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "3d21ec24ded95cee24e23d806863b854c01d1d5d6f40afb0a5c687246745e68f",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.06999999999999995,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.48,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.31000000000000005,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.24,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 354,
+      "input_tokens": 2621,
+      "output_tokens": 84
+    },
+    {
+      "id": "design-kit-download-revocation",
+      "role": "primary",
+      "target": "required-work-before-success",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "31ae730bd4bc366fd2a25fa90565b2badea3b217754ed952455d243d8a09883c",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.15000000000000002,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.5700000000000001,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.25,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.27,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 210,
+      "input_tokens": 2090,
+      "output_tokens": 84
+    },
+    {
+      "id": "wordcell-bundle-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "5d10ca3a21b45d22adb513eaea578371540e4dc63dab06b600d4a0a49208a67d",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.09999999999999998,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.18999999999999995,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.49,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.47,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 247,
+      "input_tokens": 2137,
+      "output_tokens": 84
+    },
+    {
+      "id": "wordcell-http-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "3a95d27de0f09f63956d77465c6a3ff4667f1506d435200e8db9fdf56f2ff608",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.12,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.13,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.17000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.30000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 198,
+      "input_tokens": 3376,
+      "output_tokens": 84
+    },
+    {
+      "id": "ghostget-artifact-containment",
+      "role": "primary",
+      "target": "validate-path-components",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "d61eca09e20ddd97982734ebaa02bd0b5dfd28228d941cf7724ac3f0a833391a",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.08999999999999997,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.19999999999999996,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.44999999999999996,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.45999999999999996,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 198,
+      "input_tokens": 2085,
+      "output_tokens": 84
+    },
+    {
+      "id": "sys1-state-home-override",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "9cd3ce042d17ae638cc297a72c989eefa6cd873806540b14e71fdd9ae0147c45",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.08999999999999997,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.51,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.06000000000000005,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.33999999999999997,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 212,
+      "input_tokens": 1771,
+      "output_tokens": 84
+    },
+    {
+      "id": "sys1-explicit-backend-pin",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "0e389b03be2659d5ac6124588b4ff24f079dbbfac2e5de98c47ee31aaaeeee9b",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.06999999999999995,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.42000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.16000000000000003,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.31999999999999995,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 263,
+      "input_tokens": 3878,
+      "output_tokens": 84
+    },
+    {
+      "id": "slopcamera-requested-aspect",
+      "role": "primary",
+      "target": "explicit-override-precedence",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "24f89cc8464998b8bc1c0e68fbdc566d630d0db111e385617370d4888e555915",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.07999999999999996,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.53,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.37,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.36,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 232,
+      "input_tokens": 2489,
+      "output_tokens": 84
+    },
+    {
+      "id": "design-kit-fader-presentation",
+      "role": "primary",
+      "target": "preserve-native-activation",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "6e62562e88cfdd9225ff5089e42a4396e477131418566c6b6dd366ec7fd7a782",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.09999999999999998,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.41000000000000003,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.18999999999999995,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.27,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        }
+      ],
+      "elapsed_ms": 194,
+      "input_tokens": 3109,
+      "output_tokens": 84
+    },
+    {
+      "id": "design-kit-playback-presentation",
+      "role": "primary",
+      "target": "preserve-native-activation",
+      "admitted_label": "clean",
+      "diagnostic_hypothesis": null,
+      "request_sha256": "fc594a7e712f058d7de343647b50a819c290dd9789920c69c4843b1bdfdeccd7",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.08999999999999997,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.39,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.30000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.21999999999999997,
+          "tier": "low",
+          "admitted_target_label": "clean"
+        }
+      ],
+      "elapsed_ms": 188,
+      "input_tokens": 2784,
+      "output_tokens": 84
+    },
+    {
+      "id": "wordcell-release-before",
+      "role": "diagnostic",
+      "target": "required-work-before-success",
+      "admitted_label": null,
+      "diagnostic_hypothesis": "violation",
+      "request_sha256": "b0c61ccc903e0f6f8d3ab9fb2761ef384798ee82d8d2acc9002ad66512c3d583",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.15000000000000002,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.24,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.09999999999999998,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.32999999999999996,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 262,
+      "input_tokens": 6235,
+      "output_tokens": 84
+    },
+    {
+      "id": "wordcell-release-after",
+      "role": "diagnostic",
+      "target": "required-work-before-success",
+      "admitted_label": null,
+      "diagnostic_hypothesis": "clean",
+      "request_sha256": "5d6614627c6ddfc0d7df3efa88a1569d9fcac6abb18bbd4e846c2d2847d88bd6",
+      "status": "evaluated",
+      "answers": [
+        {
+          "rule": "required-work-before-success",
+          "score": 0.17000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "validate-path-components",
+          "score": 0.29000000000000004,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "explicit-override-precedence",
+          "score": 0.12,
+          "tier": "low",
+          "admitted_target_label": null
+        },
+        {
+          "rule": "preserve-native-activation",
+          "score": 0.41000000000000003,
+          "tier": "low",
+          "admitted_target_label": null
+        }
+      ],
+      "elapsed_ms": 215,
+      "input_tokens": 6738,
+      "output_tokens": 84
+    }
+  ],
+  "metrics_scope": "Admitted target-rule labels on ten primary clean controls only; diagnostics and non-target outputs excluded.",
+  "primary": {
+    "planned": 10,
+    "evaluated": 10,
+    "high": {
+      "threshold": 0.9,
+      "tp": 0,
+      "fp": 0,
+      "tn": 10,
+      "fn": 0,
+      "precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null,
+        "wilson95": null
+      },
+      "recall": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null,
+        "wilson95": null
+      },
+      "false_positive_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "value": 0,
+        "wilson95": [
+          0,
+          0.2775327998628892
+        ]
+      }
+    },
+    "at_least_medium": {
+      "threshold": 0.8,
+      "tp": 0,
+      "fp": 0,
+      "tn": 10,
+      "fn": 0,
+      "precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null,
+        "wilson95": null
+      },
+      "recall": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null,
+        "wilson95": null
+      },
+      "false_positive_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "value": 0,
+        "wilson95": [
+          0,
+          0.2775327998628892
+        ]
+      }
+    }
+  }
+}

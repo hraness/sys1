@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "study": "sys1-selected-path-checkpoints-2026-09-27",
+  "source_freeze_sha256": "6a4cc642198bc79ce738bcbda74ecf8758b2e858b8112f663068817693b454b0",
+  "files": [
+    {
+      "file": "freeze.json",
+      "sha256": "b9cb8579b48b7e3ecf47442430e0e8ac2a88d573710fa4076727d8bbf682b0e0",
+      "bytes": 34643
+    },
+    {
+      "file": "results.json",
+      "sha256": "e950cb602a2999deae84d9c78a634b3141c9f9498c25c60e2bb29595d376b126",
+      "bytes": 14691
+    },
+    {
+      "file": "public-sources.json",
+      "sha256": "19822fe1e2889a02bc3344800581ddbe01917da37c60f2961f7cbbad5c3fc730",
+      "bytes": 13213
+    },
+    {
+      "file": "dispatches.json",
+      "sha256": "c742fbef33765b655ead11923dc3c68a4284830410514963af497a352cee34ef",
+      "bytes": 5208
+    }
+  ]
+}

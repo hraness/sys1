@@ -1,7 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { collectDiff, type DiffCollection } from "./diff.ts";
 import { evaluateAudit, AUDIT_LIMITS, type AuditReport } from "./evaluate.ts";
-import { loadPacks, packRoots } from "./pack.ts";
+import { loadPacks, packRoots, type RuleSet } from "./pack.ts";
+import { RuleSelectionError, selectRules } from "./select.ts";
 import { createClient } from "../client.ts";
 import { createRouter } from "../runtime.ts";
 import { gatewayUrl } from "../daemon.ts";
@@ -21,7 +22,8 @@ function usage(message: string): never { throw new AuditCliError(message, 2); }
 export async function runAuditCli(argv: string[], home: string, cwd = process.cwd()): Promise<AuditReport> {
   const flags = new Map<string, string | true>();
   const paths: string[] = [];
-  const values = new Set(["since", "model", "max-requests", "timeout-ms"]);
+  const ruleIds: string[] = [];
+  const values = new Set(["since", "model", "max-requests", "timeout-ms", "rule"]);
   const booleans = new Set(["worktree", "staged", "dry-run", "gateway", "json", "agent"]);
   let pathMode = false;
   for (let index = 0; index < argv.length; index++) {
@@ -30,11 +32,12 @@ export async function runAuditCli(argv: string[], home: string, cwd = process.cw
     if (arg === "--") { pathMode = true; continue; }
     if (!arg.startsWith("--")) usage("Put audit paths after --");
     const [name, ...rest] = arg.slice(2).split("=");
-    if (name === undefined || flags.has(name)) usage("Audit options must be known and appear once");
+    if (name === undefined || (name !== "rule" && flags.has(name))) usage("Audit options must be known and appear once, except --rule");
     if (values.has(name)) {
       const value = rest.length > 0 ? rest.join("=") : argv[++index];
       if (value === undefined || value.length === 0 || value.startsWith("--")) usage(`--${name} needs a value`);
       flags.set(name, value);
+      if (name === "rule") ruleIds.push(value);
     } else if (booleans.has(name) && rest.length === 0) flags.set(name, true);
     else usage(`Unknown audit option ${arg}`);
   }
@@ -62,7 +65,10 @@ export async function runAuditCli(argv: string[], home: string, cwd = process.cw
   } catch {
     throw new AuditCliError("Could not collect the Git diff; check the repository, ref, and selected paths", 2);
   }
-  const rules = await loadPacks(packRoots({ repoRoot: diff.repoRoot, sys1Home: home, builtinDir: BUILTIN_PACKS }));
+  const activeRules = await loadPacks(packRoots({ repoRoot: diff.repoRoot, sys1Home: home, builtinDir: BUILTIN_PACKS }));
+  let rules: RuleSet;
+  try { rules = selectRules(activeRules, ruleIds.length ? ruleIds : undefined); }
+  catch (error) { if (error instanceof RuleSelectionError) usage(error.message); throw error; }
   const dryRun = flags.has("dry-run");
   const common = { diff, rules, route, maxRequests, timeoutMs };
   if (dryRun) return evaluateAudit({ ...common, dryRun: true });

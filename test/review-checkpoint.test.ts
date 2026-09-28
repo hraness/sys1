@@ -6,12 +6,18 @@ import { checkpointReview, feedbackReview, listReviewIssues, recheckReview, REVI
 import { mutateReviewState, readReviewState, reviewStatePath } from "../src/review/state.ts";
 import { ruleRevision, ruleSchema } from "../src/audit/schema.ts";
 import type { LoadedPack, LoadedRule, RuleSet } from "../src/audit/pack.ts";
+import { selectRules } from "../src/audit/select.ts";
 import type { Sys1Client } from "../src/client.ts";
+
+// These integration workflows create real repositories and collect multiple
+// Git snapshots. Allow shared-runner process/IO overhead without changing
+// product deadlines or treating Bun's default five seconds as a latency claim.
+const GIT_WORKFLOW_TIMEOUT_MS = 20_000;
 
 const roots: string[] = [];
 afterEach(async () => { await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true }))); });
-function ruleset(wording = "The changed code keeps errors visible."): RuleSet {
-  const rule = ruleSchema.parse({ id: "errors-visible", applies: { paths: ["**/*.ts"] }, ensure: wording, breaks: "The changed code hides errors." });
+function ruleset(wording = "The changed code keeps errors visible.", id = "errors-visible"): RuleSet {
+  const rule = ruleSchema.parse({ id, applies: { paths: ["**/*.ts"] }, ensure: wording, breaks: "The changed code hides errors." });
   const pack = { name: "test", rules: [rule] } as unknown as LoadedPack;
   const loaded = { id: rule.id, rule, revision: ruleRevision(rule), pack, overrides: [] } satisfies LoadedRule;
   return { rules: [loaded], packs: [pack], get: id => id === rule.id ? loaded : undefined, pack: () => pack };
@@ -52,7 +58,7 @@ describe("agent review checkpoint", () => {
     expect((await readFile(reviewStatePath(f.home, f.cwd))).includes(Buffer.from("SOURCE_SENTINEL"))).toBe(false);
     const issue = (await listReviewIssues(f.options)).issues[0]!;
     expect(issue).not.toHaveProperty("model_score"); expect(issue).not.toHaveProperty("summary");
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("unrelated edit rechecks snapshot but suppresses existing unchanged findings", async () => {
     const f = await fixture();
@@ -64,7 +70,7 @@ describe("agent review checkpoint", () => {
     expect(next.findings[0]!.id).not.toBe(first.findings[0]!.id);
     expect(next.audit!.findings).toEqual(next.findings);
     expect((await listReviewIssues(f.options)).issues).toHaveLength(2);
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("a cached snapshot becoming stale during rule loading is never returned as unchanged", async () => {
     for (const change of ["source", "rule"] as const) {
@@ -79,7 +85,7 @@ describe("agent review checkpoint", () => {
       expect(f.calls()).toBe(1);
       expect((await readReviewState(f.home, f.cwd)).generation).toBe(1);
     }
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("absolute temporary aliases have the same selection and recheck identity", async () => {
     if (process.platform !== "darwin") return;
@@ -90,7 +96,7 @@ describe("agent review checkpoint", () => {
     expect(first.status).toBe("complete");
     expect(await checkpointReview({ ...f.options, paths: ["code.ts"] })).toMatchObject({ status: "unchanged", requests: 0 });
     expect(await recheckReview({ ...f.options, id: first.findings[0]!.id })).toMatchObject({ status: "reported" });
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("a worktree with a trailing space keeps one canonical identity", async () => {
     if (process.platform === "win32") return; // Windows normalizes trailing spaces in ordinary paths.
@@ -100,7 +106,7 @@ describe("agent review checkpoint", () => {
     expect((await listReviewIssues(f.options)).issues[0]!.id).toBe(id);
     expect((await feedbackReview({ ...f.options, id, feedback: "useful" })).issue.feedback).toBe("useful");
     expect(await recheckReview({ ...f.options, id })).toMatchObject({ status: "reported" });
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("source, route and rule revisions invalidate receipts and finding identities", async () => {
     const f = await fixture();
@@ -111,14 +117,56 @@ describe("agent review checkpoint", () => {
     const source = await checkpointReview(f.options);
     expect(new Set([first, route, rules, source].map(item => item.snapshot)).size).toBe(4);
     expect(new Set([first, route, rules, source].map(item => item.findings[0]!.id)).size).toBe(4);
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
+
+  test("selected rules govern receipt identity and recheck retains the finding's original rule", async () => {
+    const f = await fixture();
+    let firstWording = "The first condition holds.";
+    let secondWording = "The second condition holds.";
+    const loadRules = (ids?: readonly string[]) => async (): Promise<RuleSet> => {
+      const entries = [...ruleset(firstWording, "first-rule").rules, ...ruleset(secondWording, "second-rule").rules];
+      return selectRules({ rules: entries, packs: entries.map(rule => rule.pack), get: id => entries.find(rule => rule.id === id), pack: () => entries[0]!.pack }, ids);
+    };
+    const questions: string[][] = [];
+    const decider: Sys1Client = { evaluate(request, options) {
+      questions.push(Object.keys(request.questions));
+      return f.decider.evaluate(request, options);
+    } };
+    const base = { ...f.options, decider };
+    const selected = { ...base, loadRules: loadRules(["first-rule"]) };
+    const first = await checkpointReview(selected);
+    expect(first.status).toBe("complete");
+    expect(questions).toEqual([["first-rule"]]);
+    const all = await checkpointReview({ ...base, loadRules: loadRules() });
+    expect(all.status).toBe("complete");
+    expect(all.snapshot).not.toBe(first.snapshot);
+    expect(questions[1]).toEqual(["first-rule", "second-rule"]);
+    expect(await checkpointReview(selected)).toMatchObject({ status: "unchanged", snapshot: first.snapshot, requests: 0 });
+    expect(await checkpointReview({ ...base, loadRules: loadRules(["second-rule", "first-rule", "second-rule"]) })).toMatchObject({ status: "unchanged", snapshot: all.snapshot, requests: 0 });
+    expect(f.calls()).toBe(2);
+
+    secondWording = "The unselected condition has changed.";
+    expect(await checkpointReview(selected)).toMatchObject({ status: "unchanged", snapshot: first.snapshot, requests: 0 });
+    const id = first.findings[0]!.id;
+    expect(await recheckReview({ ...base, loadRules: loadRules(), id })).toMatchObject({ status: "reported" });
+    expect(questions[2]).toEqual(["first-rule"]);
+    expect(f.calls()).toBe(3);
+
+    firstWording = "The selected condition has changed.";
+    expect(await recheckReview({ ...base, loadRules: loadRules(), id })).toMatchObject({ status: "superseded", reason: "rule_changed" });
+    expect(f.calls()).toBe(3);
+    const revised = await checkpointReview(selected);
+    expect(revised.status).toBe("complete");
+    expect(revised.snapshot).not.toBe(first.snapshot);
+    expect(f.calls()).toBe(4);
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("expired receipts trigger a fresh evaluation without repeating unchanged findings", async () => {
     const f = await fixture(); await checkpointReview(f.options);
     await mutateReviewState(f.home, f.cwd, state => { state.receipts[0]!.created_at = Date.now() - REVIEW_RECEIPT_TTL_MS - 1; });
     const refreshed = await checkpointReview(f.options);
     expect(refreshed).toMatchObject({ status: "complete", requests: 1, findings: [], suppressed_count: 1 });
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("partial results are retryable and failed/cancelled calls never become a receipt", async () => {
     const f = await fixture(); await writeFile(join(f.cwd, "other.ts"), "export const other = 3;\n");
@@ -134,7 +182,7 @@ describe("agent review checkpoint", () => {
     expect((await readFile(reviewStatePath(failing.home, failing.cwd))).includes(Buffer.from("ANSWER_SENTINEL"))).toBe(false);
     const cancelled = new AbortController(); cancelled.abort();
     expect(await checkpointReview({ ...failing.options, signal: cancelled.signal })).toMatchObject({ status: "incomplete", requests: 0 });
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("midflight source or rule changes report stale and persist nothing", async () => {
     for (const change of ["source", "rule"] as const) {
@@ -148,7 +196,7 @@ describe("agent review checkpoint", () => {
       expect(stale).toMatchObject({ status: "stale", complete: false, findings: [], audit: { findings: [] } });
       await expect(lstat(f.home)).rejects.toMatchObject({ code: "ENOENT" });
     }
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("overlapping checkpoints report each finding once and retain concurrent feedback", async () => {
     const f = await fixture();
@@ -163,7 +211,7 @@ describe("agent review checkpoint", () => {
     await feedbackReview({ ...f.options, id: issue.id, feedback: "useful" });
     expect((await listReviewIssues(f.options)).issues).toHaveLength(1);
     expect((await listReviewIssues(f.options)).issues[0]!.feedback).toBe("useful");
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("recheck always evaluates exact evidence and never claims a missing or changed hunk fixed", async () => {
     const f = await fixture(); const first = await checkpointReview(f.options); const id = first.findings[0]!.id;
@@ -176,7 +224,7 @@ describe("agent review checkpoint", () => {
     expect(await recheckReview({ ...f.options, id })).toMatchObject({ status: "superseded", reason: "evidence_changed", audit: null });
     expect((await listReviewIssues(f.options)).issues[0]!.feedback).toBe("incorrect");
     expect(f.calls()).toBe(2);
-  });
+  }, GIT_WORKFLOW_TIMEOUT_MS);
 
   test("feedback rejects unknown identifiers and freeform judgments without creating state", async () => {
     const f = await fixture();

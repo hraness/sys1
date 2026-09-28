@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-27",
+  "command": "bun benchmarks/reviewer-next/controls/reproduce.ts",
+  "runtime": "Bun 1.3.14",
+  "platform": "macOS arm64",
+  "exit_code": 0,
+  "assertions": 64,
+  "primary_behaviors_exercised": 8,
+  "diagnostic_behaviors_exercised": 2,
+  "source_review_only": ["design-kit-fader-presentation", "design-kit-playback-presentation"],
+  "diagnostic_outcomes": {
+    "wordcell-release-before": {
+      "first_resolved_while_cleanup_pending": false,
+      "second_resolved_while_cleanup_pending": true
+    },
+    "wordcell-release-after": {
+      "first_resolved_while_cleanup_pending": false,
+      "second_resolved_while_cleanup_pending": false
+    }
+  },
+  "network_requests": 0,
+  "model_requests": 0,
+  "listeners_opened": 0,
+  "browser": "explicit API fakes",
+  "filesystem": "owned temporary directory, cleaned in finally",
+  "limitations": [
+    "Not the original repositories' complete test suites.",
+    "No native browser activation or UI suite was rerun.",
+    "Release timing is diagnostic behavior, not an admitted positive success-rule label."
+  ]
+}
