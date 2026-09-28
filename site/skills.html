@@ -50,6 +50,7 @@
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/#how-it-works">How it works</a>
+          <a href="/introducing-sys1">Introducing</a>
           <a href="/docs">Docs</a>
           <a href="/compare">Compare</a>
           <a href="/skills" aria-current="page">Skills</a>
@@ -77,6 +78,7 @@
           <h1 id="skills-heading">Skills for reviewing agent work.</h1>
           <p>Give an agent reusable instructions for reviewing Git changes, checking its completion claims, or keeping noisy test output short. These workflows fit different repositories: you choose the files, rules, model, and check command.</p>
           <p>Sys1 ships <code>sys1-review</code> for code-review candidates and <code>sys1-verify</code> for completion claims. Install either project skill for Codex, Claude Code, or Devin. The separate <code>system-one-verify</code> skill only captures and shortens test or build output; it needs no Sys1 backend or API key.</p>
+          <p>New to the project? <a href="/introducing-sys1">Introducing Sys1</a> explains how these workflows connect evidence, typed model answers, and the agent’s next action.</p>
           <div class="actions skills-actions"><a class="button" href="#review">Set up agent review</a><a class="button button-secondary" href="#shipped">Keep check output short</a></div>
         </div>
         <nav class="skills-contents" aria-label="On this page"><a href="#review">Review changes</a><a href="#verify">Verify claims</a><a href="#workflows">Try workflow profiles</a><a href="#shipped">Compact check output</a><a href="#evidence">Output study</a><a href="#install">Install output skill</a></nav>
@@ -90,7 +92,7 @@ sys1 review setup codex
 sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
   --max-requests 10 --dry-run --json -- src test</code></pre></div>
         <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup writes project instructions and installs no automatic hooks. The CLI is also available to other agents.</p>
-        <p class="skills-prose">The example selects Jev, TypeSafe’s hosted decision model. Enable it and provide your own environment credential before evaluating. The preview lists the selected source, rules, skips, and request count; repeat without <code>--dry-run</code> when the selected source is ready to send. You can also select an experimental local model or a compatible server.</p>
+        <p class="skills-prose">The example selects Jev, TypeSafe’s hosted decision model. <a href="/docs#getting-started">Provide your environment credential and enable Jev</a> before evaluating. The preview lists the selected source, rules, skips, and request count; repeat without <code>--dry-run</code> when the selected source is ready to send. You can also select an experimental local model or a compatible server.</p>
         <p class="skills-prose">Review is experimental and advisory. Its scores rank candidates, not calibrated defect probabilities. Keep your tests and ordinary review, investigate candidates before changing code, and record whether they were useful, incorrect, or unverifiable.</p>
         <div class="install-links skills-links"><a href="/docs#getting-started">Install Sys1 and choose a backend</a><a href="/docs#audit">Review workflow</a><a href="https://github.com/hraness/sys1/blob/main/docs/review.md#draft-a-repository-rule">Write a repository rule</a></div>
       </section>
@@ -113,6 +115,12 @@ sys1 verify --message /tmp/final-message.txt \
           <div><dt><a href="https://github.com/hraness/sys1/blob/main/examples/workflows/claim-support.profile.json">Claim support</a></dt><dd>Compare a claim with a supplied excerpt and identify support, contradiction, or insufficient evidence. The result does not verify the excerpt's accuracy.</dd></div>
         </dl>
         <p class="skills-prose">The profile evaluator checks labeled examples offline before you opt into model calls. Its reports retain errors and skipped examples alongside per-question results. The included synthetic examples are small screening sets; evaluate a profile on your own tasks before relying on it.</p>
+        <div class="skills-table-scroll" role="region" aria-label="Jev workflow screening results" tabindex="0"><table class="skills-table"><caption>Jev 1.13.0 · September 28, 2026 · 16 frozen synthetic cases per workflow, submitted once</caption><thead><tr><th scope="col">Workflow</th><th scope="col">Matched labels / submitted</th><th scope="col">Errors</th><th scope="col">Deterministic baseline</th></tr></thead><tbody>
+          <tr><th scope="row">Claim support</th><td>16/16</td><td>0</td><td>6/16 · literal text matching</td></tr>
+          <tr><th scope="row">Failure triage</th><td>16/16</td><td>0</td><td>16/16 · error signatures</td></tr>
+          <tr><th scope="row">Excerpt relevance</th><td>13/16</td><td>3</td><td>6/16 · token overlap</td></tr>
+        </tbody></table></div>
+        <p class="skills-prose">Claim support is the next candidate for a larger trial against stronger comparators; its literal-match baseline is deliberately weak. Triage tied ordinary error matching. Relevance needs response-format diagnosis. These observations do not establish production accuracy or reliable completion checks.</p>
         <div class="install-links skills-links"><a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">Run a profile evaluation</a><a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 trial</a></div>
       </section>
 

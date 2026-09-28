@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en" data-hraness-theme="paper" data-palette="tokyo-night" data-hraness-material="lantern" data-hraness-pattern="none" data-hraness-marketing-preset="editorial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Introducing Sys1 · System One decisions for coding agents</title>
+    <meta name="description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <link rel="canonical" href="https://sys1.io/introducing-sys1" />
+    <meta property="og:title" content="Introducing Sys1 · System One decisions for coding agents" />
+    <meta property="og:description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://sys1.io/introducing-sys1" />
+    <meta property="article:published_time" content="2026-09-28" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Introducing Sys1 · System One decisions for coding agents" />
+    <meta name="twitter:description" content="Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server." />
+    <!-- sys1-launch-media:start -->
+    <meta property="og:image" content="https://sys1.io/media/sys1-launch-share.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Introducing Sys1: review changes and check completion claims, with the Sys1 mark and sys1.io." />
+    <meta name="twitter:image" content="https://sys1.io/media/sys1-launch-share.jpg" />
+    <meta name="twitter:image:alt" content="Introducing Sys1: review changes and check completion claims, with the Sys1 mark and sys1.io." />
+    <script type="application/ld+json" data-sys1-launch-video>
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "@id": "https://sys1.io/introducing-sys1#launch-film",
+  "name": "Introducing Sys1",
+  "description": "A 52-second introduction to Sys1: agent review skills, completion checks, and System One decisions with hosted Jev or experimental local models. English captions and a visual transcript accompany the film.",
+  "thumbnailUrl": "https://sys1.io/media/sys1-launch-poster.jpg",
+  "contentUrl": "https://sys1.io/media/sys1-launch.mp4",
+  "uploadDate": "2026-09-28T21:17:22Z",
+  "duration": "PT52S",
+  "width": 1920,
+  "height": 1080,
+  "inLanguage": "en",
+  "creditText": "Original motion graphics and instrumental score, rendered for Sys1 with Slopcamera.",
+  "caption": {
+    "@type": "MediaObject",
+    "contentUrl": "https://sys1.io/media/sys1-launch.vtt",
+    "encodingFormat": "text/vtt",
+    "inLanguage": "en"
+  },
+  "associatedMedia": {
+    "@type": "MediaObject",
+    "name": "Visual transcript",
+    "contentUrl": "https://sys1.io/media/sys1-launch-transcript.txt",
+    "encodingFormat": "text/plain",
+    "inLanguage": "en"
+  },
+  "isPartOf": {
+    "@id": "https://sys1.io/introducing-sys1"
+  }
+}
+    </script>
+    <!-- sys1-launch-media:end -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+    <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://sys1.io/introducing-sys1#article",
+  "url": "https://sys1.io/introducing-sys1",
+  "mainEntityOfPage": "https://sys1.io/introducing-sys1",
+  "headline": "Introducing Sys1",
+  "description": "Sys1 brings repository review and completion checks to coding agents, using System One decisions from hosted Jev, local models, or your server.",
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-09-28",
+  "inLanguage": "en",
+  "author": {
+    "@type": "Organization",
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "contributor": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Codex AI drafting agent"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Codex AI review agent"
+    }
+  ],
+  "creditText": "Drafted with AI from the source code and reviewed by Codex.",
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Sys1",
+      "url": "https://sys1.io",
+      "applicationCategory": "DeveloperApplication"
+    },
+    {
+      "@type": "Thing",
+      "name": "System One models",
+      "url": "https://docs.typesafe.ai/concepts/system-one"
+    },
+    {
+      "@type": "Thing",
+      "name": "Jev",
+      "url": "https://docs.typesafe.ai/models"
+    }
+  ],
+  "citation": [
+    "https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/docs/design.md",
+    "https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/benchmarks/workflows/results/2026-09-28.md"
+  ],
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://sys1.io/media/sys1-launch-poster.jpg",
+    "contentUrl": "https://sys1.io/media/sys1-launch-poster.jpg",
+    "width": 1920,
+    "height": 1080,
+    "caption": "Introducing Sys1: review changes and check completion claims, with the Sys1 mark and sys1.io.",
+    "creditText": "Original motion graphics and instrumental score, rendered for Sys1 with Slopcamera."
+  }
+}
+    </script>
+    <script src="/appearance.js"></script>
+    <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
+    <link rel="stylesheet" href="/vendor/hraness-paper/paper-theme.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/palette-bridge.css" />
+    <link rel="stylesheet" href="/vendor/hraness-lantern/lantern-material.css" />
+    <link rel="stylesheet" href="/vendor/hraness-marketing/product-marketing-preset.css" />
+    <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
+    <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/launch-article.css" />
+    <script src="/site.js" defer></script>
+  </head>
+  <body class="launch-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header hraness-marketing-header">
+      <div class="header-inner">
+        <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
+        <nav aria-label="Primary">
+          <a href="/#how-it-works">How it works</a>
+          <a href="/introducing-sys1" aria-current="page">Introducing</a>
+          <a href="/docs">Docs</a>
+          <a href="/compare">Compare</a>
+          <a href="/skills">Skills</a>
+          <a href="https://github.com/hraness/sys1">GitHub</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-small" href="#try">Try Sys1</a>
+          <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
+            <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
+            <div class="hraness-design-theme-toggle__popover" hidden>
+              <div class="hraness-design-theme-toggle__menu" id="appearance-menu" role="menu" aria-label="Appearance">
+                <div class="hraness-design-theme-toggle__item" data-theme-value="light" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="light"></span><span>Light</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="dark" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="dark"></span><span>Dark</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="system" role="menuitemradio" aria-checked="true" tabindex="-1" data-selected="true"><span aria-hidden="true" data-appearance-icon="system"></span><span>System</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <article class="launch-article" aria-labelledby="launch-title">
+        <header class="launch-header">
+          <h1 id="launch-title">Introducing Sys1</h1>
+          <p class="launch-dek">Give a coding agent a smaller question to answer: whether a change breaks a repository rule, or whether its final message agrees with the evidence.</p>
+          <p class="launch-byline">Hraness <span aria-hidden="true">·</span> <time datetime="2026-09-28">September 28, 2026</time></p>
+          <p class="launch-status">Release at publication: <a href="https://github.com/hraness/sys1/releases/tag/v0.17.0">v0.17.0</a>. <a href="/docs#getting-started">Install from GitHub</a> with Bun. Review and verification are experimental and advisory; local Qwen is experimental, and TypeSafe’s hosted Jev model is opt-in.</p>
+        </header>
+
+        <div class="launch-opening">
+          <div class="launch-prose">
+            <p>A coding agent can edit the right files, pass a test, and still leave a requirement unchecked. Its final message is another thing to inspect: a pushed branch, an open pull request, and a merged change describe different states. Reviewing the code and checking that message are separate jobs, each with evidence the agent can examine.</p>
+            <p>Sys1 helps coding agents review changes against your repository’s rules, with probability-scored answers from hosted Jev, a local model, or your own server. Jev is TypeSafe’s hosted decision model. Sys1 provides the surrounding workflow: choose the evidence, preview what will be sent, ask a specific question, and investigate the answer.</p>
+            <p>The project skills make that sequence reusable in Codex, Claude Code, and Devin. Applications can use the same decision API directly. The questions have a declared answer shape, so a caller can handle a yes/no probability, a choice, or a score without extracting its decision from a paragraph.</p>
+          </div>
+          <nav class="launch-contents" aria-label="In this article">
+            <a href="#system-one">System One and Jev</a>
+            <a href="#evidence">From changes to evidence</a>
+            <a href="#measured">What the trial found</a>
+            <a href="#try">Try a checkpoint</a>
+          </nav>
+        </div>
+
+        <figure class="launch-film" id="film">
+          <video controls playsinline preload="none" width="1920" height="1080" poster="/media/sys1-launch-poster.jpg" aria-label="Introducing Sys1 launch film" aria-describedby="film-caption">
+            <source src="/media/sys1-launch.mp4" type="video/mp4" />
+            <track kind="captions" src="/media/sys1-launch.vtt" srclang="en" label="English captions" />
+            <p><a href="/media/sys1-launch.mp4">Download the Sys1 launch film</a> or <a href="/media/sys1-launch-transcript.txt">read the transcript</a>.</p>
+          </video>
+          <figcaption id="film-caption">A 52-second introduction to the workflow. Original motion graphics and instrumental score, rendered for Sys1 with Slopcamera. <a href="/media/sys1-launch-transcript.txt">Read the visual transcript</a>.</figcaption>
+        </figure>
+
+        <section class="launch-section" id="system-one" aria-labelledby="system-one-heading">
+          <div class="launch-prose">
+            <h2 id="system-one-heading">A System One decision has a shape</h2>
+            <p>In TypeSafe’s <a href="https://docs.typesafe.ai/concepts/system-one">System One approach</a>, an application supplies state and questions, and a model returns structured decisions with probabilities. The caller defines what the possible answers mean. A question can ask whether a condition holds, choose among named alternatives, or score evidence against ordered criteria.</p>
+            <p><a href="https://docs.typesafe.ai/models">Jev</a> is TypeSafe’s hosted model for those decisions. <strong>Sys1 is the runtime and workflow layer around the call.</strong> It exposes a Jev-compatible API, selects the configured backend, and validates an answer against the question that was asked. It also carries cancellation and reports which route answered.</p>
+            <p>That distinction matters when choosing where to run a decision. Sys1 can send a request to hosted Jev, an installed Qwen model, or a compatible HTTP service you configure. Enabling Jev selects hosted-only routing. An outage returns an error instead of silently substituting a local model. The local adapter approximates the answer format with generic Qwen models; shared JSON shapes do not establish equal quality or calibration.</p>
+            <p>The API calls its three answer types <code>noul</code>, <code>choice</code>, and <code>score</code>. These names describe the data your code receives. Validation can reject an unknown choice or a malformed probability, but the caller still needs evidence that the model makes useful judgments on its own tasks. The <a href="/docs#jev">Jev setup guide</a> explains the connection, and the <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/docs/design.md">runtime design</a> traces the request.</p>
+          </div>
+        </section>
+
+        <section class="launch-section" id="evidence" aria-labelledby="evidence-heading">
+          <div class="launch-prose">
+            <h2 id="evidence-heading">Start with the evidence an agent can inspect</h2>
+            <p>The review workflow begins with a Git change and a rule. A repository might require a login path to finish storing a token before reporting success. A review question can bring that requirement together with the selected diff. The answer points the agent toward a candidate to investigate in the implementation and its tests.</p>
+            <p>The <code>sys1-review</code> skill supplies the sequence: preview a checkpoint, inspect findings, and record whether each was useful, incorrect, or unverifiable. You choose the paths and rules. The bundled rules cover newly empty catch blocks and removed test assertions in JavaScript and TypeScript; broader language or policy coverage needs suitable rules and examples.</p>
+          </div>
+
+          <figure class="launch-flow" aria-labelledby="flow-title" aria-describedby="flow-caption">
+            <h3 id="flow-title">A review checkpoint</h3>
+            <ol class="review-flow">
+              <li><span class="flow-step">Select</span><strong>Diff + rule</strong><p>Choose the Git changes and the requirement to check.</p></li>
+              <li><span class="flow-step">Preview</span><strong>Evidence to send</strong><p>Inspect selected files, skipped evidence, and request count.</p></li>
+              <li><span class="flow-step">Evaluate</span><strong>Selected model</strong><p>Send the prepared question; validate the returned answer.</p></li>
+              <li><span class="flow-step">Investigate</span><strong>Candidate finding</strong><p>Read the code and tests; record useful, incorrect, or unverifiable.</p></li>
+            </ol>
+            <div class="verify-flow"><strong>Before the final message</strong><p><code>sys1 verify</code> compares claimed outcomes with reachable Git, pull-request, and page evidence.</p><span>Agreement, contradiction, or unavailable evidence</span></div>
+            <figcaption id="flow-caption">The model contributes a judgment. The agent’s investigation and the repository’s required checks determine the next action.</figcaption>
+          </figure>
+
+          <div class="launch-prose">
+            <p>This workflow keeps the source of a judgment available. A preview makes no model calls, and a checkpoint reports skipped evidence so a partial review is visible. Complete unchanged batches can be reused for up to 24 hours. When a repair changes the evidence, a fresh checkpoint evaluates that change; a changed file alone does not establish that a reported problem was fixed.</p>
+            <p>The separate <code>sys1-verify</code> skill checks a proposed completion message. Git state can contradict a claim that all work was committed or pushed. A linked pull request can contradict a claimed merge. A fetched page can be compared with a claim that a change is live. Missing evidence stays unverifiable. File or stdin input works with any agent; check-command results are available through local Devin transcript discovery.</p>
+            <p>Both skills install project instructions without adding automatic hooks or activating a backend. Their usefulness depends on the repository’s rules and the selected model. An earlier <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/docs/reviewer-contract-2026-09-27.md">review experiment</a> missed its reproduced defect and flagged two of five control hunks, which is why findings require investigation and ordinary tests remain part of the work.</p>
+          </div>
+        </section>
+
+        <section class="launch-section" id="measured" aria-labelledby="results-heading">
+          <div class="launch-prose">
+            <h2 id="results-heading">The trial points to one next experiment</h2>
+            <p>Sys1 also includes source-checkout profiles for failure triage, excerpt relevance, and claim support. A profile fixes the questions and model route while accepting new input. On September 28, 2026, Jev 1.13.0 received 48 synthetic examples across these profiles, each submitted once. It returned 45 valid answers matching the authored labels and three errors.</p>
+          </div>
+
+          <figure class="launch-results" aria-labelledby="chart-title" aria-describedby="chart-caption">
+            <div class="chart-heading"><h3 id="chart-title">All 48 submitted examples</h3><p>16 per workflow · Jev 1.13.0 · September 28, 2026</p></div>
+            <ul class="chart-legend" aria-label="Chart legend"><li><span class="legend-mark correct" aria-hidden="true"></span>Matched label</li><li><span class="legend-mark wrong" aria-hidden="true"></span>Wrong baseline label</li><li><span class="legend-mark error" aria-hidden="true"></span>Request error</li></ul>
+            <div class="trial-group">
+              <h4>Failure triage</h4>
+              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-16"></span></div><span class="trial-value">16 / 16</span></div>
+              <div class="trial-row"><span class="trial-label">Error signatures</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-16"></span></div><span class="trial-value">16 / 16</span></div>
+              <p>Both matched every label. These examples show no advantage over ordinary error matching.</p>
+            </div>
+            <div class="trial-group">
+              <h4>Excerpt relevance</h4>
+              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-13"></span><span class="trial-segment error count-3">×</span></div><span class="trial-value">13 / 16 <span>3 errors</span></span></div>
+              <div class="trial-row"><span class="trial-label">Token overlap</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-6"></span><span class="trial-segment wrong count-10"></span></div><span class="trial-value">6 / 16</span></div>
+              <p>Every valid answer matched its label, but three submissions failed. Error handling needs work before a broader trial.</p>
+            </div>
+            <div class="trial-group">
+              <h4>Claim support</h4>
+              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-16"></span></div><span class="trial-value">16 / 16</span></div>
+              <div class="trial-row"><span class="trial-label">Literal matching</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-6"></span><span class="trial-segment wrong count-10"></span></div><span class="trial-value">6 / 16</span></div>
+              <p>A reason to test more representative claims against a stronger comparator. Literal matching is a deliberately weak baseline.</p>
+            </div>
+            <figcaption id="chart-caption">Each bar groups 16 results by outcome. Eight development examples and eight separately authored screening examples were frozen for each workflow. Both sets are synthetic and public. Errors remain in the denominator. <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/benchmarks/workflows/results/2026-09-28.md">Full report and observations</a>.</figcaption>
+            <details class="chart-data"><summary>Read the chart as a table<svg class="disclosure-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path class="disclosure-vertical" d="M12 5v14"/></svg></summary><div class="launch-table-scroll" role="region" aria-label="Workflow results" tabindex="0"><table><caption>Matched labels and errors across all submissions</caption><thead><tr><th scope="col">Workflow</th><th scope="col">Jev matched</th><th scope="col">Jev errors</th><th scope="col">Baseline matched</th></tr></thead><tbody><tr><th scope="row">Failure triage</th><td>16/16</td><td>0</td><td>16/16</td></tr><tr><th scope="row">Excerpt relevance</th><td>13/16</td><td>3</td><td>6/16</td></tr><tr><th scope="row">Claim support</th><td>16/16</td><td>0</td><td>6/16</td></tr></tbody></table></div></details>
+          </figure>
+
+          <div class="launch-prose">
+            <p>Claim support is the most useful next candidate from this small screen. Its baseline predicted insufficient evidence on every example and matched six labels, so this comparison leaves stronger entailment models and better rules untested. The profile judges a claim against the supplied excerpt; it does not verify that the excerpt itself is true.</p>
+            <p>The relevance errors also matter. Two responses reached the gateway with provider HTTP 200 and failed response validation. The first failure was a gateway HTTP 502 whose underlying cause was not retained. The original failed request was never retried; a continuation submitted only the 30 previously unsubmitted cases. These observations test the profiles and evaluator, not the installed review skill or production accuracy.</p>
+            <p>The <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">profile evaluator</a> makes a similar comparison available from a source checkout. It validates examples offline before you opt into calls, then records coverage, matched labels, errors, timing, and routes. A next trial can preserve the first result, use stronger baselines, and measure how the decision changes the completed task.</p>
+          </div>
+        </section>
+
+        <section class="launch-section launch-try" id="try" aria-labelledby="try-heading">
+          <div class="launch-prose">
+            <h2 id="try-heading">Try a checkpoint on a change you understand</h2>
+            <p>After <a href="/docs#getting-started">installing Sys1</a>, start inside a Git repository with a small change and a rule you can inspect. Install the project instructions and preview a staged checkpoint. The preview lists the planned work without calling a model.</p>
+          </div>
+          <div class="code-example launch-code"><div class="code-heading"><span>Preview selected source and rules</span></div><pre><code>sys1 review setup codex --dry-run --json
+sys1 review setup codex
+sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
+  --max-requests 10 --dry-run --json -- src test</code></pre></div>
+          <div class="launch-prose">
+            <p>Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. To evaluate with Jev, provide <code>TYPESAFE_API_KEY</code> privately in your environment, run <code>sys1 jev enable</code>, and repeat the checkpoint without <code>--dry-run</code>. The selected source goes to that backend. The <a href="/skills#review">review guide</a> walks through investigation and feedback; the <a href="/skills#verify">verification guide</a> adds the final-message check.</p>
+            <p>If your application already has a decision to make, the <a href="/docs#integration">Node/Bun client and HTTP API</a> expose the same question types. Begin with labeled examples from that task and compare the result with the code you would otherwise use.</p>
+          </div>
+        </section>
+        <footer class="launch-article-footer">
+          <p id="article-disclosure" class="launch-disclosure">Drafted with AI from the source code and reviewed by Codex.</p>
+          <p><a href="https://github.com/hraness/sys1">Read the source</a> <span aria-hidden="true">·</span> <a href="/docs">Open the documentation</a></p>
+        </footer>
+      </article>
+    </main>
+    <footer aria-label="Hraness network" class="hraness-site-footer x1ktp55a x8d9m59 x96ybla x14z8vex x8c10za xdg0xw2 x1munjs5 xsctza4 xtq98z5 x1w6jg7m x3luoqq x1xgbxbt x9cmhvv x4sry57 xys6ka6 x18ca4t7 x1sphz0r x1a0dqq5 x1h47zgc x1ghcxmq xwk8b0x x1dsv906 x1baz8l3 xiuoait x1g4142m xprmc4t xkpwil5 x12mkk0b" data-brand="visible" data-mailing-list="none" data-slot="hraness-site-footer" id="hraness-site-footer"><div class="hraness-site-footer__inner x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x9fpagd x10xu2di x1n2onr6 xrvj5dj x182hbjg x83lif4 x1rkzygb x1o8kq85 xx97v1z xiuoait xzlj3eo x5vl0wm x1tec7hu xesnm00 xc26acl x6s0dn4 x1n78d84 x1lfezxm x1b1eqt9 x3so8kt x1hdm9tg x1np48w9 x1hhhz6w x9yvj25 x1bhgv95 x79o31f xhvvu7z x1dyck8u"><a aria-label="Hraness home" class="hraness-site-footer__brand x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 x1pmbb8p xamitd3 x1lqcxt8 xl56j7k xart1r9 xeuuy2l x6i6fhv x1d3i0y6 x1heor9g xxeg0yr x19s9jnd x130jcwj xo5v014 x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/" lang="en" dir="ltr"><svg aria-hidden="true" class="hraness-site-footer__mark x1c4vz4f x2lah0s xdl72j9 xif76xs x1wugil3" data-slot="hraness-mark" focusable="false" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z" fill="currentColor" fill-rule="evenodd"></path><path d="M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z" fill="currentColor"></path><path d="M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z" fill="currentColor" fill-rule="evenodd"></path><path d="M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z" fill="currentColor"></path><circle cx="166" cy="307" fill="currentColor" r="8"></circle></svg><span class="hraness-site-footer__brand-name xj5idha x1dcheo9 xk50ysn x1i21sxh xuxw1ft">by Hraness</span></a><nav aria-label="Hraness links" class="hraness-site-footer__links x78zum5 x6s0dn4 xt33hwp xgc5ccc x12h1iku xiuoait xesnm00 x1jfo8e8 xjsudho"><ul class="hraness-site-footer__socials x78zum5 xesnm00 x1jfo8e8 x1enigpx x1ghz6dp x1717udv x3ct3a4 x43c9pm xnbnhf8"><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1lliihq"><a aria-label="Hraness on Substack" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://substack.com/@hraness" rel="me" title="Substack"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836ZM1.46 10.812v2.836h21.08v-2.836H1.46ZM22.54 16.218V24L12 18.11 1.46 24v-7.782h21.08ZM1.46 0v2.836h21.08V0H1.46Z" fill="currentColor"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xhzsqoz x6w72mi"><a aria-label="Hraness on X" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://x.com/hraness" rel="me" title="X"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg x18g50z5 x101cbvv"><a aria-label="Hraness on LinkedIn" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://www.linkedin.com/company/hraness" rel="me" title="LinkedIn"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M7.125 6.75H7M7.25 6.75C7.25 6.88807 7.13807 7 7 7C6.86193 7 6.75 6.88807 6.75 6.75C6.75 6.61193 6.86193 6.5 7 6.5C7.13807 6.5 7.25 6.61193 7.25 6.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3C16.2426 3 18.364 3 19.682 4.31802C21 5.63604 21 7.75736 21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xir82yx xwl02xf"><a aria-label="Hraness on GitHub" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://github.com/hraness" rel="me" title="GitHub"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li></ul></nav></div></footer>
+  </body>
+</html>

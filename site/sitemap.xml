@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sys1.io/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>https://sys1.io/</loc>
+    <image:image><image:loc>https://sys1.io/media/sys1-launch-poster.jpg</image:loc></image:image>
+    <video:video>
+      <video:thumbnail_loc>https://sys1.io/media/sys1-launch-poster.jpg</video:thumbnail_loc>
+      <video:title>Introducing Sys1</video:title>
+      <video:description>A 52-second introduction to Sys1: agent review skills, completion checks, and System One decisions with hosted Jev or experimental local models. English captions and a visual transcript accompany the film.</video:description>
+      <video:content_loc>https://sys1.io/media/sys1-launch.mp4</video:content_loc>
+      <video:duration>52</video:duration>
+      <video:publication_date>2026-09-28T21:17:22Z</video:publication_date>
+    </video:video>
+  </url>
   <url><loc>https://sys1.io/docs</loc></url>
   <url><loc>https://sys1.io/skills</loc></url>
   <url><loc>https://sys1.io/compare</loc></url>
   <url><loc>https://sys1.io/docs/evaluations</loc></url>
-  <url><loc>https://sys1.io/compare-history</loc></url>
   <url><loc>https://sys1.io/docs/evaluations-history</loc></url>
+  <url>
+    <loc>https://sys1.io/introducing-sys1</loc>
+    <image:image><image:loc>https://sys1.io/media/sys1-launch-poster.jpg</image:loc></image:image>
+    <video:video>
+      <video:thumbnail_loc>https://sys1.io/media/sys1-launch-poster.jpg</video:thumbnail_loc>
+      <video:title>Introducing Sys1</video:title>
+      <video:description>A 52-second introduction to Sys1: agent review skills, completion checks, and System One decisions with hosted Jev or experimental local models. English captions and a visual transcript accompany the film.</video:description>
+      <video:content_loc>https://sys1.io/media/sys1-launch.mp4</video:content_loc>
+      <video:duration>52</video:duration>
+      <video:publication_date>2026-09-28T21:17:22Z</video:publication_date>
+    </video:video>
+  </url>
 </urlset>

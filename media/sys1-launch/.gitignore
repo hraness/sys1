@@ -1,0 +1,9 @@
+# Generated local render state and lossless intermediates.
+/artifacts/
+/score.wav
+/scene.html
+/receipts/*
+!/receipts/provenance.json
+!/receipts/review.json
+
+/__pycache__/

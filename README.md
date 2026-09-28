@@ -4,10 +4,11 @@ Sys1 helps coding agents review changes against your repository's rules, with
 probability-scored answers from hosted Jev, a local model, or your own server.
 Review and final-message verification are experimental and advisory.
 
-Underneath, Sys1 lets agents ask yes/no, choice, and score questions and get
-validated answers with probabilities. You choose who answers: TypeSafe's hosted
-[Jev](https://docs.typesafe.ai/models), a local model on your machine, or a
-compatible server you run.
+Underneath, Sys1 lets agents and applications ask yes/no, choice, and score
+questions and get validated answers with probabilities. You choose who answers:
+[Jev](https://docs.typesafe.ai/models), TypeSafe's hosted decision model, an
+experimental local Qwen model, or a compatible server you run. Hosted Jev is
+opt-in; installing Sys1 does not activate it or download model weights.
 
 Call Sys1 from a small Node/Bun client, embed the router in a Bun app, or run a
 local daemon that serves the Jev-compatible `POST /v1/systemone` API.
@@ -15,7 +16,39 @@ local daemon that serves the Jev-compatible `POST /v1/systemone` API.
 Latest release: v0.17.0. Install it from the GitHub release with npm; it runs
 on Bun 1.3.14 or newer.
 
-[Project site](https://sys1.io) · [Agent skills](https://sys1.io/skills) · [Protocol](#the-endpoint) · [Routing](#routing)
+[Introducing Sys1](https://sys1.io/introducing-sys1) · [Documentation](https://sys1.io/docs) · [Agent skills](https://sys1.io/skills) · [Model comparison](https://sys1.io/compare)
+
+## Jev, System One models, and Sys1
+
+[System One models](https://docs.typesafe.ai/concepts/system-one) evaluate
+supplied state and return decisions in an answer space you define. Jev is
+TypeSafe's hosted model in this category. Sys1 is the open-source toolkit that
+connects those decisions to coding-agent workflows and application code.
+
+| Question type | Use it to | Result |
+| --- | --- | --- |
+| Noul (`noul`) | Ask whether a condition holds | A probability of yes, from zero to one |
+| Choice (`choice`) | Select among named alternatives | The selected name, probabilities for every option, and confidence |
+| Score (`score`) | Rate something on an ordered scale | A probability-weighted score, scale labels, probabilities, and confidence |
+
+```mermaid
+flowchart LR
+    A[Your agent or application] --> B[State and typed questions]
+    B --> C[Sys1: select route and validate]
+    C --> D[Hosted Jev]
+    C --> E[Experimental local Qwen]
+    C --> F[Your compatible server]
+    D --> G[Typed answers and probabilities]
+    E --> G
+    F --> G
+    G --> H[Your code or agent investigates and acts]
+```
+
+Each request names its model or follows the configured routing policy. Sys1
+checks the answer shape and matches it to the questions; your application keeps
+its permissions, tests, quality thresholds, and action logic. A valid answer can still be wrong.
+Returning the same format does not make different models equally accurate or
+equally calibrated.
 
 ## Choose a workflow
 
@@ -39,7 +72,8 @@ conventions or languages.
 
 Requires Bun 1.3.14 or newer. Install the release file from GitHub. Its SHA-256
 is listed on the release, and release files cannot be replaced after
-publishing. `--allow-scripts=node-llama-cpp` lets only the pinned native
+publishing. The GitHub artifact is the release distribution; an npm registry
+publication is not required. `--allow-scripts=node-llama-cpp` lets only the pinned native
 inference package run its install script. The installed `sys1` command runs
 with Bun.
 
@@ -265,17 +299,19 @@ Or point any System One client at `http://127.0.0.1:13900`.
 ## Add hosted Jev
 
 Hosted Jev is disabled by default, even if `TYPESAFE_API_KEY` is already set in
-the environment. Add it explicitly:
+the environment. Obtain a key from [TypeSafe](https://console.typesafe.ai/),
+provide it through your shell or secret manager, and enable the backend:
 
 ```sh
-export TYPESAFE_API_KEY=…
+# Provide TYPESAFE_API_KEY privately in this shell first.
 sys1 jev enable
 sys1 jev status
 ```
 
 `jev enable` requires the credential to be present, stores only
 `hosted.enabled: true`, and sets routing to `hosted-only`. The key remains in the
-environment and is never written to disk or printed. Restart a gateway that was
+environment; Sys1 never writes it to its config or prints it. Avoid putting
+the key in source files or shell history. Restart a gateway that was
 started before the key was exported. To return to local-only operation:
 
 ```sh
@@ -290,6 +326,41 @@ the installed model named by `local.model`. Disabling Jev returns a hosted-only
 configuration to `auto` for the selected local model. Installing additional
 models does not change the selection. If no eligible route is available, Sys1
 reports an error instead of silently choosing another installed model.
+
+### Make your first Jev API request
+
+After enabling Jev, start the loopback daemon with `sys1 up`. Save this as
+`request.json`; it asks about a small, supplied piece of evidence:
+
+```json
+{
+  "model": "typesafe/jev-1.13.0",
+  "state": { "result": "The check exited with code 1." },
+  "questions": {
+    "failed": {
+      "type": "noul",
+      "instructions": "Does the supplied result report a failed check?"
+    }
+  }
+}
+```
+
+```sh
+sys1 eval --file request.json --json
+```
+
+Read `answers.failed.noul` as the model's probability of yes. This request
+demonstrates the API; code should read an available exit status directly.
+Pinning `typesafe/jev-1.13.0` selects the hosted route and version. TypeSafe's
+[`jev-latest` alias](https://docs.typesafe.ai/models) can move to a new version;
+Sys1's default remains the configured version until you change it. Review and
+verify commands can call Jev directly without starting the daemon; the client,
+`sys1 eval`, and commands using `--gateway` need a running gateway.
+
+For a failed request, check `sys1 jev status` and `sys1 doctor`. Restart the
+daemon after changing its environment. An HTTP error from a backend is
+returned without a retry; the client does not silently try a different model.
+Current provider limits and prices are in [TypeSafe's model reference](https://docs.typesafe.ai/models).
 
 ## Local models
 
@@ -528,6 +599,20 @@ support. These experiments require Bun and the project dependencies; they are
 separate from the installed review and verification skills. Read the
 [September 28, 2026 trial](benchmarks/workflows/results/2026-09-28.md) for the
 method, recorded outcomes, and limits.
+
+That trial submitted 48 frozen synthetic examples to Jev 1.13.0 once each:
+
+| Source workflow | Correct / submitted | Errors | Deterministic baseline |
+| --- | ---: | ---: | ---: |
+| Claim support | 16/16 | 0 | 6/16 with literal text matching |
+| Failure triage | 16/16 | 0 | 16/16 with error signatures |
+| Excerpt relevance | 13/16 | 3 | 6/16 with token overlap |
+
+Claim support is a candidate for a larger trial against stronger comparators.
+Triage tied ordinary error matching. Relevance needs response-format diagnosis.
+These small synthetic sets do not establish production accuracy, and the
+literal-match claim baseline is deliberately weak. Errors remain in the
+denominators; profiles, labels, and thresholds were unchanged after the run.
 
 For a direct Kev endpoint, use `createClient({ baseUrl: "http://127.0.0.1:8009",
 adapter: "kev" })` with an ordinary request containing `model: "kev-latest"`.

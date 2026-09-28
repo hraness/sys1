@@ -1,0 +1,32 @@
+{
+  "kind": "slopcamera.html-scene",
+  "schemaVersion": 1,
+  "name": "Introducing Sys1",
+  "document": {
+    "path": "scene.html"
+  },
+  "libraries": [],
+  "seed": 1,
+  "parameters": {
+    "reviewTimes": [
+      3,
+      10,
+      17,
+      25,
+      33,
+      40,
+      45,
+      50
+    ]
+  },
+  "resources": [],
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1
+  },
+  "timing": {
+    "durationUs": 8000000,
+    "fps": 1
+  }
+}

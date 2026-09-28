@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 import { chromium } from "playwright-core";
+import { checkLaunchMedia } from "./sync-launch-media.ts";
 
 // Exercise the shipped static files with Vercel's clean URLs and security headers.
+await checkLaunchMedia();
 const site = resolve(import.meta.dir, "../site");
 const config = await Bun.file(resolve(import.meta.dir, "../vercel.json")).json();
 const headers = Object.fromEntries(config.headers[0].headers.map((item: { key: string; value: string }) => [item.key, item.value]));
@@ -30,11 +32,13 @@ const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
 try {
   browser = await chromium.launch();
-  for (const width of [360, 390, 1440]) for (const theme of ["light", "dark"] as const) {
+  for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
     try {
       const page = await context.newPage();
       const errors: string[] = [];
+      const movieRequests: string[] = [];
+      page.on("request", request => { if (new URL(request.url()).pathname.endsWith(".mp4")) movieRequests.push(request.url()); });
       page.on("pageerror", error => errors.push(error.message));
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
       for (const file of pages) {
@@ -62,6 +66,39 @@ try {
         results.push({ route, width, theme });
       }
       await page.goto(origin.href);
+      const demo = page.locator("[data-decision-demo]");
+      for (const [type, answer] of [["noul", '"noul": 0.94'], ["choice", '"choice": "configuration"'], ["score", '"score": 1.8']] as const) {
+        const control = demo.locator(`[data-question-type="${type}"]`);
+        await control.focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await control.getAttribute("aria-pressed"), "true");
+        assert.equal(await demo.locator('[aria-pressed="true"]').count(), 1);
+        assert.equal(await demo.locator("[data-demo-answer]").textContent(), answer);
+      }
+      const video = page.locator("video");
+      assert.equal(await video.getAttribute("preload"), "none");
+      assert.equal(await video.getAttribute("autoplay"), null);
+      assert.equal(await video.locator('track[kind="captions"][srclang="en"]').count(), 1);
+      assert.deepEqual(movieRequests, [], "Page loaded video bytes before playback was requested");
+      if (width === 1440 && theme === "light") {
+        // Decode real shipped media once; page controls and the full transcript
+        // remain usable without our illustrative interaction script.
+        await video.evaluate(async element => {
+          const player = element as HTMLVideoElement;
+          player.muted = true;
+          await player.play();
+        });
+        await page.waitForFunction(() => (document.querySelector("video")?.currentTime ?? 0) > 0);
+        const media = await video.evaluate(element => {
+          const player = element as HTMLVideoElement;
+          player.pause();
+          return { width: player.videoWidth, height: player.videoHeight, duration: player.duration, error: player.error?.message };
+        });
+        assert.equal(media.width, 1920);
+        assert.equal(media.height, 1080);
+        assert.ok(Math.abs(media.duration - 52) < 0.5, "Film duration differs from published metadata");
+        assert.equal(media.error, undefined);
+      }
       await page.getByRole("button", { name: /^Appearance:/u }).click();
       const targetTheme = theme === "light" ? "dark" : "light";
       await page.getByRole("menuitemradio", { name: targetTheme, exact: false }).click();
@@ -73,6 +110,31 @@ try {
       assert.deepEqual(errors, [], "Browser errors after appearance and navigation interactions");
     } finally { await context.close(); }
   }
+  const reduced = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+  try {
+    const page = await reduced.newPage();
+    await page.goto(origin.href);
+    assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
+    assert.equal(await page.locator("[data-question-type]").first().evaluate(element => getComputedStyle(element).transitionDuration), "0s");
+  } finally { await reduced.close(); }
+  const plain = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false, reducedMotion: "reduce" });
+  try {
+    const page = await plain.newPage();
+    for (const route of ["/", "/introducing-sys1"]) {
+      await page.goto(new URL(route, origin).href);
+      assert.ok(await page.locator("h1").isVisible());
+      assert.ok(await page.getByRole("link", { name: /transcript/iu }).first().isVisible());
+      assert.equal(await page.locator("video").getAttribute("autoplay"), null);
+      if (route === "/") {
+        assert.ok(await page.locator("[data-demo-answer]").isVisible());
+        assert.ok(!await page.locator("[data-question-type]").first().isVisible());
+      } else {
+        await page.getByText("Read the chart as a table", { exact: true }).click();
+        assert.ok(await page.getByRole("table").isVisible());
+      }
+      await page.screenshot({ path: resolve(artifacts, `390-no-js-${route === "/" ? "home" : "launch"}.png`), fullPage: true });
+    }
+  } finally { await plain.close(); }
 } finally {
   try { await browser?.close(); }
   finally { await server?.stop(true); }
