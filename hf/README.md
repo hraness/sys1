@@ -59,6 +59,9 @@ The separate external JevBench leaderboard is not included in this dataset.
 The historical code-review studies in `benchmarks/reviewer/`,
 `benchmarks/reviewer-next/`, and `benchmarks/reviewer-contract/` remain in the
 source repository and are outside this synthetic dataset's explicit export list.
+The source repository also contains
+[workflow screening experiments](https://github.com/hraness/sys1/tree/main/benchmarks/workflows)
+outside this dataset's export list.
 
 ## Provenance and updates
 
