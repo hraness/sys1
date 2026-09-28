@@ -1,7 +1,7 @@
 import { Database } from "bun:sqlite";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 import { readBoundedText } from "../http.ts";
 
 /** Locating the final agent message never persists its text. */
@@ -80,7 +80,7 @@ export function devinTurn(dbPath: string, cwd: string): VerifyMessage | undefine
     const sessions = db.query(
       "SELECT id, working_directory, last_activity_at FROM sessions ORDER BY last_activity_at DESC LIMIT 200",
     ).all() as { id: string; working_directory: string; last_activity_at: number }[];
-    const session = sessions.find(item => cwd === item.working_directory || cwd.startsWith(`${item.working_directory}/`));
+    const session = sessions.find(item => cwd === item.working_directory || cwd.startsWith(`${item.working_directory}${sep}`));
     if (session === undefined) return undefined;
     const rows = db.query(
       "SELECT chat_message FROM message_nodes WHERE session_id = ? ORDER BY created_at DESC LIMIT ?",
