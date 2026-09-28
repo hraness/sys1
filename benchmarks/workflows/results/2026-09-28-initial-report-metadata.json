@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "experiment": "workflow-synthetic-screening-2026-09-28",
+  "analysis_author": {
+    "name": "Codex agent /root/trial_review_prep",
+    "type": "AI agent"
+  },
+  "source_checked_at": "2026-09-28",
+  "public_results_sha256": "b3008f7c0df1287eee372f371c4bd1edc390aba20021d574586a4fac56c52006",
+  "public_results_bytes": 70901,
+  "original_results_sha256": "317c357e5cac975f29608e2b35959c117d0d6ab34c143e3bbb7686ef88df7386",
+  "original_results_bytes": 70965,
+  "omitted_fields": [
+    {
+      "json_pointer": "/execution/vercel_deployment_id",
+      "reason": "Private temporary infrastructure identifier; the field line is removed without reserializing any remaining result bytes."
+    }
+  ],
+  "preservation": "All remaining result bytes are unchanged. Counts, case ordering, scores, errors, skips, routes, token counts, times, and recorded hashes are preserved. The original report already excluded credentials, input state, question text, and raw provider bodies.",
+  "frozen_input_commit": "241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c",
+  "execution_source_note": "This commit links the unchanged frozen inputs. It is not claimed as the exact execution checkout: results.json records the v0.17.0 base plus exact hashes of the experimental evaluator and runtime sources.",
+  "manifest": {
+    "path": "benchmarks/workflows/manifest.json",
+    "sha256": "c9be70943375de49f836a2ba1b8c1a4c90a179adf50e4b9bc383742b9d18db9d",
+    "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/manifest.json"
+  },
+  "frozen_files": [
+    {
+      "path": "examples/workflows/failure-triage.profile.json",
+      "role": "profile",
+      "workflow": "failure-triage",
+      "sha256": "da067bf8efb546af6c1c13940f48a5ce36e67c59661c1a708b0790f37efa16bd",
+      "bytes": 2276,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/failure-triage.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.development.json",
+      "role": "development",
+      "workflow": "failure-triage",
+      "sha256": "845b622b9c15990fc59f69e8d6ba45fd7cac7a9d10113dd5667805420259cf03",
+      "bytes": 3334,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/failure-triage.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.screening.json",
+      "role": "screening",
+      "workflow": "failure-triage",
+      "sha256": "e2d1513c24a8e80233899c31fb6f2c1c401fffc2b8405b27335de90a687464d1",
+      "bytes": 4023,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/failure-triage.screening.json"
+    },
+    {
+      "path": "examples/workflows/evidence-relevance.profile.json",
+      "role": "profile",
+      "workflow": "evidence-relevance",
+      "sha256": "a4e0ccfea3cf5f4951c5ffd838f9acfaaa33135e8e6bf20a6bdc4b448120ae0d",
+      "bytes": 1392,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/evidence-relevance.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.development.json",
+      "role": "development",
+      "workflow": "evidence-relevance",
+      "sha256": "8ae95310eeb368c5ca4533f3e58e459ef8d8da3c65a6148f6d1b11253a2b7e7e",
+      "bytes": 2608,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/evidence-relevance.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.screening.json",
+      "role": "screening",
+      "workflow": "evidence-relevance",
+      "sha256": "b6eaf330a0910e4c0f555c82d0632c1978a4fe1de7f498864eaa555cec0201f2",
+      "bytes": 3187,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/evidence-relevance.screening.json"
+    },
+    {
+      "path": "examples/workflows/claim-support.profile.json",
+      "role": "profile",
+      "workflow": "claim-support",
+      "sha256": "d63ab5b57de84c9cca1aac72da766e5bbf0a6eff42710b91f84617f487585c3b",
+      "bytes": 1500,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/claim-support.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.development.json",
+      "role": "development",
+      "workflow": "claim-support",
+      "sha256": "e8c5998b1b0f7309e3ee8c770bc933121bbcf2af46559ffac2227ae644cfcf19",
+      "bytes": 2455,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/claim-support.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.screening.json",
+      "role": "screening",
+      "workflow": "claim-support",
+      "sha256": "2f065f444b355ac19281411a41f613e0de974e413f1a72c5038518295aabbf7a",
+      "bytes": 3048,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/claim-support.screening.json"
+    },
+    {
+      "path": "scripts/workflow-baselines.ts",
+      "role": "baseline",
+      "sha256": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "bytes": 7562,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/scripts/workflow-baselines.ts"
+    },
+    {
+      "path": "benchmarks/workflows/README.md",
+      "role": "methodology",
+      "sha256": "235e3c9c8d23eb070ec02d6619476967942a2cc4d7ab42413b0b0d055da0f07d",
+      "bytes": 2872,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/README.md"
+    }
+  ],
+  "hash_note": "Frozen-file SHA-256 values cover raw bytes. Evaluator hashes cover JSON.stringify of validated values in their key order. The harness attached split/family metadata before the evaluator fixture hash. Provider submission hashes use sorted-key canonical JSON with the provider model name.",
+  "harness_source_sha256": "4d4ce5abc62a6e00fb3d0829d6ed89bab61aad8c1d3d7589520a47861cf5cbdc",
+  "executed_bundle_sha256": "7af19c806cdcac41fda84b5fde46845c090d3a8503f88f8f4b5aa7b2d64e65ad",
+  "analysis_review": {
+    "name": "Codex root agent",
+    "type": "independent AI agent review",
+    "date": "2026-09-28",
+    "evidence": "Compared public and original result JSON and every remaining byte; verified all 11 frozen-file hashes; reviewed calculations against independent-v4-analysis and the evaluator source."
+  },
+  "additional_analysis_reviews": [
+    {
+      "name": "Codex agent /root/trial_cases",
+      "type": "independent AI agent review",
+      "date": "2026-09-28",
+      "evidence": "Recomputed all 48 case identities, 17 completed grades, 48 baseline predictions, summary counts, timing medians, usage totals, and all 11 frozen raw-file hashes against the recorded results and immutable source commit."
+    }
+  ],
+  "editorial_record": {
+    "owner": "Sys1 repository maintainers",
+    "reader_job": "Inspect the interrupted first run and establish which cases were eligible for continuation.",
+    "original_contribution": "The original 18-submission observation record and partial-result analysis, with local aborts distinguished from provider submissions.",
+    "nearest_document": "benchmarks/workflows/results/2026-09-28.md",
+    "admission_reason": "Kept as a dated audit of the first run so the later combined report cannot conceal the failure or imply repeated submissions. The combined report is the primary discovery destination.",
+    "scores": {
+      "reader_utility": 1,
+      "original_evidence": 2,
+      "factual_confidence": 2,
+      "host_fit": 2,
+      "voice_integrity": 2,
+      "maintenance_value": 1
+    },
+    "score_reason": "The historical partial analysis serves a narrower audit task than the combined report; its unique observations are independently verified, while duplicate context adds a small maintenance burden.",
+    "lifecycle_state": "superseded_analysis_preserved_for_audit",
+    "source_checked_at": "2026-09-28",
+    "reviewed_at": "2026-09-28",
+    "reassess_on": "2026-11-09",
+    "human_review": null,
+    "homepage_slot": null
+  }
+}

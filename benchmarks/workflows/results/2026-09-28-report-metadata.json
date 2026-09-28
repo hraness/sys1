@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "experiment": "workflow-synthetic-screening-2026-09-28",
+  "analysis_author": {
+    "name": "Codex integration agent /root",
+    "type": "AI agent"
+  },
+  "source_checked_at": "2026-09-28",
+  "frozen_input_commit": "241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c",
+  "execution_source_note": "This commit links the unchanged frozen inputs. It is not claimed as the exact execution checkout: results.json records the v0.17.0 base plus exact hashes of the experimental evaluator and runtime sources.",
+  "manifest": {
+    "path": "benchmarks/workflows/manifest.json",
+    "sha256": "c9be70943375de49f836a2ba1b8c1a4c90a179adf50e4b9bc383742b9d18db9d",
+    "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/manifest.json"
+  },
+  "frozen_files": [
+    {
+      "path": "examples/workflows/failure-triage.profile.json",
+      "role": "profile",
+      "workflow": "failure-triage",
+      "sha256": "da067bf8efb546af6c1c13940f48a5ce36e67c59661c1a708b0790f37efa16bd",
+      "bytes": 2276,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/failure-triage.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.development.json",
+      "role": "development",
+      "workflow": "failure-triage",
+      "sha256": "845b622b9c15990fc59f69e8d6ba45fd7cac7a9d10113dd5667805420259cf03",
+      "bytes": 3334,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/failure-triage.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/failure-triage.screening.json",
+      "role": "screening",
+      "workflow": "failure-triage",
+      "sha256": "e2d1513c24a8e80233899c31fb6f2c1c401fffc2b8405b27335de90a687464d1",
+      "bytes": 4023,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/failure-triage.screening.json"
+    },
+    {
+      "path": "examples/workflows/evidence-relevance.profile.json",
+      "role": "profile",
+      "workflow": "evidence-relevance",
+      "sha256": "a4e0ccfea3cf5f4951c5ffd838f9acfaaa33135e8e6bf20a6bdc4b448120ae0d",
+      "bytes": 1392,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/evidence-relevance.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.development.json",
+      "role": "development",
+      "workflow": "evidence-relevance",
+      "sha256": "8ae95310eeb368c5ca4533f3e58e459ef8d8da3c65a6148f6d1b11253a2b7e7e",
+      "bytes": 2608,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/evidence-relevance.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/evidence-relevance.screening.json",
+      "role": "screening",
+      "workflow": "evidence-relevance",
+      "sha256": "b6eaf330a0910e4c0f555c82d0632c1978a4fe1de7f498864eaa555cec0201f2",
+      "bytes": 3187,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/evidence-relevance.screening.json"
+    },
+    {
+      "path": "examples/workflows/claim-support.profile.json",
+      "role": "profile",
+      "workflow": "claim-support",
+      "sha256": "d63ab5b57de84c9cca1aac72da766e5bbf0a6eff42710b91f84617f487585c3b",
+      "bytes": 1500,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/examples/workflows/claim-support.profile.json"
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.development.json",
+      "role": "development",
+      "workflow": "claim-support",
+      "sha256": "e8c5998b1b0f7309e3ee8c770bc933121bbcf2af46559ffac2227ae644cfcf19",
+      "bytes": 2455,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/claim-support.development.json"
+    },
+    {
+      "path": "benchmarks/workflows/claim-support.screening.json",
+      "role": "screening",
+      "workflow": "claim-support",
+      "sha256": "2f065f444b355ac19281411a41f613e0de974e413f1a72c5038518295aabbf7a",
+      "bytes": 3048,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/claim-support.screening.json"
+    },
+    {
+      "path": "scripts/workflow-baselines.ts",
+      "role": "baseline",
+      "sha256": "5245a2f165c0a64f8edc1522a0c786221c497a2d68343b835fc1d2673ef891d0",
+      "bytes": 7562,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/scripts/workflow-baselines.ts"
+    },
+    {
+      "path": "benchmarks/workflows/README.md",
+      "role": "methodology",
+      "sha256": "235e3c9c8d23eb070ec02d6619476967942a2cc4d7ab42413b0b0d055da0f07d",
+      "bytes": 2872,
+      "url": "https://github.com/hraness/sys1/blob/241ef9b8cfff5fdef22ef56f2edd4dc9ab731f4c/benchmarks/workflows/README.md"
+    }
+  ],
+  "hash_note": "Frozen-file SHA-256 values cover raw bytes. Evaluator hashes cover JSON.stringify of validated values in their key order. The harness attached split/family metadata before the evaluator fixture hash. Provider submission hashes use sorted-key canonical JSON with the provider model name.",
+  "observations": [
+    {
+      "role": "initial",
+      "path": "2026-09-28-initial-results.json",
+      "public_sha256": "b3008f7c0df1287eee372f371c4bd1edc390aba20021d574586a4fac56c52006",
+      "public_bytes": 70901,
+      "original_sha256": "317c357e5cac975f29608e2b35959c117d0d6ab34c143e3bbb7686ef88df7386",
+      "original_bytes": 70965,
+      "provider_model_posts": 18,
+      "provider_probe_gets": 36,
+      "harness_source_sha256": "4d4ce5abc62a6e00fb3d0829d6ed89bab61aad8c1d3d7589520a47861cf5cbdc",
+      "executed_bundle_sha256": "7af19c806cdcac41fda84b5fde46845c090d3a8503f88f8f4b5aa7b2d64e65ad"
+    },
+    {
+      "role": "continuation",
+      "path": "2026-09-28-continuation-results.json",
+      "public_sha256": "9f455d38c4eddbbb713b1f5fe29bc662d12bf40806660a0d3e4fe5c3ae11091b",
+      "public_bytes": 75347,
+      "original_sha256": "90d1fff029b036279b4b481b7bf3915cc1ebfc51c2d3ce284dc4106e29ab30e2",
+      "original_bytes": 75411,
+      "provider_model_posts": 30,
+      "provider_probe_gets": 60,
+      "harness_source_sha256": "c69fb48f23ccfd40242a8bd6fcfe2cfcc1be44794852918dc2ffd9b3f6b21a5a",
+      "executed_bundle_sha256": "88f7d73e63e867942e21c347dbc322328763b2e17e4b77c27f8148f0f4ba02e3"
+    }
+  ],
+  "omitted_fields": [
+    {
+      "json_pointer": "/execution/vercel_deployment_id",
+      "reason": "Private temporary infrastructure identifier; the field line is removed without reserializing any remaining result bytes."
+    }
+  ],
+  "preservation": "All remaining result bytes are unchanged. Counts, case ordering, scores, errors, skips, routes, token counts, times, and recorded hashes are preserved. The original report already excluded credentials, input state, question text, and raw provider bodies.",
+  "combined_summary": {
+    "path": "2026-09-28-summary.json",
+    "sha256": "d681223d4876238129c7a92f227cf360679d03be713cd64ca9d13577ebd765aa",
+    "method": "Combine initial provider submissions with the separate continuation of never-submitted cases. The first-run local abort is preserved in the original report and is superseded here by that case's first provider submission. No model request was retried. Errors remain separate from graded incorrect answers.",
+    "planned": 48,
+    "provider_model_posts": 48,
+    "provider_probe_gets": 96,
+    "completed": 45,
+    "correct": 45,
+    "submitted_errors": 3,
+    "unsubmitted": 0
+  },
+  "continuation_controls": {
+    "previous_report_sha256": "317c357e5cac975f29608e2b35959c117d0d6ab34c143e3bbb7686ef88df7386",
+    "excluded_provider_requests": 18,
+    "eligible_provider_requests": 30,
+    "cumulative_model_cap": 48,
+    "cumulative_probe_cap": 96,
+    "retries": 0,
+    "changes": "Diagnostic status/error metadata and continuation after ordinary per-case HTTP or response-validation errors; unchanged evaluator, runtime sources, prompts, fixtures, baseline, and grading.",
+    "offline_evidence": {
+      "harness_scenarios_passed": 32,
+      "controller_scenarios_passed": 25,
+      "harness_report_compatibility_scenarios_passed": 3
+    }
+  },
+  "independent_reviews": [
+    {
+      "name": "Codex agent /root/profile_evaluator",
+      "type": "independent AI agent review",
+      "date": "2026-09-28",
+      "evidence": "Reconstructed the continuation filtered fixtures, request hashes, frozen baselines, returned classifications from retained probabilities, model identities, and submission accounting. The initial report received a separate independent recomputation."
+    },
+    {
+      "name": "Codex agent /root/trial_cases",
+      "type": "independent AI agent numeric and provenance review",
+      "date": "2026-09-28",
+      "evidence": "Recomputed both reports, all 48 request identities, all grades and baseline predictions, latency and usage; verified exact public redactions and frozen input/source hashes."
+    },
+    {
+      "name": "Codex agent /root/trial_review_prep",
+      "type": "independent AI agent source and copy review",
+      "date": "2026-09-28",
+      "evidence": "Checked report conclusions, comparator mechanism, errors, limitations, public-copy privacy, and 46 new or changed links."
+    }
+  ],
+  "editorial_record": {
+    "owner": "Sys1 repository maintainers",
+    "reader_job": "Choose which experimental workflow merits a larger application-specific pilot.",
+    "original_contribution": "A dated first-party 48-case experiment with deterministic comparisons, preserved failures, one-submission accounting, and inspectable results.",
+    "canonical_host": "The Sys1 repository contains the profiles, evaluator, frozen fixtures, and observations.",
+    "nearest_documents": [
+      {
+        "path": "docs/profile-evaluation.md",
+        "distinction": "How to run the evaluator; this report provides measured results."
+      },
+      {
+        "path": "benchmarks/workflows/results/2026-09-28-initial.md",
+        "distinction": "Preserves the interrupted first run; this report combines distinct submissions without replacing it."
+      },
+      {
+        "url": "https://sys1.io/docs/evaluations",
+        "distinction": "Historical adapter studies use different cases and timing; this report evaluates the three new workflows."
+      }
+    ],
+    "admission_reason": "The report changes the next pilot decision: triage ties simple matching, relevance has contract errors, and claim support merits broader comparison. Its own measurements cannot be replaced by the setup guide or historical studies.",
+    "scores": {
+      "reader_utility": 2,
+      "original_evidence": 2,
+      "factual_confidence": 2,
+      "host_fit": 2,
+      "voice_integrity": 2,
+      "maintenance_value": 2
+    },
+    "score_reason": "The reader gets a concrete pilot decision from owned, independently recomputed observations with explicit synthetic-data limits; authorship is disclosed and frozen historical results remain useful for later comparisons.",
+    "lifecycle_state": "historical_experiment",
+    "source_checked_at": "2026-09-28",
+    "reviewed_at": "2026-09-28",
+    "reassess_on": "2026-11-09",
+    "human_review": null,
+    "homepage_slot": null
+  }
+}

@@ -9,6 +9,9 @@ support. Each has eight development examples and eight separately authored
 synthetic screening examples. They are small experiments for inspecting errors;
 their results do not establish production reliability or faster completed tasks.
 
+Read the [September 28, 2026 trial](../benchmarks/workflows/results/2026-09-28.md)
+for recorded Jev results, deterministic comparisons, errors, and coverage.
+
 ## Check examples before calling a model
 
 From the repository root:

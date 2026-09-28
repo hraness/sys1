@@ -61,7 +61,12 @@ The historical code-review studies in `benchmarks/reviewer/`,
 source repository and are outside this synthetic dataset's explicit export list.
 The source repository also contains
 [workflow screening experiments](https://github.com/hraness/sys1/tree/main/benchmarks/workflows)
-outside this dataset's export list.
+outside this dataset's export list. These source-checkout profiles explore
+failure triage, excerpt relevance, and claim support. The
+[profile evaluator guide](https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md)
+explains how to run them; the
+[September 28, 2026 trial](https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md)
+records their method, outcomes, and limits.
 
 ## Provenance and updates
 

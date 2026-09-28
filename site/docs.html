@@ -206,6 +206,7 @@ sys1 verify --message /tmp/final-message.txt \
 const result = await client.evaluate(triage.request(ticket));</code></pre></div>
             <p>Import <code>createProfile</code> from <code>@hraness/sys1/client</code>. Save the definition as JSON for <code>sys1 eval --profile triage.json</code>, with <code>{"state": ...}</code> on stdin. Profiles also work with Jev and built-in local model routes.</p>
             <p>Start by improving instructions and criteria against fixed application examples. If fine-tuning helps, train Kev separately, calibrate and evaluate the checkpoint, then publish a new profile revision pointing at its server. Profiles do not collect training data or start training jobs.</p>
+            <p>From a source checkout with Bun and project dependencies, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate a profile on labeled examples</a>, including experimental failure triage, excerpt relevance, and claim support; these experiments are separate from the installed project skills.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev setup, prompt tuning, and fine-tuning guide <span aria-hidden="true">↗</span></a></div>
           </section>
 
