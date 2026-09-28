@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "pack": "reviewer-contract",
+  "revision": "2026.09.28",
+  "description": "Experimental contract-authored response-finality rule. Source benchmark only; no default activation.",
+  "rules": [
+    {
+      "id": "sys1-http-response-finality",
+      "applies": {
+        "paths": [
+          "src/backends.ts"
+        ]
+      },
+      "type": "noul",
+      "unit": "hunk",
+      "ensure": "When forwarding receives any HTTP response, including a backend error response, it returns the response variant of ForwardResult; the transport variant is reserved for failures where no HTTP response was received.",
+      "breaks": "The shown forwarding logic returns the transport variant of ForwardResult after receiving an HTTP response.",
+      "tiers": {
+        "medium": 0.8,
+        "high": 0.9
+      },
+      "gate": false,
+      "severity": "P2"
+    }
+  ]
+}

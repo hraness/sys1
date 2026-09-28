@@ -1,0 +1,392 @@
+{
+  "version": 1,
+  "corpus": "reviewer-contract-response-finality-2026-09-28",
+  "status": "source-only-experimental",
+  "repository": "https://github.com/hraness/sys1",
+  "path": "src/backends.ts",
+  "family": "http-response-finality",
+  "fixture_representation": "collector-unified-diff-hunk",
+  "context_lines": 15,
+  "fixtures_sha256": "380ace98472e2a8cc0029dc27ac791ee973db92caf0655d48902fd25001d3b41",
+  "pack_sha256": "6df9bf39089f38de6051a822da711ceeeaaf7218165ac08e9e2347d5b62554d0",
+  "snapshots": [
+    {
+      "label": "introduction",
+      "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "src_tree": "8126ae72f6c3403e7d2450e39f11e4ac5185aa21",
+      "source_files": 8,
+      "files": {
+        "src/backends.ts": "24bd58972192af5a8e66c752c2bad4e1e50f8aef5df22a26dad0fc63979e3c17",
+        "LICENSE": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539",
+        "package.json": "d8e3d996c804e0c6f2d488e83b0b1026cd46e4c43c7cc95568bd78fef3ae3382",
+        "bun.lock": "4e582d523f1b8870415f8248e1c0c8ef6a384c9291e1ac84750c01affec19c8b"
+      },
+      "archive_sha256": "bdc323fe462cd6b376882123a275d9dfcfe92afbf508a455e4ca7fa665d5c8d5",
+      "archive_bytes": 26328,
+      "archive_url": "https://codeload.github.com/hraness/sys1/tar.gz/6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "verified_records": 13
+    },
+    {
+      "label": "repair_parent",
+      "commit": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "src_tree": "d619a04e49eea957286a0a50286a545d3ac27ffa",
+      "source_files": 19,
+      "files": {
+        "src/backends.ts": "761349bb0592d68598902d735a313fc7ebf73b13179f277cd5e8b83a256701be",
+        "LICENSE": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539",
+        "package.json": "e338fc19b0d79c5eb9e4842d8b3080fe9147afeebff94f76bdcc36e321936264",
+        "bun.lock": "de687d661b6da4eb514307195b1496ef09b3020c94b44765852ae604e5765016"
+      },
+      "archive_sha256": "0af12d3f5927bcdcad59024bd989dff01c0e741d67d15654fb468a9a05d4cb14",
+      "archive_bytes": 122624,
+      "archive_url": "https://codeload.github.com/hraness/sys1/tar.gz/c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "verified_records": 22
+    },
+    {
+      "label": "repair",
+      "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "src_tree": "0aafcddcf134a1fb720dddc5b019023b092503b8",
+      "source_files": 28,
+      "files": {
+        "src/backends.ts": "c3e57f0e846aade99caa3ea7c2cba9cd7b79d3a777646cbc3a1ca57fc50fd5c3",
+        "LICENSE": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539",
+        "package.json": "6b96f66c14878f7fbbde57a7a6e38885fca17b7707ffde902adc64516b12bc8e",
+        "bun.lock": "2641927e4207467ad05df6fb30afa5384d68385b8c6271576ff7bf544c9fb178"
+      },
+      "archive_sha256": "aa93f28e211e8ae810088addd5a8e78da4de29cd1de1d372d6e8a213727e3302",
+      "archive_bytes": 151382,
+      "archive_url": "https://codeload.github.com/hraness/sys1/tar.gz/3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "verified_records": 31
+    },
+    {
+      "label": "clean_parent",
+      "commit": "2884b85bf8cfb32322c761805c94aca4e977770c",
+      "src_tree": "cd98814651ef6dafc999dda11a6d34097cb2c161",
+      "source_files": 24,
+      "files": {
+        "src/backends.ts": "d273db3fa928e6333ec9fdb6475c41616fe3f0c9f405b0e0e04793d974f12fad",
+        "LICENSE": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539",
+        "package.json": "b15323c8c85b5f8dcb8199bbae0701979c0dddd2db556fd782a4d2431be63c6a",
+        "bun.lock": "2ed9b6a24624a0290953e5071bcf6ab1b3a53db7facb62a1b351cf1f1e6eea71"
+      },
+      "archive_sha256": "4192808936e9dcdb7df63af2c069e5581467c8439f430bc3a9be6f42c56cf6de",
+      "archive_bytes": 750657,
+      "archive_url": "https://codeload.github.com/hraness/sys1/tar.gz/2884b85bf8cfb32322c761805c94aca4e977770c",
+      "verified_records": 27
+    },
+    {
+      "label": "clean",
+      "commit": "1aaa4297943de7e424eb1ee272803b9e62b68465",
+      "src_tree": "be9f2e3f6656f8cf3400dd89e3b9fd2a912c2f4a",
+      "source_files": 26,
+      "files": {
+        "src/backends.ts": "a56d247afdd4190ea3806ae56580aafe2d052688a8c40ebe8d7d8a1ed19ddd8f",
+        "LICENSE": "74b69bf37c8f340c9c2a54d431a15218738d9c463d0e014fa6a8bb8edce4e539",
+        "package.json": "16e9b3564dda18c2b0c69c377dd9e7a2e31834e4c51672f618bd8469e89b2aff",
+        "bun.lock": "2ed9b6a24624a0290953e5071bcf6ab1b3a53db7facb62a1b351cf1f1e6eea71"
+      },
+      "archive_sha256": "f5c7c956167d1e658d705aa07d2fa3533f50e1ea09922d11b4e2956b015d6d6c",
+      "archive_bytes": 769764,
+      "archive_url": "https://codeload.github.com/hraness/sys1/tar.gz/1aaa4297943de7e424eb1ee272803b9e62b68465",
+      "verified_records": 29
+    }
+  ],
+  "diffs": [
+    {
+      "role": "introduction",
+      "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "parent": null,
+      "sha256": "b2a7c0b1c67bd3f76c6d53f4815179618bde65cb62cb415275ba2edb2a97b515",
+      "hunks": 1,
+      "git_header": "diff --git a/src/backends.ts b/src/backends.ts\nnew file mode 100644\nindex 0000000..f50022c\n--- /dev/null\n+++ b/src/backends.ts\n"
+    },
+    {
+      "role": "repair",
+      "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "parent": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "sha256": "a2463a55430dc873619ca2f388021e260ca0af299abed33360a3a38ef1136eb9",
+      "hunks": 3,
+      "git_header": "diff --git a/src/backends.ts b/src/backends.ts\nindex 23ee5ec..380ab4e 100644\n--- a/src/backends.ts\n+++ b/src/backends.ts\n"
+    },
+    {
+      "role": "control",
+      "commit": "1aaa4297943de7e424eb1ee272803b9e62b68465",
+      "parent": "2884b85bf8cfb32322c761805c94aca4e977770c",
+      "sha256": "c92c954ff595a3bbb255774a1c6a9377e388b63950ec39749c26412f06b1756e",
+      "hunks": 2,
+      "git_header": "diff --git a/src/backends.ts b/src/backends.ts\nindex c169ec7..3914b23 100644\n--- a/src/backends.ts\n+++ b/src/backends.ts\n"
+    }
+  ],
+  "units": [
+    {
+      "id": "sys1-response-finality-introduction-h1",
+      "role": "introduction",
+      "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "parent": null,
+      "hunk_index": 1,
+      "label": "violation",
+      "state_sha256": "a289de84337dc5dedd50ac1bbc2fc88cbe81ecb5fdddb10d8653ab33c0e4630b",
+      "old_range": {
+        "start": 0,
+        "count": 0
+      },
+      "new_range": {
+        "start": 1,
+        "count": 198
+      },
+      "evidence": "Received responses with unreadable bodies reach the transport catch."
+    },
+    {
+      "id": "sys1-response-finality-repair-h1",
+      "role": "repair",
+      "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "parent": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "hunk_index": 1,
+      "label": "clean",
+      "state_sha256": "de18097c18981239f85d1e8f154642773fa458fdc9a19e994c1b023b16772b5c",
+      "old_range": {
+        "start": 1,
+        "count": 24
+      },
+      "new_range": {
+        "start": 1,
+        "count": 39
+      },
+      "evidence": "The shown post-change code has no target-rule violation; hunk 3 separates post-response body failure from transport failure."
+    },
+    {
+      "id": "sys1-response-finality-repair-h2",
+      "role": "repair",
+      "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "parent": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "hunk_index": 2,
+      "label": "clean",
+      "state_sha256": "001ec0b946ee8115bc21bc09209617a5e2986b28471f0597ab164caa50f01bcb",
+      "old_range": {
+        "start": 85,
+        "count": 46
+      },
+      "new_range": {
+        "start": 100,
+        "count": 46
+      },
+      "evidence": "The shown post-change code has no target-rule violation; hunk 3 separates post-response body failure from transport failure."
+    },
+    {
+      "id": "sys1-response-finality-repair-h3",
+      "role": "repair",
+      "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+      "parent": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+      "hunk_index": 3,
+      "label": "clean",
+      "state_sha256": "f24593a52efa5d43e83c23ccf6a372b53006532ef21c346e9be7b7704d2d265c",
+      "old_range": {
+        "start": 135,
+        "count": 186
+      },
+      "new_range": {
+        "start": 150,
+        "count": 224
+      },
+      "evidence": "The shown post-change code has no target-rule violation; hunk 3 separates post-response body failure from transport failure."
+    },
+    {
+      "id": "sys1-response-finality-control-h1",
+      "role": "control",
+      "commit": "1aaa4297943de7e424eb1ee272803b9e62b68465",
+      "parent": "2884b85bf8cfb32322c761805c94aca4e977770c",
+      "hunk_index": 1,
+      "label": "clean",
+      "state_sha256": "610c53e9a9f2c0cc03cf9c2d85650a977a6b9850ff5800c8ae2b4ad0aa2944d9",
+      "old_range": {
+        "start": 12,
+        "count": 30
+      },
+      "new_range": {
+        "start": 12,
+        "count": 31
+      },
+      "evidence": "Adapter configuration changes preserve response classification in the reproduced scenarios; classification code is outside these hunks."
+    },
+    {
+      "id": "sys1-response-finality-control-h2",
+      "role": "control",
+      "commit": "1aaa4297943de7e424eb1ee272803b9e62b68465",
+      "parent": "2884b85bf8cfb32322c761805c94aca4e977770c",
+      "hunk_index": 2,
+      "label": "clean",
+      "state_sha256": "ea34458ad7e66e41cf947004afdf59c2b0afef85e1026c47e8db939ba7caef89",
+      "old_range": {
+        "start": 179,
+        "count": 30
+      },
+      "new_range": {
+        "start": 180,
+        "count": 31
+      },
+      "evidence": "Adapter configuration changes preserve response classification in the reproduced scenarios; classification code is outside these hunks."
+    }
+  ],
+  "authoring": {
+    "frozen_at": "2026-09-28T00:33:34.179871+00:00",
+    "predictions_before_freeze": 0,
+    "rule_json_sha256": "5bc2d606359ba1cbd8025f6940411b35227d1d212513b37c0c841399e951dc6c",
+    "rule_json": "{\n  \"id\": \"sys1-http-response-finality\",\n  \"applies\": {\n    \"paths\": [\"src/backends.ts\"]\n  },\n  \"type\": \"noul\",\n  \"unit\": \"hunk\",\n  \"ensure\": \"When forwarding receives any HTTP response, including a backend error response, it returns the response variant of ForwardResult; the transport variant is reserved for failures where no HTTP response was received.\",\n  \"breaks\": \"The shown forwarding logic returns the transport variant of ForwardResult after receiving an HTTP response.\",\n  \"tiers\": {\n    \"medium\": 0.8,\n    \"high\": 0.9\n  },\n  \"gate\": false,\n  \"severity\": \"P2\"\n}\n",
+    "author_note_sha256": "7b1e1a714baaeb135431896ca93119678634ff48b5ad27d55ebc9d11adb62ec1",
+    "contract_packet_sha256": "981918b4a67d2341ad3075cdb6b2e5454e67f3d1de4bfcfa55c7fc5769a3c217",
+    "contract_packet": "# Sys1 repository requirement packet A\n\nThis packet supplies a historical public requirement and its API context. It\ncontains no evaluated source diff, outcomes, later repair, or proposed diagnosis.\nAuthor one narrow advisory rule from this requirement, keeping it inactive.\n\n## Requirement\n\nRepository: https://github.com/hraness/sys1\n\nSource: `AGENTS.md`, commit `6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7`,\nlines 41–43:\n\n> A backend that returned any HTTP response is definitive; only transport\n> failures (no response) may re-dispatch, at most once, and never for a\n> `backend/model` pinned request. Surface retries via `x-sysone-attempts`.\n\nThe public function documentation in `src/backends.ts` at that same commit says:\n\n> Forward one already-validated System One request body to a backend. Only\n> transport failures (no HTTP response at all) report `transport`; any HTTP\n> response — including backend errors — is definitive and passed through.\n\n## API context\n\n`src/backends.ts` exports this result union:\n\n```ts\nexport type ForwardResult =\n  | { kind: \"response\"; status: number; body: string; content_type: string }\n  | { kind: \"transport\"; detail: string };\n```\n\nThe forwarding function accepts a configured backend, a serialized validated\nrequest, an optional resolved model ID, a timeout in milliseconds, and an\ninjectable Fetch implementation. It returns `Promise<ForwardResult>`.\n`src/gateway.ts` owns the request routing and retry loop. The guidance applies\nto both hosted and operator-configured backends.\n\nRule path: `src/backends.ts`. Use an `ensure` and a `breaks` statement derived\nfrom the requirement. Do not add unsupported requirements or assume surrounding\ncode that a selected diff does not show.\n",
+    "author_note_rendering": "# Blinded rule author note\n\nRead exactly one domain-evidence file: `contract-only.md`.\n\nSource packet SHA256: `981918b4a67d2341ad3075cdb6b2e5454e67f3d1de4bfcfa55c7fc5769a3c217`.\n\nThe packet's requirement and function documentation both distinguish receipt of an HTTP response from a transport failure with no response. The rule therefore covers only that distinction in `ForwardResult`. It does not impose gateway retry, pinning, or attempt-header requirements on `src/backends.ts`.\n\nA selected hunk may omit the context needed to establish whether a response was received or which result is returned. Missing context alone does not establish the stated violation. The packet does not specify additional implementation mechanics, so none are required by this rule.\n\nI read no evaluated defect, diff, repair, source snapshot, current implementation, history, manifest, result, sibling candidate file, or other conversation. I made no model, network, or test calls. This is inactive, source-only experimental material and will not be revised in response to predictions or results.\n",
+    "author_note_rendering_sha256": "dbc6a85cd42e5638f7015939b46ab1c70226cde37d4a7c28feff41add523254b",
+    "author_note_rendering_notice": "Private filesystem prefix removed for publication. author_note_sha256 identifies the original frozen note, not this rendering."
+  },
+  "requirement_sources": [
+    {
+      "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "path": "AGENTS.md",
+      "sha256": "a4d853547546c18b24e49583a139760cacae1c1d607d46ea3219ef33c70a9cba",
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7/AGENTS.md"
+    },
+    {
+      "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+      "path": "docs/design.md",
+      "sha256": "dc9c88ee6f382ffca7e723c4d1e370641031c2d73693f87efb5a90b5d8c5e6c9",
+      "url": "https://raw.githubusercontent.com/hraness/sys1/6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7/docs/design.md"
+    }
+  ],
+  "public_verification": {
+    "date": "2026-09-27",
+    "method": "Anonymous immutable GitHub archives; 122 source, requirement, and license records matched local bytes.",
+    "records": 122
+  },
+  "reproduction": {
+    "bun": "1.3.14",
+    "zod": "4.6.2",
+    "expected_assertions": 63,
+    "results": [
+      {
+        "label": "introduction",
+        "commit": "6870f6acde623fd56446ba8fd9e4cdaf39fc4ee7",
+        "direct_result": "transport",
+        "requirement_met": false,
+        "scenarios": {
+          "broken_body": {
+            "posts": 2,
+            "response_status": 503,
+            "response_error": "no_backend_available"
+          },
+          "http_error": {
+            "posts": 1,
+            "response_status": 503,
+            "response_error": "fixture"
+          },
+          "successful_body": {
+            "posts": 1,
+            "response_status": 200,
+            "response_error": null
+          }
+        }
+      },
+      {
+        "label": "repair_parent",
+        "commit": "c6cf06f7319bbbb98c8a9069146b01a00fd6972b",
+        "direct_result": "transport",
+        "requirement_met": false,
+        "scenarios": {
+          "broken_body": {
+            "posts": 2,
+            "response_status": 503,
+            "response_error": "no_backend_available"
+          },
+          "http_error": {
+            "posts": 1,
+            "response_status": 503,
+            "response_error": "fixture"
+          },
+          "successful_body": {
+            "posts": 1,
+            "response_status": 200,
+            "response_error": null
+          }
+        }
+      },
+      {
+        "label": "repair",
+        "commit": "3960a9be66ec531748b05b4e5ffb60e2d98c4a12",
+        "direct_result": "response",
+        "requirement_met": true,
+        "scenarios": {
+          "broken_body": {
+            "posts": 1,
+            "response_status": 502,
+            "response_error": "backend_response_unreadable"
+          },
+          "http_error": {
+            "posts": 1,
+            "response_status": 503,
+            "response_error": "fixture"
+          },
+          "successful_body": {
+            "posts": 1,
+            "response_status": 200,
+            "response_error": null
+          }
+        }
+      },
+      {
+        "label": "clean_parent",
+        "commit": "2884b85bf8cfb32322c761805c94aca4e977770c",
+        "direct_result": "response",
+        "requirement_met": true,
+        "scenarios": {
+          "broken_body": {
+            "posts": 1,
+            "response_status": 502,
+            "response_error": "backend_response_unreadable"
+          },
+          "http_error": {
+            "posts": 1,
+            "response_status": 503,
+            "response_error": "fixture"
+          },
+          "successful_body": {
+            "posts": 1,
+            "response_status": 200,
+            "response_error": null
+          }
+        }
+      },
+      {
+        "label": "clean",
+        "commit": "1aaa4297943de7e424eb1ee272803b9e62b68465",
+        "direct_result": "response",
+        "requirement_met": true,
+        "scenarios": {
+          "broken_body": {
+            "posts": 1,
+            "response_status": 502,
+            "response_error": "backend_response_unreadable"
+          },
+          "http_error": {
+            "posts": 1,
+            "response_status": 503,
+            "response_error": "fixture"
+          },
+          "successful_body": {
+            "posts": 1,
+            "response_status": 200,
+            "response_error": null
+          }
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "One natural initial-implementation defect; the introduction is a root commit, not a regression from a previously working release.",
+    "The repair contains unrelated changes.",
+    "All six hunks cover three complete diffs of src/backends.ts, not all changed files or six independent defects.",
+    "The ordinary control changes adapter configuration, not response classification; it is a no-new-violation control rather than a challenging body-parser negative.",
+    "Clean labels concern only the selected response-finality requirement. Repair hunks 1 and 2 do not show the forwarding repair.",
+    "Rule wording and thresholds were frozen before predictions. The six recorded results are uncalibrated observations of this case, not a general accuracy estimate.",
+    "The curator chose a contract matching a known historical defect. The question author was blind to the defect and repair, but case selection was not blind. This is not a wholly independent new-repository evaluation."
+  ]
+}
