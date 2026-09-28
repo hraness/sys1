@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-// Current installation guides only. Historical reports and changelog entries
+// Current release identity and guides. Historical reports and changelog entries
 // retain their original version and evidence identity.
 const root = resolve(import.meta.dir, "..");
 const args = process.argv.slice(2);
@@ -14,12 +14,13 @@ if (typeof manifest !== "object" || manifest === null || !("version" in manifest
   throw new Error("Expected a stable package.json version");
 }
 const version = manifest.version;
-const files = ["README.md", "site/index.html", "site/docs.html", "site/llms.txt"];
+const files = ["src/gateway.ts", "README.md", "site/index.html", "site/docs.html", "site/llms.txt"];
 const stale: string[] = [];
 for (const file of files) {
   const path = resolve(root, file);
   const source = await readFile(path, "utf8");
   const updated = source
+    .replace(/(export const SYS1_VERSION = ")\d+\.\d+\.\d+(")/gu, `$1${version}$2`)
     .replace(/https:\/\/github\.com\/hraness\/sys1\/releases\/download\/v\d+\.\d+\.\d+\/hraness-sys1-\d+\.\d+\.\d+\.tgz/gu,
       `https://github.com/hraness/sys1/releases/download/v${version}/hraness-sys1-${version}.tgz`)
     .replace(/Latest release: v\d+\.\d+\.\d+/gu, `Latest release: v${version}`)

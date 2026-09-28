@@ -19,9 +19,9 @@ tests, the dist build, and an isolated import/CLI execution check against the
 actual packed tarball.
 
 When bumping `package.json`, run `bun run release:sync` to update the current
-README and site installation references, then add the matching changelog
-section. Historical reports retain their original versions. The aggregate
-check rejects stale current release references.
+runtime version, README and site installation references, then add the matching
+changelog section. Historical reports retain their original versions. The
+aggregate check rejects stale current release references.
 
 After that gate, `bun run check:native` packs the existing dist, installs it in
 a disposable prefix with the pinned native dependency, and runs `sys1 doctor`.
