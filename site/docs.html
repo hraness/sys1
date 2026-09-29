@@ -49,7 +49,8 @@
     <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
     <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/vendor/hraness-syntax/syntax-highlighting.css" />
+  <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/docs.css?v=0.16.1" />
     <script src="/site.js" defer></script>
   </head>
@@ -114,21 +115,21 @@
             <div class="docs-route-list">
               <div class="docs-route">
                 <div><h3>Install the release</h3><p>The GitHub release installs the CLI on macOS, Linux, or Windows. <code>--allow-scripts=node-llama-cpp</code> permits the native inference package’s install script. Installation does not download model weights.</p></div>
-                <pre><code>npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
-sys1 doctor</code></pre>
+                <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> \
+  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz</span>
+<span class="syntax-token syntax-token--command">sys1</span> doctor</code></pre>
               </div>
               <div class="docs-route">
                 <div><h3>Choose hosted Jev</h3><p>Get a key from <a href="https://console.typesafe.ai/">TypeSafe</a> and provide <code>TYPESAFE_API_KEY</code> privately in your environment. Enabling Jev selects <code>hosted-only</code> routing. Sys1 saves the activation flag; the key stays in the environment.</p></div>
-                <pre><code># After setting TYPESAFE_API_KEY privately:
-sys1 jev enable
-sys1 jev status</code></pre>
+                <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--comment"># After setting TYPESAFE_API_KEY privately:</span>
+<span class="syntax-token syntax-token--command">sys1</span> jev enable
+<span class="syntax-token syntax-token--command">sys1</span> jev status</code></pre>
               </div>
               <div class="docs-route">
                 <div><h3>Or choose a local model</h3><p>Setup downloads Qwen3 1.7B. Start the local daemon for application requests or review commands using <code>--gateway</code>. Evaluate this experimental model on your own cases before relying on its answers.</p></div>
-                <pre><code>sys1 setup --tier quality
-sys1 up
-sys1 status</code></pre>
+                <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> setup <span class="syntax-token syntax-token--flag">--tier</span> quality
+<span class="syntax-token syntax-token--command">sys1</span> up
+<span class="syntax-token syntax-token--command">sys1</span> status</code></pre>
               </div>
             </div>
             <p class="docs-footnote">Preview the download with <code>sys1 setup --dry-run --json</code>. <code>sys1 doctor</code> reports the runtime, model store, routing, and daemon state. For a client-only install or a source build, see the <a href="https://github.com/hraness/sys1#install">README</a>.</p>
@@ -147,17 +148,17 @@ sys1 status</code></pre>
             <p>Use these answers to prioritize investigation, classify evidence, or choose a workflow in code. Sys1 validates the response against the request. Your application still decides which actions are allowed and checks whether the model works on representative examples.</p>
             <h3 id="jev">Make your first Jev request</h3>
             <p>After enabling Jev above, run <code>sys1 up</code> to start the loopback gateway. Save this request as <code>request.json</code>:</p>
-            <div class="docs-code-block"><div class="docs-code-heading"><span>request.json</span><span>Illustrative input</span></div><pre><code>{
-  "model": "typesafe/jev-1.13.0",
-  "state": { "result": "The check exited with code 1." },
-  "questions": {
-    "failed": {
-      "type": "noul",
-      "instructions": "Does the supplied result report a failed check?"
-    }
-  }
-}</code></pre></div>
-            <div class="docs-code-block"><div class="docs-code-heading"><span>Send the request</span></div><pre><code>sys1 eval --file request.json --json</code></pre></div>
+            <div class="docs-code-block"><div class="docs-code-heading"><span>request.json</span><span>Illustrative input</span></div><pre tabindex="0"><code class="syntax-code language-json" data-language="json"><span class="sh__line"><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">model</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">typesafe/jev-1.13.0</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">state</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">result</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">The check exited with code 1.</span><span class="sh__token--string">&quot;</span><span class="sh__token--space"> </span><span class="sh__token--sign">}</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">questions</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">failed</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">type</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">noul</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">instructions</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Does the supplied result report a failed check?</span><span class="sh__token--string">&quot;</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--sign">}</span></span></code></pre></div>
+            <div class="docs-code-block"><div class="docs-code-heading"><span>Send the request</span></div><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> eval <span class="syntax-token syntax-token--flag">--file</span> request.json <span class="syntax-token syntax-token--flag">--json</span></code></pre></div>
             <p>Read <code>answers.failed.noul</code> as the model’s probability of yes. The example demonstrates the API; use the exit status directly when your code already has it. Review and verify can call Jev without a daemon. The client, <code>sys1 eval</code>, and commands using <code>--gateway</code> need one.</p>
             <h3>Choose the model and handle failures</h3>
             <p>The request pins <code>typesafe/jev-1.13.0</code>. A TypeSafe alias such as <code>jev-latest</code> can change; keep a versioned model ID when comparing runs or setting thresholds. Enabling Jev keeps requests on hosted-only routing, so a provider failure returns an error without substituting Qwen. HTTP errors do not trigger a retry.</p>
@@ -170,14 +171,14 @@ sys1 status</code></pre>
             <h2 id="audit-title">Review changes with your agent</h2>
             <p class="docs-intro">The <code>sys1-review</code> project skill guides an agent through selecting a batch of Git changes, applying reusable rules, investigating candidates, and recording feedback. Its instructions work with Codex, Claude Code, and Devin; other agents can call the CLI directly.</p>
             <p>The bundled rules check newly empty catch blocks and removed test assertions in JavaScript and TypeScript. Add and evaluate repository rules for other conventions or languages.</p>
-            <pre><code>sys1 review setup codex --dry-run --json
-sys1 review setup codex
-sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
-  --max-requests 10 --dry-run --json -- src test</code></pre>
+            <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> review setup codex <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> review setup codex
+<span class="syntax-token syntax-token--command">sys1</span> review checkpoint <span class="syntax-token syntax-token--flag">--staged</span> <span class="syntax-token syntax-token--flag">--model</span> typesafe/jev-1.13.0 \
+  <span class="syntax-token syntax-token--flag">--max-requests</span> 10 <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span> <span class="syntax-token syntax-token--flag">--</span> src test</code></pre>
             <p>Run setup inside your repository. Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup installs a skill file and no automatic hooks. In the checkpoint preview, inspect selected files, rules, skipped evidence, and request count. With Jev enabled and the source ready to send, repeat without <code>--dry-run</code>.</p>
             <p>Use <code>--worktree</code> for current files or <code>--since &lt;ref&gt;</code> for committed changes. Paths after <code>--</code> keep the selection within your task. Find active rules with <code>sys1 rules list</code>; repeat <code>--rule &lt;id&gt;</code> to choose checks. Repository-specific rule packs can cover conventions in your own code and guides.</p>
-            <pre><code>sys1 review issues --json
-sys1 review feedback &lt;finding-id&gt; useful --json</code></pre>
+            <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> review issues <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> review feedback <span class="syntax-token syntax-token--operator">&lt;</span>finding-id<span class="syntax-token syntax-token--operator">&gt;</span> useful <span class="syntax-token syntax-token--flag">--json</span></code></pre>
             <p>Investigate each candidate in the code before marking it <code>useful</code>, <code>incorrect</code>, or <code>unverifiable</code>. Findings are advisory, and scores are not calibrated defect probabilities. Keep your normal tests and review.</p>
             <p>Complete unchanged batches can reuse their review for up to 24 hours. Local metadata preserves feedback without storing source or model answers. Recheck evaluates available original evidence; changed or missing evidence does not establish a fix. A new checkpoint and relevant tests check the repaired batch.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Agent review guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">Stateless audit and rule packs <span aria-hidden="true">↗</span></a><a href="/skills">Choose an agent workflow</a></div>
@@ -186,10 +187,10 @@ sys1 review feedback &lt;finding-id&gt; useful --json</code></pre>
           <section id="verify" class="docs-section" aria-labelledby="verify-title">
             <h2 id="verify-title">Verify completion claims</h2>
             <p class="docs-intro">The <code>sys1-verify</code> project skill guides an agent through checking a completion message. Its <code>sys1 verify</code> command compares that message with reachable evidence. It can identify unpushed commits, uncommitted files, unmerged linked pull requests, or a fetched page that lacks the claimed change.</p>
-            <pre><code>sys1 verify setup codex --dry-run --json
-sys1 verify setup codex
-sys1 verify --message /tmp/final-message.txt \
-  --model typesafe/jev-1.13.0 --dry-run --json</code></pre>
+            <pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> verify setup codex <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> verify setup codex
+<span class="syntax-token syntax-token--command">sys1</span> verify <span class="syntax-token syntax-token--flag">--message</span> /tmp/final-message.txt \
+  <span class="syntax-token syntax-token--flag">--model</span> typesafe/jev-1.13.0 <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span></code></pre>
             <p>Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. The skill can be installed alongside <code>sys1-review</code> or on its own. Save the message outside your Git worktree, for example at <code>/tmp/final-message.txt</code> on macOS or Linux, then run the preview inside the repository. On Windows, choose an equivalent external path. It reads local Git state and makes no model calls or page fetches. Inspect the plan and repeat without <code>--dry-run</code>; message text and any fetched page text go to the selected backend.</p>
             <p>Without <code>--message</code>, Sys1 finds the newest matching local Devin session and reads its final message and recent check-command results. Codex, Claude Code, and other agents supply a file or pipe text with <code>--message -</code>. Automatic test-result evidence currently comes from Devin transcripts only.</p>
             <p>Exit 7 means a claim contradicts reachable evidence; exit 8 means the run was incomplete. Missing or unreachable evidence is <code>unverifiable</code>. Exit 0 means no contradiction was found, including when evidence is unavailable; it does not prove completion or deployment correctness.</p>
@@ -200,22 +201,22 @@ sys1 verify --message /tmp/final-message.txt \
             <h2 id="integration-title">Integration modes</h2>
             <p class="docs-intro">Use the same request and answer format from application code. Choose whether your app calls a server, runs the router itself, or connects to a local daemon.</p>
             <div class="docs-mode-list">
-              <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre><code>npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz</code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
+              <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--omit=optional</span> \
+  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz</span></code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Embedded Bun router</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Embedded guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Loopback HTTP</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="https://github.com/hraness/sys1#the-endpoint">HTTP reference <span aria-hidden="true">↗</span></a></div>
             </div>
             <div class="docs-code-block">
               <div class="docs-code-heading"><span>One typed request</span><span>System One</span></div>
-              <pre><code>{
-  "state": "The build failed after a dependency update.",
-  "questions": {
-    "action": {
-      "type": "choice",
-      "criteria": { "repair": "Fix it", "continue": "Keep going" }
-    }
-  }
-}</code></pre>
+              <pre tabindex="0"><code class="syntax-code language-json" data-language="json"><span class="sh__line"><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">state</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">The build failed after a dependency update.</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">questions</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">action</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">type</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">choice</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">criteria</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">repair</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Fix it</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">continue</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Keep going</span><span class="sh__token--string">&quot;</span><span class="sh__token--space"> </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--sign">}</span></span></code></pre>
             </div>
           </section>
 
@@ -237,14 +238,14 @@ sys1 verify --message /tmp/final-message.txt \
           <section id="profiles" class="docs-section" aria-labelledby="profiles-title">
             <h2 id="profiles-title">Profiles and evaluation</h2>
             <p class="docs-intro">Give each task a versioned set of questions and a model route. Reuse the same profile from application code or the CLI; each call supplies only the changing state.</p>
-            <div class="docs-code-block"><pre><code>const triage = createProfile({
-  version: 1, id: "triage", revision: "1",
-  model: "kev/kev-latest",
-  questions: {
-    urgent: { type: "noul", instructions: "Is there an active outage?" }
-  }
-});
-const result = await client.evaluate(triage.request(ticket));</code></pre></div>
+            <div class="docs-code-block"><pre tabindex="0"><code class="syntax-code language-typescript" data-language="typescript"><span class="sh__line"><span class="sh__token--keyword">const</span><span class="sh__token--space"> </span><span class="sh__token--identifier">triage</span><span class="sh__token--space"> </span><span class="sh__token--sign">=</span><span class="sh__token--space"> </span><span class="sh__token--identifier">createProfile</span><span class="sh__token--sign">(</span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--identifier">version</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--class">1</span><span class="sh__token--sign">,</span><span class="sh__token--space"> </span><span class="sh__token--identifier">id</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">triage</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span><span class="sh__token--space"> </span><span class="sh__token--identifier">revision</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">1</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--identifier">model</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">kev/kev-latest</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--identifier">questions</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--identifier">urgent</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span><span class="sh__token--space"> </span><span class="sh__token--identifier">type</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">noul</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span><span class="sh__token--space"> </span><span class="sh__token--identifier">instructions</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Is there an active outage?</span><span class="sh__token--string">&quot;</span><span class="sh__token--space"> </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--sign">}</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span>
+<span class="sh__line"><span class="sh__token--keyword">const</span><span class="sh__token--space"> </span><span class="sh__token--identifier">result</span><span class="sh__token--space"> </span><span class="sh__token--sign">=</span><span class="sh__token--space"> </span><span class="sh__token--keyword">await</span><span class="sh__token--space"> </span><span class="sh__token--identifier">client</span><span class="sh__token--sign">.</span><span class="sh__token--property">evaluate</span><span class="sh__token--sign">(</span><span class="sh__token--identifier">triage</span><span class="sh__token--sign">.</span><span class="sh__token--property">request</span><span class="sh__token--sign">(</span><span class="sh__token--identifier">ticket</span><span class="sh__token--sign">)</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span></code></pre></div>
             <p>Import <code>createProfile</code> from <code>@hraness/sys1/client</code>. Save the definition as JSON for <code>sys1 eval --profile triage.json</code>, with <code>{"state": ...}</code> on stdin. Profiles also work with Jev and built-in local model routes.</p>
             <p>Start by improving instructions and criteria against fixed application examples. If fine-tuning helps, train Kev separately, calibrate and evaluate the checkpoint, then publish a new profile revision pointing at its server. Profiles do not collect training data or start training jobs.</p>
             <p>From a source checkout with Bun and project dependencies, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate a profile on labeled examples</a>. The included experiments cover failure triage, excerpt relevance, and claim support. They are separate from the installed project skills.</p>

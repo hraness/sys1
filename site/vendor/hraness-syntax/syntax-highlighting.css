@@ -1,0 +1,71 @@
+.syntax-code {
+  --syntax-comment: var(--muted, currentColor);
+  --syntax-keyword: var(--warning, var(--accent, currentColor));
+  --syntax-string: var(--success, var(--accent, currentColor));
+  --syntax-number: var(--danger, var(--accent, currentColor));
+  --syntax-name: var(--info, var(--accent, currentColor));
+  --syntax-sign: var(--muted, currentColor);
+  --sh-class: var(--syntax-name);
+  --sh-comment: var(--syntax-comment);
+  --sh-entity: var(--syntax-number);
+  --sh-identifier: var(--foreground, currentColor);
+  --sh-jsxliterals: var(--syntax-string);
+  --sh-keyword: var(--syntax-keyword);
+  --sh-property: var(--syntax-name);
+  --sh-sign: var(--syntax-sign);
+  --sh-space: currentColor;
+  --sh-string: var(--syntax-string);
+  text-shadow: none;
+}
+
+/* Class-only Sugar High output uses the same palette roles as its default
+ * inline output. Keep specificity below the forced-color rule below. */
+.syntax-code :where(.sh__token--class) { color: var(--sh-class); }
+.syntax-code :where(.sh__token--comment) { color: var(--sh-comment); }
+.syntax-code :where(.sh__token--entity) { color: var(--sh-entity); }
+.syntax-code :where(.sh__token--identifier) { color: var(--sh-identifier); }
+.syntax-code :where(.sh__token--jsxliterals) { color: var(--sh-jsxliterals); }
+.syntax-code :where(.sh__token--keyword) { color: var(--sh-keyword); }
+.syntax-code :where(.sh__token--property) { color: var(--sh-property); }
+.syntax-code :where(.sh__token--sign) { color: var(--sh-sign); }
+.syntax-code :where(.sh__token--space) { color: var(--sh-space); }
+.syntax-code :where(.sh__token--string) { color: var(--sh-string); }
+
+.syntax-token--comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.syntax-token--keyword,
+.syntax-token--marker {
+  color: var(--syntax-keyword);
+}
+
+.syntax-token--string,
+.syntax-token--inline {
+  color: var(--syntax-string);
+}
+
+.syntax-token--command,
+.syntax-token--heading,
+.syntax-token--variable {
+  color: var(--syntax-name);
+}
+
+.syntax-token--flag,
+.syntax-token--operator {
+  color: var(--syntax-sign);
+}
+
+.syntax-token--command,
+.syntax-token--heading {
+  font-weight: var(--font-weight-bold, 700);
+}
+
+@media (forced-colors: active) {
+  .syntax-code,
+  .syntax-code span {
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}

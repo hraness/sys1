@@ -157,7 +157,8 @@
     <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
     <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/vendor/hraness-syntax/syntax-highlighting.css" />
+  <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/launch-article.css" />
     <script src="/site.js" defer></script>
   </head>
@@ -313,10 +314,10 @@
             <h2 id="try-heading">Try a checkpoint on a change you understand</h2>
             <p>After <a href="/docs#getting-started">installing Sys1</a>, start inside a Git repository with a small change and a rule you can inspect. Install the project instructions and preview a staged checkpoint. The preview lists the planned work without calling a model.</p>
           </div>
-          <div class="code-example launch-code"><div class="code-heading"><span>Preview selected source and rules</span></div><pre><code>sys1 review setup codex --dry-run --json
-sys1 review setup codex
-sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
-  --max-requests 10 --dry-run --json -- src test</code></pre></div>
+          <div class="code-example launch-code"><div class="code-heading"><span>Preview selected source and rules</span></div><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> review setup codex <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> review setup codex
+<span class="syntax-token syntax-token--command">sys1</span> review checkpoint <span class="syntax-token syntax-token--flag">--staged</span> <span class="syntax-token syntax-token--flag">--model</span> typesafe/jev-1.13.0 \
+  <span class="syntax-token syntax-token--flag">--max-requests</span> 10 <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span> <span class="syntax-token syntax-token--flag">--</span> src test</code></pre></div>
           <div class="launch-prose">
             <p>Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. To evaluate with Jev, provide <code>TYPESAFE_API_KEY</code> privately in your environment, run <code>sys1 jev enable</code>, and repeat the checkpoint without <code>--dry-run</code>. The selected source goes to that backend. The <a href="/skills#review">review guide</a> walks through investigation and feedback; the <a href="/skills#verify">verification guide</a> adds the final-message check.</p>
             <p>If your application already has a decision to make, the <a href="/docs#integration">Node/Bun client and HTTP API</a> expose the same question types. Begin with labeled examples from that task and compare the result with the code you would otherwise use.</p>

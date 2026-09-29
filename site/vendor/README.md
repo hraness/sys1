@@ -95,3 +95,19 @@ bun scripts/build-site-footer.ts /path/to/site-footer-git-checkout
 The script reads the pinned commit directly; it does not depend on the
 checkout's current branch. The static consent adapter remains unchanged in
 behavior: this site configures no consent runtime.
+
+## Shared code highlighting
+
+`scripts/build-site-syntax.ts` highlights all 18 existing code blocks in the
+homepage, docs, skills, and introduction pages with the shared design-kit
+highlighter. Source text, command IDs, and copy-button behavior are preserved.
+The pages load the byte-exact shared `syntax-highlighting.css`; they run no
+syntax-highlighting JavaScript in the browser.
+
+Run `bun scripts/build-site-syntax.ts --check` to verify the recorded markup,
+stylesheet, and generator. After editing code or synchronizing release URLs,
+run `bun scripts/build-site-syntax.ts --refresh KIT_CHECKOUT FULL_COMMIT vVERSION`
+against the immutable design-kit release in the provenance file, with its
+frozen dependencies installed. The refresh reads the highlighter's JavaScript
+module closure directly from Git, records its dependency bytes and lockfile,
+and renders from a temporary copy. Never color code spans by hand.
