@@ -1,6 +1,6 @@
 version: 1
 pack: core
-revision: "2026.09.2"
+revision: "2026.09.3"
 description: Experimental advisory checks for two narrow JavaScript and TypeScript changes.
 rules:
   - id: core-new-empty-catch
@@ -8,19 +8,20 @@ rules:
       paths: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
       languages: [javascript, typescript]
     ensure: >-
-      The change does not introduce a new empty JavaScript or TypeScript catch
-      block. A violation requires a complete catch body visible after the
-      change, with no executable statement, that was either newly added or
-      emptied by removing its last executable statement. Comments, whitespace,
-      and empty semicolon statements do not count as executable statements.
-      An unchanged or moved empty catch, removal of a catch, an incomplete
-      catch body, a Promise.catch callback, or catch text inside a string is
-      outside this rule. Any executable statement, including return, makes
-      the catch nonempty. Judge only the shown before and after code.
+      The change does not leave a JavaScript or TypeScript catch block
+      silently swallowing errors. A violation is a complete catch body, visible
+      after the change, with no executable statement, that is either newly
+      added with no explanatory comment, or emptied by removing its last
+      executable statement whatever comments remain. A lint or coverage
+      directive alone is not an explanation. A new catch whose comment says
+      why it is empty, an unchanged, re-commented or moved empty catch,
+      removal of a catch, an incomplete catch body, a Promise.catch callback,
+      or catch text inside a string is outside this rule. Any executable
+      statement, including return, makes the catch nonempty.
     breaks: >-
-      The shown change adds a complete empty catch block or removes every
-      executable statement from a retained complete catch block, leaving
-      only whitespace, comments, or empty semicolon statements.
+      The shown change adds a complete empty catch block with no explanatory
+      comment, or removes every executable statement from a retained complete
+      catch block.
     severity: P2
     tiers: { medium: 0.8, high: 0.85 }
     source: { kind: builtin }

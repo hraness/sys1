@@ -90,6 +90,19 @@ interface Span {
   readonly text: string;
   /** No executable statement in the body. */
   readonly empty: boolean;
+  /** The body carries a comment that is not only a lint or coverage directive. */
+  readonly explained: boolean;
+}
+
+const DIRECTIVE = /^(?:eslint|@ts-|istanbul|c8|v8|biome-ignore|prettier-ignore|jshint|tslint)\b/;
+
+/** True when some comment in an empty body says something beyond a tool directive. */
+function explains(body: string): boolean {
+  const comments = body.match(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g) ?? [];
+  return comments.some(comment => {
+    const text = comment.replace(/^\/\/|^\/\*|\*\/$/g, "").replace(/^[\s*]+/, "").trim();
+    return text.length > 0 && !DIRECTIVE.test(text);
+  });
 }
 
 /** Complete `} catch (...) { ... }` blocks in one side, as spans of patch-line indexes. */
@@ -132,22 +145,26 @@ function catchBlocks(lines: readonly PatchLine[], side: "before" | "after"): Spa
     }
     // An incomplete body is not evidence either way.
     if (k >= masked.length) continue;
+    const empty = /^[\s;]*$/.test(masked.slice(open + 1, k));
     spans.push({
       start: lineAt(match.index),
       end: lineAt(k),
       text: masked.slice(match.index, k + 1).replace(/\s+/g, ""),
-      empty: /^[\s;]*$/.test(masked.slice(open + 1, k)),
+      empty,
+      explained: empty && explains(source.slice(open + 1, k)),
     });
   }
   return spans;
 }
 
 /**
- * Catch blocks this change leaves with no executable statement (comments,
- * whitespace and empty statements do not count):
- * - a new empty catch, unless it only moved (an identical empty catch was
- *   removed elsewhere in the unit);
- * - an existing catch emptied by removing its last executable statement.
+ * Catch blocks this change leaves swallowing errors silently:
+ * - a new catch with an empty body and no explanatory comment, unless it only
+ *   moved (an identical empty catch was removed elsewhere in the unit);
+ * - an existing catch emptied by removing its last executable statement,
+ *   whatever comments remain.
+ * An explained new catch (`catch { // already exited }`) is deliberate, as in
+ * ESLint's no-empty; a lint-disable directive alone is not an explanation.
  */
 export function detectNewEmptyCatch(patch: string): DetectorHit[] {
   const lines = patchLines(patch);
@@ -186,7 +203,7 @@ export function detectNewEmptyCatch(patch: string): DetectorHit[] {
     if (used < available) { moved.set(span.text, used + 1); continue; }
     const previous = previousOf(span);
     // Reformatting or re-commenting an already empty catch is not new.
-    if (previous?.empty) continue;
+    if (previous ? previous.empty : span.explained) continue;
     hits.push({ line: Math.max(1, lines[span.start]!.newLine), side: "after" });
   }
   return hits;

@@ -18,12 +18,14 @@ describe("empty-catch detector", () => {
     expect(hits([" try {", "   run();", " } catch (e) {", "-  log(e);", "-  retry();", " }"])).toEqual([3]);
   });
 
-  test("comments and semicolons do not make a catch nonempty", () => {
-    expect(hits(["+try { run(); } catch { /* optional */ ; // later", "+}"])).toEqual([1]);
+  test("an explanatory comment excuses only a new catch", () => {
+    expect(hits(["+try { run(); } catch { /* optional */ ; // later", "+}"])).toEqual([]);
+    expect(hits(["+try { run(); } catch { ; }"])).toEqual([1]);
+    expect(hits(["+try { run(); } catch { // eslint-disable-line no-empty", "+}"])).toEqual([1]);
     expect(hits([" try {", "   run();", " } catch (e) {", "-  log(e);", "+  // ignored", " }"])).toEqual([3]);
   });
 
-  test("a moved empty catch is not paired with an unrelated rewritten one", () => {
+  test("a moved explained catch is not paired with an unrelated rewritten one", () => {
     expect(hits([
       "-} catch (error) {",
       "-  report(error);",
