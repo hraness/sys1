@@ -33,3 +33,9 @@
 
 # Shared footer mask provenance hashes canonical package-derived bytes.
 /site/vendor/hraness-site-footer/** text eol=lf
+
+# The committed analytics bundle is checked byte-for-byte against its sources.
+/site/analytics.js text eol=lf
+/site/analytics.provenance.json text eol=lf
+/scripts/site-analytics.ts text eol=lf
+/scripts/site-analytics-entry.ts text eol=lf
