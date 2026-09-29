@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { compileUnit, ruleApplies, QUESTION_FORMAT } from "./compile.ts";
 import type { LoadedRule, RuleSet } from "./pack.ts";
 import type { Rule } from "./schema.ts";
-import type { DiffCollection, DiffUnit } from "./diff.ts";
+import { languageFor, type DiffCollection, type DiffUnit } from "./diff.ts";
 import type { Sys1Client } from "../client.ts";
 import type { Answer } from "../protocol.ts";
 import { validateResponseForRequest } from "../response.ts";
@@ -94,6 +94,12 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
   const started = performance.now();
   const { diff } = options;
   const skipped: AuditSkip[] = diff.skipped.map(({ path, reason }) => ({ path, reason }));
+  // Complete means at least one change was checked and every change an active
+  // rule covers was checked. Changes no rule covers, and generated files
+  // excluded by design, stay listed in `skipped` but do not make it incomplete.
+  const covered = (path: string): boolean => options.rules.rules.some(({ rule }) => ruleApplies(rule, { path, language: languageFor(path) }));
+  const gaps = diff.skipped.filter((item) => item.reason !== "excluded_generated"
+    && (covered(item.path) || (item.previousPath !== undefined && covered(item.previousPath)))).length;
   const work: { unit: DiffUnit; rules: LoadedRule[]; requests: ReturnType<typeof compileUnit> }[] = [];
   // Rules with a detector are decided locally and never reach the model.
   const local: { unit: DiffUnit; rules: LoadedRule[] }[] = [];
@@ -215,7 +221,7 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
     }
     report.findings.sort((a, b) => b.model_score - a.model_score || a.path.localeCompare(b.path) || a.rule.localeCompare(b.rule));
     report.usage.unknown_requests = report.requests - report.usage.known_requests;
-    report.complete = diff.complete && skipped.length === 0;
+    report.complete = local.length + work.length > 0 && gaps === 0 && skipped.slice(diff.skipped.length).every(({ reason }) => reason === "no_matching_rules");
     report.status = report.complete ? "complete" : "incomplete";
     report.elapsed_ms = Math.round(performance.now() - started);
     return report;

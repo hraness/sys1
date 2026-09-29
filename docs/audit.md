@@ -68,7 +68,11 @@ Token totals cover validated responses. `usage.unknown_requests` counts attempts
 whose usage could not be confirmed, so an incomplete run may have additional
 provider charges.
 
-`complete` means all selected evidence was evaluated by the applicable rules.
+`complete` means at least one change was checked and every change an active
+rule covers was evaluated. Changes no rule covers, such as documentation or
+styles, and generated files such as lockfiles, build output, and minified
+bundles, are still listed in `skipped` but do not make the audit incomplete. A
+covered change skipped for any other reason, including a sensitive path, does.
 It does not mean the changes are correct. `qualification: "unqualified"` means
 the rules have no production-quality guarantee for that route. The high and
 medium tiers are score cutoffs, not severity or measured precision.

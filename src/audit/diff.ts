@@ -218,7 +218,7 @@ function excluded(path: string): SkipReason | undefined {
   return undefined;
 }
 
-function languageFor(path: string): string | undefined {
+export function languageFor(path: string): string | undefined {
   const extension = path.toLowerCase().split(".").at(-1) as string;
   const languages: Record<string, string> = {
     ts: "typescript", tsx: "typescript", mts: "typescript", cts: "typescript",
