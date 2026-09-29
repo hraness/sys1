@@ -96,8 +96,8 @@ with `data-palette="tokyo-night"` selecting colors. It also declares
 warm Paper palette. Pages do not require a mesh or grain background.
 
 Paper, marketing, Lantern, and appearance are pinned to design-kit v0.23.0,
-commit `3df4c411c7f5e5cbc02448463571696f0d47cee5`. The normal-flow footer is
-site-footer v0.20.0, commit `4244dc563daf125eadbc66fe2a896311f09afc84`.
+commit `3df4c411c7f5e5cbc02448463571696f0d47cee5`. The normal-flow footer release
+is recorded in [its provenance](site/vendor/hraness-site-footer/provenance.json).
 Directory-local provenance manifests bind the admitted assets to source and
 hashes. Preserve those manifests, licenses, font notices, and the static
 footer adapter. Regenerate shared assets through the repository scripts;
