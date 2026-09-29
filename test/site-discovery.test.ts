@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { launchMedia } from "../media/sys1-launch/site-media.ts";
+import { checkSocialCards, socialPageAlt, socialPages, socialSite } from "../scripts/social-cards.ts";
 
 const site = new URL("../site/", import.meta.url);
 const origin = "https://sys1.io";
@@ -33,23 +33,35 @@ test("every sitemap URL is an indexable page whose canonical, og:url, and titles
   }
 });
 
-test("every indexable page has its declared 1200x630 social card", () => {
-  const png = readFileSync(new URL("og.png", site));
-  expect(png.subarray(1, 4).toString("latin1")).toBe("PNG");
-  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
-  for (const path of paths) {
-    const html = read(fileFor(path));
-    const launchPage = launchMedia.pages.some(page => new URL(page.url).pathname === path);
-    const card = launchPage ? new URL(launchMedia.social.src, origin).href : `${origin}/og.png`;
+test("every indexable page uses its shared-template social card", () => {
+  expect(socialPages.map(page => page.url).sort()).toEqual([...sitemap].sort());
+  expect(socialSite.name).toBe("Sys1");
+  expect(socialSite.domain).toBe("sys1.io");
+  expect(socialSite.icon?.kind).toBe("app");
+  expect(socialSite.icon?.src).toBe(`data:image/png;base64,${readFileSync(new URL("icon.png", site)).toString("base64")}`);
+  for (const page of socialPages) {
+    const html = read(page.file.replace(/^site\//, ""));
+    const card = new URL(page.image, origin).href;
+    const png = readFileSync(new URL(page.image.slice(1), site));
+    expect(png.subarray(1, 4).toString("latin1")).toBe("PNG");
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
     expect([...html.matchAll(/<meta property="og:image" /g)]).toHaveLength(1);
     expect([...html.matchAll(/<meta name="twitter:image" /g)]).toHaveLength(1);
     expect(meta(html, "property", "og:image")).toBe(card);
+    expect(meta(html, "property", "og:image:type")).toBe("image/png");
     expect(meta(html, "property", "og:image:width")).toBe("1200");
     expect(meta(html, "property", "og:image:height")).toBe("630");
     expect(meta(html, "name", "twitter:card")).toBe("summary_large_image");
     expect(meta(html, "name", "twitter:image")).toBe(card);
     expect(meta(html, "property", "og:site_name")).toBe("Sys1");
+    const alt = socialPageAlt(page).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    expect(meta(html, "property", "og:image:alt")).toBe(alt);
+    expect(meta(html, "name", "twitter:image:alt")).toBe(alt);
   }
+});
+
+test("social cards match their recorded template render", async () => {
+  await checkSocialCards();
 });
 
 test("structured data parses and entity references resolve across the site", () => {

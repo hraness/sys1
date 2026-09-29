@@ -9,7 +9,7 @@
   },
   "generator": {
     "path": "scripts/generate-brand-icons.ts",
-    "sha256": "b43c6f382b3656aedfe34e6e1e4554e35972f7597e67f00f8e42554777be64c8"
+    "sha256": "ab7cce81365b567ccb28c0b4bd5e8289bec5a2537442dc23f90ef6ba84c6f0ae"
   },
   "recipe": {
     "iconInset": 0.125,
@@ -62,11 +62,6 @@
       "path": "site/favicon-16.png",
       "bytes": 232,
       "sha256": "6812f1b22f4f354904c3c57d2695da5ba96abc81c47526900db83a4f7ace9cb2"
-    },
-    {
-      "path": "site/og.png",
-      "bytes": 5264,
-      "sha256": "fde2e3b455045ab8449f50766f6d1d34862c405c9362eb1fbf529e56045e647d"
     },
     {
       "path": "site/favicon.ico",

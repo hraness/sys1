@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "template": "0.10.0",
+  "cards": [
+    {
+      "page": "https://sys1.io/",
+      "path": "site/og.png",
+      "input": "b470acefce03a08c5333576eaca93a6924a2cdaf774bf1cd5948f155ee4d6f34",
+      "bytes": 134366,
+      "sha256": "e7176e74737f2ab2799286d816cb9f8f6f4807df43d76a169e0330a5eefb0154"
+    },
+    {
+      "page": "https://sys1.io/introducing-sys1",
+      "path": "site/og/introducing-sys1.png",
+      "input": "0cb21e1e9753be14b8de18dffb54e4438f5d53b344fc2286abe8e3a2a2646816",
+      "bytes": 115694,
+      "sha256": "2b1da090c225f298fc97e8498092c159a9afe5cac6350ba594b52cb0045ee69e"
+    },
+    {
+      "page": "https://sys1.io/docs",
+      "path": "site/og/docs.png",
+      "input": "8c706b02e420e7be6af6f1b320714e464a7f53d3753a9e2dae70d9326567636b",
+      "bytes": 115303,
+      "sha256": "228ecd2bd35782012136f2129ab5d53c9fe11ae17da073fb9ad52169c4de6e0f"
+    },
+    {
+      "page": "https://sys1.io/docs/evaluations",
+      "path": "site/og/docs-evaluations.png",
+      "input": "656d1f725e0a0bbe78b47707b9914b95e11c776899ad954710e40c0085bc2f40",
+      "bytes": 117127,
+      "sha256": "000c242c83cab8e9370c6bd0165a93500f410a43db656056e454a12b85078012"
+    },
+    {
+      "page": "https://sys1.io/docs/evaluations-history",
+      "path": "site/og/docs-evaluations-history.png",
+      "input": "2d654991ca16126ffb07a16f3914d84a06d00f6f751e67c577d32729fb488b2c",
+      "bytes": 122503,
+      "sha256": "0d91439583ee58a4b69d262b49d5ecccbd15e835aaed9d43312766468bbc5225"
+    },
+    {
+      "page": "https://sys1.io/compare",
+      "path": "site/og/compare.png",
+      "input": "e72f6df28945d01346ae8dff11deb4dc3e37c55f1743e0cfc997375c8b48c541",
+      "bytes": 123366,
+      "sha256": "7cbbaeca95a429eb8c74016043aed4b9b601ff878fca2460691f849e94ca2cb0"
+    },
+    {
+      "page": "https://sys1.io/skills",
+      "path": "site/og/skills.png",
+      "input": "535bebe429c701716cbf088591242a77f6e72e8b175192d9546926175e9e0fc5",
+      "bytes": 123948,
+      "sha256": "a206da40dd0bd61932e1edf9d6bb422199b176c8b134aeef2c6ad6af3c035abf"
+    }
+  ]
+}
