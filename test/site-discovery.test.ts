@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { checkSocialCards, socialPageAlt, socialPages, socialSite } from "../scripts/social-cards.ts";
+import { socialImageFit, socialImageSiteDetails } from "@hraness/web-discovery/social-image/card";
+import { checkSocialCards, socialPageAlt, socialPageCopy, socialPages, socialSite } from "../scripts/social-cards.ts";
 
 const site = new URL("../site/", import.meta.url);
 const origin = "https://sys1.io";
@@ -37,8 +38,8 @@ test("every indexable page uses its shared-template social card", () => {
   expect(socialPages.map(page => page.url).sort()).toEqual([...sitemap].sort());
   expect(socialSite.name).toBe("Sys1");
   expect(socialSite.domain).toBe("sys1.io");
-  expect(socialSite.icon?.kind).toBe("app");
-  expect(socialSite.icon?.src).toBe(`data:image/png;base64,${readFileSync(new URL("icon.png", site)).toString("base64")}`);
+  expect(socialSite.icon?.kind).toBe("mark");
+  expect(socialSite.icon?.src).toBe(`data:image/svg+xml;base64,${readFileSync(new URL("marks/sys1.svg", site)).toString("base64")}`);
   for (const page of socialPages) {
     const html = read(page.file.replace(/^site\//, ""));
     const card = new URL(page.image, origin).href;
@@ -57,6 +58,18 @@ test("every indexable page uses its shared-template social card", () => {
     const alt = socialPageAlt(page).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
     expect(meta(html, "property", "og:image:alt")).toBe(alt);
     expect(meta(html, "name", "twitter:image:alt")).toBe(alt);
+  }
+});
+
+test("every social card's copy fits the template as written", () => {
+  for (const page of socialPages) {
+    const copy = socialPageCopy(page);
+    const fit = socialImageFit(socialImageSiteDetails(socialSite, copy));
+    expect({ page: page.url, issues: fit.issues }).toEqual({ page: page.url, issues: [] });
+    // The template drops an eyebrow that repeats the headline; declare none instead.
+    expect({ page: page.url, eyebrow: fit.eyebrow }).toEqual({ page: page.url, eyebrow: copy.eyebrow });
+    // Page cards carry their own summary, never the home tagline.
+    if (page.copy !== null) expect(copy.description).not.toBe(socialSite.description);
   }
 });
 

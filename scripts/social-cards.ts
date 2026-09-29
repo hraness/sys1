@@ -18,14 +18,17 @@ const root = resolve(import.meta.dir, "..");
 const origin = "https://sys1.io";
 const manifestPath = "brand/social-cards.json";
 
-// The browser and home-screen icon (brand:generate) is the finished app icon.
-const appIcon = readFileSync(resolve(root, "site/icon.png"));
+// The single-ink header mark (brand:generate). As a template `mark`, the card
+// paints the keycap white on an accent tile, and the numeral stays cut out so
+// it reads in the accent. The black app icon would sit as a grey keycap on a
+// black tile.
+const mark = readFileSync(resolve(root, "site/marks/sys1.svg"));
 
 export const socialSite = defineSocialImageSite({
   name: "Sys1",
   domain: "sys1.io",
   description: "Stop spending big-model tokens on small decisions.",
-  icon: { kind: "app", src: `data:image/png;base64,${appIcon.toString("base64")}` },
+  icon: { kind: "mark", src: `data:image/svg+xml;base64,${mark.toString("base64")}` },
   // Light-mode Tokyo Night tokens from DESIGN.md.
   theme: { accent: "#1d4e90", background: "#e1e2e7", foreground: "#1c3161", muted: "#414c76" },
 });
@@ -44,8 +47,8 @@ export const socialPages: readonly SocialPage[] = [
   { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { eyebrow: "Docs", headline: "Sys1 documentation", description: "Install the skills, configure a backend, and make your first request." } },
   { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { eyebrow: "Docs", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
   { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 form-action questions across five models." } },
-  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { eyebrow: "Compare", headline: "Compare the models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { eyebrow: "Skills", headline: "Skills for reviewing agent work", description: "Code review, completion checks, and compact test output for your agent." } },
+  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { eyebrow: "Models", headline: "Compare the models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { eyebrow: "System One Skills", headline: "Skills for reviewing agent work", description: "Code review, completion checks, and compact test output for your agent." } },
 ];
 
 const escape = (text: string): string => text
@@ -109,7 +112,8 @@ async function render(): Promise<void> {
   for (const page of socialPages) {
     const file = resolve(root, page.file);
     const html = await readFile(file, "utf8");
-    const card = createSocialImageCard(socialImageSiteDetails(socialSite, socialPageCopy(page)));
+    // strict: copy that the template would shorten or clean fails the render.
+    const card = createSocialImageCard({ ...socialImageSiteDetails(socialSite, socialPageCopy(page)), strict: true });
     const svg = await satori(card.element, {
       fonts: card.fonts.map(font => ({ data: font.data, name: font.name, style: font.style, weight: font.weight })),
       height: card.height,
