@@ -43,7 +43,7 @@
     "build:dist": "bun scripts/build-dist.ts",
     "check:package": "bun scripts/package-smoke.ts",
     "check:native": "bun scripts/check-native.ts",
-    "test": "bun test ./src ./test",
+    "test": "bun test --parallel=4 ./src ./test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check": "bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run analytics:check && bun run test && bun run build:dist && bun run check:package",
     "prepack": "bun run check",

@@ -1,41 +1,4 @@
-# Frozen fixture and public evidence hashes must survive Windows checkout.
-/benchmarks/*.json text eol=lf
-/site/data/*.json text eol=lf
-/benchmarks/laya/** text eol=lf
-/benchmarks/reviewer/** text eol=lf
-/benchmarks/reviewer-next/** text eol=lf
-/benchmarks/workflows/** text eol=lf
-/examples/workflows/** text eol=lf
-/scripts/workflow-baselines.ts text eol=lf
-
-# Canonical brand provenance uses byte hashes across all CI platforms.
-/brand/*.json text eol=lf
-/brand/*.svg text eol=lf
-/site/marks/*.svg text eol=lf
-/scripts/generate-brand-icons.ts text eol=lf
-
-# Release pages copy changelog bytes.
-/CHANGELOG.md text eol=lf
-
-# Status page receipts hash checked-out bytes.
-/site/vendor/hraness-status-page/** text eol=lf
-/scripts/site-status-page.js text eol=lf
-/site/status-page.js text eol=lf
-/site/404.html text eol=lf
-
-# Syntax receipts hash generator, stylesheet, and highlighted block bytes.
-/scripts/build-site-syntax.ts text eol=lf
-/site/vendor/hraness-syntax/** text eol=lf
-/site/index.html text eol=lf
-/site/docs.html text eol=lf
-/site/skills.html text eol=lf
-/site/introducing-sys1.html text eol=lf
-
-# Shared footer mask provenance hashes canonical package-derived bytes.
-/site/vendor/hraness-site-footer/** text eol=lf
-
-# The committed analytics bundle is checked byte-for-byte against its sources.
-/site/analytics.js text eol=lf
-/site/analytics.provenance.json text eol=lf
-/scripts/site-analytics.ts text eol=lf
-/scripts/site-analytics-entry.ts text eol=lf
+# Every text file is LF on every platform. Fixture, receipt, brand, snapshot,
+# and provenance tests hash checked-out bytes, so a Windows CRLF checkout must
+# never differ from Linux/macOS. Binary detection stays automatic.
+* text=auto eol=lf
