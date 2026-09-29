@@ -8,7 +8,7 @@ const root = resolve(import.meta.dir, "..");
 test("the install blocks match the recorded design-kit platform marks", async () => {
   await checkPlatforms(root);
   const manifest = JSON.parse(await readFile(join(root, "site/vendor/hraness-platforms/provenance.json"), "utf8"));
-  expect(manifest.source.release).toBe("v0.29.2");
+  expect(manifest.source.release).toBe("v0.30.2");
 });
 
 test("home and docs list macOS, Linux, and Windows in order with the released command", async () => {
