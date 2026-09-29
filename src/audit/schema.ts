@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { PROTOCOL_LIMITS } from "../protocol.ts";
+import { DETECTORS } from "./detectors.ts";
 
 /**
  * Rule pack grammar. Every schema is strict and parses foreign values from
@@ -98,6 +99,8 @@ const commonFields = {
   severity: z.enum(["P0", "P1", "P2", "P3"]).optional(),
   overlaps: z.array(z.string().min(1).max(PACK_LIMITS.maxOverlapChars)).max(PACK_LIMITS.maxOverlaps).optional(),
   source: sourceSchema.optional(),
+  /** Decide this rule locally with a built-in deterministic detector; no model is asked. */
+  detector: z.enum(DETECTORS).optional(),
 };
 
 /** Shorthand: the unit should satisfy `ensure`; `breaks` names what violates it. Violation = `false`. */

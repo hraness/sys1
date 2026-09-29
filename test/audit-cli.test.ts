@@ -30,10 +30,12 @@ async function invoke(args: string[], repo: string, home: string): Promise<{ cod
 describe("audit command integration", () => {
   test("preview works in an unborn Git repository without credentials", async () => {
     const { repo, home } = fixture();
+    // The empty-catch rule in code.ts is decided locally; the test file needs the model.
+    writeFileSync(join(repo, "code.test.ts"), "test(\"x\", () => { expect(1).toBe(1); });\n");
     const result = await invoke(["--worktree", "--model", "typesafe/jev-1.13.0", "--dry-run", "--json"], repo, home);
     expect(result.code).toBe(0);
     const report = JSON.parse(result.out);
-    expect(report).toMatchObject({ status: "planned", complete: false, requests: 0, planned_requests: 1, targets: [{ path: "code.ts", units: 1 }] });
+    expect(report).toMatchObject({ status: "planned", complete: false, requests: 0, planned_requests: 1, targets: [{ path: "code.test.ts", units: 1 }, { path: "code.ts", units: 1 }] });
     expect(report.rules.length).toBeGreaterThan(0);
     expect(result.out).not.toContain("export function");
     expect(result.err).toBe("");
@@ -84,9 +86,13 @@ describe("audit command integration", () => {
 
   test("hosted default stays disabled and incomplete coverage has exit 8", async () => {
     const { repo, home } = fixture();
+    writeFileSync(join(repo, "code.test.ts"), "test(\"x\", () => { expect(1).toBe(1); });\n");
     const result = await invoke(["--worktree", "--model", "typesafe/jev-1.13.0", "--json"], repo, home);
     expect(result.code).toBe(8);
-    expect(JSON.parse(result.out)).toMatchObject({ complete: false, status: "incomplete", evaluated_units: 0 });
+    const report = JSON.parse(result.out);
+    // Only the local empty-catch check ran; the model-checked test file stays unevaluated.
+    expect(report).toMatchObject({ complete: false, status: "incomplete", evaluated_units: 1 });
+    expect(report.findings).toEqual([expect.objectContaining({ rule: "core-new-empty-catch", path: "code.ts" })]);
   });
 
   test("registered loopback backend receives exact evidence and reports advisory findings", async () => {

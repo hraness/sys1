@@ -349,6 +349,8 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     mkdirSync(auditRepo);
     await run(["git", "init", "--quiet"], { cwd: auditRepo, env });
     writeFileSync(join(auditRepo, "example.ts"), "try { run(); } catch {}\n");
+    // example.ts is decided locally; the test file is the one planned model request.
+    writeFileSync(join(auditRepo, "example.test.ts"), "test(\"x\", () => { expect(1).toBe(1); });\n");
     const audit = record(JSON.parse(await run([
       process.execPath, installedCli, "audit", "--worktree", "--model", "typesafe/jev-1.13.0", "--dry-run", "--json",
     ], { cwd: auditRepo, env })), "audit preview");

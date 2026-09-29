@@ -1,6 +1,6 @@
 version: 1
 pack: core
-revision: "2026.09.1"
+revision: "2026.09.2"
 description: Experimental advisory checks for two narrow JavaScript and TypeScript changes.
 rules:
   - id: core-new-empty-catch
@@ -24,6 +24,9 @@ rules:
     severity: P2
     tiers: { medium: 0.8, high: 0.85 }
     source: { kind: builtin }
+    # Decided by a local syntax scan, not the model: Jev reached 20% recall on
+    # this rule (docs/audit-evaluation-2026-09-27.md).
+    detector: empty-catch
   - id: core-removed-test-assertions
     applies:
       paths: ["**/*.{test,spec}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/{test,tests,__tests__}/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]
