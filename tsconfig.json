@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "exactOptionalPropertyTypes": true,
+    "jsx": "react-jsx",
     "module": "Preserve",
     "moduleDetection": "force",
     "noEmit": true,

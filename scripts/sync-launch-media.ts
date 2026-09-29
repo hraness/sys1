@@ -56,9 +56,8 @@ function projectPage(source: string, page: typeof media.pages[number]): string {
   let head = source.slice(0, split);
   const body = source.slice(split);
   assert.ok(head.includes(`<link rel="canonical" href="${page.url}"`), `${page.file}: canonical differs from media record`);
+  // Share images belong to scripts/social-cards.ts; this block carries the film only.
   head = head.replace(/    <!-- sys1-launch-media:start -->[\s\S]*?    <!-- sys1-launch-media:end -->\n/gu, "")
-    // Registered pages use the reviewed film crop instead of the site's generic card.
-    .replace(/^[ \t]*<meta (?:property="og:image(?::[^"]+)?"|name="twitter:image(?::[^"]+)?")[^>]*>\r?\n/gmu, "")
     .replace(/(<meta name="twitter:card" content=")[^"]+("\s*\/>)/u, "$1summary_large_image$2");
   assert.ok(head.includes('name="twitter:card" content="summary_large_image"'), `${page.file}: missing Twitter card`);
   if (page.article) {
@@ -74,13 +73,6 @@ function projectPage(source: string, page: typeof media.pages[number]): string {
   }
   const block = [
     begin,
-    `    <meta property="og:image" content="${url(media.social.src)}" />`,
-    `    <meta property="og:image:type" content="${media.social.contentType}" />`,
-    `    <meta property="og:image:width" content="${media.social.width}" />`,
-    `    <meta property="og:image:height" content="${media.social.height}" />`,
-    `    <meta property="og:image:alt" content="${escape(media.social.alt)}" />`,
-    `    <meta name="twitter:image" content="${url(media.social.src)}" />`,
-    `    <meta name="twitter:image:alt" content="${escape(media.social.alt)}" />`,
     `    <script type="application/ld+json" data-sys1-launch-video>\n${json(videoObject(page))}\n    </script>`,
     end,
   ].join("\n");
@@ -168,12 +160,9 @@ export async function checkLaunchMedia(): Promise<void> {
     assert.equal([...html.matchAll(/name="twitter:image"/gu)].length, 1, `${page.file}: duplicate or missing Twitter image`);
     assert.equal([...html.matchAll(/"@type": "VideoObject"/gu)].length, 1, `${page.file}: duplicate or missing video schema`);
   }
-  // Documentation may keep the generic brand card without inheriting editorial media.
+  // Documentation keeps its own template card without inheriting editorial media.
   const docs = await readFile(resolve(root, "site/docs.html"), "utf8");
   assert.ok(!/sys1-launch-media:start|\/media\/sys1-launch|"@type"\s*:\s*"(?:ImageObject|VideoObject)"/u.test(docs), "Documentation must not inherit launch media");
-  for (const [, src] of docs.matchAll(/<meta (?:property="og:image"|name="twitter:image") content="([^"]+)"/gu)) {
-    assert.equal(src, url("/og.png"), "Documentation may only use its generic brand card");
-  }
 }
 
 if (import.meta.main) {

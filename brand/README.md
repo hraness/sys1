@@ -33,7 +33,10 @@ raster libraries on every OS to emit identical compressed PNG bytes.
 | `site/apple-icon.png` | 180px home-screen icon |
 | `site/favicon-16.png`, `site/favicon-32.png` | Small browser icons |
 | `site/favicon.ico` | The same 16px and 32px PNGs in an ICO container |
-| `site/og.png` | 1200×630 social card: the blue mark, 300px, centered on black, with no text |
+
+Share images are not brand assets. `bun run social:generate` renders
+`site/og.png` and `site/og/*.png` from the shared `@hraness/web-discovery`
+card template using `site/icon.png`; see `scripts/social-cards.ts`.
 
 Generation checks visible coverage and the transparent numeral at 16px and
 32px. Review those sizes visually after any geometry change. Keep the mark

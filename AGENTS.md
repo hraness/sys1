@@ -67,6 +67,11 @@
   `scripts/build-site-status-page.ts --refresh` regenerates its markup,
   stylesheet, and `site/status-page.js` from one tagged design-kit release, and
   `test/site-status-page.test.ts` checks them against the recorded digests.
+- Share images come only from the shared `@hraness/web-discovery`
+  social-image template via the site's single `defineSocialImageSite`
+  declaration in `scripts/social-cards.ts`. Pages pass copy only (headline,
+  description, eyebrow); add no per-site drawing code. Run
+  `bun run social:generate` after changing card copy, the icon, or the pin.
 - `.github/workflows/check.yml` is read-only CI. `release.yml` is the annotated
   stable-tag channel for exact cross-platform artifacts and immutable GitHub
   Releases; it does not publish npm.
