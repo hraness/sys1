@@ -62,7 +62,7 @@ interface Manifest {
 
 const escapeHtml = (value: string) => value.replace(/&/gu, "&amp;").replace(/</gu, "&lt;").replace(/>/gu, "&gt;").replace(/"/gu, "&quot;");
 
-// Like design-kit's PlatformInstall (v0.29.2), each mark is defined once per
+// Like design-kit's PlatformInstall (v0.30.2), each mark is defined once per
 // block as an id-scoped <symbol> and drawn by reference, so the badges, tabs,
 // and no-script panel names do not repeat the full paths (Tux is several KB).
 const markId = (prefix: string, id: PlatformId) => `${prefix}-mark-${id}`;
