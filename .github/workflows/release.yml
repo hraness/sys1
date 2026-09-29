@@ -208,3 +208,84 @@ jobs:
           for source in "${local_assets[@]}"; do
             cmp "$source" "$directory/$(basename "$source")"
           done
+
+  npm:
+    # Publishes the exact tarball the GitHub Release carries to npm through npm
+    # trusted publishing: the registry exchanges this job's GitHub OIDC token
+    # for a short-lived credential, so no npm token is stored and no one
+    # approves the release. CONTRIBUTING.md lists the one-time registry setup.
+    name: Publish to npm
+    needs: [verify, publish]
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      EXPECTED_NAME: "@hraness/sys1"
+      TAG: ${{ needs.verify.outputs.tag }}
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.19.0
+          package-manager-cache: false
+          registry-url: "https://registry.npmjs.org"
+      - name: Pin npm
+        run: |
+          set -euo pipefail
+          npm install --global npm@11.19.0 --ignore-scripts --registry=https://registry.npmjs.org
+          test "$(npm --version)" = "11.19.0"
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact_id }}
+          merge-multiple: true
+          path: artifacts
+      - name: Publish the released tarball
+        run: |
+          set -euo pipefail
+          cd artifacts
+          shasum -a 256 -c SHA256SUMS
+          tarballs=(./*.tgz)
+          if [[ "${#tarballs[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one release tarball"
+            exit 1
+          fi
+          tarball="${tarballs[0]}"
+          manifest="$(tar -xOzf "$tarball" package/package.json)"
+          name="$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).name)' "$manifest")"
+          version="$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).version)' "$manifest")"
+          if [[ "$name" != "$EXPECTED_NAME" || "v$version" != "$TAG" ]]; then
+            echo "::error::Tarball holds $name@$version, expected $EXPECTED_NAME at $TAG"
+            exit 1
+          fi
+          probe="$RUNNER_TEMP/npm-view.txt"
+          if ! npm view "$name" name --json --registry=https://registry.npmjs.org >/dev/null 2>"$probe"; then
+            if grep -q E404 "$probe"; then
+              echo "::warning::$name is not on npm yet, so trusted publishing cannot run. CONTRIBUTING.md lists the one-time setup."
+              exit 0
+            fi
+            cat "$probe"
+            echo "::error::Could not read $name from npm"
+            exit 1
+          fi
+          if npm view "$name@$version" version --json --registry=https://registry.npmjs.org >/dev/null 2>"$probe"; then
+            echo "::notice::$name@$version is already on npm"
+            exit 0
+          elif ! grep -q E404 "$probe"; then
+            cat "$probe"
+            echo "::error::Could not check whether $name@$version is on npm"
+            exit 1
+          fi
+          npm publish "$tarball" --access public --provenance --ignore-scripts --registry=https://registry.npmjs.org
+          expected="$(shasum -a 1 "$tarball" | awk '{print $1}')"
+          for _ in $(seq 1 10); do
+            view="$(npm view "$name@$version" dist.shasum dist.attestations.provenance.predicateType --json --prefer-online --registry=https://registry.npmjs.org 2>/dev/null || true)"
+            if [[ "$(jq -r '."dist.shasum" // empty' <<<"$view")" == "$expected" \
+              && "$(jq -r '."dist.attestations.provenance.predicateType" // empty' <<<"$view")" == "https://slsa.dev/provenance/v1" ]]; then
+              echo "Published $name@$version from the released tarball with provenance"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::npm does not report $name@$version with the released tarball and a provenance attestation"
+          exit 1

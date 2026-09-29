@@ -77,7 +77,8 @@
   `bun run social:generate` after changing card copy, the icon, or the pin.
 - `.github/workflows/check.yml` is read-only CI. `release.yml` is the annotated
   stable-tag channel for exact cross-platform artifacts and immutable GitHub
-  Releases; it does not publish npm.
+  Releases. Its `npm` job then publishes the same tarball to npm through npm
+  trusted publishing (GitHub OIDC, no stored token).
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `LICENSE` are the public
   contract.
 
@@ -144,7 +145,8 @@
   existing hosted-only policy.
 - Releases use one annotated `v<version>` tag at exact current `main`. Preserve
   exact tarball/checksum identity, Ubuntu/macOS/Windows artifact execution,
-  repository release immutability, and the no-npm-publication boundary.
+  repository release immutability, and npm publication of only the released
+  tarball through trusted publishing. Never add an npm token.
   Write the version's `CHANGELOG.md` section in the version bump pull request.
 - Keep the public repository independently buildable. No sibling checkouts,
   private packages, internal project names, or unpublished provenance.
