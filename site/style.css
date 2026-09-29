@@ -175,8 +175,16 @@ main svg.platform-icon { inline-size: 1em; block-size: 1em; width: 1em; height: 
 .platform-badges li { display: inline-flex; align-items: center; gap: .35rem; color: var(--foreground); white-space: nowrap; }
 .platform-badge-note { color: var(--muted); }
 .platform-install { display: grid; gap: .75rem; max-width: 55rem; min-width: 0; }
-.platform-tabs { flex-wrap: wrap; gap: .25rem; justify-self: start; max-width: 100%; padding: .25rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); }
-.platform-tabs [role="tab"] { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: .35rem .85rem; border: 1px solid transparent; border-radius: .45rem; background: transparent; color: var(--muted); font: inherit; font-size: .875rem; cursor: pointer; }
+.platform-tabs { flex-wrap: nowrap; gap: .25rem; justify-self: start; max-width: 100%; min-width: 0; padding: .25rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); }
+.platform-tabs [role="tab"] { display: inline-flex; flex: 1 1 auto; align-items: center; justify-content: center; min-width: 0; white-space: nowrap; gap: .45rem; min-height: 2.5rem; padding: .35rem .85rem; border: 1px solid transparent; border-radius: .45rem; background: transparent; color: var(--muted); font: inherit; font-size: .875rem; cursor: pointer; }
+.platform-tab-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.platform-marks { position: absolute; inline-size: 0; block-size: 0; overflow: hidden; }
+/* Phones and narrow columns (design-kit v0.29.2): the tab row spans the column
+   and its tabs tighten so macOS, Linux, and Windows fit side by side at 320px. */
+@media (max-width: 30rem) {
+  .platform-tabs { justify-self: stretch; gap: .125rem; padding: .1875rem; }
+  .platform-tabs [role="tab"] { font-size: .8125rem; gap: .3rem; padding-inline: .45rem; }
+}
 .platform-tabs [role="tab"]:hover { color: var(--foreground); background: var(--surface-hover); }
 .platform-tabs [role="tab"][aria-selected="true"] { color: var(--foreground); background: var(--background); border-color: var(--line); }
 .platform-tabs [role="tab"]:focus-visible { outline: 2px solid var(--focus, var(--primary)); outline-offset: 2px; }

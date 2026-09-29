@@ -62,21 +62,34 @@ interface Manifest {
 
 const escapeHtml = (value: string) => value.replace(/&/gu, "&amp;").replace(/</gu, "&lt;").replace(/>/gu, "&gt;").replace(/"/gu, "&quot;");
 
-function icon(platforms: PlatformsModule, id: PlatformId): string {
-  const mark = platforms.platformMark(id);
-  return `<svg class="platform-icon" aria-hidden="true" focusable="false" viewBox="${mark.viewBox}" fill="currentColor"><path d="${mark.path}"/></svg>`;
+// Like design-kit's PlatformInstall (v0.29.2), each mark is defined once per
+// block as an id-scoped <symbol> and drawn by reference, so the badges, tabs,
+// and no-script panel names do not repeat the full paths (Tux is several KB).
+const markId = (prefix: string, id: PlatformId) => `${prefix}-mark-${id}`;
+
+function markSymbols(platforms: PlatformsModule, prefix: string, ids: readonly PlatformId[]): string {
+  const symbols = [...new Set(ids)].map((id) => {
+    const mark = platforms.platformMark(id);
+    return `<symbol id="${markId(prefix, id)}" viewBox="${mark.viewBox}"><path d="${mark.path}"/></symbol>`;
+  }).join("");
+  return `<svg class="platform-marks" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">${symbols}</svg>`;
+}
+
+function icon(platforms: PlatformsModule, prefix: string, id: PlatformId): string {
+  return `<svg class="platform-icon" aria-hidden="true" focusable="false" viewBox="${platforms.platformMark(id).viewBox}" fill="currentColor"><use href="#${markId(prefix, id)}"/></svg>`;
 }
 
 /** Static markup for one "Runs on" row and one tabbed install block. */
 export function renderBlock(platforms: PlatformsModule, block: Block): string {
   const p = block.prefix;
+  const ids = [...block.badges.map((entry) => typeof entry === "string" ? entry : entry.id), ...block.targets.map((target) => target.id)];
   const badges = block.badges.map((entry) => {
     const { id, note: badgeNote } = typeof entry === "string" ? { id: entry, note: undefined } : entry;
-    return `<li>${icon(platforms, id)}<span>${escapeHtml(platforms.platformLabel(id))}</span>${badgeNote === undefined ? "" : `<span class="platform-badge-note">${escapeHtml(badgeNote)}</span>`}</li>`;
+    return `<li>${icon(platforms, p, id)}<span>${escapeHtml(platforms.platformLabel(id))}</span>${badgeNote === undefined ? "" : `<span class="platform-badge-note">${escapeHtml(badgeNote)}</span>`}</li>`;
   }).join("");
   const tabs = block.targets.map((target, index) => {
     const label = escapeHtml(platforms.platformLabel(target.id));
-    return `<button type="button" role="tab" id="${p}-tab-${target.id}" aria-controls="${p}-panel-${target.id}" aria-selected="${index === 0}" tabindex="${index === 0 ? 0 : -1}" data-platform="${target.id}">${icon(platforms, target.id)}<span>${label}</span></button>`;
+    return `<button type="button" role="tab" id="${p}-tab-${target.id}" aria-controls="${p}-panel-${target.id}" aria-selected="${index === 0}" tabindex="${index === 0 ? 0 : -1}" data-platform="${target.id}">${icon(platforms, p, target.id)}<span class="platform-tab-label">${label}</span></button>`;
   }).join("\n");
   const panels = block.targets.map((target) => {
     const label = platforms.platformLabel(target.id);
@@ -88,10 +101,11 @@ export function renderBlock(platforms: PlatformsModule, block: Block): string {
     const unavailable = target.unavailableNote === undefined ? "" : `\n<p class="platform-unavailable">${escapeHtml(target.unavailableNote)}</p>`;
     const qualifier = target.note === undefined ? "" : `\n<p class="platform-note">${escapeHtml(target.note)}</p>`;
     return `<div class="platform-panel" role="tabpanel" id="${p}-panel-${target.id}" aria-labelledby="${p}-tab-${target.id}" data-platform="${target.id}">
-<p class="platform-panel-name">${icon(platforms, target.id)}<span>${escapeHtml(label)}</span></p>${unavailable}${command}${qualifier}
+<p class="platform-panel-name">${icon(platforms, p, target.id)}<span>${escapeHtml(label)}</span></p>${unavailable}${command}${qualifier}
 </div>`;
   }).join("\n");
   return `
+${markSymbols(platforms, p, ids)}
 <div class="platform-badges"><span class="platform-badges-label" aria-hidden="true">Runs on</span><ul aria-label="Runs on">${badges}</ul></div>
 <div class="platform-install" data-platform-install>
 <div class="platform-tabs js-only" role="tablist" aria-label="Platform">

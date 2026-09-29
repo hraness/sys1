@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "source": {
     "repository": "https://github.com/hraness/design-kit",
-    "commit": "f298dfc8d03dc254e87275b6263e958187e1becd",
-    "release": "v0.29.0"
+    "commit": "4443f3731ee5be0ad1bb94329122333e4c1c3997",
+    "release": "v0.29.2"
   },
   "files": {
     "platforms.ts": {
