@@ -74,6 +74,8 @@ function inputDigest(page: SocialPage): string {
 /** Replace every og:image / twitter:image tag with the page's template card. */
 export function projectSocialMeta(html: string, page: SocialPage): string {
   const alt = escape(socialPageAlt(page));
+  // Keep the checkout's line endings so Windows CRLF checkouts stay current.
+  const eol = html.includes("\r\n") ? "\r\n" : "\n";
   const image = new URL(page.image, origin).href;
   const stripped = html.replace(/^[ \t]*<meta (?:property="og:image(?::[^"]+)?"|name="twitter:image(?::[^"]+)?")[^>]*>\r?\n/gmu, "");
   const og = [
@@ -82,17 +84,17 @@ export function projectSocialMeta(html: string, page: SocialPage): string {
     `    <meta property="og:image:width" content="1200" />`,
     `    <meta property="og:image:height" content="630" />`,
     `    <meta property="og:image:alt" content="${alt}" />`,
-  ].join("\n");
+  ].join(eol);
   const twitter = [
     `    <meta name="twitter:image" content="${image}" />`,
     `    <meta name="twitter:image:alt" content="${alt}" />`,
-  ].join("\n");
+  ].join(eol);
   const ogAnchor = /^[ \t]*<meta property="og:url"[^>]*>\r?\n/mu;
   const twitterAnchor = /^[ \t]*<meta name="twitter:description"[^>]*>\r?\n/mu;
   assert.ok(ogAnchor.test(stripped) && twitterAnchor.test(stripped), `${page.file}: missing og:url or twitter:description`);
   return stripped
-    .replace(ogAnchor, match => `${match}${og}\n`)
-    .replace(twitterAnchor, match => `${match}${twitter}\n`);
+    .replace(ogAnchor, match => `${match}${og}${eol}`)
+    .replace(twitterAnchor, match => `${match}${twitter}${eol}`);
 }
 
 type Manifest = {
