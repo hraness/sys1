@@ -76,7 +76,7 @@ export const verifyTurns: readonly AgentTurn[] = [
 function PrComment(): ReactElement {
   return (
     <div className="launch-mock-pr">
-      <p className="launch-mock-pr-head"><strong>fix(orders): validate the request body</strong> <span>#128 · jmoreno wants to merge 3 commits</span></p>
+      <p className="launch-mock-pr-head"><strong>fix(orders): validate the request body</strong> <span>#128 · ada-example wants to merge 3 commits</span></p>
       <div className="launch-mock-pr-comment">
         <p className="launch-mock-pr-author"><strong>review-bot</strong> <span>commented · advisory</span></p>
         <p>Sys1 review checked 4 changed files against 2 repository rules.</p>
@@ -97,16 +97,16 @@ export function LaunchMockup({ id }: Readonly<{ id: LaunchMockupId }>): ReactEle
     case "agent-review":
       return <AgentSession agent="generic-cli" describe="Illustration: a coding agent runs the sys1-review skill on the files it changed, gets one advisory finding, and fixes it." title="Coding agent · ~/code/orders-api" turns={reviewTurns} />;
     case "compact":
-      return <TerminalFrame describe={`Illustration: a failing check returns its exit status and a short excerpt while the full log stays on disk. In the study, results were ${launchFacts.reduction.value} shorter.`} lines={compactLines} title="orders-api — check" />;
+      return <TerminalFrame describe={`Illustration: a failing check returns its exit status and a short excerpt while the full log stays on disk. In the study, results were ${launchFacts.reduction.value} shorter.`} lines={compactLines} title="orders-api · check" />;
     case "verify":
-      return <TerminalFrame describe="Illustration: sys1 verify reports that a message claiming a push is contradicted because two commits are still local." lines={verifyLines} title="orders-api — sys1 verify" />;
+      return <TerminalFrame describe="Illustration: sys1 verify reports that a message claiming a push is contradicted because two commits are still local." lines={verifyLines} title="orders-api · sys1 verify" />;
     case "pr-comment":
-      return <BrowserFrame describe="Illustration: an advisory review comment on a made-up pull request lists one finding from a repository rule." url="code.example/jmoreno/orders-api/pull/128"><PrComment /></BrowserFrame>;
+      return <BrowserFrame describe="Illustration: an advisory review comment on a made-up pull request lists one finding from a repository rule." url="code.example/ada-example/orders-api/pull/128"><PrComment /></BrowserFrame>;
     case "decision":
       return <TerminalFrame describe="Illustration: an application asks one choice question and gets back a named answer with its probability." lines={decisionLines} title="triage.ts" />;
     case "agent-verify":
       return <AgentSession agent="generic-chat" describe="Illustration: asked whether it pushed, an agent checks its own claim, finds two local commits, and corrects itself." title="Assistant" turns={verifyTurns} />;
     case "install":
-      return <TerminalFrame describe="Illustration: two setup commands write the review and verify skills into a project; setup makes no model calls." lines={installLines} title="orders-api — setup" />;
+      return <TerminalFrame describe="Illustration: two setup commands write the review and verify skills into a project; setup makes no model calls." lines={installLines} title="orders-api · setup" />;
   }
 }

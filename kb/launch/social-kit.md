@@ -53,7 +53,7 @@ A Sys1 profile freezes a set of questions so a decision runs the same way next t
 ### 8 of 9
 
 ```text
-The honest part: in 32 whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.
+The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
 ```
 
 ### 9 of 9
@@ -113,7 +113,7 @@ A Sys1 profile freezes a set of questions so a decision runs the same way next t
 ### 8 of 9
 
 ```text
-The honest part: in 32 whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.
+The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
 ```
 
 ### 9 of 9
@@ -173,7 +173,7 @@ A Sys1 profile freezes a set of questions so a decision runs the same way next t
 ### 8 of 9
 
 ```text
-The honest part: in 32 whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.
+The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
 ```
 
 ### 9 of 9
@@ -201,7 +201,7 @@ Sys1 is for developers who run Codex, Claude Code or Devin on real repositories.
 
 A Sys1 profile freezes a set of questions so a decision runs the same way next time. ALGAL, a sibling language for agent programs, keeps whole procedures once they prove themselves. Both call the same Jev decision API.
 
-The honest part: in 32 whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.
+The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
 
 Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
 
@@ -228,7 +228,7 @@ Write the Show HN post and first comment yourself; use only these facts.
 - sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 - Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
 - Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
-- The honest part: in 32 whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.
+- The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
 - Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
 - Latest release: v0.17.0. https://sys1.io/introducing-sys1
 

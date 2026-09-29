@@ -71,10 +71,10 @@ export const launchBeats: readonly LaunchBeat[] = [
     id: "limits",
     part: "limits",
     headline: "What we haven't shown yet",
-    post: "The honest part: in {pairs} whole-task tests, agents never reached for the review skill on their own, and telling them to use it cost more tokens and time. Nobody has measured a whole-task saving yet. Results are advisory; keep your tests.",
+    post: "The honest part: in whole-task tests ({pairs} for review, {compactPairs} for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.",
     visual: { kind: "diagram", src: "#measured" },
     alt: "A scorecard of what the whole-task tests measured for each skill and what is still unknown.",
-    facts: ["pairs"],
+    facts: ["pairs", "compactPairs"],
     detailHref: "https://github.com/hraness/sys1/blob/main/docs/proof-roadmap-2026-09.md",
   },
   {
