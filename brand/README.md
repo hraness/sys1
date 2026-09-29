@@ -36,7 +36,8 @@ raster libraries on every OS to emit identical compressed PNG bytes.
 
 Share images are not brand assets. `bun run social:generate` renders
 `site/og.png` and `site/og/*.png` from the shared `@hraness/web-discovery`
-card template using `site/icon.png`; see `scripts/social-cards.ts`.
+card template using the header mark `site/marks/sys1.svg`; see
+`scripts/social-cards.ts`.
 
 Generation checks visible coverage and the transparent numeral at 16px and
 32px. Review those sizes visually after any geometry change. Keep the mark
