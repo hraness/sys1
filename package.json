@@ -45,14 +45,16 @@
     "check:native": "bun scripts/check-native.ts",
     "test": "bun test ./src ./test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check": "bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run test && bun run build:dist && bun run check:package",
+    "check": "bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run analytics:check && bun run test && bun run build:dist && bun run check:package",
     "prepack": "bun run check",
     "brand:generate": "bun scripts/generate-brand-icons.ts",
     "brand:check": "bun scripts/generate-brand-icons.ts --check",
     "release:sync": "bun scripts/sync-public-release.ts --write",
     "social:generate": "bun scripts/social-cards.ts --write",
     "social:check": "bun scripts/social-cards.ts --check",
-    "check:release-info": "bun scripts/sync-public-release.ts --check"
+    "check:release-info": "bun scripts/sync-public-release.ts --check",
+    "analytics:build": "bun scripts/build-site-analytics.ts --write",
+    "analytics:check": "bun scripts/build-site-analytics.ts --check"
   },
   "dependencies": {
     "zod": "4.6.2"
@@ -67,6 +69,7 @@
     "@types/node": "26.2.0",
     "@types/react": "19.3.0",
     "playwright-core": "1.58.2",
+    "posthog-js": "1.422.5",
     "react": "19.3.0",
     "satori": "0.33.5",
     "sharp": "0.35.3",
