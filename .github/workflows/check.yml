@@ -8,9 +8,10 @@ on:
 permissions:
   contents: read
 
+# PR runs supersede each other; main runs are keyed per SHA and never cancelled.
 concurrency:
-  group: check-${{ github.ref }}
-  cancel-in-progress: true
+  group: check-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:
