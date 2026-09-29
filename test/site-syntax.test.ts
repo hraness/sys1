@@ -55,7 +55,7 @@ test("the check catches an edited code block or stylesheet", async () => {
     await checkSyntax(temporary);
     const page = join(temporary, "site/index.html");
     const html = await readFile(page, "utf8");
-    await writeFile(page, html.replace('id="install-command"', 'id="changed-command"'));
+    await writeFile(page, html.replace('id="install-command-macos"', 'id="changed-command"'));
     await expect(checkSyntax(temporary)).rejects.toThrow("site/index.html");
     await writeFile(page, html);
     const css = join(temporary, "site/vendor/hraness-syntax/syntax-highlighting.css");
