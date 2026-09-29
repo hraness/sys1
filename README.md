@@ -738,7 +738,8 @@ release. The tag must match `package.json`. The release workflow reruns the
 complete gate, creates one npm-format tarball and `SHA256SUMS`, installs and
 executes those exact bytes with the native dependency and `doctor` on Ubuntu,
 macOS, and Windows, then publishes them to a repository-enforced immutable
-GitHub Release. No npm registry package is claimed or required.
+GitHub Release. Once `@hraness/sys1` is set up on npm, the workflow also
+publishes the same tarball there with a provenance attestation.
 
 Each release page copies its summary and changes from the version's section of
 [`CHANGELOG.md`](CHANGELOG.md) and adds the install command, the tarball's

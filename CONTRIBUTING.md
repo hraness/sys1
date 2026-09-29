@@ -55,3 +55,23 @@ temporary paths for recovery instead of deleting potentially live files.
   configured HTTP services require a request pin. A new download or registration
   must not change automatic fallback behavior.
 - Keep `--json` additive-only and machine-readable.
+
+## npm
+
+After the GitHub Release, the release workflow's `npm` job publishes the
+released tarball to npm as `@hraness/sys1` with a provenance attestation. It
+uses npm trusted publishing, so GitHub Actions proves the workflow's identity
+to npm and no npm token is stored anywhere. No one needs to approve a release.
+The job skips a version that npm already has.
+
+npm only accepts trusted publishing for a package that already exists, so the
+job warns and skips until a maintainer does this once:
+
+1. Publish the newest release tarball by hand:
+   `gh release download vX.Y.Z --repo hraness/sys1 --pattern '*.tgz'` and
+   `npm publish hraness-sys1-X.Y.Z.tgz --access public`.
+2. Let this workflow publish from now on:
+   `npm trust github @hraness/sys1 --repo hraness/sys1 --file release.yml --allow-publish --yes`
+   (npm 11.16 or newer).
+3. In the package settings on npmjs.com, require two-factor authentication and
+   disallow tokens.
