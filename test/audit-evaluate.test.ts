@@ -56,6 +56,22 @@ describe("advisory audit", () => {
     expect(report).toMatchObject({ complete: false, status: "incomplete", requests: 0, skipped: [{ path: "readme.md", reason: "no_matching_rules" }] });
   });
 
+  test("changes no rule covers do not make a checked audit incomplete", async () => {
+    const report = await evaluateAudit({ diff: diff([unit("src/code.ts"), unit("readme.md")]), rules, route, decider: decider() });
+    expect(report).toMatchObject({ complete: true, status: "complete", requests: 1, evaluated_units: 1, skipped: [{ path: "readme.md", reason: "no_matching_rules" }] });
+  });
+
+  test("only covered skips from the diff make an audit incomplete", async () => {
+    const withSkips = (...skipped: DiffCollection["skipped"]) => ({ ...diff(), skipped, complete: false });
+    const outside = await evaluateAudit({ diff: withSkips({ path: "site/logo.svg", reason: "hunk_too_large" }, { path: "dist/index.ts", reason: "excluded_generated" }), rules, route, decider: decider() });
+    expect(outside).toMatchObject({ complete: true, status: "complete" });
+    expect(outside.skipped).toEqual([{ path: "site/logo.svg", reason: "hunk_too_large" }, { path: "dist/index.ts", reason: "excluded_generated" }]);
+    for (const skip of [{ path: "src/big.ts", reason: "hunk_too_large" }, { path: "src/credentials.ts", reason: "excluded_sensitive" }, { path: "notes.txt", previousPath: "src/old.ts", reason: "file_limit" }] as const) {
+      const report = await evaluateAudit({ diff: withSkips(skip), rules, route, decider: decider() });
+      expect(report).toMatchObject({ complete: false, status: "incomplete" });
+    }
+  });
+
   test("backend errors are private and stop additional spend", async () => {
     const report = await evaluateAudit({ diff: diff([unit("a.ts"), unit("b.ts")]), rules, route, decider: { async evaluate() { throw new Error("PRIVATE_PROVIDER_RESPONSE"); } } });
     expect(report).toMatchObject({ complete: false, requests: 1, evaluated_units: 0 });
