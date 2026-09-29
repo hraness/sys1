@@ -50,7 +50,8 @@
     <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
     <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/vendor/hraness-syntax/syntax-highlighting.css" />
+  <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/skills.css" />
     <script src="/site.js" defer></script>
   </head>
@@ -98,10 +99,10 @@
       <section id="review" class="section" aria-labelledby="review-heading">
         <div class="section-intro"><h2 id="review-heading">Review a batch of changes</h2><p><code>sys1-review</code> tells your agent when to preview a checkpoint, investigate findings in the code, and record feedback. Install the same workflow for Codex, Claude Code, or Devin, then choose the changes and rules for your repository.</p></div>
         <p class="skills-prose">The bundled rules check newly empty catch blocks and removed test assertions in JavaScript and TypeScript. Add and evaluate repository rules for other conventions or languages.</p>
-        <div class="code-example skills-command"><div class="code-heading"><span>Run inside your Git repository after installing Sys1</span></div><pre><code>sys1 review setup codex --dry-run --json
-sys1 review setup codex
-sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
-  --max-requests 10 --dry-run --json -- src test</code></pre></div>
+        <div class="code-example skills-command"><div class="code-heading"><span>Run inside your Git repository after installing Sys1</span></div><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> review setup codex <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> review setup codex
+<span class="syntax-token syntax-token--command">sys1</span> review checkpoint <span class="syntax-token syntax-token--flag">--staged</span> <span class="syntax-token syntax-token--flag">--model</span> typesafe/jev-1.13.0 \
+  <span class="syntax-token syntax-token--flag">--max-requests</span> 10 <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span> <span class="syntax-token syntax-token--flag">--</span> src test</code></pre></div>
         <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup writes project instructions and installs no automatic hooks. The CLI is also available to other agents.</p>
         <p class="skills-prose">The example selects Jev, TypeSafe’s hosted decision model. <a href="/docs#getting-started">Provide your environment credential and enable Jev</a> before evaluating. The preview lists the selected source, rules, skips, and request count; repeat without <code>--dry-run</code> when the selected source is ready to send. You can also select an experimental local model or a compatible server.</p>
         <p class="skills-prose">Review is experimental and advisory. Its scores rank candidates, not calibrated defect probabilities. Keep your tests and ordinary review, investigate candidates before changing code, and record whether they were useful, incorrect, or unverifiable.</p>
@@ -110,10 +111,10 @@ sys1 review checkpoint --staged --model typesafe/jev-1.13.0 \
 
       <section id="verify" class="section" aria-labelledby="verify-heading">
         <div class="section-intro"><h2 id="verify-heading">Check the completion message</h2><p>The <code>sys1-verify</code> project skill runs <code>sys1 verify</code> to compare an agent’s claims with reachable evidence from Git, linked pull requests, and fetched pages. Use it to investigate claims that work was committed, merged, or made live.</p></div>
-        <div class="code-example skills-command"><div class="code-heading"><span>Install the skill, then preview a saved message</span></div><pre><code>sys1 verify setup codex --dry-run --json
-sys1 verify setup codex
-sys1 verify --message /tmp/final-message.txt \
-  --model typesafe/jev-1.13.0 --dry-run --json</code></pre></div>
+        <div class="code-example skills-command"><div class="code-heading"><span>Install the skill, then preview a saved message</span></div><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> verify setup codex <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span>
+<span class="syntax-token syntax-token--command">sys1</span> verify setup codex
+<span class="syntax-token syntax-token--command">sys1</span> verify <span class="syntax-token syntax-token--flag">--message</span> /tmp/final-message.txt \
+  <span class="syntax-token syntax-token--flag">--model</span> typesafe/jev-1.13.0 <span class="syntax-token syntax-token--flag">--dry-run</span> <span class="syntax-token syntax-token--flag">--json</span></code></pre></div>
         <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. The skill can be installed independently of <code>sys1-review</code>. Save the message outside the Git worktree (<code>/tmp/final-message.txt</code> here; choose an equivalent path on Windows). Run inside the task repository, inspect the preview, and repeat without <code>--dry-run</code> to send the message and any fetched page text to the selected backend. Devin can supply the message and recent check-command results from a local session; other agents pass a file or stdin.</p>
         <p class="skills-prose">This command is experimental and advisory. Contradictions exit 7; missing evidence is reported as unverifiable. A result without contradictions does not prove that the work is finished. <a href="/docs#verify">Evidence sources and limits</a>.</p>
       </section>
@@ -194,11 +195,11 @@ sys1 verify --message /tmp/final-message.txt \
 
       <section id="install" class="section" aria-labelledby="install-heading">
         <div class="section-intro"><h2 id="install-heading">Install system-one-verify for Devin, Claude Code, or Codex.</h2><p>Version 0.4.1 installs only <code>system-one-verify</code>. It needs Node.js 20 or later on macOS or Linux.</p></div>
-        <div class="install-terminal skills-install"><div class="code-heading"><span>Install System One Skills</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy commands</button></div><pre><code id="install-command">npm install --global https://github.com/hraness/system-one-skills/releases/download/v0.4.1/system-one-skills-0.4.1.tgz
-system-one-skills install-skills --target .agents/skills</code></pre></div>
+        <div class="install-terminal skills-install"><div class="code-heading"><span>Install System One Skills</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy commands</button></div><pre tabindex="0"><code id="install-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> https://github.com/hraness/system-one-skills/releases/download/v0.4.1/system-one-skills-0.4.1.tgz
+<span class="syntax-token syntax-token--command">system-one-skills</span> install-skills <span class="syntax-token syntax-token--flag">--target</span> .agents/skills</code></pre></div>
         <p id="copy-status" class="copy-status" role="status"></p>
         <p class="skills-prose">Use <code>.claude/skills</code> or <code>.devin/skills</code> for those agents. Keep your repository’s scheduler and required checks.</p>
-        <div class="code-example skills-command"><div class="code-heading"><span>Run a check already known to be noisy</span></div><pre><code>system-one-skills check --timeout-ms 900000 -- bun test</code></pre></div>
+        <div class="code-example skills-command"><div class="code-heading"><span>Run a check already known to be noisy</span></div><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">system-one-skills</span> check <span class="syntax-token syntax-token--flag">--timeout-ms</span> 900000 <span class="syntax-token syntax-token--flag">--</span> bun test</code></pre></div>
         <div class="install-links skills-links"><a href="https://github.com/hraness/system-one-skills#commands">Command reference</a><a href="https://github.com/hraness/system-one-skills/releases/tag/v0.4.1">Release &amp; checksums</a></div>
         <p class="skills-prose">System One Skills does not need Sys1. Its <code>system-one-verify</code> skill captures command output; Sys1’s <code>sys1 verify</code> checks a completion message using a model. Installing either package does not configure the other.</p>
         <p class="section-footnote">Figures from System One Skills at <a href="https://github.com/hraness/system-one-skills/commit/6f69658">6f69658</a>, published September 20, 2026.</p>

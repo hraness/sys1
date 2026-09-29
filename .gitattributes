@@ -22,3 +22,11 @@
 /scripts/site-status-page.js text eol=lf
 /site/status-page.js text eol=lf
 /site/404.html text eol=lf
+
+# Syntax receipts hash generator, stylesheet, and highlighted block bytes.
+/scripts/build-site-syntax.ts text eol=lf
+/site/vendor/hraness-syntax/** text eol=lf
+/site/index.html text eol=lf
+/site/docs.html text eol=lf
+/site/skills.html text eol=lf
+/site/introducing-sys1.html text eol=lf

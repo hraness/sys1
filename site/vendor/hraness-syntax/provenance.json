@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/hraness/design-kit",
+    "commit": "55ba1a7fdd0298155ea6149bf45b193564f2aa7e",
+    "release": "v0.26.0"
+  },
+  "modules": [
+    {
+      "path": "dist/syntax-highlighting.js",
+      "sha256": "7a04262658808670028cf842b57788427e90638c0d5b815d3b830bc68ad1fce8",
+      "bytes": 300
+    },
+    {
+      "path": "dist/chunk-kspdf9ch.js",
+      "sha256": "6e3b01e2871ef626ab1e75966d8f16039c1fedbf222b7270e4d6eede58714dd9",
+      "bytes": 12121
+    },
+    {
+      "path": "dist/chunk-5gtx3pza.js",
+      "sha256": "5561e9455c1787adbf99d06be72c3bb2012ec2cdfdcaff95f85b6b4705dd6141",
+      "bytes": 392
+    }
+  ],
+  "dependency": {
+    "name": "sugar-high",
+    "version": "1.3.0",
+    "lock": {
+      "path": "bun.lock",
+      "sha256": "4daf33ab141794a43dba944eb439608a99677bced1959617ca8a54d58a4961c3",
+      "bytes": 64899
+    },
+    "files": [
+      {
+        "path": "node_modules/sugar-high/package.json",
+        "sha256": "3519e7f7f611c3d333a74efb9681a48ca64798ac236d07e5fff99bdaae027f5b",
+        "bytes": 792
+      },
+      {
+        "path": "node_modules/sugar-high/lib/index.js",
+        "sha256": "9bf682d88200c7c866579cc841dc41a4e4c3c1e548ed6ec6ab5c1ce78f50a7b9",
+        "bytes": 26239
+      }
+    ]
+  },
+  "generator": {
+    "path": "scripts/build-site-syntax.ts",
+    "sha256": "53d3e1769dd498c9b0def41d4c69a7e3971ef20a1e8e8a838897a8a100f1c044",
+    "bytes": 10712
+  },
+  "stylesheet": {
+    "path": "src/syntax-highlighting.css",
+    "sha256": "4f7789be14f3fbb963a5a6c92a62479e877a39175f0065c691d7795d77639d35",
+    "bytes": 2277
+  },
+  "license": {
+    "path": "LICENSE",
+    "sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0",
+    "bytes": 1088
+  },
+  "pages": {
+    "site/index.html": [
+      {
+        "language": "typescript",
+        "codeSha256": "c7a7084aba934aafba8719bff7c468f3b4a2468321254373d29875dd3a9ad22b",
+        "markup": {
+          "path": "site/index.html#code-1",
+          "sha256": "14a56d3ffb5573b0b7bb5f85f8e9185b462de46171c72e64272420bcdf5fcdbc",
+          "bytes": 5712
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "2d9544fa4fcd1baf2e7648b0cc55259350a9a934f7cdd289fc369e5c57798307",
+        "markup": {
+          "path": "site/index.html#code-2",
+          "sha256": "eb2e447603d27d5cb836fa613ef842280df884c64640b87ec0fe88159d01b318",
+          "bytes": 675
+        }
+      }
+    ],
+    "site/docs.html": [
+      {
+        "language": "shell",
+        "codeSha256": "ef0d46033ee537ce20205d9e49a6e365defce8e79d4dbd43dd34be14a5df2888",
+        "markup": {
+          "path": "site/docs.html#code-1",
+          "sha256": "e77a59ea981c73c5c846b686889f37c6c530cd7fdf6ec90b86d1874aff8e54f5",
+          "bytes": 517
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "5120edbe4c2ee14a642def06bc6ca65d2c5b61ffa281dff1736fefe9dfabd45f",
+        "markup": {
+          "path": "site/docs.html#code-2",
+          "sha256": "455021ca073b2177c81178a8a17d7eb8e517086ace9534360aa9fc4e72cdcec7",
+          "bytes": 337
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "db0b3048b1bd049f2cab5d35eb6d2751b492505a764e64e8f23e121b51246475",
+        "markup": {
+          "path": "site/docs.html#code-3",
+          "sha256": "685d66c6718c5569fb12c968813f9d0033e1ae47a3442078a4879c9ca1c61d61",
+          "bytes": 360
+        }
+      },
+      {
+        "language": "json",
+        "codeSha256": "6311e938f07d47df11bc4736371ca4166652d2529ed7ba3f38080682df7b8d69",
+        "markup": {
+          "path": "site/docs.html#code-4",
+          "sha256": "34427935f2d16ddff06abb4f864c52a02847a9792ac70ce9dc3947922a632cd6",
+          "bytes": 3333
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "bc2499b5d06731fa8b11e569d6d14f6ab6cee43dd9b9a4c95556a713f0bf247b",
+        "markup": {
+          "path": "site/docs.html#code-5",
+          "sha256": "70b8c882b179a277c85b274db18836ec410b0e8a47719fac8a02fb9ad0404fc3",
+          "bytes": 292
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "0d488e83d4b3419e74ee73fee13b2ad3a5c5bff4c270eff395a8ee3a250b1948",
+        "markup": {
+          "path": "site/docs.html#code-6",
+          "sha256": "caed5e42c554a30ae5c1411fae0ad1b2492b18ca49b983535ee89c6f6ab85674",
+          "bytes": 861
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "5ea0c4ff0e558e094d1317c9c76afc22758b5ea33231fc265379087377412456",
+        "markup": {
+          "path": "site/docs.html#code-7",
+          "sha256": "f7aefd2290cb200702f52f9b00f88da52557dc0d1b6a545fa220d8f90687d8d8",
+          "bytes": 505
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "fd02cc7df9b855d93490ea46ff6a03fe4f3bfe7e0af22446cb190c1393ff8adf",
+        "markup": {
+          "path": "site/docs.html#code-8",
+          "sha256": "fbacb905f54c4cb6c24901b1cd8097bca3fa9defc371ec629a98f4e8048170d7",
+          "bytes": 738
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "83b8e7a48c1a234cdfe212d2091ce793337f7a4f5e001fcbffdde3fc797a13ac",
+        "markup": {
+          "path": "site/docs.html#code-9",
+          "sha256": "8ae1728ed8d0327507824c2d8868658bb6491567aa0f62f1fd0fbd6a9df22faa",
+          "bytes": 372
+        }
+      },
+      {
+        "language": "json",
+        "codeSha256": "f79ea53b372c47823c4db3951327943cc19843dcb960c43c8f8d461e2fe67c7b",
+        "markup": {
+          "path": "site/docs.html#code-10",
+          "sha256": "9e4ebf37558a37dc9e1cf081cd550132ca50fe82ecb4f188ca2978173cbe8f7a",
+          "bytes": 3266
+        }
+      },
+      {
+        "language": "typescript",
+        "codeSha256": "e7841c86ad36c6dc3c5f667858e979a928cbafda290a687286df75c558b851b7",
+        "markup": {
+          "path": "site/docs.html#code-11",
+          "sha256": "96ac4e82895638bc47727631872a0ecf3127f6fbf2e63d597134e7c516b4052c",
+          "bytes": 4176
+        }
+      }
+    ],
+    "site/skills.html": [
+      {
+        "language": "shell",
+        "codeSha256": "0d488e83d4b3419e74ee73fee13b2ad3a5c5bff4c270eff395a8ee3a250b1948",
+        "markup": {
+          "path": "site/skills.html#code-1",
+          "sha256": "caed5e42c554a30ae5c1411fae0ad1b2492b18ca49b983535ee89c6f6ab85674",
+          "bytes": 861
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "fd02cc7df9b855d93490ea46ff6a03fe4f3bfe7e0af22446cb190c1393ff8adf",
+        "markup": {
+          "path": "site/skills.html#code-2",
+          "sha256": "fbacb905f54c4cb6c24901b1cd8097bca3fa9defc371ec629a98f4e8048170d7",
+          "bytes": 738
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "f7fc9a744669c719d677700009bb7e25a37d2dfd86d012052eca8a5e5304b7ea",
+        "markup": {
+          "path": "site/skills.html#code-3",
+          "sha256": "6e4a4ba21c0fe2782c0340ee3ef6d3a73a5b2a34c6c32f4ca8fbb3aa84c69603",
+          "bytes": 508
+        }
+      },
+      {
+        "language": "shell",
+        "codeSha256": "36a8397bfc7c7affb2b75d79afe5b05b1dc9fe18ed9f4dfad085cc5c01a5996b",
+        "markup": {
+          "path": "site/skills.html#code-4",
+          "sha256": "dd1512b95910079f6b5606b30689ee3c65cceb47b6b57bc7458ec5fcb382ef3d",
+          "bytes": 311
+        }
+      }
+    ],
+    "site/introducing-sys1.html": [
+      {
+        "language": "shell",
+        "codeSha256": "0d488e83d4b3419e74ee73fee13b2ad3a5c5bff4c270eff395a8ee3a250b1948",
+        "markup": {
+          "path": "site/introducing-sys1.html#code-1",
+          "sha256": "caed5e42c554a30ae5c1411fae0ad1b2492b18ca49b983535ee89c6f6ab85674",
+          "bytes": 861
+        }
+      }
+    ]
+  }
+}

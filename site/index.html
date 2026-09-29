@@ -113,7 +113,8 @@
     <link rel="stylesheet" href="/vendor/hraness-foil/foil.css" />
     <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
     <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/vendor/hraness-syntax/syntax-highlighting.css" />
+  <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/home.css" />
     <script src="/site.js" defer></script>
     <script src="/home.js" defer></script>
@@ -263,24 +264,24 @@
           </dl>
           <div class="code-frame">
             <div class="code-heading"><span>Inside your application</span><span>TypeScript</span></div>
-            <pre><code><span class="syntax-keyword">import</span> { createClient } <span class="syntax-keyword">from</span> <span class="syntax-string">"@hraness/sys1/client"</span>;
-
-<span class="syntax-keyword">const</span> sys1 = createClient();
-<span class="syntax-keyword">const</span> { response, metadata } = <span class="syntax-keyword">await</span> sys1.evaluate({
-  state: <span class="syntax-string">"The build failed after a dependency update."</span>,
-  questions: {
-    next: {
-      type: <span class="syntax-string">"choice"</span>,
-      criteria: {
-        repair: <span class="syntax-string">"Fix the build"</span>,
-        continue: <span class="syntax-string">"Continue work"</span>
-      }
-    }
-  }
-});
-
-console.log(response.answers.next);
-console.log(metadata.backend);</code></pre>
+            <pre tabindex="0"><code class="syntax-code language-typescript" data-language="typescript"><span class="sh__line"><span class="sh__token--keyword">import</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span><span class="sh__token--space"> </span><span class="sh__token--identifier">createClient</span><span class="sh__token--space"> </span><span class="sh__token--sign">}</span><span class="sh__token--space"> </span><span class="sh__token--keyword">from</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">@hraness/sys1/client</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">;</span></span>
+<span class="sh__line"></span>
+<span class="sh__line"><span class="sh__token--keyword">const</span><span class="sh__token--space"> </span><span class="sh__token--identifier">sys1</span><span class="sh__token--space"> </span><span class="sh__token--sign">=</span><span class="sh__token--space"> </span><span class="sh__token--identifier">createClient</span><span class="sh__token--sign">(</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span>
+<span class="sh__line"><span class="sh__token--keyword">const</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span><span class="sh__token--space"> </span><span class="sh__token--identifier">response</span><span class="sh__token--sign">,</span><span class="sh__token--space"> </span><span class="sh__token--identifier">metadata</span><span class="sh__token--space"> </span><span class="sh__token--sign">}</span><span class="sh__token--space"> </span><span class="sh__token--sign">=</span><span class="sh__token--space"> </span><span class="sh__token--keyword">await</span><span class="sh__token--space"> </span><span class="sh__token--identifier">sys1</span><span class="sh__token--sign">.</span><span class="sh__token--property">evaluate</span><span class="sh__token--sign">(</span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--identifier">state</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">The build failed after a dependency update.</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--identifier">questions</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--identifier">next</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--identifier">type</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">choice</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--identifier">criteria</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--sign">{</span></span>
+<span class="sh__line"><span class="sh__token--space">        </span><span class="sh__token--identifier">repair</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Fix the build</span><span class="sh__token--string">&quot;</span><span class="sh__token--sign">,</span></span>
+<span class="sh__line"><span class="sh__token--space">        </span><span class="sh__token--keyword">continue</span><span class="sh__token--sign">:</span><span class="sh__token--space"> </span><span class="sh__token--string">&quot;</span><span class="sh__token--string">Continue work</span><span class="sh__token--string">&quot;</span></span>
+<span class="sh__line"><span class="sh__token--space">      </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">    </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--space">  </span><span class="sh__token--sign">}</span></span>
+<span class="sh__line"><span class="sh__token--sign">}</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span>
+<span class="sh__line"></span>
+<span class="sh__line"><span class="sh__token--identifier">console</span><span class="sh__token--sign">.</span><span class="sh__token--property">log</span><span class="sh__token--sign">(</span><span class="sh__token--identifier">response</span><span class="sh__token--sign">.</span><span class="sh__token--property">answers</span><span class="sh__token--sign">.</span><span class="sh__token--property">next</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span>
+<span class="sh__line"><span class="sh__token--identifier">console</span><span class="sh__token--sign">.</span><span class="sh__token--property">log</span><span class="sh__token--sign">(</span><span class="sh__token--identifier">metadata</span><span class="sh__token--sign">.</span><span class="sh__token--property">backend</span><span class="sh__token--sign">)</span><span class="sh__token--sign">;</span></span></code></pre>
             <a class="code-doc-link" href="/docs#integration">Read the integration guide</a>
           </div>
         </div>
@@ -307,11 +308,11 @@ console.log(metadata.backend);</code></pre>
           <p>Install the release from GitHub, inspect your setup, then add the project skill for your agent. Choose hosted Jev or a local model in the <a href="/docs#getting-started">setup guide</a>.</p>
         </div>
         <div class="code-frame install-terminal">
-          <div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy</button></div>
-          <pre><code id="install-command">npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz
-sys1 doctor
-sys1 review setup codex</code></pre>
+          <div class="code-heading"><span class="terminal-title"><span class="terminal-lights" aria-hidden="true"><span></span><span></span><span></span></span>Install Sys1</span><button type="button" class="copy-button js-only" data-copy="install-command">Copy</button></div>
+          <pre tabindex="0" aria-label="Install Sys1 and add the Codex review skill"><code id="install-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> \
+  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.17.0/hraness-sys1-0.17.0.tgz</span>
+<span class="syntax-token syntax-token--command">sys1</span> doctor
+<span class="syntax-token syntax-token--command">sys1</span> review setup codex</code></pre>
         </div>
         <p id="copy-status" class="copy-status" role="status"></p>
         <p class="section-footnote">The CLI requires Bun 1.3.14 or newer on macOS, Linux, or Windows. <code>--allow-scripts=node-llama-cpp</code> permits the native inference package’s install script. Installation downloads no model weights and activates no hosted backend. Use <code>setup claude-code</code> or <code>setup devin</code> for those agents.</p>

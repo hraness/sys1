@@ -79,8 +79,10 @@ pre code { font-size: inherit; }
 .integration-body + .section-footnote { margin-top: 2rem; }
 .code-example { overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--grid); border-radius: .75rem; min-width: 0; }
 .code-example pre { padding: 1.5rem; line-height: 1.85; font-size: .75rem; }
-.syntax-keyword { color: light-dark(#624397, #c4b1e5); }
-.syntax-string { color: var(--hraness-marketing-terminal-command); }
+.terminal-title, .terminal-lights { display: inline-flex; align-items: center; }
+.terminal-title { gap: .75rem; }
+.terminal-lights { gap: .35rem; }
+.terminal-lights > span { inline-size: .6rem; block-size: .6rem; border-radius: 50%; background: color-mix(in srgb, var(--hraness-marketing-terminal-ink) 18%, transparent); }
 .code-doc-link { display: flex; align-items: center; min-height: 2.75rem; padding: .4rem 1.4rem; border-top: 1px solid var(--grid); font-size: .85rem; }
 .ecosystem-header, .ecosystem-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 2fr); gap: 2rem; }
 .ecosystem-header { padding-bottom: .8rem; color: var(--muted); font-size: .8rem; border-bottom: 1px solid var(--line); }

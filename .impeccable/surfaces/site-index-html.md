@@ -201,3 +201,12 @@ published workflow numbers; the 35% figure is the System One Skills replay.
 One CSS change: `.ecosystem-row strong` matches the linked part names. Visual
 structure, tokens, demo behavior, and footer are unchanged. Draft: Claude Code
 on 2026-09-28. Human review: pending the user.
+
+## Install example — 2026-09-28
+
+The install frame adds decorative window lights and static shell highlighting
+for commands, flags, and the release URL. It keeps the existing terminal
+palette, copy action, exact command text, and release-version binding. The
+scrollable block is keyboard-focusable and has a descriptive accessible name.
+No client dependency, product behavior, or model/approval claim changes. Source
+review and browser validation belong to the marketing integration owner.
