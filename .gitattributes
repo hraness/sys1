@@ -30,3 +30,6 @@
 /site/docs.html text eol=lf
 /site/skills.html text eol=lf
 /site/introducing-sys1.html text eol=lf
+
+# Shared footer mask provenance hashes canonical package-derived bytes.
+/site/vendor/hraness-site-footer/** text eol=lf

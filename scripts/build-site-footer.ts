@@ -6,7 +6,7 @@ import { resolve, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { adaptStaticFooter } from "../site/vendor/hraness-site-footer/adapt-static-footer.mjs";
 
-const commit = "4244dc563daf125eadbc66fe2a896311f09afc84";
+const commit = "60d6ba5baad35f4a7abdc6fe2e693ddd7bf00476";
 const root = resolve(import.meta.dir, "..");
 const vendor = join(root, "site/vendor/hraness-site-footer");
 const repository = process.argv[2];
@@ -21,6 +21,10 @@ try {
   const { renderHranessSiteFooter } = await import(pathToFileURL(file).href);
   const options = { mailingList: { kind: "none" } };
   const html = adaptStaticFooter(renderHranessSiteFooter(options));
+  const mark = html.match(/<svg\b(?=[^>]*\bclass="hraness-site-footer__mark(?:\s|"))[^>]*>([\s\S]*?)<\/svg>/);
+  if (!mark) throw new Error("Shared footer lost its canonical inline mark");
+  const mask = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">${mark[1]}</svg>\n`;
+  await writeFile(join(vendor, "mark.svg"), mask);
   const files: Record<string, { path: string; sha256: string; bytes: number }> = {};
   for (const name of ["stylex.css", "LICENSE", "THIRD_PARTY_NOTICES.md"]) {
     const path = name === "stylex.css" ? "dist/stylex.css" : name;
@@ -38,14 +42,15 @@ try {
   const adapter = await readFile(join(vendor, "adapt-static-footer.mjs"));
   await writeFile(join(vendor, "provenance.json"), JSON.stringify({
     schemaVersion: 1,
-    source: { repository: "https://github.com/hraness/site-footer", commit, version: "0.20.0" },
+    source: { repository: "https://github.com/hraness/site-footer", commit, version: "0.20.1" },
     files,
+    mask: { path: "mark.svg", sha256: hash(mask), bytes: Buffer.byteLength(mask), source: "renderer inline mark", reason: "Same-origin mask preserves the site's image CSP." },
     renderer: { path: "dist/index.js", sha256: hash(renderer), options,
       output: { sha256: hash(html), bytes: Buffer.byteLength(html) },
       adapter: { path: "adapt-static-footer.mjs", sha256: hash(adapter), removes: '[data-slot="hraness-cookie-consent"]', reason: "No consent runtime is configured on the static site; omit its inactive action and copy." },
     },
   }, null, 2) + "\n");
-  console.log("Footer refreshed from immutable 0.20.0 with normal document flow.");
+  console.log("Footer refreshed from immutable 0.20.1 with normal document flow.");
 } finally {
   await rm(directory, { recursive: true, force: true });
 }

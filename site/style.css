@@ -159,6 +159,8 @@ html:not(.has-js) [data-hraness-appearance-menu] { display: none; }
 
 main { flex: 1; }
 :root { --hraness-site-footer-measure: 70rem; }
+/* Use the unchanged shared silhouette from this origin under the site's image CSP. */
+.hraness-site-footer__mark-paint { mask-image: url("/vendor/hraness-site-footer/mark.svg"); }
 
 /* Keep the shared recovery page quiet without modifying its release snapshot. */
 .hraness-status-page__code { display: none; }
