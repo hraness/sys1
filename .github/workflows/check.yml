@@ -54,22 +54,6 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.19.0
-      # Windows bun install downloads ~680 MB of node-llama-cpp binaries (37-82 s).
-      # Only main saves the cache; PRs restore it read-only.
-      - name: Restore bun cache
-        if: runner.os == 'Windows' && github.event_name == 'none'
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.bun/install/cache
-          key: bun-platform-${{ runner.os }}-${{ hashFiles('bun.lock') }}
-          restore-keys: bun-platform-${{ runner.os }}-
-      - name: Cache bun
-        if: runner.os == 'Windows'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.bun/install/cache
-          key: bun-platform-${{ runner.os }}-${{ hashFiles('bun.lock') }}
-          restore-keys: bun-platform-${{ runner.os }}-
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run check
       - name: Install candidate and verify native readiness
