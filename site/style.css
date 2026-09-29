@@ -166,3 +166,26 @@ main { flex: 1; }
 .hraness-status-page__code { display: none; }
 .hraness-status-page__action[data-emphasis="primary"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); box-shadow: none; }
 .hraness-status-page__action[data-emphasis="primary"]::before, .hraness-status-page__action[data-emphasis="primary"]::after { display: none; }
+
+/* Install commands per platform, matching design-kit PlatformInstall and PlatformBadges.
+   Without JavaScript every platform shows under its name; with it, tabs pick one. */
+main svg.platform-icon { inline-size: 1em; block-size: 1em; width: 1em; height: 1em; fill: currentColor; stroke: none; flex: none; }
+.platform-badges { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .75rem; margin: 0 0 1rem; color: var(--muted); font-size: .85rem; }
+.platform-badges ul { display: flex; flex-wrap: wrap; gap: .35rem .9rem; margin: 0; padding: 0; list-style: none; }
+.platform-badges li { display: inline-flex; align-items: center; gap: .35rem; color: var(--foreground); white-space: nowrap; }
+.platform-badge-note { color: var(--muted); }
+.platform-install { display: grid; gap: .75rem; max-width: 55rem; min-width: 0; }
+.platform-tabs { flex-wrap: wrap; gap: .25rem; justify-self: start; max-width: 100%; padding: .25rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); }
+.platform-tabs [role="tab"] { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: .35rem .85rem; border: 1px solid transparent; border-radius: .45rem; background: transparent; color: var(--muted); font: inherit; font-size: .875rem; cursor: pointer; }
+.platform-tabs [role="tab"]:hover { color: var(--foreground); background: var(--surface-hover); }
+.platform-tabs [role="tab"][aria-selected="true"] { color: var(--foreground); background: var(--background); border-color: var(--line); }
+.platform-tabs [role="tab"]:focus-visible { outline: 2px solid var(--focus, var(--primary)); outline-offset: 2px; }
+.platform-panel { display: grid; gap: .5rem; min-width: 0; }
+.platform-panel[hidden] { display: none; }
+.platform-panel-name { display: inline-flex; align-items: center; gap: .45rem; margin: 0; font-weight: 600; }
+.has-js .platform-panel-name { display: none; }
+.platform-panel .code-heading > span { font-family: inherit; }
+.platform-note, .platform-unavailable { margin: 0; color: var(--muted); font-size: .85rem; }
+.platform-install .copy-status { margin: 0; min-height: 0; }
+.install-next { margin: 1.5rem 0 .75rem; }
+@media (forced-colors: active) { .platform-tabs [role="tab"][aria-selected="true"] { border-color: Highlight; } }

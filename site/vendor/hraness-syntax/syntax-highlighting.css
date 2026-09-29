@@ -47,9 +47,16 @@
 }
 
 .syntax-token--command,
+.syntax-token--function,
 .syntax-token--heading,
+.syntax-token--property,
+.syntax-token--type,
 .syntax-token--variable {
   color: var(--syntax-name);
+}
+
+.syntax-token--number {
+  color: var(--syntax-number);
 }
 
 .syntax-token--flag,

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/hraness/design-kit",
+    "commit": "f298dfc8d03dc254e87275b6263e958187e1becd",
+    "release": "v0.29.0"
+  },
+  "files": {
+    "platforms.ts": {
+      "path": "src/platforms.ts",
+      "sha256": "8db8c996f88fc05cfcc073590f1d6ae43eb13176dd8cb7501e9d5bee06212c78",
+      "bytes": 11659
+    },
+    "LICENSE": {
+      "path": "LICENSE",
+      "sha256": "763eaf6783097cac7303f10321b33ffc6a88c35845ba1e592b6a750e4568c5e0",
+      "bytes": 1088
+    },
+    "marks-LICENSE": {
+      "path": "vendor/platform-marks/LICENSE",
+      "sha256": "9046848b63a5c92bff14e4accca80bd987e0623b74adf9226ce5198d312b79d5",
+      "bytes": 6569
+    },
+    "UPSTREAM.md": {
+      "path": "vendor/platform-marks/UPSTREAM.md",
+      "sha256": "2e9e15f76634a33f03cdb86b97555c8e0327ff3c79b8c1263d64ca62f9b122c6",
+      "bytes": 800
+    }
+  }
+}

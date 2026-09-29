@@ -98,7 +98,7 @@ behavior: this site configures no consent runtime.
 
 ## Shared code highlighting
 
-`scripts/build-site-syntax.ts` highlights all 18 existing code blocks in the
+`scripts/build-site-syntax.ts` highlights all 24 existing code blocks in the
 homepage, docs, skills, and introduction pages with the shared design-kit
 highlighter. Source text, command IDs, and copy-button behavior are preserved.
 The pages load the byte-exact shared `syntax-highlighting.css`; they run no
@@ -111,3 +111,19 @@ against the immutable design-kit release in the provenance file, with its
 frozen dependencies installed. The refresh reads the highlighter's JavaScript
 module closure directly from Git, records its dependency bytes and lockfile,
 and renders from a temporary copy. Never color code spans by hand.
+
+## Install commands per platform
+
+`scripts/build-site-platforms.ts` renders the "Runs on" row and the tabbed
+install block on the homepage and docs (macOS, Linux, Windows, in that order)
+with the platform marks and labels from design-kit's `src/platforms.ts`, the
+same marks its React `PlatformInstall` draws. `hraness-platforms/` holds that
+module, the package license, and the Simple Icons CC0 notice for the Apple and
+Linux marks, with digests in `provenance.json`. `site/site.js` adds the tabs,
+opens the visitor's system, and copies one command at a time.
+
+Run `bun scripts/build-site-platforms.ts --check` to verify the vendored files
+and re-render both blocks. To change a command or refresh the marks, edit
+`SYS1_PLATFORM_BLOCKS`, run
+`bun scripts/build-site-platforms.ts --refresh KIT_CHECKOUT FULL_COMMIT vVERSION`,
+then refresh the shared highlighting as above.

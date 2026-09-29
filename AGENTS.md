@@ -67,6 +67,9 @@
   `scripts/build-site-status-page.ts --refresh` regenerates its markup,
   stylesheet, and `site/status-page.js` from one tagged design-kit release, and
   `test/site-status-page.test.ts` checks them against the recorded digests.
+  `scripts/build-site-platforms.ts` renders the per-platform install blocks on
+  the homepage and docs from design-kit's platform marks; see
+  `site/vendor/README.md`.
 - Share images come only from the shared `@hraness/web-discovery`
   social-image template via the site's single `defineSocialImageSite`
   declaration in `scripts/social-cards.ts`. Pages pass copy only (headline,

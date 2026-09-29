@@ -18,10 +18,13 @@
 .docs-intro { max-width: 62ch; color: var(--muted); font-size: 1.03rem; margin-bottom: 2.5rem; }
 .docs-route-list, .docs-mode-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .docs-route { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, .8fr); gap: 2rem; align-items: start; padding: 1.5rem 0; border-bottom: 1px solid var(--grid); }
+.docs-route-install { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.docs-route-code { display: grid; gap: .75rem; min-width: 0; }
+.docs-route-code .platform-badges { margin: 0; }
 .docs-route h3, .docs-mode h3 { margin-bottom: .35rem; }
 .docs-route p, .docs-mode p { color: var(--muted); font-size: .92rem; margin: 0; }
 .docs-mode pre { margin-top: 1rem; padding: .85rem .9rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .875rem; line-height: 1.7; }
-.docs-route pre { padding: .95rem 1rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .875rem; line-height: 1.8; }
+.docs-route pre:not(.platform-pre) { padding: .95rem 1rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .875rem; line-height: 1.8; }
 .docs-footnote { color: var(--muted); font-size: .8rem; margin: 1rem 0 0; }
 .docs-mode-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; border-top: 0; }
 .docs-mode { padding: 0 1.5rem 0 0; border-right: 1px solid var(--grid); }
@@ -68,7 +71,7 @@
 
 .docs-content { font-size: 1rem; line-height: 1.75; }
 .docs-content :is(h2, h3) { font-family: var(--font-text); letter-spacing: -.025em; }
-.docs-content pre { border-radius: .875rem; border: 1px solid var(--grid); }
+.docs-content pre:not(.platform-pre) { border-radius: .875rem; border: 1px solid var(--grid); }
 .docs-content > .docs-section > p { max-width: 68ch; }
 .docs-section h3[id] { scroll-margin-top: 5rem; }
 .docs-section > h3 { margin-top: 2.5rem; }
