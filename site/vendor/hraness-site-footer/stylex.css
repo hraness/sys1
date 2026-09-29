@@ -21,6 +21,10 @@
     grid-area: support;
   }
 
+  .x10a8y8t {
+    inset: 0;
+  }
+
   .xkdpibf {
     margin: -1px;
   }
@@ -335,6 +339,10 @@
     background-image: none;
   }
 
+  .xyowimg {
+    background-image: radial-gradient(ellipse 24% 85% at var(--hraness-foil-x, 50%) var(--hraness-foil-y, 50%),color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 80%,var(--hraness-site-footer-background, Canvas)) 0%,transparent 68%),radial-gradient(ellipse 65% 160% at calc(100% - var(--hraness-foil-x, 50%)) calc(100% - var(--hraness-foil-y, 50%)),color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 98%,var(--hraness-site-footer-background, Canvas)) 0%,transparent 72%),linear-gradient(115deg,color-mix(in oklch,var(--_hraness-foil-1) var(--hraness-foil-reflection, 14%),transparent),color-mix(in oklch,var(--_hraness-foil-2) var(--hraness-foil-reflection, 14%),transparent),color-mix(in oklch,var(--_hraness-foil-3) var(--hraness-foil-reflection, 14%),transparent),color-mix(in oklch,var(--_hraness-foil-4) var(--hraness-foil-reflection, 14%),transparent),color-mix(in oklch,var(--_hraness-foil-5) var(--hraness-foil-reflection, 14%),transparent),color-mix(in oklch,var(--_hraness-foil-6) var(--hraness-foil-reflection, 14%),transparent)),linear-gradient(115deg,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 90%,var(--hraness-site-footer-background, Canvas)) 0%,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 100%,var(--hraness-site-footer-background, Canvas)) 24%,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 86%,var(--hraness-site-footer-background, Canvas)) 39%,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 100%,var(--hraness-site-footer-background, Canvas)) 56%,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 84%,var(--hraness-site-footer-background, Canvas)) 82%,color-mix(in oklch,var(--hraness-site-footer-foreground, CanvasText) 100%,var(--hraness-site-footer-background, Canvas)) 100%);
+  }
+
   .x1gqfdwy {
     background-origin: border-box;
   }
@@ -513,6 +521,10 @@
 
   .x1s85apg {
     display: none;
+  }
+
+  .xq2h55 {
+    display: var(--_hraness-footer-mark-display);
   }
 
   .xdl72j9 {
@@ -747,6 +759,10 @@
     letter-spacing: normal;
   }
 
+  .x14ju556 {
+    line-height: 0;
+  }
+
   .x1u7k74 {
     line-height: 1.2;
   }
@@ -793,6 +809,31 @@
 
   .xjsudho {
     margin-inline-start: var(--_hraness-site-footer-links-offset, 0px);
+  }
+
+  .xi9drc3 {
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z\" fill=\"currentColor\" fill-rule=\"evenodd\"></path><path d=\"M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z\" fill=\"currentColor\"></path><path d=\"M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z\" fill=\"currentColor\" fill-rule=\"evenodd\"></path><path d=\"M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z\" fill=\"currentColor\"></path><circle cx=\"166\" cy=\"307\" fill=\"currentColor\" r=\"8\"></circle></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z\" fill=\"currentColor\" fill-rule=\"evenodd\"></path><path d=\"M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z\" fill=\"currentColor\"></path><path d=\"M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z\" fill=\"currentColor\" fill-rule=\"evenodd\"></path><path d=\"M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z\" fill=\"currentColor\"></path><circle cx=\"166\" cy=\"307\" fill=\"currentColor\" r=\"8\"></circle></svg>");
+  }
+
+  .x5e4rk6 {
+    -webkit-mask-source-type: alpha;
+    mask-mode: alpha;
+  }
+
+  .x1rudrqi {
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  .x16fucec {
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .x2k2kcx {
+    -webkit-mask-size: contain;
+    mask-size: contain;
   }
 
   .x1pzgvly {
@@ -865,6 +906,10 @@
 
   .xhvvu7z {
     padding-inline-start: max(clamp(1rem,4vw,2rem),env(safe-area-inset-left),calc((100% - var(--hraness-site-footer-measure, 100%)) / 2));
+  }
+
+  .x47corl {
+    pointer-events: none;
   }
 
   .x10l6tqk {
@@ -1304,6 +1349,10 @@
   }
 }
 
+.x1lhcm7p {
+  --_hraness-footer-mark-display: none;
+}
+
 .xwk8b0x {
   --_hraness-site-footer-consent-clearance: 0px;
 }
@@ -1440,6 +1489,12 @@
   --hraness-site-footer-status-block-size: 1.5rem;
 }
 
+@supports ((-webkit-mask-image: linear-gradient(black, black)) or (mask-image: linear-gradient(black, black))) {
+  .xr9ynje.xr9ynje {
+    --_hraness-footer-mark-display: block;
+  }
+}
+
 .x1dsv906:has( > .hraness-site-footer__inner > [data-slot="hraness-cookie-consent"]:not([hidden])) {
   --_hraness-site-footer-consent-clearance: calc(var(--hraness-site-footer-control-block-size) + 1.25rem + 2px);
 }
@@ -1523,6 +1578,14 @@
 
   .x1w6jg7m.x1w6jg7m {
     --hraness-site-footer-social-target: 44px;
+  }
+}
+
+@supports ((-webkit-mask-image: linear-gradient(black, black)) or (mask-image: linear-gradient(black, black))) {
+  @media (forced-colors: active) {
+    .x1apl0kd.x1apl0kd.x1apl0kd {
+      --_hraness-footer-mark-display: none;
+    }
   }
 }
 
