@@ -1,6 +1,6 @@
 version: 1
 pack: core
-revision: "2026.09.3"
+revision: "2026.09.4"
 description: Experimental advisory checks for two narrow JavaScript and TypeScript changes.
 rules:
   - id: core-new-empty-catch
@@ -50,5 +50,5 @@ rules:
       before, loses its last such check in this diff, and contains no behavioral
       check or possible replacement assertion helper call afterward.
     severity: P2
-    tiers: { medium: 0.7, high: 0.85 }
+    tiers: { medium: 0.2, high: 0.85 }
     source: { kind: builtin }
