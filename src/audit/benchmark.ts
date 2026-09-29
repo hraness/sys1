@@ -7,6 +7,7 @@ import type { Sys1Client } from "../client.ts";
 import { PROTOCOL_LIMITS, type SystemOneRequest } from "../protocol.ts";
 import { validateResponseForRequest } from "../response.ts";
 import { compileUnit, QUESTION_FORMAT, ruleApplies } from "./compile.ts";
+import { runDetector } from "./detectors.ts";
 import { violationScore } from "./evaluate.ts";
 import type { LoadedPack } from "./pack.ts";
 import { canonicalJson, ruleIdSchema, ruleRevision } from "./schema.ts";
@@ -195,8 +196,10 @@ export async function benchmarkPack(options: AuditBenchmarkOptions) {
     const rule = pack.rules.find(candidate => candidate.id === fixture.rule);
     const applicable = pack.rules.filter(candidate => candidate.unit === "hunk" && ruleApplies(candidate, fixture));
     if (rule === undefined || !applicable.includes(rule)) throw new AuditBenchmarkError("fixture target rule does not apply to its path and language");
+    // A detector rule is scored locally, so its fixtures send no request.
+    const asked = rule.detector === undefined ? applicable.filter(candidate => candidate.detector === undefined) : [];
     let requests: SystemOneRequest[];
-    try { requests = compileUnit(applicable, fixture.state, { model: options.route }); }
+    try { requests = compileUnit(asked, fixture.state, { model: options.route }); }
     catch { throw new AuditBenchmarkError("fixture does not compile within request bounds"); }
     return { fixture, rule, requests, hashes: requests.map(request => digest(canonicalJson(request))) };
   });
@@ -255,6 +258,10 @@ export async function benchmarkPack(options: AuditBenchmarkOptions) {
             latencies.push(elapsed);
             if (valid) validLatencies.push(elapsed);
           }
+        }
+        if (entry.rule.detector !== undefined) {
+          const patch = (JSON.parse(entry.fixture.state) as { patch: string }).patch;
+          targetScore = runDetector(entry.rule.detector, patch).length > 0 ? 1 : 0;
         }
         if (targetScore === undefined) throw new Error("benchmark_missing_answer");
         record.tier = targetScore >= entry.rule.tiers.high ? "high" : targetScore >= entry.rule.tiers.medium ? "medium" : "low";

@@ -6,6 +6,7 @@ import type { DiffCollection, DiffUnit } from "./diff.ts";
 import type { Sys1Client } from "../client.ts";
 import type { Answer } from "../protocol.ts";
 import { validateResponseForRequest } from "../response.ts";
+import { runDetector } from "./detectors.ts";
 
 export const AUDIT_LIMITS = { maxRequests: 200, defaultRequests: 20, maxTimeoutMs: 120_000, defaultTimeoutMs: 30_000 } as const;
 
@@ -94,16 +95,23 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
   const { diff } = options;
   const skipped: AuditSkip[] = diff.skipped.map(({ path, reason }) => ({ path, reason }));
   const work: { unit: DiffUnit; rules: LoadedRule[]; requests: ReturnType<typeof compileUnit> }[] = [];
+  // Rules with a detector are decided locally and never reach the model.
+  const local: { unit: DiffUnit; rules: LoadedRule[] }[] = [];
   const used = new Map<string, LoadedRule>();
   for (const unit of diff.units) {
     const selected = options.rules.rules.filter(({ rule }) => ruleApplies(rule, unit));
-    const supported = selected.filter(({ rule }) => rule.unit === "hunk");
+    const detected = selected.filter(({ rule }) => rule.detector !== undefined);
+    const supported = selected.filter(({ rule }) => rule.detector === undefined && rule.unit === "hunk");
     for (const loaded of selected) {
-      if (loaded.rule.unit !== "hunk") skipped.push({ path: unit.path, rule: loaded.id, reason: "file_unit_unsupported" });
+      if (loaded.rule.detector === undefined && loaded.rule.unit !== "hunk") skipped.push({ path: unit.path, rule: loaded.id, reason: "file_unit_unsupported" });
     }
     if (selected.length === 0) {
       skipped.push({ path: unit.path, reason: "no_matching_rules" });
       continue;
+    }
+    if (detected.length > 0) {
+      local.push({ unit, rules: detected });
+      for (const loaded of detected) used.set(loaded.id, loaded);
     }
     if (supported.length === 0) continue;
     try {
@@ -119,7 +127,7 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
     status: options.dryRun ? "planned" : "complete", complete: false, qualification: "unqualified",
     mode: diff.mode, base: diff.base, head: diff.head, route: options.route, question_format: QUESTION_FORMAT,
     changed_files: diff.changedFiles, units: diff.units.length, evaluated_units: 0,
-    targets: [...new Set(work.map(({ unit }) => unit.path))].map((path) => ({ path, units: work.filter(({ unit }) => unit.path === path).length })),
+    targets: [...new Set([...local, ...work].map(({ unit }) => unit.path))].map((path) => ({ path, units: new Set([...local, ...work].filter(({ unit }) => unit.path === path).map(({ unit }) => unit.id)).size })),
     planned_requests: work.reduce((sum, entry) => sum + entry.requests.length, 0),
     requests: 0, questions: 0, usage: { input_tokens: 0, output_tokens: 0, known_requests: 0, unknown_requests: 0 }, elapsed_ms: 0,
     rules: [...used.values()].map(({ id, revision, pack }) => ({ id, revision, pack: pack.name })),
@@ -129,6 +137,26 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
     if (report.planned_requests > maxRequests) skipped.push({ path: ".", reason: "request_limit" });
     report.elapsed_ms = Math.round(performance.now() - started);
     return report;
+  }
+  const pushFinding = (loaded: LoadedRule, unit: DiffUnit, score: number, line: number, side: "before" | "after"): void => {
+    report.findings.push({
+      id: createHash("sha256").update(JSON.stringify([diff.repoRoot, loaded.id, loaded.revision, QUESTION_FORMAT, unit.id, options.route])).digest("hex").slice(0, 16),
+      unit_id: unit.id,
+      rule: loaded.id, revision: loaded.revision, path: unit.path,
+      line, side,
+      model_score: score, tier: score >= loaded.rule.tiers.high ? "high" : "medium",
+      summary: "ensure" in loaded.rule ? loaded.rule.ensure : loaded.rule.ask,
+      qualification: "unqualified",
+    });
+  };
+  const askedUnits = new Set(work.map(({ unit }) => unit.id));
+  for (const entry of local) {
+    for (const loaded of entry.rules) {
+      // One finding per rule and unit, at the first hit, to match model findings.
+      const hit = runDetector(loaded.rule.detector!, entry.unit.patch)[0];
+      if (hit !== undefined) pushFinding(loaded, entry.unit, 1, hit.line, hit.side);
+    }
+    if (!askedUnits.has(entry.unit.id)) report.evaluated_units++;
   }
   // Own the timer so a decider with no active I/O still has a live deadline
   // on every supported runtime, and successful calls release it immediately.
@@ -177,15 +205,7 @@ export async function evaluateAudit(options: AuditOptions): Promise<AuditReport>
           const score = scores.get(loaded.id)!;
           if (score < loaded.rule.tiers.medium) continue;
           const before = entry.unit.newRange.count === 0;
-          report.findings.push({
-            id: createHash("sha256").update(JSON.stringify([diff.repoRoot, loaded.id, loaded.revision, QUESTION_FORMAT, entry.unit.id, options.route])).digest("hex").slice(0, 16),
-            unit_id: entry.unit.id,
-            rule: loaded.id, revision: loaded.revision, path: entry.unit.path,
-            line: Math.max(1, before ? entry.unit.oldRange.start : entry.unit.newRange.start), side: before ? "before" : "after",
-            model_score: score, tier: score >= loaded.rule.tiers.high ? "high" : "medium",
-            summary: "ensure" in loaded.rule ? loaded.rule.ensure : loaded.rule.ask,
-            qualification: "unqualified",
-          });
+          pushFinding(loaded, entry.unit, score, Math.max(1, before ? entry.unit.oldRange.start : entry.unit.newRange.start), before ? "before" : "after");
         }
       } catch {
         // Never echo an untrusted provider exception (it may contain the source).

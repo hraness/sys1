@@ -115,9 +115,9 @@ describe("review command", () => {
       const path = new URL(request.url).pathname;
       if (path === "/v1/models") return Response.json({ data: [{ id: "v1" }] });
       if (path !== "/v1/systemone") return new Response("", { status: 404 });
+      // The empty-catch rule is decided locally, so the model is never asked.
       calls++;
       const body = await request.json() as { questions: Record<string, { type: string }> };
-      expect(Object.keys(body.questions)).toEqual(["core-new-empty-catch"]);
       return Response.json({ model: "v1", answers: Object.fromEntries(Object.entries(body.questions).map(([id]) => [id, { type: "noul", noul: 0.01 }])), usage: { input_tokens: 10, output_tokens: 1 } });
     } });
     saveConfig(home, configSchema.parse({ version: 1, local: { enabled: false }, backends: [{ name: "fake", model: "v1", base_url: `http://127.0.0.1:${backend.port}` }] }));
@@ -131,14 +131,14 @@ describe("review command", () => {
       const id = observed.findings[0].id;
       const repeated = await invoke(checkpoint, repo, home);
       expect(JSON.parse(repeated.out)).toMatchObject({ status: "unchanged", requests: 0, suppressed_count: 1 });
-      expect(calls).toBe(1);
+      expect(calls).toBe(0);
       const feedback = await invoke(["review", "feedback", id, "useful", "--json"], repo, home);
       expect(JSON.parse(feedback.out).issue.feedback).toBe("useful");
       const recheck = await invoke(["review", "recheck", id, "--model", "fake/v1", "--json"], repo, home);
-      expect(recheck.code).toBe(0); expect(JSON.parse(recheck.out).status).toBe("reported"); expect(calls).toBe(2);
+      expect(recheck.code).toBe(0); expect(JSON.parse(recheck.out).status).toBe("reported"); expect(calls).toBe(0);
       writeFileSync(join(repo, "code.ts"), "try { persist(); } catch (error) { throw error; }\n");
       const changed = await invoke(["review", "recheck", id, "--model", "fake/v1", "--json"], repo, home);
-      expect(changed.code).toBe(8); expect(JSON.parse(changed.out).status).toBe("superseded"); expect(calls).toBe(2);
+      expect(changed.code).toBe(8); expect(JSON.parse(changed.out).status).toBe("superseded"); expect(calls).toBe(0);
     } finally { backend.stop(true); }
   }, CLI_WORKFLOW_TIMEOUT_MS);
 });
