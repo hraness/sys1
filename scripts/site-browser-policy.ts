@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { dirname, join, resolve, sep } from "node:path";
 import { chromium, type LaunchOptions } from "playwright-core";
 import { z } from "zod";
+import { pinnedChromiumDefinition } from "./owned-browser.mjs";
 
 const require = createRequire(import.meta.url);
 const executableOverrides = [
@@ -39,11 +40,13 @@ export function chromiumPolicyArguments(defaultArgs: readonly string[]): Pick<La
   const features = new Set(disabled.flatMap(argument => argument.slice("--disable-features=".length).split(",")).filter(Boolean));
   features.add("PaintHolding");
   features.add("MacAppCodeSignClone");
+  const merged = `--disable-features=${[...features].join(",")}`;
+  const unchanged = disabled.length === 1 && disabled[0] === merged;
   return {
-    // Playwright adds mute-audio separately for headless mode. Replace it too so
-    // the final command contains one mute switch and one disable-features switch.
-    ignoreDefaultArgs: [...disabled, "--mute-audio"],
-    args: ["--mute-audio", `--disable-features=${[...features].join(",")}`],
+    // Playwright filters user arguments together with its defaults. Preserve
+    // an existing mute switch instead of filtering the replacement out too.
+    ignoreDefaultArgs: unchanged ? [] : disabled,
+    args: [...(defaultArgs.includes("--mute-audio") ? [] : ["--mute-audio"]), ...(unchanged ? [] : [merged])],
   };
 }
 
@@ -57,11 +60,8 @@ export function pinnedChromiumPolicy() {
     .parse(JSON.parse(readFileSync(join(root, "browsers.json"), "utf8")));
   const browser = manifest.browsers.find(item => item.name === "chromium");
   assert.ok(browser?.browserVersion, "Pinned Playwright must declare its Chromium version");
-  // Pinned Playwright has no public default-argument API. Read its switch list
-  // and remove only the switches we merge, preserving all its other defaults.
-  const switches: unknown = require(join(root, "lib/server/chromium/chromiumSwitches.js"));
-  assert.ok(switches && typeof switches === "object" && "chromiumSwitches" in switches && typeof switches.chromiumSwitches === "function");
-  const defaultArgs: unknown = switches.chromiumSwitches(false, "chromium");
+  // Reconcile the package's complete headless defaults, including mute-audio.
+  const { defaultArgs } = pinnedChromiumDefinition();
   assert.ok(Array.isArray(defaultArgs) && defaultArgs.every(argument => typeof argument === "string"), "Unrecognized pinned Playwright launch arguments");
   return { playwrightVersion: installed, revision: browser.revision, browserVersion: browser.browserVersion, defaultArgs: defaultArgs as string[] };
 }

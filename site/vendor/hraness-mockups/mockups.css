@@ -8,7 +8,9 @@
  *
  * Theming: colors use light-dark() and follow the inherited color-scheme.
  * `data-hkm-theme="light|dark"` pins one mockup. Products retheme through
- * --hkm-accent, --hkm-font, --hkm-mono, and --hkm-serif.
+ * the --hkm-accent / --hkm-accent-foreground pair, --hkm-font, --hkm-mono,
+ * and --hkm-serif. Custom accent fills must supply their readable foreground;
+ * filled controls and their details always consume the pair together.
  *
  * Motion: nothing animates on first paint. Transitions turn on under
  * `[data-hkm-animated]`, which the client shells set after the first user
@@ -22,6 +24,7 @@
 
   :where(.hkm-root, .hkm-showcase) {
     --hkm-accent: var(--hraness-site-accent, var(--primary, #2f6fed));
+    --hkm-accent-foreground: var(--hraness-site-accent-ink, var(--primary-foreground, #ffffff));
     --hkm-font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
     --hkm-mono: var(--font-mono, ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace);
     --hkm-serif: "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
@@ -550,7 +553,7 @@
 
   .hkm-root .hkm-popover-item[data-hkm-selected] {
     background: var(--hkm-accent);
-    color: #ffffff;
+    color: var(--hkm-accent-foreground);
   }
 
   .hkm-root .hkm-popover-dot {
@@ -575,7 +578,7 @@
   }
 
   .hkm-root .hkm-popover-item[data-hkm-selected] .hkm-popover-dot {
-    background: #ffffff;
+    background: currentColor;
   }
 
   .hkm-root .hkm-popover-text {
@@ -594,7 +597,7 @@
   }
 
   .hkm-root .hkm-popover-item[data-hkm-selected] .hkm-popover-detail {
-    color: rgb(255 255 255 / 0.82);
+    color: inherit;
   }
 
   .hkm-root .hkm-popover-footer {
@@ -1486,7 +1489,7 @@
     block-size: 34px;
     border-radius: 7px;
     background: var(--hkm-accent);
-    color: #ffffff;
+    color: var(--hkm-accent-foreground);
   }
 
   .hkm-root .hkm-work-top .hkm-search-field {
@@ -2238,11 +2241,11 @@
   /* ---------------------------------------------------------------- */
 
   .hkm-showcase {
-    --hkm-sc-bg: light-dark(#fafafa, #141518);
-    --hkm-sc-field: light-dark(#ffffff, #1e1f23);
+    --hkm-sc-bg: var(--background, light-dark(#fafafa, #141518));
+    --hkm-sc-field: var(--surface-raised, light-dark(#ffffff, #1e1f23));
     --hkm-sc-fg: var(--foreground, light-dark(#15171a, #eceef1));
-    --hkm-sc-muted: var(--muted-foreground, light-dark(#5e6570, #9ba2ac));
-    --hkm-sc-line: light-dark(#e3e5e8, #2c2e34);
+    --hkm-sc-muted: var(--muted, var(--muted-foreground, light-dark(#5e6570, #9ba2ac)));
+    --hkm-sc-line: var(--line, light-dark(#e3e5e8, #2c2e34));
     --hkm-sc-radius: var(--radius-lg, 14px);
 
     container: hkm-showcase / inline-size;
@@ -2330,7 +2333,7 @@
   .hkm-showcase .hkm-tab[data-hkm-done] .hkm-step-number {
     border-color: var(--hkm-accent);
     background: var(--hkm-accent);
-    color: #ffffff;
+    color: var(--hkm-accent-foreground);
   }
 
   .hkm-showcase .hkm-showcase-settings {
@@ -2369,7 +2372,7 @@
 
   .hkm-showcase .hkm-segmented button[aria-pressed="true"] {
     background: var(--hkm-accent);
-    color: #ffffff;
+    color: var(--hkm-accent-foreground);
   }
 
   /* Disabled segments keep a readable muted label instead of fading the whole button. */
@@ -2394,6 +2397,10 @@
     outline: 2px solid var(--hkm-sc-fg);
     outline-offset: -4px;
     box-shadow: inset 0 0 0 2px var(--hkm-sc-field);
+  }
+
+  .hkm-showcase .hkm-segmented button[aria-pressed="true"]:focus-visible {
+    outline-color: var(--hkm-accent-foreground);
   }
 
   .hkm-showcase .hkm-showcase-hint {
@@ -2450,7 +2457,8 @@
   }
 
   .hkm-showcase .hkm-step-button:disabled {
-    opacity: 0.45;
+    background: var(--hkm-sc-field);
+    color: var(--hkm-sc-muted);
     cursor: default;
   }
 
@@ -2598,10 +2606,33 @@
     }
 
     .hkm-showcase .hkm-tab[aria-selected="true"],
-    .hkm-showcase .hkm-segmented button[aria-pressed="true"] {
+    .hkm-showcase .hkm-segmented button[aria-pressed="true"],
+    .hkm-showcase .hkm-tab[data-hkm-done] .hkm-step-number,
+    .hkm-root .hkm-popover-item[data-hkm-selected],
+    .hkm-root .hkm-work-mark {
       forced-color-adjust: none;
       background: Highlight;
       color: HighlightText;
+    }
+
+    .hkm-showcase .hkm-segmented button[aria-pressed="true"]:disabled {
+      background: ButtonFace;
+      color: GrayText;
+    }
+
+    .hkm-showcase .hkm-step-button:disabled {
+      color: GrayText;
+    }
+
+    .hkm-showcase .hkm-tab:focus-visible,
+    .hkm-showcase .hkm-step-button:focus-visible,
+    .hkm-showcase .hkm-segmented button:focus-visible {
+      outline-color: Highlight;
+      box-shadow: none;
+    }
+
+    .hkm-showcase .hkm-segmented button[aria-pressed="true"]:focus-visible {
+      outline-color: HighlightText;
     }
   }
 }

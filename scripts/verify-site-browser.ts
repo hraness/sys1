@@ -4,6 +4,7 @@ import { resolve, sep } from "node:path";
 import { chromium } from "playwright-core";
 import { closeSiteBrowser, siteBrowserLaunchPlan } from "./site-browser-policy.ts";
 import { checkLaunchMedia } from "./sync-launch-media.ts";
+import { verifyOwnedChromium } from "./owned-browser.mjs";
 
 // Exercise the shipped static files with Vercel's clean URLs and security headers.
 await checkLaunchMedia();
@@ -32,6 +33,7 @@ const server = production ? undefined : Bun.serve({
 });
 const pages = [...new Bun.Glob("**/*.html").scanSync(site)].sort();
 let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+let browserProof: Awaited<ReturnType<typeof verifyOwnedChromium>> | undefined;
 const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
 let browserVersion: string | undefined;
@@ -45,6 +47,8 @@ try {
   browserVersion = browser.version();
   console.log(`Browser: ${launch.executablePath}\nVersion: ${browserVersion}; Playwright ${launch.playwrightVersion}`);
   assert.equal(browserVersion, launch.expectedVersion, "Launched browser differs from the pinned Playwright version");
+  browserProof = await verifyOwnedChromium(browser, launch.executablePath, launch.expectedVersion);
+  console.log(JSON.stringify({ browserProof }));
   for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
     try {
@@ -152,5 +156,5 @@ try {
 } finally {
   await closeSiteBrowser(browser, server);
 }
-await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), browser: { executable: launch.executablePath, version: browserVersion, playwrightVersion: launch.playwrightVersion }, cleanup: "browser and server closed", results }, null, 2) + "\n");
+await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), browser: { executable: launch.executablePath, version: browserVersion, playwrightVersion: launch.playwrightVersion }, browserProof, cleanup: "browser and server closed", results }, null, 2) + "\n");
 console.log(`Verified ${results.length} route/viewport/theme combinations.`);

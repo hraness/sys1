@@ -91,3 +91,16 @@ hraness/.github) and the “Public copy” section of `PRODUCT.md`.
 - `test/compare.test.js` pins facts on this page (the two hard-tier counts,
   the unscored-Qwen sentence, the external-measurement scope, the MLX limit,
   and the $4.20 example). Reword those sentences only together with the test.
+
+
+## Evidence and caption refinement, September 30, 2026
+
+This refinement supersedes instructions to promote the synthetic workflow
+screen and blanket illustration captions. Marketing keeps the measured
+563-output replay and external JevBench comparisons. Plans and small screening
+results remain in their existing research reports. Demonstration context and
+accessible descriptions identify sample content; visible captions add information
+only when readers need it to interpret a result.
+
+Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
+and converged browser acceptance remain with the integration owner.

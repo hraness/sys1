@@ -75,7 +75,9 @@ The comparison page owns external JevBench scores and cost estimates.
 `/docs/evaluations-history` preserves the original form-action study. Local Qwen
 quality remains experimental. Synthetic examples and recorded figures do not
 establish production accuracy or calibrated probabilities. There are no supplied
-customer testimonials or adoption counts. Authored illustrations are labelled.
+customer testimonials or adoption counts. Describe demonstration content through
+its accessible name and example context; add a visible caption only when it
+explains a result the image alone cannot.
 
 ## Public copy
 
