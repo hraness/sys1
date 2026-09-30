@@ -14,7 +14,7 @@ if (typeof manifest !== "object" || manifest === null || !("version" in manifest
   throw new Error("Expected a stable package.json version");
 }
 const version = manifest.version;
-const files = ["src/gateway.ts", "README.md", "site/index.html", "site/docs.html", "site/llms.txt", "scripts/build-site-platforms.ts", "site/introducing-sys1.html", "kb/launch/social-kit.md"];
+const files = ["src/gateway.ts", "README.md", "site/index.html", "site/docs.html", "site/llms.txt", "scripts/build-site-platforms.ts", "site/introducing-sys1.html", "kb/launch/social-kit.md", "site-templates/index.html", "site-templates/docs.html", "site-templates/introducing-sys1.html"];
 const stale: string[] = [];
 for (const file of files) {
   const path = resolve(root, file);

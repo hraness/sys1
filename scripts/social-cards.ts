@@ -3,6 +3,8 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import primary from "../portfolio-messaging.generated.json";
+import skills from "../portfolio-system-one-skills.generated.json";
 import {
   createSocialImageCard,
   defineSocialImageSite,
@@ -25,9 +27,9 @@ const manifestPath = "brand/social-cards.json";
 const mark = readFileSync(resolve(root, "site/marks/sys1.svg"));
 
 export const socialSite = defineSocialImageSite({
-  name: "Sys1",
+  name: primary.messaging.names.name,
   domain: "sys1.io",
-  description: "Keep checks and code review together.",
+  description: primary.messaging.channels.social.imageDescription,
   // Product names the card must not break across lines.
   keepTogether: ["System One"],
   icon: { kind: "mark", src: `data:image/svg+xml;base64,${mark.toString("base64")}` },
@@ -45,12 +47,12 @@ type SocialPage = Readonly<{
 
 export const socialPages: readonly SocialPage[] = [
   { file: "site/index.html", url: `${origin}/`, image: "/og.png", copy: null },
-  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { path: "/introducing-sys1", eyebrow: "Launch", headline: "Introducing Sys1", description: "Compact check output, code review, and completion checks." } },
-  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { path: "/docs", eyebrow: "Documentation", headline: "Set up your first useful check", description: "Install Sys1 and save your first check result." } },
-  { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
-  { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 questions, five models." } },
-  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: "Models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "Skills", headline: "Shorter test logs for your agent", description: "No model or API key required." } },
+  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { path: "/introducing-sys1", eyebrow: "Launch", headline: `Introducing ${primary.messaging.names.name}`, description: "Compact check output, code review, and completion checks." } },
+  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { path: "/docs", eyebrow: "Documentation", headline: primary.messaging.headings["docs-title"], description: `Install ${primary.messaging.names.name} and save your first check result.` } },
+  { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: `${primary.messaging.names.name} evaluations`, description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
+  { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: `${primary.messaging.names.name}’s first tests: 20 questions, five models.` } },
+  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: `Models ${primary.messaging.names.name} can use`, description: "JevBench scores, where each model runs, and what your workload costs." } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "Skills", headline: skills.messaging.headings["social-image-title"], description: skills.messaging.channels.social.imageDescription } },
 ];
 
 const escape = (text: string): string => text
