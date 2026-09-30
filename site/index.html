@@ -128,7 +128,7 @@
         <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/skills">Skills</a>
-          <a href="#benchmarks">Benchmarks</a>
+          <a href="/compare#quality">Benchmarks</a>
           <a href="/introducing-sys1">Introducing</a>
           <a href="/docs">Docs</a>
           <a href="/compare">Compare</a>
@@ -158,7 +158,7 @@
         <p class="summary">Coding agents burn minutes and context on noisy logs and questions with short answers. System One Skills is our skill pack for that. Its first skill, <code>system-one-verify</code>, runs a noisy test or build once, hands your agent a short result, and keeps the full log on disk. Across 563 real validation runs it returned 35% less text, with no model and no Sys1 required. When your agent also needs fast decisions, Sys1 adds review and completion-check skills backed by Jev, TypeSafe’s fast hosted decision model, or a local model.</p>
         <div class="actions">
           <a class="button" href="/skills#install" data-analytics-cta="hero-install-skills">Install the skills <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-          <a class="text-link" href="#benchmarks" data-analytics-cta="hero-benchmarks">See what we measured</a>
+          <a class="text-link" href="/compare#quality" data-analytics-cta="hero-benchmarks">See what we measured</a>
         </div>
         <p class="hero-note">v0.17.0 Sys1 · v0.4.1 System One Skills · MIT · Open source. Review and verify are experimental and advisory. Hosted Jev is opt-in; an experimental local model runs on your machine.</p>
         </div>
@@ -196,22 +196,9 @@
         <p class="section-footnote">Review scores rank candidates; they are not calibrated defect probabilities. Keep your repository’s tests and review.</p>
       </section>
 
-      <section id="benchmarks" class="section" aria-labelledby="benchmarks-heading">
-        <div class="section-intro">
-          <h2 id="benchmarks-heading">Benchmarks against other skill packs are in progress.</h2>
-          <p>People reasonably ask how System One Skills compares with <a href="https://github.com/garrytan/gstack">gstack</a>, <a href="https://github.com/backnotprop/pstack">pstack</a>, <a href="https://github.com/obra/superpowers">Superpowers</a>, and <a href="https://github.com/anthropics/skills">Anthropic’s skills</a>. We have not run that comparison yet, so we publish no head-to-head numbers. Those packs cover planning, review, shipping, and document workflows. Ours starts with check output and completion claims, so the fair test is the same agent tasks with and without each pack.</p>
-        </div>
-        <div class="ecosystem-table" role="table" aria-label="What we have measured and what is still planned">
-          <div class="ecosystem-header" role="row"><span role="columnheader">Question</span><span role="columnheader">Status</span><span role="columnheader">Where to look</span></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><strong>Compact check output</strong><span class="project-kind">system-one-verify</span></div><p role="cell">Measured. 563 replayed validation outputs from one developer’s Codex and Devin sessions returned 35% less text.</p><p role="cell"><a href="/skills#evidence" data-analytics-cta="benchmarks-study">Read the study and its limits</a></p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><strong>Cost per decision</strong><span class="project-kind">Sys1 with Jev</span></div><p role="cell">Cost per decision and output size are measured. Whole-task token savings are not yet.</p><p role="cell"><a href="/docs/evaluations" data-analytics-cta="benchmarks-evaluations">See our evaluations</a></p></div>
-          <div class="ecosystem-row" role="row"><div role="cell"><strong>Skill packs head to head</strong><span class="project-kind">gstack, pstack, Superpowers, Anthropic</span></div><p role="cell">Planned, not run. Fixed tasks, pinned pack versions, and the same agent and model, scored on task success, tokens, time, and false “done” claims.</p><p role="cell"><a href="https://github.com/hraness/sys1/blob/main/docs/skill-pack-benchmark-plan.md" data-analytics-cta="benchmarks-plan">Read the benchmark plan</a></p></div>
-        </div>
-        <p class="section-footnote">We will publish results, including the ones where another pack wins, with the task set and raw logs. Until then, treat any comparison you read here as a question, not a result.</p>
-      </section>
 
       <section class="section launch-feature" aria-labelledby="launch-heading">
-        <div><h2 id="launch-heading">Meet Sys1.</h2><p>Why a fast model beside a smart one saves tokens and time, how ALGAL fits in, and what our first trial did and did not show.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
+        <div><h2 id="launch-heading">Meet Sys1.</h2><p>Why a fast model beside a smart one saves tokens and time, how ALGAL fits in, and how to try a checkpoint.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
         <figure>
           <video controls playsinline preload="none" width="1920" height="1080" poster="/media/sys1-launch-poster.jpg" aria-label="Introducing Sys1 launch film" aria-describedby="film-caption">
             <source src="/media/sys1-launch.mp4" type="video/mp4" />
@@ -250,25 +237,6 @@
         </ol>
       </section>
 
-      <section class="section trial-section" aria-labelledby="trial-heading">
-        <div class="section-intro">
-          <h2 id="trial-heading">Test the decision on your task.</h2>
-          <p>A September 28, 2026 trial submitted 48 synthetic examples once each to Jev 1.13.0. Claim support is the strongest next candidate for a larger evaluation; failure triage tied its baseline.</p>
-          <a class="text-link" href="/introducing-sys1#measured">Read the results and limitations →</a>
-        </div>
-        <figure class="trial-chart">
-          <table aria-label="Jev 1.13.0 synthetic workflow trial">
-            <thead><tr><th scope="col">Workflow</th><th scope="col">Jev · 16 cases each</th><th scope="col">Baseline</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">Claim support</th><td><div class="result-bar" aria-hidden="true"><span class="matches all"></span></div>16 / 16<small>No errors</small></td><td>6 / 16</td></tr>
-              <tr><th scope="row">Failure triage</th><td><div class="result-bar" aria-hidden="true"><span class="matches all"></span></div>16 / 16<small>No errors</small></td><td>16 / 16</td></tr>
-              <tr><th scope="row">Excerpt relevance</th><td><div class="result-bar" aria-hidden="true"><span class="matches thirteen"></span><span class="errors three"></span></div>13 / 16<small>3 errors</small></td><td>6 / 16</td></tr>
-            </tbody>
-          </table>
-          <div class="chart-legend" aria-hidden="true"><span><i></i> Matched the label</span><span><i class="error-key"></i> Error</span></div>
-          <figcaption>Eight development and eight separately authored screening cases per workflow. The baselines are simple error matching, word overlap, and a weak literal-match heuristic. These small tests do not establish production accuracy. <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">Method and all results</a>.</figcaption>
-        </figure>
-      </section>
 
       <section id="integrate" class="section" aria-labelledby="integration-heading">
         <div class="section-intro">

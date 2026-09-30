@@ -160,3 +160,16 @@ and report links remain unchanged. Sources: the existing forms-v1 and
 decisions-v2 reports and the frozen workflow profiles. Drafter/source pass:
 Codex agent /root/trial_cases; no human review. Root owns independent copy
 review and the final browser check.
+
+
+## Evidence and caption refinement, September 30, 2026
+
+This refinement supersedes instructions to promote the synthetic workflow
+screen and blanket illustration captions. Marketing keeps the measured
+563-output replay and external JevBench comparisons. Plans and small screening
+results remain in their existing research reports. Demonstration context and
+accessible descriptions identify sample content; visible captions add information
+only when readers need it to interpret a result.
+
+Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
+and converged browser acceptance remain with the integration owner.

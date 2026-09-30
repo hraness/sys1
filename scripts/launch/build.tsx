@@ -28,20 +28,18 @@ assertLaunchKit(resolvedBeats, socialKit, {
   forbiddenNames: ["gstack", "pstack", "Superpowers", "RTK"],
 });
 
-function Scorecard(): ReactElement {
-  const { compactPairs, pairs, reviewCorrectRequired, reviewCorrectWithout } = launchFacts;
+function VerificationStates(): ReactElement {
   return (
     <div className="launch-scorecard">
       <table>
-        <caption>Whole-task tests, September 2026</caption>
-        <thead><tr><th scope="col">Skill</th><th scope="col">Tasks</th><th scope="col">What happened</th></tr></thead>
+        <caption>What verification results mean</caption>
+        <thead><tr><th scope="col">State</th><th scope="col">Next step</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Review, available</th><td>{pairs.value}</td><td>Never called. No change.</td></tr>
-          <tr><th scope="row">Review, required</th><td>{pairs.value}</td><td>More tokens and time; {reviewCorrectRequired.value} of {pairs.value} correct against {reviewCorrectWithout.value} without it.</td></tr>
-          <tr><th scope="row">Compact check output</th><td>{compactPairs.value}</td><td>Never called. No token or time change.</td></tr>
+          <tr><th scope="row">Confirmed</th><td>Read the evidence supporting the claim.</td></tr>
+          <tr><th scope="row">Contradicted</th><td>Resolve the mismatch before reporting completion.</td></tr>
+          <tr><th scope="row">Unverifiable</th><td>Collect the missing evidence.</td></tr>
         </tbody>
       </table>
-      <p>Source: <code>docs/proof-roadmap-2026-09.md</code>. The next step is accuracy on real inputs.</p>
     </div>
   );
 }
@@ -53,7 +51,7 @@ function renderVisual(beat: LaunchBeat): ReactElement {
     case "clip":
       return <img alt="" decoding="async" height={720} loading="lazy" src={`/media/launch/beat-${beat.id}.jpg`} width={1280} />;
     case "diagram":
-      return <Scorecard />;
+      return <VerificationStates />;
   }
 }
 
@@ -64,10 +62,6 @@ function launchBeatAnchor(beat: Pick<LaunchBeat, "id">): string {
 }
 
 const figureKind = { mockup: "illustration", clip: "recording", diagram: "diagram" } as const;
-const figureLabel = { mockup: "Illustration", clip: "Film still", diagram: "Chart" } as const;
-
-const sentenceCase = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
-
 function LaunchBeats({ beats }: Readonly<{ beats: readonly LaunchBeat[] }>): ReactElement {
   assertLaunchBeats(beats);
   return (
@@ -80,7 +74,6 @@ function LaunchBeats({ beats }: Readonly<{ beats: readonly LaunchBeat[] }>): Rea
             <p>{beat.post}</p>
             <figure className="launch-beat-figure" data-figure-kind={figureKind[beat.visual.kind]}>
               <div className="launch-beat-visual">{renderVisual(beat)}</div>
-              <figcaption><span className="launch-beat-kind">{figureLabel[beat.visual.kind]}.</span> {sentenceCase(beat.alt.replace(/^Illustration: /u, ""))}</figcaption>
             </figure>
             {beat.detailHref === undefined ? null : (
               <p className="launch-beat-detail"><a href={beat.detailHref}>More on this</a></p>
@@ -177,8 +170,8 @@ const beatNav = resolvedBeats.map((beat) => `<li><a href="#${launchBeatAnchor(be
 
 const homeHtml = markup(
   <div className="launch-home-mockups">
-    <figure className="launch-home-figure"><LaunchMockup id="agent-review" /><figcaption>Illustration: an agent reviews its own change with <code>sys1-review</code>.</figcaption></figure>
-    <figure className="launch-home-figure"><LaunchMockup id="verify" /><figcaption>Illustration: <code>sys1 verify</code> catches a push that never happened.</figcaption></figure>
+    <figure className="launch-home-figure"><LaunchMockup id="agent-review" /></figure>
+    <figure className="launch-home-figure"><LaunchMockup id="verify" /></figure>
   </div>,
 );
 

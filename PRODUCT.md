@@ -69,14 +69,12 @@ run. The homepage links a dated 0.9.0 module integration record
 The broader frozen fixtures show poor Qwen quality; a direct Laya MLX
 candidate study reached 30/72 and remains outside the shipped runtime; local inference remains
 experimental. Jev has a completed 20-case result; a broader attempt failed
-authentication and is not quality evidence. The September 28, 2026 source-profile trial submitted 48 frozen synthetic
-examples to Jev 1.13.0 once each: claim support matched 16/16 labels, triage
-matched 16/16 and tied error signatures, and relevance matched 13/16 with
-three errors. Claim support's literal-match baseline scored 6/16 and is
-deliberately weak. The dated launch article explains this evidence with a
-chart; it does not establish production accuracy or review-skill quality.
-No customer adoption count or testimonial is supplied. Illustrative page
-examples must be labelled as such.
+authentication and is not quality evidence. The September 28 source-profile trial is retained in the dated research report.
+Public marketing emphasizes the external JevBench comparison and the
+563-output System One Skills replay.
+No customer adoption count or testimonial is supplied. Describe demonstration
+content through its accessible name and example context; add a visible caption
+only when it explains a result the image alone cannot.
 
 ## Public copy
 

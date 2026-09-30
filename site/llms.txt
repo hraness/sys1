@@ -36,11 +36,9 @@ Latest release: v0.17.0.
 
 These experimental profiles and their evaluator require a Sys1 source checkout, Bun, and project dependencies. They are separate from the installed review and verification skills.
 
-The September 28, 2026 Jev 1.13.0 trial submitted 48 frozen synthetic cases once each: claim support matched 16/16 labels, failure triage matched 16/16 and tied error signatures, and excerpt relevance matched 13/16 with three errors. The claim-support literal-match baseline scored 6/16 and is deliberately weak. The results motivate a larger trial; they do not establish production accuracy or probability calibration.
 
 - [Workflow profiles](https://sys1.io/skills#workflows): Explore failure triage, excerpt relevance, and support for claims using caller-supplied text.
 - [Profile evaluation](https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md): Validate labeled examples offline, then opt into model calls with request limits and per-question reports.
-- [September 28, 2026 trial](https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md): Method, recorded outcomes, and limits of the synthetic screening experiments.
 
 ## Source
 

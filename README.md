@@ -620,23 +620,8 @@ From a source checkout, [evaluate profiles on labeled examples](docs/profile-eva
 with an offline preview, request limits, and per-question results. Experimental
 [profiles](examples/workflows) cover failure triage, excerpt relevance, and claim
 support. These experiments require Bun and the project dependencies; they are
-separate from the installed review and verification skills. Read the
-[September 28, 2026 trial](benchmarks/workflows/results/2026-09-28.md) for the
-method, recorded outcomes, and limits.
-
-That trial submitted 48 frozen synthetic examples to Jev 1.13.0 once each:
-
-| Source workflow | Correct / submitted | Errors | Deterministic baseline |
-| --- | ---: | ---: | ---: |
-| Claim support | 16/16 | 0 | 6/16 with literal text matching |
-| Failure triage | 16/16 | 0 | 16/16 with error signatures |
-| Excerpt relevance | 13/16 | 3 | 6/16 with token overlap |
-
-Claim support is a candidate for a larger trial against stronger comparators.
-Triage tied ordinary error matching. Relevance needs response-format diagnosis.
-These small synthetic sets do not establish production accuracy, and the
-literal-match claim baseline is deliberately weak. Errors remain in the
-denominators; profiles, labels, and thresholds were unchanged after the run.
+separate from the installed review and verification skills. Use the evaluator with labeled examples from your own tasks and compare its
+answers with the native workflow before adopting a profile.
 
 For a direct Kev endpoint, use `createClient({ baseUrl: "http://127.0.0.1:8009",
 adapter: "kev" })` with an ordinary request containing `model: "kev-latest"`.

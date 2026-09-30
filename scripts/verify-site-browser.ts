@@ -3,6 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 import { chromium } from "playwright-core";
 import { checkLaunchMedia } from "./sync-launch-media.ts";
+import { ownedChromiumLaunchOptions, pinnedBrowserExecutable, pinnedChromiumDefinition, verifyOwnedChromium } from "./owned-browser.mjs";
 
 // Exercise the shipped static files with Vercel's clean URLs and security headers.
 await checkLaunchMedia();
@@ -13,6 +14,9 @@ const artifacts = resolve(process.env.SYS1_BROWSER_ARTIFACTS ?? "/tmp/sys1-site-
 await mkdir(artifacts, { recursive: true });
 const production = process.argv.includes("--production");
 assert.ok(process.argv.slice(2).every(argument => argument === "--production"), "Unknown argument");
+const executablePath = await pinnedBrowserExecutable(chromium.executablePath(), process.env.SYS1_BROWSER_EXECUTABLE);
+const { defaultArgs, expectedVersion } = pinnedChromiumDefinition();
+const launchOptions = ownedChromiumLaunchOptions(executablePath, defaultArgs);
 const server = production ? undefined : Bun.serve({
   hostname: "127.0.0.1", port: 0,
   async fetch(request) {
@@ -30,6 +34,7 @@ const server = production ? undefined : Bun.serve({
 });
 const pages = [...new Bun.Glob("**/*.html").scanSync(site)].sort();
 let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
+let browserProof: Awaited<ReturnType<typeof verifyOwnedChromium>> | undefined;
 const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
 try {
@@ -38,7 +43,9 @@ try {
     assert.equal(response.status, redirect.permanent ? 308 : 307);
     assert.equal(new URL(response.headers.get("location")!, origin).pathname, redirect.destination);
   }
-  browser = await chromium.launch();
+  browser = await chromium.launch(launchOptions);
+  browserProof = await verifyOwnedChromium(browser, executablePath, expectedVersion);
+  console.log(JSON.stringify({ browserProof }));
   for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
     try {
@@ -146,5 +153,5 @@ try {
   try { await browser?.close(); }
   finally { await server?.stop(true); }
 }
-await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), cleanup: "browser and server closed", results }, null, 2) + "\n");
+await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), browserProof, cleanup: "browser and server closed", results }, null, 2) + "\n");
 console.log(`Verified ${results.length} route/viewport/theme combinations.`);

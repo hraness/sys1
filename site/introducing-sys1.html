@@ -206,14 +206,14 @@
           <div class="launch-prose">
             <p>Watch a coding agent work and you will see it spend real effort on small questions. Did that test fail because of my change? Does this diff break the project’s rule about error handling? Did I actually push? Each one costs a frontier model context and seconds, and the answer is usually yes or no.</p>
             <p>Psychologists call fast, instinctive thinking System One and slow, deliberate thinking System Two. A coding agent is all System Two. Sys1 adds the other half: it sends those small questions to Jev, TypeSafe’s hosted System One decision model, which returns a probability in under a second. TypeSafe’s published workflow figures put a decision at about $0.0004. The agent keeps its context for the work that needs it.</p>
-            <p>Sys1 ships as project skills for Codex, Claude Code, and Devin, plus a CLI and an API for your own code. This post explains how the pieces fit, where ALGAL comes in, and what a first small trial did and did not show.</p>
+            <p>Sys1 ships as project skills for Codex, Claude Code, and Devin, plus a CLI and an API for your own code. This post explains how the pieces fit, where ALGAL comes in, and how to try a checkpoint.</p>
           </div>
           <nav class="launch-contents" aria-label="In this article">
             <a href="#short">The short version</a>
             <a href="#three-parts">The agent, Jev, and ALGAL</a>
             <a href="#system-one">What a decision looks like</a>
             <a href="#evidence">From changes to evidence</a>
-            <a href="#measured">What the trial found</a>
+            <a href="#measured">Measured output and model performance</a>
             <a href="#try">Try a checkpoint</a>
           </nav>
         </div>
@@ -305,40 +305,9 @@ https://sys1.io/introducing-sys1</pre></details>
 
         <section class="launch-section" id="measured" aria-labelledby="results-heading">
           <div class="launch-prose">
-            <h2 id="results-heading">The trial points to one next experiment</h2>
-            <p>Sys1 also includes source-checkout profiles for failure triage, excerpt relevance, and claim support. A profile fixes the questions and model route while accepting new input. On September 28, 2026, Jev 1.13.0 received 48 synthetic examples across these profiles, each submitted once. It returned 45 valid answers matching the authored labels and three errors.</p>
-          </div>
-
-          <figure class="launch-results" aria-labelledby="chart-title" aria-describedby="chart-caption">
-            <div class="chart-heading"><h3 id="chart-title">All 48 submitted examples</h3><p>16 per workflow · Jev 1.13.0 · September 28, 2026</p></div>
-            <ul class="chart-legend" aria-label="Chart legend"><li><span class="legend-mark correct" aria-hidden="true"></span>Matched label</li><li><span class="legend-mark wrong" aria-hidden="true"></span>Wrong baseline label</li><li><span class="legend-mark error" aria-hidden="true"></span>Request error</li></ul>
-            <div class="trial-group">
-              <h4>Failure triage</h4>
-              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-16"></span></div><span class="trial-value">16 / 16</span></div>
-              <div class="trial-row"><span class="trial-label">Error signatures</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-16"></span></div><span class="trial-value">16 / 16</span></div>
-              <p>Both matched every label. These examples show no advantage over ordinary error matching.</p>
-            </div>
-            <div class="trial-group">
-              <h4>Excerpt relevance</h4>
-              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-13"></span><span class="trial-segment error count-3">×</span></div><span class="trial-value">13 / 16 <span>3 errors</span></span></div>
-              <div class="trial-row"><span class="trial-label">Token overlap</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-6"></span><span class="trial-segment wrong count-10"></span></div><span class="trial-value">6 / 16</span></div>
-              <p>Every valid answer matched its label, but three submissions failed. Error handling needs work before a broader trial.</p>
-            </div>
-            <div class="trial-group">
-              <h4>Claim support</h4>
-              <div class="trial-row"><span class="trial-label">Jev</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct count-16"></span></div><span class="trial-value">16 / 16</span></div>
-              <div class="trial-row"><span class="trial-label">Literal matching</span><div class="trial-track" aria-hidden="true"><span class="trial-segment correct baseline count-6"></span><span class="trial-segment wrong count-10"></span></div><span class="trial-value">6 / 16</span></div>
-              <p>A reason to test more representative claims against a stronger comparator. Literal matching is a deliberately weak baseline.</p>
-            </div>
-            <figcaption id="chart-caption">Each bar groups 16 results by outcome. Eight development examples and eight separately authored screening examples were frozen for each workflow. Both sets are synthetic and public. Errors remain in the denominator. <a href="https://github.com/hraness/sys1/blob/3cfc8261bd533467f58ae40ebba70353fe8e2afe/benchmarks/workflows/results/2026-09-28.md">Full report and observations</a>.</figcaption>
-            <details class="chart-data"><summary>Read the chart as a table<svg class="disclosure-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path class="disclosure-vertical" d="M12 5v14"/></svg></summary><div class="launch-table-scroll" role="region" aria-label="Workflow results" tabindex="0"><table><caption>Matched labels and errors across all submissions</caption><thead><tr><th scope="col">Workflow</th><th scope="col">Jev matched</th><th scope="col">Jev errors</th><th scope="col">Baseline matched</th></tr></thead><tbody><tr><th scope="row">Failure triage</th><td>16/16</td><td>0</td><td>16/16</td></tr><tr><th scope="row">Excerpt relevance</th><td>13/16</td><td>3</td><td>6/16</td></tr><tr><th scope="row">Claim support</th><td>16/16</td><td>0</td><td>6/16</td></tr></tbody></table></div></details>
-          </figure>
-
-          <div class="launch-prose">
-            <p>Claim support is the most useful next candidate from this small screen. Its baseline predicted insufficient evidence on every example and matched six labels, so this comparison leaves stronger entailment models and better rules untested. The profile judges a claim against the supplied excerpt; it does not verify that the excerpt itself is true.</p>
-            <p>The relevance errors also matter. Two responses reached the gateway with provider HTTP 200 and failed response validation. The first failure was a gateway HTTP 502 whose underlying cause was not retained. The original failed request was never retried; a continuation submitted only the 30 previously unsubmitted cases. These observations test the profiles and evaluator, not the installed review skill or production accuracy.</p>
-            <p>This trial measured answers, not savings. Per-decision cost and latency come from TypeSafe’s published figures, and the separate <a href="/skills#shipped">compact check output</a> skill returned 35% less text across 563 real test and build runs. Nobody has yet measured how many tokens a whole agent task saves; that is the next number worth getting.</p>
-            <p>The <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">profile evaluator</a> makes a similar comparison available from a source checkout. It validates examples offline before you opt into calls, then records coverage, matched labels, errors, timing, and routes. A next trial can preserve the first result, use stronger baselines, and measure how the decision changes the completed task.</p>
+            <h2 id="results-heading">Measured output and model performance</h2>
+            <p>The separate System One Skills package returned 35% less text when replaying 563 recorded validation outputs from one developer’s Codex and Devin sessions. The <a href="/skills#evidence">study</a> includes the provider breakdown and preservation checks.</p>
+            <p>The <a href="/compare#quality">model comparison</a> uses external JevBench workloads for decision quality. Choose results from the task you plan to run; the <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">profile evaluator</a> lets you validate labeled application examples offline before opting into model calls.</p>
           </div>
         </section>
 

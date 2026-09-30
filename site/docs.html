@@ -289,7 +289,6 @@
             <p>Import <code>createProfile</code> from <code>@hraness/sys1/client</code>. Save the definition as JSON for <code>sys1 eval --profile triage.json</code>, with <code>{"state": ...}</code> on stdin. Profiles also work with Jev and built-in local model routes.</p>
             <p>Start by improving instructions and criteria against fixed application examples. If fine-tuning helps, train Kev separately, calibrate and evaluate the checkpoint, then publish a new profile revision pointing at its server. Profiles do not collect training data or start training jobs.</p>
             <p>From a source checkout with Bun and project dependencies, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate a profile on labeled examples</a>. The included experiments cover failure triage, excerpt relevance, and claim support. They are separate from the installed project skills.</p>
-            <p>The <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 screening trial</a> submitted 48 synthetic cases to Jev 1.13.0 once each. Claim support matched 16/16 labels, triage matched 16/16 and tied its deterministic baseline, and relevance matched 13/16 with three errors. Claim support’s literal-match baseline scored 6/16 and is a weak comparator. Use the findings to choose a larger trial on your own tasks.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev setup, prompt tuning, and fine-tuning guide <span aria-hidden="true">↗</span></a></div>
           </section>
 
@@ -297,7 +296,6 @@
             <h2 id="research-title">Evidence &amp; research</h2>
             <p class="docs-intro">Each evaluation is dated and keeps its raw reports, workloads, runtime details, and caveats. A result describes the build it tested, not later releases.</p>
             <div class="docs-research-list">
-              <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md"><span><strong>Workflow screening: September 28</strong><small>48 frozen synthetic cases · baseline comparisons and response errors</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations"><span><strong>Model evaluations</strong><small>JevBench v1.2.6 · Jev, Qwen, and direct Laya study</small></span><span aria-hidden="true">↗</span></a>
               <a href="/docs/evaluations-history"><span><strong>Evaluation history</strong><small>Earlier CUA, Needle, forms-v1, and local adapter results</small></span><span aria-hidden="true">↗</span></a>
               <a href="/skills"><span><strong>Agent skills</strong><small>Review instructions, claim verification, and optional compact check output</small></span><span aria-hidden="true">↗</span></a>
