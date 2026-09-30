@@ -1,7 +1,7 @@
 // Browser entry for site/analytics.js. Built by scripts/build-site-analytics.ts;
 // the deployed site never loads a remote script.
 import posthog from "posthog-js/dist/module.slim.no-external";
-import { getBrowserConsent } from "@hraness/posthog/consent";
+import { getBrowserConsent, installConsentTransport } from "@hraness/posthog/consent";
 import { initHranessCookieConsent } from "@hraness/site-footer/consent";
 // Registers the web-vitals library on window.__PosthogExtensions__ locally.
 import "posthog-js/dist/web-vitals.js";
@@ -56,6 +56,12 @@ function startAnalytics(): void {
   if (callbacks !== undefined) {
     let buffer: (WebVitalMetric & { timestamp: number })[] = [];
     let timer: ReturnType<typeof setTimeout> | undefined;
+    consent?.subscribe(() => {
+      if (consent.allowed()) return;
+      if (timer !== undefined) clearTimeout(timer);
+      timer = undefined;
+      buffer = [];
+    });
     const flush = () => {
       if (timer !== undefined) clearTimeout(timer);
       timer = undefined;
@@ -92,7 +98,7 @@ function startAnalytics(): void {
 if (shouldLoad(window.location, navigator as Navigator & { globalPrivacyControl?: boolean })) {
   let started = false;
   consent?.subscribe(() => {
-    if (started || !consent?.allowed()) return;
+    if (started || !consent?.allowed() || !installConsentTransport(posthog, consent)) return;
     started = true;
     startAnalytics();
   });

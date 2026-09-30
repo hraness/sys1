@@ -2,11 +2,13 @@
 // transport together. A child process keeps browser globals out of other tests.
 import { mock } from "bun:test";
 import { strict as assert } from "node:assert";
+import { WEB_VITALS_METRICS, type WebVitalMetric } from "./site-analytics";
 
 const scenario = process.argv[2] ?? "required";
 assert(["required", "exempt", "unavailable"].includes(scenario));
-// Browser performance observers are unrelated to this consent transport check.
+// Supply controlled observer reports while retaining the real browser entry.
 mock.module("posthog-js/dist/web-vitals.js", () => ({}));
+const metricReports = new Map<string, (metric: WebVitalMetric) => void>();
 const windowEvents = new EventTarget();
 const documentEvents = new EventTarget();
 const location = new URL("https://sys1.io/");
@@ -28,6 +30,8 @@ Object.assign(globalThis, {
   ...listeners(windowEvents), window: globalThis, document: documentValue, location,
   navigator: { doNotTrack: null, globalPrivacyControl: false, language: "en-US", languages: ["en-US"], onLine: true, userAgent: "Mozilla/5.0", webdriver: false },
   screen: { height: 900, width: 1440 }, innerHeight: 900, innerWidth: 1440,
+  __PosthogExtensions__: { postHogWebVitalsCallbacks: Object.fromEntries(WEB_VITALS_METRICS.map(name =>
+    [`on${name}`, (report: (metric: WebVitalMetric) => void) => metricReports.set(name, report)])) },
   localStorage: { getItem: (key: string) => storage.get(key) ?? null, setItem: (key: string, value: string) => storage.set(key, value) },
   fetch: async (url: string, options: { body?: unknown } = {}) => {
     if (url === "https://account.hraness.com/api/consent/region") {
@@ -60,10 +64,20 @@ await new Promise(resolve => setTimeout(resolve, 20));
 assert.equal(sent.length, 1, "repeated acceptance cannot initialize the SDK twice");
 
 const { default: posthog } = await import("posthog-js/dist/module.slim.no-external");
+assert.equal(metricReports.size, 4, "the entry registers each performance observer");
+metricReports.get("LCP")!({ name: "LCP", value: 100 });
 storage.set("hraness-consent-cookies-v1", "declined");
 windowEvents.dispatchEvent(Object.assign(new Event("storage"), { key: "hraness-consent-cookies-v1" }));
 posthog.capture("$pageleave", {}, { send_instantly: true, transport: "fetch" });
 await new Promise(resolve => setTimeout(resolve, 20));
 assert.equal(sent.length, 1, "a changed choice blocks subsequent collection");
+storage.set("hraness-consent-cookies-v1", "accepted");
+windowEvents.dispatchEvent(new Event("hraness-consent-accepted"));
+for (const name of ["CLS", "FCP", "INP"]) metricReports.get(name)!({ name, value: 1 });
+await new Promise(resolve => setTimeout(resolve, 20));
+assert.equal(sent.length, 1, "reacceptance cannot combine fresh metrics with a withdrawn metric");
+metricReports.get("LCP")!({ name: "LCP", value: 200 });
+await new Promise(resolve => setTimeout(resolve, 20));
+assert.equal(sent.length, 2, "a complete fresh metric set flushes after reacceptance");
 console.log(JSON.stringify({ scenario, regionRequests: pendingRegion.length, analyticsRequests: sent.length, passed: true }));
 process.exit(0);

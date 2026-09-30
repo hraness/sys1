@@ -7,6 +7,6 @@ for (const scenario of ["required", "exempt", "unavailable"]) {
     });
     const [exitCode, output, error] = await Promise.all([child.exited, new Response(child.stdout).text(), new Response(child.stderr).text()]);
     expect({ exitCode, error }).toEqual({ exitCode: 0, error: "" });
-    expect(JSON.parse(output)).toMatchObject({ scenario, analyticsRequests: 1, passed: true });
+    expect(JSON.parse(output)).toMatchObject({ scenario, analyticsRequests: 2, passed: true });
   }, 15_000);
 }

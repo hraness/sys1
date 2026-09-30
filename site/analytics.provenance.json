@@ -1,7 +1,17 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "bun": "1.3.14",
   "posthogJs": "1.422.5",
+  "consent": [
+    {
+      "entry": "@hraness/posthog/consent",
+      "sha256": "1b052eea7b6acfd3689edb158aca25143b5a7eee9db61179cdf4267bf0982912"
+    },
+    {
+      "entry": "@hraness/site-footer/consent",
+      "sha256": "59efe96b7d0771b707f2faa238244d306e93ae52fa13d30a3539271d175d3991"
+    }
+  ],
   "entry": [
     "posthog-js/dist/module.slim.no-external",
     "posthog-js/dist/web-vitals.js"
@@ -9,16 +19,16 @@
   "sources": [
     {
       "path": "scripts/site-analytics.ts",
-      "sha256": "e81cb803b4095447935476d19d61a97eb9dfeeed9680844b9c0adef1fd1716f0"
+      "sha256": "960947c5de2bc4ca3a72fbde8f76223f64b0da4d83d78a532242e6e5a7b94a0a"
     },
     {
       "path": "scripts/site-analytics-entry.ts",
-      "sha256": "b22eab666ab134cdb9267c7c3f8f0cd5d14f26797ffc33184308a45a99cebbf1"
+      "sha256": "b2f18d46a86f97189f63ea454a7fd7eb11daa3c28a7fc4b6330bcdd573d946fa"
     }
   ],
   "output": {
     "path": "site/analytics.js",
-    "sha256": "4a22571bd518b81ed5c21ef69d1f751ec2539eb5ac3c82c1b4ff617b37628399",
-    "bytes": 161737
+    "sha256": "96e38ffd96a309005a02c80c65c21027a7412579bfc3375b0812e4dfa3161849",
+    "bytes": 168342
   }
 }
