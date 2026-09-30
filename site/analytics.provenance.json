@@ -9,7 +9,7 @@
   "sources": [
     {
       "path": "scripts/site-analytics.ts",
-      "sha256": "b1c10a6997e6eddf29ee6fa3091ad57f4eeedb5891890dca52439048a7875936"
+      "sha256": "e81cb803b4095447935476d19d61a97eb9dfeeed9680844b9c0adef1fd1716f0"
     },
     {
       "path": "scripts/site-analytics-entry.ts",
@@ -18,7 +18,7 @@
   ],
   "output": {
     "path": "site/analytics.js",
-    "sha256": "499c59e42a03222d06dd6a771dffff51cdc43719c17d42ff8cdef5482c8b2c09",
-    "bytes": 160967
+    "sha256": "4a22571bd518b81ed5c21ef69d1f751ec2539eb5ac3c82c1b4ff617b37628399",
+    "bytes": 161737
   }
 }
