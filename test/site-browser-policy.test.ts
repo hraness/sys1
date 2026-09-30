@@ -31,6 +31,8 @@ test("rejects system Chrome and environment executable overrides", () => {
   for (const name of ["CHROME_PATH", "CHROME_BIN", "CHROMIUM_EXECUTABLE_PATH", "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "SYS1_BROWSER_EXECUTABLE_PATH"]) {
     expect(() => verifyProvisionedChromium(path, "1234", { [name]: path })).toThrow("executable overrides");
   }
+  expect(verifyProvisionedChromium(path, "1234", { CHROME_BIN: "" })).toBe(realpathSync(path));
+  expect(() => verifyProvisionedChromium(path, "1234", { CHROME_BIN: "/private/custom/browser" })).toThrow("unset CHROME_BIN");
   expect(() => verifyProvisionedChromium(path, "1234", { SELENIUM_REMOTE_URL: "https://example.invalid" })).toThrow("Remote browser overrides");
 });
 

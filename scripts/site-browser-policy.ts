@@ -14,7 +14,8 @@ const executableOverrides = [
 ];
 
 export function verifyProvisionedChromium(executable: string, revision: string, environment: NodeJS.ProcessEnv = process.env): string {
-  assert.ok(executableOverrides.every(name => !environment[name]), "Browser executable overrides are not supported; use the pinned Playwright browser");
+  const overrides = executableOverrides.filter(name => environment[name]);
+  assert.ok(overrides.length === 0, `Browser executable overrides are not supported; unset ${overrides.join(", ")} and use the pinned Playwright browser`);
   assert.ok(!environment.SELENIUM_REMOTE_URL, "Remote browser overrides are not supported for owned browser checks");
   const candidate = resolve(executable);
   const portable = candidate.replaceAll("\\", "/").toLowerCase();
