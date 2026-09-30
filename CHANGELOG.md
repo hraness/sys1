@@ -5,6 +5,16 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.18.0 - 2026-09-30
+
+Sys1 includes ALGAL to save check results and continue a scoped code review across agent sessions.
+
+- Run `sys1 workflow check -- <command>` on macOS or Linux to save a check result and private command log without a model or account.
+- Use `sys1 workflow review` to run a check before an advisory review, with an explicit model route and request limit. Pause after the check when you want to inspect it before review.
+- List, show, resume, and verify saved runs. Resume checks the project, command, environment, rules, configuration, and check age before continuing; an interrupted step with an unknown outcome requires inspection instead of an automatic retry.
+- Keep model bodies, command arguments, and credentials out of the saved execution record. Command output is stored separately in private logs with size and retention limits.
+- Let the review skill use the combined workflow when the agent already needs to run a repository check and review its changes. Existing review-only commands remain available.
+
 ## 0.17.1 - 2026-09-30
 
 Sys1 makes installation and everyday checks easier to follow, with working CLI examples and a shorter path from the website to the first useful command.

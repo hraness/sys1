@@ -5,7 +5,7 @@ structured answers from Jev or a local model. Jev is TypeSafe’s hosted decisio
 model. Project skills work with Codex, Claude Code, and Devin; applications can
 use the same tools through a CLI, Node/Bun client, or HTTP API.
 
-Latest release: v0.17.1. Install the GitHub release with npm and run it with
+Latest release: v0.18.0. Install the GitHub release with npm and run it with
 Bun 1.3.14 or newer. MIT licensed.
 
 [Get started](#install) · [Agent skills](https://sys1.io/skills) · [Documentation](https://sys1.io/docs) · [Releases](https://github.com/hraness/sys1/releases)
@@ -14,15 +14,12 @@ Bun 1.3.14 or newer. MIT licensed.
 
 | You want to | Use | What you receive |
 | --- | --- | --- |
-| Keep long test logs out of the agent’s context | [System One Skills](https://sys1.io/skills#compact-checks), a separate package | A short result, the command’s exit status, and the full log saved locally. No model or API key. |
+| Save a check and continue its review later | [`sys1 workflow`](#save-a-check-and-continue-its-review) | A saved execution record, a private command log, and input checks before resume. |
 | Check a change against a repository rule | [`sys1 review`](#review-changes-with-your-agent) | Candidates tied to the rule and diff, with feedback and reuse of unchanged reviews. |
 | Check a proposed completion message | [`sys1 verify`](#check-an-agents-completion-message) | A comparison with Git state, linked pull requests, and live pages. |
 | Add a decision to application code | [Client and HTTP API](#use-as-a-module) | Yes/no, choice, or score answers with probabilities and validated response shapes. |
+| Keep long test logs out of the agent’s context | [System One Skills](https://sys1.io/skills#compact-checks), a separate package | A short result, the command’s exit status, and the full log saved locally. No model or API key. |
 
-For compact checks alone, [install System One Skills](https://sys1.io/docs#compact-checks).
-It needs Node.js 20+ on macOS or Linux and works independently of Sys1. Its
-replay of 563 validation outputs measured 35% less text at the tool output;
-whole-task token savings have not been demonstrated.
 
 ## Install
 
@@ -31,7 +28,7 @@ available, then run:
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz
+  https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz
 sys1 --version
 ```
 
@@ -39,6 +36,25 @@ The version command prints the installed release number. The release supports ma
 and Windows. `--allow-scripts=node-llama-cpp` allows the optional local inference
 runtime’s install script; installation downloads no model weights and enables
 no hosted backend. The release includes a SHA-256 checksum.
+
+## Save a check and continue its review
+
+From a Git worktree on macOS or Linux, run your repository’s check command:
+
+```sh
+sys1 workflow check -- bun test
+sys1 workflow list
+```
+
+Sys1 saves the result and command output locally. This check needs no model or
+API key. After configuring a backend, `sys1 workflow review` can run the check
+and then review the selected changes. You can pause after the check and resume
+with the same inputs; uncertain interrupted steps are never silently repeated.
+ALGAL handles execution and saved state inside Sys1.
+
+The [workflow guide](docs/workflows.md) covers scoped reviews, resume, private
+logs, and inspecting a saved run. Keep running fresh required checks before
+delivery.
 
 ## Review changes with your agent
 
@@ -126,7 +142,7 @@ For an application using Node 24 or Bun, install the portable client:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz
+  https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz
 ```
 
 With a backend configured, run `sys1 up` to start the gateway, then call it:

@@ -71,6 +71,7 @@ test("refresh rejects mismatched release, browser or lock before publishing", as
   expect(await Bun.file(join(f.vendor, "provenance.json")).exists()).toBe(false);
 });
 
+// Two Git-backed refreshes plus corruption checks can exceed 5s on Windows CI.
 test("check rejects palette or authored-bootstrap drift; refresh uses Git CSS bytes", async () => {
   const f = await fixture();
   await writeFile(join(f.upstream, "src/palette-system.css"), "uncommitted local CSS\n");
@@ -86,7 +87,7 @@ test("check rejects palette or authored-bootstrap drift; refresh uses Git CSS by
   await checkAppearance(f.root);
   await writeFile(f.browser, "wrong artifact\n");
   await expect(rebuildAppearance(f.root, f.browser)).rejects.toThrow("dist/browser/index.js");
-});
+}, 15_000);
 
 test("check rejects an incomplete inventory, unknown receipt fields and modified output", async () => {
   const f = await fixture();

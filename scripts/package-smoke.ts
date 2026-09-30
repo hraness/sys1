@@ -14,6 +14,7 @@ import { dirname, join, resolve } from "node:path";
 
 const PACKAGE_ROOT = resolve(import.meta.dir, "..");
 const PACKAGE_NAME = "@hraness/sys1";
+const ALGAL_RELEASE = "https://codeload.github.com/hraness/algal/tar.gz/741f19ec9f0e82bb8d87a89ff39eeee6e82d01e3";
 const MAX_OUTPUT_BYTES = 4 * 1_024 * 1_024;
 
 const REQUIRED = [
@@ -103,14 +104,18 @@ function record(value: unknown, label: string): Record<string, unknown> {
 function exactDependencies(manifest: Record<string, unknown>): string[] {
   const dependencies = record(manifest["dependencies"], "dependencies");
   const names = Object.keys(dependencies).sort();
-  if (names.length !== 1 || names[0] !== "zod") {
+  if (names.length !== 2 || names[0] !== "@hraness/algal" || names[1] !== "zod") {
     throw new Error(`packed dependencies are unexpected: ${names.join(", ")}`);
+  }
+  if (dependencies["@hraness/algal"] !== ALGAL_RELEASE) {
+    throw new Error("ALGAL must use the verified published release commit");
   }
   const optional = record(manifest["optionalDependencies"], "optionalDependencies");
   if (Object.keys(optional).length !== 1 || optional["node-llama-cpp"] === undefined) {
     throw new Error("native runtime must be the only optional dependency");
   }
   for (const [name, version] of Object.entries({ ...dependencies, ...optional })) {
+    if (name === "@hraness/algal") continue;
     if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
       throw new Error(`dependency ${name} is not exactly pinned`);
     }
@@ -119,7 +124,7 @@ function exactDependencies(manifest: Record<string, unknown>): string[] {
 }
 
 export async function packageSmoke(tarballArgument?: string): Promise<void> {
-  const work = mkdtempSync(join(tmpdir(), "sys1-package-"));
+  const work = realpathSync(mkdtempSync(join(tmpdir(), "sys1-package-")));
   try {
     let tarball: string;
     if (tarballArgument === undefined) {
@@ -393,6 +398,33 @@ export async function packageSmoke(tarballArgument?: string): Promise<void> {
     }
     const rules = record(JSON.parse(await run([process.execPath, installedCli, "rules", "list", "--json"], { cwd: auditRepo, env })), "rule list");
     if (!Array.isArray(rules["rules"]) || rules["rules"].length === 0) throw new Error("packed CLI did not list bundled rules");
+    // Exercise the shipped ALGAL process engine through the packed CLI, with
+    // neither a configured backend nor a credential. Windows execution stays
+    // disabled until process-group cleanup is qualified on that platform.
+    if (process.platform !== "win32") {
+      const command = [process.execPath, "--eval", "process.stdout.write('packed-workflow-check')"];
+      const workflow = record(JSON.parse(await run([
+        process.execPath, installedCli, "workflow", "check", "--json", "--", ...command,
+      ], { cwd: auditRepo, env: { ...env, TYPESAFE_API_KEY: "" } })), "packed workflow");
+      const id = workflow["id"];
+      if (typeof id !== "string" || !/^wf-[a-f0-9]{24}$/.test(id) || workflow["status"] !== "complete"
+        || workflow["exitCode"] !== 0 || record(workflow["check"], "workflow check")["exitCode"] !== 0
+        || workflow["review"] !== null || typeof workflow["processDigest"] !== "string") {
+        throw new Error("packed workflow did not finish its check without a model");
+      }
+      const saved = record(JSON.parse(await run([
+        process.execPath, installedCli, "workflow", "show", id, "--json",
+      ], { cwd: auditRepo, env })), "saved workflow");
+      if (saved["id"] !== id || saved["status"] !== "complete" || saved["processDigest"] !== workflow["processDigest"]) {
+        throw new Error("packed workflow did not preserve its result across processes");
+      }
+      const verified = record(JSON.parse(await run([
+        process.execPath, installedCli, "workflow", "verify", id, "--json",
+      ], { cwd: auditRepo, env })), "workflow verification");
+      if (verified["ok"] !== true || verified["id"] !== id || Number(verified["receipts"]) < 1) {
+        throw new Error("packed ALGAL workflow record did not verify");
+      }
+    }
     console.log(`standalone package verified (${entries.length} files, Bun ${Bun.version})`);
   } finally {
     rmSync(work, { recursive: true, force: true });

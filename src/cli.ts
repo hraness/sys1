@@ -3,6 +3,7 @@ import { readBoundedText } from "./http.ts";
 import { runAuditCli, renderAudit, AuditCliError } from "./audit/cli.ts";
 import { runReviewCli, renderReview, reviewExitCode } from "./review/cli.ts";
 import { runVerifyCli, renderVerify, verifyExitCode } from "./verify/cli.ts";
+import { WorkflowError } from "./workflows/types.ts";
 import { VerifyError } from "./verify/message.ts";
 import { ReviewError, resolveReviewRoot } from "./review/checkpoint.ts";
 import { ProjectFileError } from "./review/project-files.ts";
@@ -85,9 +86,9 @@ function defaultNext(code: number): string {
 }
 
 /** SPEC § D5: one sentence and one next command, or one JSON error object for agents and --json. */
-function fail(message: string, code: number, next = defaultNext(code)): never {
+function fail(message: string, code: number, next = defaultNext(code), errorCode = ERROR_CODES[code] ?? "failed"): never {
   if (wantsJsonOutput()) {
-    out(JSON.stringify({ ok: false, error: { code: ERROR_CODES[code] ?? "failed", message: sentence(message), next } }));
+    out(JSON.stringify({ ok: false, error: { code: errorCode, message: sentence(message), next } }));
   } else {
     err(`${sym("fail", process.stderr)} ${sentence(message)}`);
     err(`${sym("next", process.stderr)} ${next}`);
@@ -795,14 +796,14 @@ async function main(): Promise<void> {
   const rawArgs = process.argv.slice(2);
   const separator = rawArgs.indexOf("--");
   const beforePaths = parseArgs(separator === -1 ? rawArgs : rawArgs.slice(0, separator));
-  // Audit owns everything after -- as literal paths. Do not interpret a file
-  // named --help or --version as a top-level control flag.
-  const args = ["audit", "review", "rules", "verify"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
+  // These commands own everything after -- as paths or child argv. A literal
+  // --help, --version, or --json there never becomes a Sys1 control flag.
+  const args = ["audit", "review", "rules", "verify", "workflow"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
   const [command] = args.positional;
   const home = sys1Home(process.env);
 
   currentCommand = command;
-  jsonRequested = args.flags.get("json") === true || (["audit", "review", "rules", "verify"].includes(command ?? "") && args.flags.get("agent") === true);
+  jsonRequested = args.flags.get("json") === true || (["audit", "review", "rules", "verify", "workflow"].includes(command ?? "") && args.flags.get("agent") === true);
   if (args.flags.get("version") === true || (command === "version" && args.flags.get("help") !== true)) {
     if (jsonRequested) out(JSON.stringify({ name: "sys1", version: SYS1_VERSION }));
     else out(`sys1 ${SYS1_VERSION}`);
@@ -838,6 +839,22 @@ async function main(): Promise<void> {
   }
 
   switch (command) {
+    case "workflow": {
+      let workflow: typeof import("./workflows/cli.ts") | undefined;
+      try {
+        workflow = await import("./workflows/cli.ts");
+        const index = rawArgs.indexOf("workflow");
+        const report = await workflow.runWorkflowCli([...rawArgs.slice(0, index), ...rawArgs.slice(index + 1)], home);
+        if (wantsJson(args.flags) || args.flags.has("agent")) out(JSON.stringify(report));
+        else process.stdout.write(workflow.renderWorkflow(report, home));
+        process.exitCode = workflow.workflowExitCode(report);
+      } catch (error) {
+        if (error instanceof WorkflowError || (workflow !== undefined && error instanceof workflow.WorkflowCliError)) fail(error.message, error.exitCode, "sys1 workflow --help", error.code);
+        if (error instanceof ReviewError || error instanceof ProjectFileError) fail(error.message, error.exitCode, "sys1 workflow --help");
+        fail("Workflow could not load its runtime or read the selected repository, configuration, or saved state", EXIT.config, "sys1 workflow --help");
+      }
+      return;
+    }
     case "review": {
       try {
         const index = rawArgs.indexOf("review");

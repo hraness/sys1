@@ -250,3 +250,29 @@ Root also inspected the desktop/mobile layouts and share image. The converged
 local browser sweep passed all 80 combinations and interactions on September
 30, 2026, with verified owned-browser cleanup. Reassess on
 2026-11-10 or with the next release, whichever comes first.
+
+## Unified Sys1 workflows — September 30, 2026
+
+The user asked to incorporate ALGAL into Sys1 underneath ready-made workflows.
+Retain the current Tokyo Night design, components, illustrations and interactions.
+The homepage now answers whether to install Sys1 to save a repository check and
+continue a scoped review; the primary action installs Sys1 itself. The separate
+System One Skills package remains an optional compact-output tool, with its own
+dated measurement. Do not transfer that measurement to the new workflow.
+
+The original contribution is the checked installation and execution path owned
+by this repository. /docs owns the procedure, /skills owns agent installation,
+and /introducing-sys1 remains the launch explanation; no new route is needed.
+Reader utility 2, original evidence 2, factual confidence 2, host fit 2, voice
+integrity 2, maintenance value 2: 12/12. Claims are
+bounded to saved results and guarded continuation, not improved review quality.
+Drafter and owner: Codex /root. Independent source/voice reviewer: Codex
+/root/install_experience; the reviewer confirmed the commands and measurement
+boundaries. No human review claimed. Root inspected mobile and desktop captures
+and the share cards; all 80 local browser combinations and interactions passed
+with the pinned Chromium 145.0.7632.6. The exact packed CLI also passed its
+model-free saved-check and cross-process inspection checks. The homepage's
+metadata retains the canonical product description while its hero introduces
+the saved workflow. Source-check date: 2026-09-30. State: admit. Release and
+production verification remain part of delivery. Reassess on
+2026-11-10 or the next feature release.

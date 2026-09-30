@@ -5,49 +5,49 @@
     {
       "page": "https://sys1.io/",
       "path": "site/og.png",
-      "input": "e9b2cc7438fe6d23d13035300983d338a2e286599e8af39ac977d8be72323dd9",
-      "bytes": 155976,
-      "sha256": "35e09984785c72e197d14211f7bac9282ea267e1d4f4b858c46dd6e7dd097f57"
+      "input": "cd579bed18a92d2bae5979200e69e55873276f99fb7951e4b05d9a43ef924f4c",
+      "bytes": 154428,
+      "sha256": "702e86ed4afeda8d9095c416f9763894c744b74b926cf7494e2edbf80a603115"
     },
     {
       "page": "https://sys1.io/introducing-sys1",
       "path": "site/og/introducing-sys1.png",
-      "input": "65f8944156e09c96eedfe375defb22f00ecb8bc4a025f27ec87e0e6d52b0c092",
+      "input": "a0a8662e429610ca960232183289ae8118c0fc5103a788d61967675a7974cb20",
       "bytes": 130320,
       "sha256": "6c3edb10af3042a9fa30945f4b746946ca660a02d60a95c725890350e575c37c"
     },
     {
       "page": "https://sys1.io/docs",
       "path": "site/og/docs.png",
-      "input": "ed4b67e5e5fd9e40a26d9a9c50743895daf66f6602577bcb151a7e3ba4078c57",
-      "bytes": 131296,
-      "sha256": "36d28dc82fb563b157d4338eb22def339b9d9f9002c799539e68bffcc35782ce"
+      "input": "d115b84eec5d7f0f84950ff41ada5ca29646b57ae54a9923a273c77c59e6c18b",
+      "bytes": 133467,
+      "sha256": "7fffdb4230c092eac3b8116f0f89a05d274b0a121f7a3fedf3853b0293e1047b"
     },
     {
       "page": "https://sys1.io/docs/evaluations",
       "path": "site/og/docs-evaluations.png",
-      "input": "53d8acb1bc22714d5e6d19897602f1b6092b23714afce765ff242cd73102e4f4",
+      "input": "aa477d131c427782d9f178d11020ce5b32bb51d7ac8335bcd520ee4622ef11ca",
       "bytes": 135083,
       "sha256": "62013848a4021c1697bd8a54cbf3224f4b4a4c630317b9113f60ad2851d14304"
     },
     {
       "page": "https://sys1.io/docs/evaluations-history",
       "path": "site/og/docs-evaluations-history.png",
-      "input": "879ee1c531ad1cb9d71e77a1c82958a900f1ceac25238f6ae64e04091cf3d08d",
+      "input": "17541090c49f521687101ab00f2dde32534f3d269efe0314932b20496606995e",
       "bytes": 138763,
       "sha256": "582c25a486db341ea0657dbc30c5862289531ab57cc635d7a063397b7248b977"
     },
     {
       "page": "https://sys1.io/compare",
       "path": "site/og/compare.png",
-      "input": "654d9edc9b53e8ddb7f9e6bbb8bead1d7c280761de7dc7c0160890ae91cdce2f",
+      "input": "6bc3ef85caa372b041aa39a5224a62e3dc4ad922bae600c181cb21b9060cf12b",
       "bytes": 137330,
       "sha256": "4759bacb099bd5444061075e372ff6777a065ddd948eaba4d053ff7aaf1d4c19"
     },
     {
       "page": "https://sys1.io/skills",
       "path": "site/og/skills.png",
-      "input": "a7367c54a7b7aefaa8470851c72d49064a54cca99286a252b3a81732a5ea2b57",
+      "input": "5aedf9eaab5908331002d2d2897e83f8627429ddeac06e2908b6466b0415f8cd",
       "bytes": 133606,
       "sha256": "35716ae763c37796c45b303615949b1528fbafe571ee2966d0e381ea0aa14ee9"
     }

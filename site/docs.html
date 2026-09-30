@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Docs · Sys1</title>
-    <meta name="description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
+    <meta name="description" content="Install Sys1, save a repository check, and add optional code review or completion checks. Working commands, setup steps, and limits." />
     <link rel="canonical" href="https://sys1.io/docs" />
     <meta property="og:title" content="Docs · Sys1" />
-    <meta property="og:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
+    <meta property="og:description" content="Install Sys1, save a repository check, and add optional code review or completion checks. Working commands, setup steps, and limits." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sys1" />
     <meta property="og:url" content="https://sys1.io/docs" />
@@ -18,7 +18,7 @@
     <meta property="og:image:alt" content="Set up your first useful check, from Sys1" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Docs · Sys1" />
-    <meta name="twitter:description" content="Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request." />
+    <meta name="twitter:description" content="Install Sys1, save a repository check, and add optional code review or completion checks. Working commands, setup steps, and limits." />
     <meta name="twitter:image" content="https://sys1.io/og/docs.png" />
     <meta name="twitter:image:alt" content="Set up your first useful check, from Sys1" />
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
@@ -33,7 +33,7 @@
   "@id": "https://sys1.io/docs",
   "url": "https://sys1.io/docs",
   "name": "Docs · Sys1",
-  "description": "Use Jev and System One models with Sys1. Install agent review skills, configure a backend, and make your first typed decision API request.",
+  "description": "Install Sys1, save a repository check, and add optional code review or completion checks. Working commands, setup steps, and limits.",
   "isPartOf": {
     "@type": "WebSite",
     "@id": "https://sys1.io/#website",
@@ -70,7 +70,7 @@
           <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
         <div class="header-actions">
-          <a class="button button-small" href="/skills#install" data-analytics-cta="header-install-skills">Install skills</a>
+          <a class="button button-small" href="/docs#getting-started" data-analytics-cta="header-install-sys1">Install Sys1</a>
           <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
             <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
             <div class="hraness-design-theme-toggle__popover" hidden>
@@ -89,8 +89,8 @@
       <section class="docs-hero" aria-labelledby="docs-title">
         <div class="docs-hero-inner">
           <h1 id="docs-title">Set up your first useful check</h1>
-          <p class="docs-lede">Start with compact output for noisy tests. Add Sys1 when you want your agent to check repository rules, review a completion message, or request a structured decision.</p>
-          <div class="docs-meta"><span>Sys1 0.17.1</span><span>Codex · Claude Code · Devin</span><a href="https://github.com/hraness/sys1/releases">Release notes</a></div>
+          <p class="docs-lede">Install Sys1 and save your first check result without a model. Then add code review, check a completion message, or request a structured decision.</p>
+          <div class="docs-meta"><span>Sys1 0.18.0</span><span>Codex · Claude Code · Devin</span><a href="https://github.com/hraness/sys1/releases">Release notes</a></div>
         </div>
       </section>
 
@@ -98,10 +98,12 @@
         <aside class="docs-sidebar" aria-label="Documentation sections">
           <p class="docs-sidebar-title">On this page</p>
           <nav class="docs-nav">
-            <a href="#compact-checks">Compact test output</a>
             <a href="#getting-started">Install Sys1</a>
+            <a href="#workflows">Save and resume a workflow</a>
+            <a href="#connect-jev">Connect a model</a>
             <a href="#audit">Review code changes</a>
             <a href="#verify">Check completion claims</a>
+            <a href="#compact-checks">Compact test output</a>
             <a href="#system-one">Make an API request</a>
             <a href="#integration">Integrate an application</a>
             <a href="#backends">Other backends</a>
@@ -112,22 +114,10 @@
         </aside>
 
         <div class="docs-content">
-          <section id="compact-checks" class="docs-section" aria-labelledby="compact-checks-title">
-            <h2 id="compact-checks-title">Start with compact test output</h2>
-            <p class="docs-intro">For a test or build that prints pages of output, install System One Skills. It runs your command once, returns the exit status and a short result, and keeps the full log on your machine.</p>
-            <p>Requires <a href="https://nodejs.org/en/download">Node.js 20+</a> on macOS or Linux. This separate package needs no Sys1 installation, model, or API key. From your project directory:</p>
-            <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-compact-command" data-copy-status="docs-compact-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-compact-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> https://github.com/hraness/system-one-skills/releases/download/v0.4.1/system-one-skills-0.4.1.tgz
-<span class="syntax-token syntax-token--command">system-one-skills</span> install-skills <span class="syntax-token syntax-token--flag">--target</span> .agents/skills
-<span class="syntax-token syntax-token--command">system-one-skills</span> check <span class="syntax-token syntax-token--flag">--timeout-ms</span> 900000 <span class="syntax-token syntax-token--flag">--</span> npm test</code></pre><p id="docs-compact-command-status" class="copy-status" role="status"></p></div>
-            <p>The example installs the Codex skill and runs <code>npm test</code>. Use <code>.claude/skills</code> for Claude Code or <code>.devin/skills</code> for Devin, and substitute your project’s check command after <code>--</code>. Existing modified instructions are preserved.</p>
-            <p>Short output passes through unchanged. Long output includes the result, an excerpt, and the full log’s location; failures and timeouts remain failures. Use this for checks already known to be noisy, and open the log when you need details.</p>
-            <p class="docs-footnote">A replay of 563 validation outputs measured 35% less text at the tool output. Whole-task token savings have not been demonstrated. Prefer a native quiet mode when it already gives the agent what it needs.</p>
-            <div class="docs-links"><a href="/skills#compact-checks">How compact checks work</a><a href="https://github.com/hraness/system-one-skills#commands">Command reference <span aria-hidden="true">↗</span></a></div>
-          </section>
 
           <section id="getting-started" class="docs-section" aria-labelledby="getting-started-title">
-            <h2 id="getting-started-title">Add Sys1 for review and decisions</h2>
-            <p class="docs-intro">Install Sys1 when you want to check a change against repository rules, review a completion message, or ask a model for a structured answer.</p>
+            <h2 id="getting-started-title">Install Sys1</h2>
+            <p class="docs-intro">Sys1 saves check results and runs optional model-assisted reviews. The workflow engine is included in the installation.</p>
             <div class="docs-route-list">
               <div class="docs-route docs-route-install">
                 <div><h3>Install the CLI</h3><p>Have npm and <a href="https://bun.sh/docs/installation">Bun 1.3.14+</a> available. The release installs on macOS, Linux, and Windows. The command permits the optional local inference runtime’s install script; it downloads no model weights and activates no hosted backend.</p></div>
@@ -145,7 +135,7 @@
 <p class="platform-panel-name"><svg class="platform-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><use href="#docs-install-mark-macos"/></svg><span>macOS</span></p>
 <div class="code-frame">
 <div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-install-command-macos" data-copy-status="docs-install-status" data-copy-subject="macOS install command">Copy</button></div>
-<pre class="platform-pre" tabindex="0"><code id="docs-install-command-macos" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz</code></pre>
+<pre class="platform-pre" tabindex="0"><code id="docs-install-command-macos" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz</code></pre>
 </div>
 <p class="platform-note">Requires Bun 1.3.14+</p>
 </div>
@@ -153,7 +143,7 @@
 <p class="platform-panel-name"><svg class="platform-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><use href="#docs-install-mark-linux"/></svg><span>Linux</span></p>
 <div class="code-frame">
 <div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-install-command-linux" data-copy-status="docs-install-status" data-copy-subject="Linux install command">Copy</button></div>
-<pre class="platform-pre" tabindex="0"><code id="docs-install-command-linux" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz</code></pre>
+<pre class="platform-pre" tabindex="0"><code id="docs-install-command-linux" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz</code></pre>
 </div>
 <p class="platform-note">Requires Bun 1.3.14+</p>
 </div>
@@ -161,7 +151,7 @@
 <p class="platform-panel-name"><svg class="platform-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><use href="#docs-install-mark-windows"/></svg><span>Windows</span></p>
 <div class="code-frame">
 <div class="code-heading"><span>PowerShell</span><button type="button" class="copy-button js-only" data-copy="docs-install-command-windows" data-copy-status="docs-install-status" data-copy-subject="Windows install command">Copy</button></div>
-<pre class="platform-pre" tabindex="0"><code id="docs-install-command-windows" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz</code></pre>
+<pre class="platform-pre" tabindex="0"><code id="docs-install-command-windows" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> <span class="syntax-token syntax-token--flag">--allow-scripts=node-llama-cpp</span> https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz</code></pre>
 </div>
 <p class="platform-note">Requires Bun 1.3.14+</p>
 </div>
@@ -169,15 +159,29 @@
 </div>
 <!-- hraness-platform-install:end -->
                 <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-version-command" data-copy-status="docs-version-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-version-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> <span class="syntax-token syntax-token--flag">--version</span></code></pre><p id="docs-version-command-status" class="copy-status" role="status"></p></div>
-                <p>The version command confirms that the CLI is installed. You can install project skills and preview a review before configuring a model.</p>
+                <p>The version command confirms that the CLI is installed. Run your first saved check below; no model or API key is needed.</p>
                 </div>
               </div>
-              <div class="docs-route">
-                <div><h3 id="connect-jev">Connect hosted Jev</h3><p>For model calls, get a key from <a href="https://console.typesafe.ai/">TypeSafe</a>, the provider of the hosted decision model Jev. Supply <code>TYPESAFE_API_KEY</code> privately through your shell or secret manager. The key stays in your environment; Sys1 saves only the activation setting.</p></div>
-                <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-jev-command" data-copy-status="docs-jev-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-jev-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> jev enable
-<span class="syntax-token syntax-token--command">sys1</span> jev status</code></pre><p id="docs-jev-command-status" class="copy-status" role="status"></p></div>
-              </div>
             </div>
+            <div class="docs-links"><a href="#workflows">Run your first saved check</a></div>
+          </section>
+
+          <section id="workflows" class="docs-section" aria-labelledby="workflows-title">
+            <h2 id="workflows-title">Save a check and continue its review</h2>
+            <p class="docs-intro">Run a repository check and keep its result across agent sessions. From a Git worktree on macOS or Linux, pass your project’s check command after <code>--</code>:</p>
+            <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-workflow-command" data-copy-status="docs-workflow-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-workflow-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> workflow check <span class="syntax-token syntax-token--flag">--</span> bun test
+<span class="syntax-token syntax-token--command">sys1</span> workflow list</code></pre><p id="docs-workflow-command-status" class="copy-status" role="status"></p></div>
+            <p>The check needs no model or API key. Sys1 reports its exit status, keeps its output in a private log, and prints a run ID. Use that ID with <code>sys1 workflow show &lt;id&gt;</code> to inspect the result.</p>
+            <p>With a backend configured, <code>sys1 workflow review</code> runs the check and then reviews the selected changes. Add <code>--pause-after-check</code> to stop before the review. Within an hour, resume checks that project files, environment, command, rules, and configuration still match; uncertain interrupted steps require inspection before a new run.</p>
+            <p>ALGAL handles execution and saved state inside Sys1. Review remains advisory, and saved check results do not replace fresh required checks before delivery.</p>
+            <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/workflows.md">Commands, resume, and saved data <span aria-hidden="true">↗</span></a></div>
+          </section>
+
+          <section id="connect-jev" class="docs-section" aria-labelledby="connect-jev-title">
+            <h2 id="connect-jev-title">Connect hosted Jev for model calls</h2>
+            <p>Check-only workflows need no backend. For reviews and other model calls, get a key from <a href="https://console.typesafe.ai/">TypeSafe</a>, the provider of the hosted decision model Jev. Supply <code>TYPESAFE_API_KEY</code> privately through your shell or secret manager. The key stays in your environment; Sys1 saves only the activation setting.</p>
+            <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-jev-command" data-copy-status="docs-jev-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-jev-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">sys1</span> jev enable
+<span class="syntax-token syntax-token--command">sys1</span> jev status</code></pre><p id="docs-jev-command-status" class="copy-status" role="status"></p></div>
             <p>Enabling Jev selects <code>hosted-only</code> routing. Requests stay on that route if the provider is unavailable. Review and verification can call Jev directly; application requests use the gateway described below. TypeSafe bills usage at its <a href="https://docs.typesafe.ai/models">published rates</a>.</p>
             <p class="docs-footnote">For local inference or a server you run, see <a href="#backends">other backends</a>. Use <code>sys1 doctor</code> to inspect your runtime, routing, and gateway after setup.</p>
             <div class="docs-links"><a href="#audit">Preview a code review</a><a href="#verify">Check a completion message</a><a href="#jev">Make an API request</a></div>
@@ -208,6 +212,19 @@
             <p>Use <code>--message -</code> for piped text. Without <code>--message</code>, Sys1 reads the newest matching local Devin session, including that turn’s check-command results. File and stdin input work with any agent but do not contain check-command evidence.</p>
             <p>Exit 7 means a claim contradicts available evidence. Exit 8 means the run was incomplete. Missing evidence is <code>unverifiable</code>; exit 0 means no contradiction was found, including when evidence is unavailable. A clean report does not prove completion.</p>
             <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/verify.md">Evidence and exit-code reference <span aria-hidden="true">↗</span></a></div>
+          </section>
+
+          <section id="compact-checks" class="docs-section" aria-labelledby="compact-checks-title">
+            <h2 id="compact-checks-title">Compact test output</h2>
+            <p class="docs-intro">For a test or build that prints pages of output, install System One Skills. It runs your command once, returns the exit status and a short result, and keeps the full log on your machine.</p>
+            <p>Requires <a href="https://nodejs.org/en/download">Node.js 20+</a> on macOS or Linux. This separate package needs no Sys1 installation, model, or API key. From your project directory:</p>
+            <div class="code-frame"><div class="code-heading"><span>Terminal</span><button type="button" class="copy-button js-only" data-copy="docs-compact-command" data-copy-status="docs-compact-command-status" data-copy-subject="command">Copy</button></div><pre tabindex="0"><code id="docs-compact-command" class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--global</span> https://github.com/hraness/system-one-skills/releases/download/v0.4.1/system-one-skills-0.4.1.tgz
+<span class="syntax-token syntax-token--command">system-one-skills</span> install-skills <span class="syntax-token syntax-token--flag">--target</span> .agents/skills
+<span class="syntax-token syntax-token--command">system-one-skills</span> check <span class="syntax-token syntax-token--flag">--timeout-ms</span> 900000 <span class="syntax-token syntax-token--flag">--</span> npm test</code></pre><p id="docs-compact-command-status" class="copy-status" role="status"></p></div>
+            <p>The example installs the Codex skill and runs <code>npm test</code>. Use <code>.claude/skills</code> for Claude Code or <code>.devin/skills</code> for Devin, and substitute your project’s check command after <code>--</code>. Existing modified instructions are preserved.</p>
+            <p>Short output passes through unchanged. Long output includes the result, an excerpt, and the full log’s location; failures and timeouts remain failures. Use this for checks already known to be noisy, and open the log when you need details.</p>
+            <p class="docs-footnote">A replay of 563 validation outputs measured 35% less text at the tool output. Whole-task token savings have not been demonstrated. Prefer a native quiet mode when it already gives the agent what it needs.</p>
+            <div class="docs-links"><a href="/skills#compact-checks">How compact checks work</a><a href="https://github.com/hraness/system-one-skills#commands">Command reference <span aria-hidden="true">↗</span></a></div>
           </section>
 
           <section id="system-one" class="docs-section" aria-labelledby="system-one-title">
@@ -246,7 +263,7 @@
             <p class="docs-intro">Use the same request and answer format from application code. Choose whether your app calls a server, runs the router itself, or connects to a local daemon.</p>
             <div class="docs-mode-list">
               <div class="docs-mode"><h3>Portable client</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--omit=optional</span> \
-  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz</span></code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
+  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz</span></code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Embedded Bun router</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Embedded guide <span aria-hidden="true">↗</span></a></div>
               <div class="docs-mode"><h3>Loopback HTTP</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="https://github.com/hraness/sys1#the-endpoint">HTTP reference <span aria-hidden="true">↗</span></a></div>
             </div>
