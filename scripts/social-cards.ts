@@ -28,6 +28,8 @@ export const socialSite = defineSocialImageSite({
   name: "Sys1",
   domain: "sys1.io",
   description: "Stop spending big-model tokens on small decisions.",
+  // Product names the card must not break across lines.
+  keepTogether: ["System One"],
   icon: { kind: "mark", src: `data:image/svg+xml;base64,${mark.toString("base64")}` },
   // Light-mode Tokyo Night tokens from DESIGN.md.
   theme: { accent: "#1d4e90", background: "#e1e2e7", foreground: "#1c3161", muted: "#414c76" },
@@ -43,12 +45,12 @@ type SocialPage = Readonly<{
 
 export const socialPages: readonly SocialPage[] = [
   { file: "site/index.html", url: `${origin}/`, image: "/og.png", copy: null },
-  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { eyebrow: "Launch", headline: "Introducing Sys1", description: "Sys1 hands your agent’s small yes-or-no calls to Jev, a fast model." } },
-  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { eyebrow: "Docs", headline: "Sys1 documentation", description: "Install the skills, configure a backend, and make your first request." } },
-  { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { eyebrow: "Docs", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
-  { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 form-action questions across five models." } },
-  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { eyebrow: "Models", headline: "Compare the models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { eyebrow: "System One Skills", headline: "Skills for reviewing agent work", description: "Code review, completion checks, and compact test output for your agent." } },
+  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { path: "/introducing-sys1", eyebrow: "Launch", headline: "Introducing Sys1", description: "Sys1 hands your agent’s small yes-or-no calls to Jev, a fast model." } },
+  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { path: "/docs", eyebrow: "Documentation", headline: "Getting started with Sys1", description: "Install skills, pick a backend, send a request." } },
+  { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
+  { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 questions, five models." } },
+  { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: "Models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "System One Skills", headline: "Skills for reviewing agent work", description: "Code review, completion checks, test output." } },
 ];
 
 const escape = (text: string): string => text
