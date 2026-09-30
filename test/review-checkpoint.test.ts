@@ -72,8 +72,8 @@ describe("agent review checkpoint", () => {
     expect((await listReviewIssues(f.options)).issues).toHaveLength(2);
   }, GIT_WORKFLOW_TIMEOUT_MS);
 
-  test("an expected snapshot rejects changed prepared inputs before model calls or state access", async () => {
-    for (const change of ["source", "rule", "route", "selection"] as const) {
+  for (const change of ["source", "rule", "route", "selection"] as const) {
+    test(`an expected snapshot rejects changed ${change} before model calls or state access`, async () => {
       const f = await fixture();
       const preview = await checkpointReview({ ...f.options, dryRun: true });
       const options: ReviewCheckpointOptions = { ...f.options, expectedSnapshot: preview.snapshot };
@@ -92,8 +92,8 @@ describe("agent review checkpoint", () => {
       expect(await checkpointReview(bound)).toMatchObject({ status: "unchanged", complete: true, requests: 0 });
       expect(f.calls()).toBe(1);
       expect((await readReviewState(f.home, f.cwd)).generation).toBe(1);
-    }
-  }, GIT_WORKFLOW_TIMEOUT_MS);
+    }, GIT_WORKFLOW_TIMEOUT_MS);
+  }
 
   test("a cached snapshot becoming stale during rule loading is never returned as unchanged", async () => {
     for (const change of ["source", "rule"] as const) {

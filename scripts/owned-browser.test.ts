@@ -69,8 +69,10 @@ describe('pinned browser identity', () => {
     await symlink(system, alias);
     await expect(pinnedBrowserExecutable(alias)).rejects.toThrow('Installed Google Chrome');
   });
-  test('rejects a directory or non-executable file', async () => {
+  test('rejects a directory', async () => {
     await expect(pinnedBrowserExecutable(dirname(pinned))).rejects.toThrow('regular file');
+  });
+  test.skipIf(process.platform === 'win32')('rejects a file without POSIX execution permission', async () => {
     await chmod(pinned, 0o644);
     await expect(pinnedBrowserExecutable(pinned)).rejects.toThrow();
   });
