@@ -21,6 +21,12 @@ export function renderPortfolioCopy(source: string, snapshot: { canonicalUrl?: s
       const record = Object.fromEntries(Object.entries(value).map(([key, child]) => [key, update(child)]));
       const identity = record["@type"] === "WebSite" ? siteSnapshot : snapshot;
       const ownsUrl = typeof record.url === "string" && record.url.replace(/\/$/u, "") === identity.canonicalUrl?.replace(/\/$/u, "");
+      // A product's page may retain its page-specific title. Its description
+      // still comes from that product, including when hosted on another site.
+      if (record["@type"] === "WebPage" && ownsUrl && record.description !== identity.messaging.meta) {
+        record.description = identity.messaging.meta;
+        changed = true;
+      }
       if ((record["@type"] === "WebSite" || record["@type"] === "SoftwareApplication") && (ownsUrl || record.name === identity.messaging.names.name) && (record.name !== identity.messaging.names.name || record.description !== identity.messaging.meta)) {
         record.name = identity.messaging.names.name;
         record.description = identity.messaging.meta;
