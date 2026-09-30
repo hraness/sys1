@@ -76,12 +76,16 @@ const MAX_DEPTH = 6;
 
 // posthog-js campaign properties that are not on the keep-list, and the
 // search query posthog-js reads from a referrer.
-const DROPPED_QUERY_PROPERTIES = new Set(["_kx", "ref", "gclsrc", "qclid", "ph_keyword"]);
+const DROPPED_QUERY_PROPERTIES = new Set(["_kx", "ref", "gclsrc", "qclid", "ph_keyword", "campaign_params", "set", "set_once"]);
+const PERSONAL_PROPERTIES = new Set([
+  "code", "email", "key", "password", "secret", "token", "state", "access_token",
+  "refresh_token", "id_token", "session_token", "api_key", "authorization",
+]);
 // Values that must pass through byte for byte: ingestion routing and the cookieless hash.
 const VERBATIM_PROPERTIES = new Set(["token", "distinct_id", "$raw_user_agent", "$cookieless_mode"]);
 const URL_PROPERTIES = new Set(["$current_url", "$initial_current_url", "$session_entry_url"]);
 const REFERRER_PROPERTIES = new Set(["$referrer", "$initial_referrer", "$session_entry_referrer"]);
-const PATHNAME_PROPERTIES = new Set(["$pathname", "$initial_pathname", "$session_entry_pathname", "$prev_pageview_pathname"]);
+const PATHNAME_PROPERTIES = new Set(["$pathname", "$initial_pathname", "$session_entry_pathname", "$prev_pageview_pathname", "requested_path", "canonical_path"]);
 
 export type Capture = Readonly<{
   event: string;
@@ -104,7 +108,18 @@ export function normalizePath(pathname: string): string {
   const raw = (pathname.split(/[?#]/u, 1)[0] ?? "/") || "/";
   const path = (raw.startsWith("/") ? raw : `/${raw}`).replace(/\/{2,}/gu, "/").replace(/\.html$/u, "").replace(/\/index$/u, "/");
   const trimmed = path.length > 1 ? path.replace(/\/+$/u, "") : "/";
-  return trimmed.slice(0, 256) || "/";
+  return isSensitivePath(trimmed) ? "/private" : redactSensitiveText(trimmed).slice(0, 256) || "/";
+}
+
+function isSensitivePath(path: string): boolean {
+  let decoded: string;
+  try { decoded = decodeURIComponent(path).replace(/\/{2,}/gu, "/"); } catch { return true; }
+  return /(?:^|\/)(?:auth|account|billing|checkout|invite|callback|oauth|token|login|logout|sign-in|sign-up|signin|signup|reset-password)(?:\/|$)/iu.test(decoded);
+}
+
+function isSensitiveLocation(value: unknown): boolean {
+  if (typeof value !== "string") return false;
+  try { return isSensitivePath(new URL(value, CANONICAL_ORIGIN).pathname); } catch { return true; }
 }
 
 export function isKnownRoute(pathname: string): boolean {
@@ -130,7 +145,7 @@ export function redactSensitiveText(value: string): string {
     // Queries and fragments go; a trailing :line:column from a stack frame stays.
     .replace(/(https?:\/\/[^\s?#)]+)(?:\?[^\s#):]*)?(?:#[^\s):]*)?/giu, "$1")
     .replace(/([/][^\s?#)]+)\?[^\s#):]*/gu, "$1")
-    .replace(/\b(api[_-]?key|access[_-]?token|auth(?:orization)?|secret|password|code|state)=([^\s&]+)/giu, "$1=[redacted]");
+    .replace(/\b(api[_-]?key|access[_-]?token|auth(?:orization)?|secret|password|code|state|token)=([^\s&]+)/giu, "$1=[redacted]");
 }
 
 function parseUrl(value: string): URL | null {
@@ -143,13 +158,13 @@ function parseUrl(value: string): URL | null {
 }
 
 /** Owned URL: canonical origin, normalized path, attribution parameters only. Other URL: origin. */
-export function sanitizeUrl(value: string): string | undefined {
+export function sanitizeUrl(value: string, stripAttribution = false): string | undefined {
   const url = parseUrl(value);
   if (url === null) return undefined;
   if (!isAllowedHost(url.hostname)) return url.origin;
   const query = new URLSearchParams();
   for (const [key, param] of url.searchParams) {
-    if (ATTRIBUTION.has(key) && param !== "") query.append(key, param.slice(0, MAX_ATTRIBUTION_LENGTH));
+    if (!stripAttribution && !isSensitivePath(url.pathname) && ATTRIBUTION.has(key) && param !== "") query.append(key, redactSensitiveText(param).slice(0, MAX_ATTRIBUTION_LENGTH));
   }
   const search = query.toString();
   return `${CANONICAL_ORIGIN}${normalizePath(url.pathname)}${search === "" ? "" : `?${search}`}`;
@@ -226,37 +241,37 @@ export function classifyTraffic(referrer: unknown, currentUrl: unknown): Traffic
 }
 
 function baseKey(key: string): string {
-  return key.replace(/^\$(?:initial|session_entry)_/u, "");
+  return key.toLowerCase().replace(/^\$/u, "").replace(/^(?:initial|session_entry)_/u, "").replace(/-/gu, "_");
 }
 
-function scrubValue(key: string, value: unknown, depth: number): unknown {
+function scrubValue(key: string, value: unknown, depth: number, stripAttribution: boolean): unknown {
   if (value === null || typeof value === "number" || typeof value === "boolean") return value;
   if (typeof value === "string") {
-    if (URL_PROPERTIES.has(key)) return sanitizeUrl(value);
+    if (URL_PROPERTIES.has(key)) return sanitizeUrl(value, stripAttribution);
     if (REFERRER_PROPERTIES.has(key)) return sanitizeReferrer(value);
     if (PATHNAME_PROPERTIES.has(key)) return normalizePath(value);
     return redactSensitiveText(value).slice(0, MAX_STRING_LENGTH);
   }
   if (depth >= MAX_DEPTH) return undefined;
-  if (Array.isArray(value)) return value.map((item) => scrubValue("", item, depth + 1)).filter((item) => item !== undefined);
-  if (typeof value === "object") return scrubObject(value as Record<string, unknown>, depth + 1);
+  if (Array.isArray(value)) return value.map((item) => scrubValue("", item, depth + 1, stripAttribution)).filter((item) => item !== undefined);
+  if (typeof value === "object") return scrubObject(value as Record<string, unknown>, depth + 1, stripAttribution);
   return undefined;
 }
 
-function scrubObject(source: Readonly<Record<string, unknown>>, depth: number): Record<string, unknown> {
+function scrubObject(source: Readonly<Record<string, unknown>>, depth: number, stripAttribution: boolean): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(source)) {
     const attribution = baseKey(key);
-    if (DROPPED_QUERY_PROPERTIES.has(attribution)) continue;
-    if (ATTRIBUTION.has(attribution)) {
-      if (typeof value === "string" && value !== "") result[key] = value.slice(0, MAX_ATTRIBUTION_LENGTH);
-      continue;
-    }
     if (VERBATIM_PROPERTIES.has(key) && depth === 0) {
       result[key] = value;
       continue;
     }
-    const scrubbed = scrubValue(key, value, depth);
+    if (DROPPED_QUERY_PROPERTIES.has(attribution) || PERSONAL_PROPERTIES.has(attribution)) continue;
+    if (ATTRIBUTION.has(attribution)) {
+      if (!stripAttribution && typeof value === "string" && value !== "") result[key] = redactSensitiveText(value).slice(0, MAX_ATTRIBUTION_LENGTH);
+      continue;
+    }
+    const scrubbed = scrubValue(key, value, depth, stripAttribution);
     if (scrubbed !== undefined) result[key] = scrubbed;
   }
   return result;
@@ -271,10 +286,12 @@ export function sanitizeCapture(capture: Capture | null, location: PageLocation,
   if (capture === null || !ALLOWED_EVENTS.has(capture.event)) return null;
   if (!token.startsWith("phc_") || location.protocol !== "https:" || !isAllowedHost(location.hostname)) return null;
   const source = capture.properties ?? {};
-  const properties = scrubObject(source, 0);
+  const stripAttribution = isSensitivePath(location.pathname) || Object.entries(source).some(([key, value]) =>
+    (URL_PROPERTIES.has(key) || PATHNAME_PROPERTIES.has(key)) && isSensitiveLocation(value));
+  const properties = scrubObject(source, 0, stripAttribution);
   const pathname = normalizePath(location.pathname);
   const rawReferrer = source.$referrer ?? documentReferrer;
-  properties.$host = normalizeHost(typeof source.$host === "string" && source.$host !== "" ? source.$host : location.hostname);
+  properties.$host = CANONICAL_DOMAIN;
   properties.$current_url ??= `${CANONICAL_ORIGIN}${pathname}`;
   properties.$pathname ??= pathname;
   properties.$referrer = sanitizeReferrer(rawReferrer);
@@ -284,9 +301,9 @@ export function sanitizeCapture(capture: Capture | null, location: PageLocation,
   const pageUrl = typeof source.$current_url === "string" ? parseUrl(source.$current_url) : null;
   for (const name of ATTRIBUTION_PARAMS) {
     const param = pageUrl?.searchParams.get(name);
-    if (properties[name] === undefined && param) properties[name] = param.slice(0, MAX_ATTRIBUTION_LENGTH);
+    if (!stripAttribution && properties[name] === undefined && param) properties[name] = redactSensitiveText(param).slice(0, MAX_ATTRIBUTION_LENGTH);
   }
-  const traffic = classifyTraffic(rawReferrer, source.$current_url);
+  const traffic = classifyTraffic(rawReferrer, stripAttribution ? undefined : properties.$current_url);
   Object.assign(properties, {
     $process_person_profile: false,
     analytics_schema_version: POSTHOG_SCHEMA_VERSION,
