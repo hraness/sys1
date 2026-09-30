@@ -171,8 +171,11 @@ const provenance = `${JSON.stringify(
   2,
 )}\n`;
 
+const launchIntro = `<h2 id="short-version">Put a check to work</h2><p class="launch-short-intro">Start with the part of your workflow that needs attention. Compact output runs locally; review and completion checks use your chosen model.</p>\n${beatsHtml}`;
 const outputs: { path: string; current: string; next: string }[] = [
-  region("site/introducing-sys1.html", "beats", `<h2 id="short-version">Put a check to work</h2><p class="launch-short-intro">Start with the part of your workflow that needs attention. Compact output runs locally; review and completion checks use your chosen model.</p>\n${beatsHtml}`),
+  region("site-templates/introducing-sys1.html", "beats", launchIntro),
+  region("site-templates/index.html", "mockups", homeHtml),
+  region("site/introducing-sys1.html", "beats", launchIntro),
   region("site/index.html", "mockups", homeHtml),
 ];
 for (const [file, next] of [
