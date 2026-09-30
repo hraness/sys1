@@ -44,7 +44,9 @@ async function fixture() {
   return { root, cwd, home, counter, options, review, calls: () => calls };
 }
 
-describe("saved workflow engine", () => {
+// Every scenario below previews or executes a workflow and needs supported process
+// groups. The CLI separately covers Windows rejection before effects.
+describe.skipIf(process.platform !== "darwin" && process.platform !== "linux")("saved workflow engine", () => {
   test("preview and empty readers create no store or model requests", async () => {
     const f = await fixture();
     expect(await listWorkflows(f)).toEqual([]);
