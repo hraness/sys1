@@ -1,7 +1,10 @@
 # Roadmap to proven skills, September 2026
 
-Status: plan. Written 2026-09-29 after three whole-task and recall
-measurements. Nothing here is a result.
+Status: Step 2's completion-claim baseline is complete, with results recorded
+2026-09-30. It did not meet the intervention threshold, so it does not trigger
+Steps 3–4. The remaining steps and Step 2 candidates below are plans. The
+original roadmap was written 2026-09-29 after three whole-task and recall
+measurements.
 
 ## Where the evidence stands
 
@@ -12,7 +15,7 @@ measurements. Nothing here is a result.
 | `sys1 review checkpoint`, directed | 32 whole-task pairs | 84% more tokens, 145% more time, 22/32 correct vs 29/32. |
 | Core rules, recall | Same 32 diffs, no agent | 3/16 planted problems caught, even given only the planted file and rule. 0 false alarms. |
 | Core rules, authored fixtures (Sep 27) | 20+20 per rule | Empty catch 2/10. Removed assertion 10/10, which fell to 3/8 on real diffs. |
-| `sys1 verify` (completion claims) | Not measured on whole tasks | Unknown. |
+| Completion-claim baseline for `sys1 verify` | 30 tasks per model, Sonnet 5.5 and Haiku 4.5, without Sys1 | Original scorer: 0/30 Sonnet and 1/30 Haiku flags. Review confirmed no false extracted primary claims. Below the 10% threshold; no intervention tested. [Data and report](https://github.com/hraness/system-one-skills/blob/main/docs/COMPLETION-BASELINE-RESULTS-2026-09.md). |
 
 Three separate failures explain the nulls:
 
@@ -73,6 +76,20 @@ wrong or overspends. Candidates, most promising first:
 
 Keep a target only if its baseline failure rate is ≥ 10% on ≥ 30 tasks.
 
+The [completion-claim baseline](https://github.com/hraness/system-one-skills/blob/main/docs/COMPLETION-BASELINE-RESULTS-2026-09.md)
+finished with 30 included tasks per model. The original scorer flagged no
+Sonnet runs and one Haiku run (3.3%). That flag compared a passing test subset
+with a failing repository suite; review of the quoted assertions confirmed
+no false commit, push, or passing-check claim. Both calculations remain
+published. The second grading pass met the registered audit limit with two
+disagreements across 80 labels.
+
+Neither model meets the point-estimate cutoff. This study supplies no target
+for a Step 3 hook or Step 4 paired trial, and neither was started. The 95%
+intervals still extend above 10%; the finding applies to this small-task
+sample and does not establish a low population failure rate. Long sessions
+and rules learned from past mistakes remain unmeasured.
+
 ## Step 3. Deliver without asking the agent to choose
 
 Goal: remove failure 1.
@@ -108,15 +125,15 @@ unique claim, and it needs its own evidence.
 ## What the site can say meanwhile
 
 Per-decision speed and cost of a Jev call, the measured recall and false-alarm
-numbers, and that whole-task results are in progress. Nothing about whole-task
+numbers, and the completed whole-task and baseline findings above. Nothing about whole-task
 token or time savings until Step 4 produces one.
 
-## Rough cost
+## Recorded and prospective cost
 
 | Step | Claude usage | Jev |
 | --- | --- | --- |
 | 1 | none | a few dollars |
-| 2 | ~$10–15 | none |
+| 2, completion-claim baseline | $34.27 main runs; $39.13 including recorded pilots and grading | none |
 | 3 | engineering only | none |
 | 4 | ~$20–40 | ~$1 |
 | 5 | ~$20 | ~$1 |
