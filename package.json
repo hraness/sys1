@@ -45,7 +45,7 @@
     "check:native": "bun scripts/check-native.ts",
     "test": "bun test --parallel=4 ./src ./test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check": "bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run analytics:check && bun run launch:check && bun run test && bun run build:dist && bun run check:package",
+    "check": "bun run check:site-copy && bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run analytics:check && bun run launch:check && bun run test && bun run build:dist && bun run check:package",
     "prepack": "bun run check",
     "brand:generate": "bun scripts/generate-brand-icons.ts",
     "brand:check": "bun scripts/generate-brand-icons.ts --check",
@@ -56,7 +56,9 @@
     "launch:check": "bun scripts/launch/build.tsx --check",
     "check:release-info": "bun scripts/sync-public-release.ts --check",
     "analytics:build": "bun scripts/build-site-analytics.ts --write",
-    "analytics:check": "bun scripts/build-site-analytics.ts --check"
+    "analytics:check": "bun scripts/build-site-analytics.ts --check",
+    "build:site-copy": "bun scripts/build-site-copy.ts",
+    "check:site-copy": "bun scripts/build-site-copy.ts --check"
   },
   "dependencies": {
     "zod": "4.6.2"

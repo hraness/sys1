@@ -47,9 +47,9 @@
     {
       "page": "https://sys1.io/skills",
       "path": "site/og/skills.png",
-      "input": "14dbc12d4654741f8890084b55610c861e2c1a7c9e86baa4d5b113e66c8b2cad",
-      "bytes": 138310,
-      "sha256": "f34eabed828fca3cfa51d7f88decf27d5d1c7d2a84e9b1c26d282f6886476909"
+      "input": "8c7e0cf160d3c57f74b413c61ce6bf8f6f746ebe7df342350ba29008dc9fd696",
+      "bytes": 132993,
+      "sha256": "344f2d8b881667ebbb0f4b63a6fe0a062666779d13a09bd47afb7316556c82fe"
     }
   ]
 }

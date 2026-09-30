@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sys1 · Give your coding agent a second check.</title>
-    <meta name="description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <title>{{PORTFOLIO_TITLE}}</title>
+    <meta name="description" content="{{PORTFOLIO_META}}" />
     <link rel="canonical" href="https://sys1.io/" />
-    <meta property="og:title" content="Sys1 · Give your coding agent a second check." />
-    <meta property="og:description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <meta property="og:title" content="{{PORTFOLIO_TITLE}}" />
+    <meta property="og:description" content="{{PORTFOLIO_META}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Sys1" />
+    <meta property="og:site_name" content="{{PORTFOLIO_NAME}}" />
     <meta property="og:url" content="https://sys1.io/" />
     <meta property="og:image" content="https://sys1.io/og.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sys1: Stop spending big-model tokens on small decisions." />
+    <meta property="og:image:alt" content="{{PORTFOLIO_SOCIAL_ALT}}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sys1 · Give your coding agent a second check." />
-    <meta name="twitter:description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <meta name="twitter:title" content="{{PORTFOLIO_TITLE}}" />
+    <meta name="twitter:description" content="{{PORTFOLIO_META}}" />
     <meta name="twitter:image" content="https://sys1.io/og.png" />
-    <meta name="twitter:image:alt" content="Sys1: Stop spending big-model tokens on small decisions." />
+    <meta name="twitter:image:alt" content="{{PORTFOLIO_SOCIAL_ALT}}" />
     <!-- sys1-launch-media:start -->
     <script type="application/ld+json" data-sys1-launch-video>
 {
@@ -76,10 +76,7 @@
       "@id": "https://sys1.io/#website",
       "url": "https://sys1.io/",
       "name": "Sys1",
-      "publisher": {
-        "@id": "https://hraness.com/#organization"
-      },
-      "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model."
+      "publisher": { "@id": "https://hraness.com/#organization" }
     },
     {
       "@type": "Organization",
@@ -92,26 +89,16 @@
       "@id": "https://sys1.io/#software",
       "url": "https://sys1.io/",
       "name": "Sys1",
-      "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.",
+      "description": "Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Linux, Windows",
       "softwareVersion": "0.17.0",
       "license": "https://github.com/hraness/sys1/blob/main/LICENSE",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "downloadUrl": "https://github.com/hraness/sys1/releases/latest",
-      "sameAs": [
-        "https://github.com/hraness/sys1"
-      ],
-      "publisher": {
-        "@id": "https://hraness.com/#organization"
-      },
-      "isPartOf": {
-        "@id": "https://sys1.io/#website"
-      }
+      "sameAs": ["https://github.com/hraness/sys1"],
+      "publisher": { "@id": "https://hraness.com/#organization" },
+      "isPartOf": { "@id": "https://sys1.io/#website" }
     }
   ]
 }
@@ -138,7 +125,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header hraness-marketing-header">
       <div class="header-inner">
-        <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
+        <a class="wordmark hraness-foil-text" href="/" aria-label="{{PORTFOLIO_SITE_NAME}} home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">{{PORTFOLIO_SITE_NAME_LOWER}}<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/skills">Skills</a>
           <a href="#benchmarks">Benchmarks</a>
@@ -167,11 +154,11 @@
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-copy">
         <a class="launch-note" href="/skills" data-analytics-cta="hero-launch-note">System One Skills for Codex, Claude Code, and Devin <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-        <h1 id="hero-heading">Keep noisy logs out of <span class="hero-phrase">your agent’s context.</span></h1>
-        <p class="summary">System One Skills keeps noisy test and build logs out of your coding agent&#39;s context. Sys1 adds review and completion checks backed by Jev or a local model.</p>
+        <h1 id="hero-heading">{{PORTFOLIO_HERO_START}} <span class="hero-phrase">{{PORTFOLIO_HERO_END}}</span></h1>
+        <p class="summary">{{PORTFOLIO_HERO_SUMMARY}}</p>
         <div class="actions">
-          <a class="button" href="/skills#install" data-analytics-cta="hero-install-skills">Install compact output <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-          <a class="text-link" href="#system" data-analytics-cta="hero-explore-sys1">Explore Sys1</a>
+          <a class="button" href="/skills#install" data-analytics-cta="hero-install-skills">{{PORTFOLIO_PRIMARY_ACTION}} <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
+          <a class="text-link" href="#system" data-analytics-cta="hero-explore-sys1">{{PORTFOLIO_SECONDARY_ACTION}}</a>
         </div>
         <p class="hero-note">v0.17.0 Sys1 · v0.4.1 System One Skills · MIT · Open source. Review and verify are experimental and advisory. Hosted Jev is opt-in; an experimental local model runs on your machine.</p>
         </div>
@@ -195,7 +182,7 @@
 
       <section id="how-it-works" class="section" aria-labelledby="review-heading">
         <div class="section-intro">
-          <h2 id="review-heading">Three skills your agent runs itself.</h2>
+          <h2 id="review-heading">{{PORTFOLIO_HEADING:review-heading}}</h2>
           <p>Install a project skill for Codex, Claude Code, or Devin. The first works on its own. The other two ask Jev or a local model the small questions, so your agent saves its own reasoning for the findings worth a closer look.</p>
         </div>
         <dl class="workflow-list">
@@ -211,7 +198,7 @@
 
       <section id="benchmarks" class="section" aria-labelledby="benchmarks-heading">
         <div class="section-intro">
-          <h2 id="benchmarks-heading">Benchmarks against other skill packs are in progress.</h2>
+          <h2 id="benchmarks-heading">{{PORTFOLIO_HEADING:benchmarks-heading}}</h2>
           <p>People reasonably ask how System One Skills compares with <a href="https://github.com/garrytan/gstack">gstack</a>, <a href="https://github.com/backnotprop/pstack">pstack</a>, <a href="https://github.com/obra/superpowers">Superpowers</a>, and <a href="https://github.com/anthropics/skills">Anthropic’s skills</a>. We have not run that comparison yet, so we publish no head-to-head numbers. Those packs cover planning, review, shipping, and document workflows. Ours starts with check output and completion claims, so the fair test is the same agent tasks with and without each pack.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="What we have measured and what is still planned">
@@ -224,7 +211,7 @@
       </section>
 
       <section class="section launch-feature" aria-labelledby="launch-heading">
-        <div><h2 id="launch-heading">Meet Sys1.</h2><p>Why a fast model beside a smart one saves tokens and time, how ALGAL fits in, and what our first trial did and did not show.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
+        <div><h2 id="launch-heading">{{PORTFOLIO_HEADING:launch-heading}}</h2><p>Why a fast model beside a smart one saves tokens and time, how ALGAL fits in, and what our first trial did and did not show.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
         <figure>
           <video controls playsinline preload="none" width="1920" height="1080" poster="/media/sys1-launch-poster.jpg" aria-label="Introducing Sys1 launch film" aria-describedby="film-caption">
             <source src="/media/sys1-launch.mp4" type="video/mp4" />
@@ -237,7 +224,7 @@
 
       <section id="system" class="section" aria-labelledby="system-heading">
         <div class="section-intro">
-          <h2 id="system-heading">Three parts, one system.</h2>
+          <h2 id="system-heading">{{PORTFOLIO_HEADING:system-heading}}</h2>
           <p>People think at two speeds: slow and deliberate for hard problems, fast and instinctive for everything else. Coding agents only have the slow speed. Sys1 adds the fast one, and ALGAL gives the system a way to keep what works.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="The three parts of the system">
@@ -251,7 +238,7 @@
 
       <section id="decision-api" class="section" aria-labelledby="how-heading">
         <div class="section-intro">
-          <h2 id="how-heading">Put fast decisions in your own code.</h2>
+          <h2 id="how-heading">{{PORTFOLIO_HEADING:how-heading}}</h2>
           <p>System One models answer small, structured questions with probabilities. Jev is TypeSafe’s hosted model for this approach. Ask a yes/no, choice, or score question and get numbers your code can act on, not text to parse.</p>
           <p>Call <code>POST /v1/systemone</code> through a loopback gateway or use the Node and Bun client. Choose hosted Jev, experimental local Qwen, or an OpenJev server you run. Local answers approximate Jev; they are not calibrated Jev output. <a href="/docs#system-one">Understand System One and Jev</a>.</p>
         </div>
@@ -265,7 +252,7 @@
 
       <section class="section trial-section" aria-labelledby="trial-heading">
         <div class="section-intro">
-          <h2 id="trial-heading">Test the decision on your task.</h2>
+          <h2 id="trial-heading">{{PORTFOLIO_HEADING:trial-heading}}</h2>
           <p>A September 28, 2026 trial submitted 48 synthetic examples once each to Jev 1.13.0. Claim support is the strongest next candidate for a larger evaluation; failure triage tied its baseline.</p>
           <a class="text-link" href="/introducing-sys1#measured">Read the results and limitations →</a>
         </div>
@@ -285,7 +272,7 @@
 
       <section id="integrate" class="section" aria-labelledby="integration-heading">
         <div class="section-intro">
-          <h2 id="integration-heading">Three ways to call Sys1.</h2>
+          <h2 id="integration-heading">{{PORTFOLIO_HEADING:integration-heading}}</h2>
           <p>All three take the same request and return the same answer format.</p>
         </div>
         <div class="integration-body">
@@ -322,7 +309,7 @@
 
       <section id="backends" class="section" aria-labelledby="ecosystem-heading">
         <div class="section-intro">
-          <h2 id="ecosystem-heading">What Sys1 connects to.</h2>
+          <h2 id="ecosystem-heading">{{PORTFOLIO_HEADING:ecosystem-heading}}</h2>
           <p>Every backend answers in the same format, but not equally well. Accuracy and calibration differ by model, so test each one on your task before you reuse thresholds or change defaults. <a href="/compare">Compare the models</a>.</p>
         </div>
         <div class="ecosystem-table" role="table" aria-label="Backends and their relationship to Sys1">
@@ -336,7 +323,7 @@
 
       <section id="install" class="section" aria-labelledby="install-heading">
         <div class="section-intro">
-          <h2 id="install-heading">Install Sys1.</h2>
+          <h2 id="install-heading">{{PORTFOLIO_HEADING:install-heading}}</h2>
           <p>Install the release from GitHub, inspect your setup, then add the project skill for your agent. Choose hosted Jev or a local model in the <a href="/docs#getting-started">setup guide</a>.</p>
         </div>
         <!-- hraness-platform-install:start -->
@@ -387,7 +374,7 @@
 
       <section class="section questions" aria-labelledby="questions-heading">
         <div class="section-intro">
-          <h2 id="questions-heading">Before you begin.</h2>
+          <h2 id="questions-heading">{{PORTFOLIO_HEADING:questions-heading}}</h2>
         </div>
         <div class="question-list">
           <details><summary>How is Sys1 different from CodeRabbit, Cursor Bugbot, or Claude Code Review?<svg class="disclosure-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14" /><path class="disclosure-vertical" d="M12 5v14" /></svg></summary><p>Those are hosted AI reviewers that look for many kinds of bugs. <a href="https://cursor.com/help/ai-features/bugbot">Bugbot</a> and <a href="https://support.claude.com/en/articles/14233555-set-up-code-review-for-claude-code">Claude Code Review</a> comment on pull requests, and the <a href="https://www.coderabbit.ai/cli">CodeRabbit CLI</a> also reviews local changes. For broad bug-finding they cover more than Sys1, whose bundled rules cover two JavaScript and TypeScript checks. Sys1 checks only the rules you select, can keep your source on your machine with a local model, and lets you record whether each candidate was useful. For a pure syntax pattern such as an empty catch block, an <a href="https://eslint.org/docs/latest/rules/no-empty">ESLint</a> or <a href="https://semgrep.dev">Semgrep</a> rule is exact and free; use Sys1 for rules that need judgment.</p></details>
