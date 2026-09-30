@@ -5,6 +5,14 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.19.0 - 2026-09-30
+
+Sys1 can update supported global CLI installations before work starts.
+
+- Add `update`, `update check`, `update status`, `update enable`, and `update disable`, with automatic updates enabled by default on macOS and Linux.
+- Keep SDK imports, local/source installs, executable pins, and active commands on their current code.
+- Require the gateway to be stopped before updating and keep nested daemon commands on the same installation.
+
 ## 0.18.0 - 2026-09-30
 
 Sys1 includes ALGAL to save check results and continue a scoped code review across agent sessions.

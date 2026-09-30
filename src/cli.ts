@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { parseInvocation, type ParsedArgs } from "./cli-args.ts";
 import { readBoundedText } from "./http.ts";
 import { runAuditCli, renderAudit, AuditCliError } from "./audit/cli.ts";
 import { runReviewCli, renderReview, reviewExitCode } from "./review/cli.ts";
@@ -119,54 +120,6 @@ function tildePath(path: string): string {
   return home !== "" && path.startsWith(`${home}/`) ? `~${path.slice(home.length)}` : path;
 }
 
-
-interface ParsedArgs {
-  positional: string[];
-  flags: Map<string, string | boolean>;
-}
-
-function parseArgs(argv: string[]): ParsedArgs {
-  const positional: string[] = [];
-  const flags = new Map<string, string | boolean>();
-  for (let i = 0; i < argv.length; i += 1) {
-    const arg = argv[i];
-    if (arg === undefined) continue;
-    if (arg.startsWith("--")) {
-      const eq = arg.indexOf("=");
-      if (eq > 0) {
-        flags.set(arg.slice(2, eq), arg.slice(eq + 1));
-      } else {
-        const next = argv[i + 1];
-        if (next !== undefined && !next.startsWith("--") && VALUE_FLAGS.has(arg)) {
-          flags.set(arg.slice(2), next);
-          i += 1;
-        } else {
-          flags.set(arg.slice(2), true);
-        }
-      }
-    } else if (arg === "-h" || arg === "-V" || arg === "-v") {
-      flags.set(arg === "-h" ? "help" : "version", true);
-    } else {
-      positional.push(arg);
-    }
-  }
-  return { positional, flags };
-}
-
-const VALUE_FLAGS = new Set([
-  "--port",
-  "--name",
-  "--url",
-  "--model",
-  "--adapter",
-  "--profile",
-  "--size-b",
-  "--cost-rank",
-  "--tier",
-  "--file",
-  "--sha256",
-  "--days",
-]);
 
 function flagNumber(flags: Map<string, string | boolean>, name: string): number | undefined {
   const raw = flags.get(name);
@@ -794,11 +747,7 @@ async function cmdBackend(home: string, args: ParsedArgs): Promise<void> {
 
 async function main(): Promise<void> {
   const rawArgs = process.argv.slice(2);
-  const separator = rawArgs.indexOf("--");
-  const beforePaths = parseArgs(separator === -1 ? rawArgs : rawArgs.slice(0, separator));
-  // These commands own everything after -- as paths or child argv. A literal
-  // --help, --version, or --json there never becomes a Sys1 control flag.
-  const args = ["audit", "review", "rules", "verify", "workflow"].includes(beforePaths.positional[0] ?? "") ? beforePaths : parseArgs(rawArgs);
+  const args = parseInvocation(rawArgs);
   const [command] = args.positional;
   const home = sys1Home(process.env);
 
@@ -998,12 +947,18 @@ function renderChecks(
   return lines.join("\n");
 }
 
-// A closed pipe (`sys1 --help | head -1`) is a normal way to stop reading.
-process.stdout.on("error", (error: NodeJS.ErrnoException) => {
-  if (error.code === "EPIPE") process.exit(0);
-  throw error;
-});
+export async function runSys1Main(): Promise<void> {
+  // A closed pipe is a normal way to stop reading CLI output.
+  process.stdout.on("error", (error: NodeJS.ErrnoException) => {
+    if (error.code === "EPIPE") process.exit(0);
+    throw error;
+  });
+  await main().catch((error: unknown) => {
+    fail(error instanceof Error ? error.message : "unexpected error", 1);
+  });
+}
 
-main().catch((error: unknown) => {
-  fail(error instanceof Error ? error.message : "unexpected error", 1);
-});
+if (import.meta.main) {
+  const { runSys1Entrypoint } = await import("./cli-entry.ts");
+  await runSys1Entrypoint(process.argv.slice(2), { main: runSys1Main });
+}

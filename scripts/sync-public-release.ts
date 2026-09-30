@@ -13,14 +13,20 @@ if (typeof manifest !== "object" || manifest === null || !("version" in manifest
   || typeof manifest.version !== "string" || !/^\d+\.\d+\.\d+$/u.test(manifest.version)) {
   throw new Error("Expected a stable package.json version");
 }
-const version = manifest.version;
-const files = ["src/gateway.ts", "README.md", "site/index.html", "site/docs.html", "site/llms.txt", "scripts/build-site-platforms.ts", "site/introducing-sys1.html", "kb/launch/social-kit.md", "site-templates/index.html", "site-templates/docs.html", "site-templates/introducing-sys1.html"];
+const published: unknown = JSON.parse(await readFile(resolve(root, "site/published-release.json"), "utf8"));
+if (typeof published !== "object" || published === null || !("version" in published)
+  || typeof published.version !== "string" || !/^\d+\.\d+\.\d+$/u.test(published.version)
+  || !("releaseUrl" in published) || published.releaseUrl !== `https://github.com/hraness/sys1/releases/tag/v${published.version}`) {
+  throw new Error("Expected a verified public release record");
+}
+const version = published.version;
+const files = ["src/version.ts", "README.md", "site/index.html", "site/docs.html", "site/llms.txt", "scripts/build-site-platforms.ts", "site/introducing-sys1.html", "kb/launch/social-kit.md", "site-templates/index.html", "site-templates/docs.html", "site-templates/introducing-sys1.html"];
 const stale: string[] = [];
 for (const file of files) {
   const path = resolve(root, file);
   const source = await readFile(path, "utf8");
   const updated = source
-    .replace(/(export const SYS1_VERSION = ")\d+\.\d+\.\d+(")/gu, `$1${version}$2`)
+    .replace(/(export const SYS1_VERSION = ")\d+\.\d+\.\d+(")/gu, `$1${manifest.version}$2`)
     .replace(/https:\/\/github\.com\/hraness\/sys1\/releases\/download\/v\d+\.\d+\.\d+\/hraness-sys1-\d+\.\d+\.\d+\.tgz/gu,
       `https://github.com/hraness/sys1/releases/download/v${version}/hraness-sys1-${version}.tgz`)
     .replace(/Latest release: v\d+\.\d+\.\d+/gu, `Latest release: v${version}`)

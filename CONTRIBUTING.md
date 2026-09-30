@@ -18,10 +18,13 @@ Runs the typechecker, current release-reference and brand checks, deterministic
 tests, the dist build, and an isolated import/CLI execution check against the
 actual packed tarball.
 
-When bumping `package.json`, run `bun run release:sync` to update the current
-runtime version, README and site installation references, then add the matching
-changelog section. Historical reports retain their original versions. The
-aggregate check rejects stale current release references.
+When bumping `package.json`, run `bun run release:sync` to update the runtime
+version and add the matching changelog section. Public install links follow
+`site/published-release.json`, independently of the source version. Advance
+that record only after the immutable release and its installation checks have
+passed, then run `bun run release:sync` and verify the published site.
+Historical reports retain their original versions. The aggregate check rejects
+stale source versions and public release references.
 
 After that gate, `bun run check:native` packs the existing dist, installs it in
 a disposable prefix with the pinned native dependency, and runs `sys1 doctor`.
