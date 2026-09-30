@@ -210,3 +210,43 @@ palette, copy action, exact command text, and release-version binding. The
 scrollable block is keyboard-focusable and has a descriptive accessible name.
 No client dependency, product behavior, or model/approval claim changes. Source
 review and browser validation belong to the marketing integration owner.
+
+## Product readiness refinement — 2026-09-29
+
+The user requested a finished, useful installation experience and authorized
+revising the descriptions. Preserve the current Hraness Tokyo Night palette,
+shared controls, fonts, icon, footer, and responsive behavior. This refines the
+existing visual identity. The prior lead and navigation snapshots above are
+historical and superseded for this delivery.
+
+The homepage is Persuade. Its first task is to install the independent compact
+check skill; it needs Node 20+, macOS/Linux, and no model account. Show that
+workflow in the first viewport. Then explain the optional Sys1 review and
+completion-check tools, keeping their advisory status beside them. Put the typed
+decision API below those workflows, with a working offline illustration and a
+link to its reference. Keep one shared navigation: Skills, Docs, Evidence,
+GitHub. The primary action is Install skills. Model comparison and the launch
+story remain reachable from relevant sections and documentation.
+
+Retire the homepage's unfinished-comparison pitch, synthetic-screening chart,
+repeated backend/integration reference, speculative system narrative, and
+repeated FAQ. The research documents remain available; these blocks compete
+with installation and duplicate the documentation. A dated replay result may
+support a narrowly worded output-size claim. Whole-task savings remain unproven.
+
+Editorial admission: revise the existing `/` and `/skills` URLs. The homepage
+helps a coding-agent user choose a working check; `/skills` owns installation and
+first use. `/docs` owns the optional runtime reference, `/introducing-sys1` owns
+the explanatory guide, and `/compare` owns model comparison. Product source,
+released packages and the published studies supply first-party evidence; no
+personal endorsement or new customer claim is introduced. Scores for homepage:
+reader utility 2, original evidence 2, factual confidence 2, host fit 2, voice
+integrity 2, maintenance value 2. Scores for skills page: reader utility 2,
+original evidence 2, factual confidence 2, host fit 2, voice integrity 2,
+maintenance value 2. Evidence owner: Sys1 maintainers. Drafted by Codex. Independent AI editorial/source and rendered review by
+Codex agent `/root/launch_finish` found no remaining blockers; its five-question
+assessments and screenshot evidence are recorded in `docs/launch-editorial.md`.
+Root also inspected the desktop/mobile layouts and share image. The converged
+local browser sweep passed all 80 combinations and interactions on September
+30, 2026, with verified owned-browser cleanup. Reassess on
+2026-11-10 or with the next release, whichever comes first.

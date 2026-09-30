@@ -15,13 +15,12 @@ value, portable workflows, and search discovery on 2026-09-28.
 
 ## Product Purpose
 
-Sys1 saves coding agents tokens and time by handing small decisions to a fast
-System One model: it reviews changes against repository rules and checks
-completion claims against reachable evidence. Its reusable project skills
-work with Codex, Claude Code, and Devin. The underlying API also gives
-applications one interface for typed decisions across local models, hosted
-Jev, and operator-configured compatible HTTP services: the application supplies
-state and questions, and Sys1 returns validated yes/no, choice, or score answers.
+The website helps coding-agent users install compact test and build output
+through the independent System One Skills package. It requires Node.js 20+ on
+macOS or Linux and no model account. Sys1 adds optional repository review and
+completion-message checks using a model, plus an API for typed yes/no, choice,
+and score decisions. Review and completion checks are experimental and
+advisory. Neither package has demonstrated whole-task token or time savings.
 
 ## Capabilities and Constraints
 
@@ -59,24 +58,20 @@ CUA-S1/Needle measurements remain available; those adapters were removed in 0.9.
 
 ## Evidence on Hand
 
-README.md, source, docs/design.md (runtime architecture), release workflows,
-and deterministic/native-install checks document implemented capabilities.
-The comparison page charts external JevBench results for the supported routes
-and has a workload cost calculator. `/docs/evaluations` holds Sys1's own adapter
-studies, and `/docs/evaluations-history` keeps the September 19–20 form-action
-run. The homepage links a dated 0.9.0 module integration record
-(`site/data/sys1-0.9-module-proof.json`); no script regenerates it.
-The broader frozen fixtures show poor Qwen quality; a direct Laya MLX
-candidate study reached 30/72 and remains outside the shipped runtime; local inference remains
-experimental. Jev has a completed 20-case result; a broader attempt failed
-authentication and is not quality evidence. The September 28, 2026 source-profile trial submitted 48 frozen synthetic
-examples to Jev 1.13.0 once each: claim support matched 16/16 labels, triage
-matched 16/16 and tied error signatures, and relevance matched 13/16 with
-three errors. Claim support's literal-match baseline scored 6/16 and is
-deliberately weak. The dated launch article explains this evidence with a
-chart; it does not establish production accuracy or review-skill quality.
-No customer adoption count or testimonial is supplied. Illustrative page
-examples must be labelled as such.
+Released packages and their checksums, source, README.md, docs/runtime.md,
+and deterministic/native-install checks document the current behavior.
+The System One Skills replay of 563 validation outputs measured 35.20% fewer
+UTF-8 text bytes at the first tool result, from one developer’s sessions. It
+excludes instruction and follow-up costs. Later task trials have not established
+whole-task savings. The 60-run completion baseline did not cross its registered
+threshold for testing an automatic hook; no intervention trial followed.
+
+The comparison page owns external JevBench scores and cost estimates.
+`/docs/evaluations` owns dated local adapter and workflow experiments;
+`/docs/evaluations-history` preserves the original form-action study. Local Qwen
+quality remains experimental. Synthetic examples and recorded figures do not
+establish production accuracy or calibrated probabilities. There are no supplied
+customer testimonials or adoption counts. Authored illustrations are labelled.
 
 ## Public copy
 
@@ -84,31 +79,20 @@ Public copy follows `STYLE.md` and `WRITING.md` in this repository, synced from
 hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
 guides; update a brief in the same change as its page.
 
-- The one-line description is the canonical portfolio messaging record:
-  “Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast
-  hosted model, so the agent saves tokens and time.” After the product name
-  (“Sys1: …”, “sys1: …”), use the short form: “hands your coding agent's small
-  decisions to a fast model, saving tokens and time”. Adopted later on 2026-09-28 at the
-  user's request, replacing the 2026-09-28 review-first line: lead with the
-  token and time benefit. Review stays experimental and advisory, and the typed
-  yes/no, choice, and score API remains the foundation. Shorten by cutting
-  words, not by substituting internal ones.
-- Cost and speed claims cite TypeSafe's published workflow figures (about
-  $0.0004 and 0.4 s a decision; free output tokens) and the System One Skills
-  replay (35% less text across 563 runs). Do not claim a measured whole-task
-  token saving until one exists.
-- ALGAL is a sibling project, not a Sys1 dependency. Describe it as a
-  programming language for agent programs that wait for approval, resume after
-  a crash, and replay from receipts, and whose proven procedures are kept and
-  reused. Say that Sys1 and ALGAL both call the Jev decision API; do not claim
-  that Sys1 runs ALGAL programs.
+- The canonical Sys1 description is: “Sys1 gives coding agents tools to review
+  code, check completion claims, and get structured answers from Jev or a local
+  model.” The portfolio registry owns the shared product messaging. Keep the
+  independent System One Skills package distinct in homepage and install copy.
+- The homepage leads with compact output and links to optional Sys1 features.
+  It does not promise whole-task token, time, or cost savings. Give the scope
+  and date beside a numerical measurement.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package
   scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a
   prose spelling.
 - Introduce Jev at its first mention on a page as TypeSafe's hosted decision
   model.
-- State status once near the top of a page: local Qwen is experimental and
-  hosted Jev is opt-in. Put any other limit beside the feature it limits.
+- Put each limit beside the feature it limits: model-assisted review is
+  advisory, local Qwen is experimental, and hosted Jev is opt-in.
 - The vocabulary of `AGENTS.md` and these briefs (boundary, contract,
   qualification, admission, surface, pilot, lifecycle, owns) is internal. On a
   public page, say what the reader gets instead.
@@ -116,7 +100,7 @@ guides; update a brief in the same change as its page.
   slogan headings, maxim closers, or copy that explains how the site is
   organized.
 - Every HTML file under `site/` carries its own copy of the primary nav. Keep
-  one nav on every page: How it works, Introducing, Docs, Compare, Skills, GitHub.
+  one nav on every page: Skills, Docs, Evidence, GitHub.
 - Label a historical measurement with its date and version, and link its
   record. Do not call a record reproducible unless a script in this repository
   regenerates it.

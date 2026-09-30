@@ -6,17 +6,21 @@ export const SYS1_COMMANDS = [
   "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "help", "version",
 ] as const;
 
-const DESCRIPTION = `Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted
-model, so the agent saves tokens and time.`;
+const DESCRIPTION = `Sys1 gives coding agents tools to review code, check completion claims,
+and get structured answers from Jev or a local model.`;
 
 export function bareScreen(version: string): string {
   return `${DESCRIPTION}
 
 Start here
-  sys1 setup --dry-run       See what setup would download
-  sys1 setup                 Download the local model and turn it on
-  sys1 up                    Start the gateway in the background
-  echo '{…}' | sys1 eval     Ask a question through the gateway
+  sys1 --version             Confirm your installation
+  sys1 review --help         Review Git changes with repository rules
+  sys1 verify --help         Check a proposed completion message
+
+Choose a model
+  sys1 jev enable            Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 setup --dry-run       Preview experimental local model setup
+  sys1 eval --help           See a complete request example
 
 Everyday
   sys1 status                Gateway state and which models can answer
@@ -33,16 +37,17 @@ export function rootHelp(settableKeys: readonly string[]): string {
 ${DESCRIPTION}
 
 Start here
-  sys1 setup [--dry-run]     Download the local model and turn it on
-  sys1 up                    Start the gateway in the background
+  sys1 --version             Confirm your installation
   sys1 eval [--file <path>]  Ask a question through the gateway
 
 Setup
   sys1 jev status|enable|disable
                              Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 setup [--dry-run]     Set up an experimental local model
   sys1 doctor                Check the install and say what to fix
 
 Gateway
+  sys1 up                    Start the gateway in the background
   sys1 status                Gateway state and which models can answer
   sys1 down                  Stop the background gateway
   sys1 serve                 Run the gateway in this terminal
@@ -354,8 +359,16 @@ Send one System One request to the running gateway and print the answer. The
 request is JSON from --file or standard input. With --profile, the input is
 {"state": ...} and the profile turns it into the request.
 
+First enable hosted Jev or set up a local model, then run sys1 up. See
+sys1 jev --help and sys1 setup --help for those choices.
+
 Example
-  sys1 eval --file request.json
+  echo '{
+    "state": "The build passed.",
+    "questions": {
+      "passed": { "type": "noul", "instructions": "Did the build pass?" }
+    }
+  }' | sys1 eval
 `,
   version: `Usage: sys1 version [--json]
 

@@ -1,8 +1,8 @@
 # Contributing
 
-Sys1 is early and the contract is deliberately narrow. Contributions are
-welcome; the bar is that the loopback, credential, and bounded-input
-invariants stay checkable.
+Contribute a focused fix, a well-scoped rule, or an integration backed by
+reproducible evidence. Preserve the loopback, credential, and bounded-input
+invariants and run the checks below before submitting a change.
 
 ## Setup
 

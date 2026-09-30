@@ -5,6 +5,15 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.17.1 - 2026-09-30
+
+Sys1 makes installation and everyday checks easier to follow, with working CLI examples and a shorter path from the website to the first useful command.
+
+- Start CLI help with installation confirmation, review and completion-check commands, and explicit hosted or local setup.
+- Provide a complete JSON request in evaluation help, with gateway prerequisites.
+- Shorten installation guides and move the full runtime reference to `docs/runtime.md`.
+- Lead the website with the independent compact-output skill, then explain optional Sys1 workflows and their measured limits.
+
 ## 0.17.0 - 2026-09-28
 
 Sys1 adds a portable verification skill and clearer guides for reviewing changes and checking completion claims with coding agents.

@@ -1,5 +1,119 @@
 # Introducing Sys1: editorial record
 
+## Product guide revision (September 30, 2026)
+
+- **Decision:** Revise the existing article. Keep its URL and useful workflow examples; remove the repeated social posts and the source-profile research narrative from the reading path.
+- **Reader job:** Choose a first useful check, understand the result it returns, and install the appropriate skill for a coding agent.
+- **Non-obvious answer:** Compact check output is a separate, model-free skill. Sys1 adds optional model-assisted review and completion checks. A useful installation starts with the check the repository needs and an explicit instruction to the agent.
+- **Canonical host and original contribution:** Sys1 maintains the installed commands, project instructions, and review workflow. The article connects those commands to an example change and shows how to investigate a finding and verify a proposed completion message.
+- **Nearest URLs:** The homepage introduces the product; `/skills` owns installation and detailed skill usage; `/docs` owns command and API reference. This article supplies a sustained worked explanation across those choices, rather than another command reference.
+- **Primary evidence checked:** September 30, 2026. `docs/review.md`, `docs/verify.md`, `src/review/cli.ts`, `src/verify/cli.ts`, the current release record, the compact-output replay, `docs/proof-roadmap-2026-09.md`, and the completed 60-run completion baseline linked there.
+- **Claim review:** Whole-task token and time savings have not been demonstrated. Review and completion checks remain experimental and advisory. Local Qwen remains experimental; Jev is opt-in. The completed baseline does not justify automatic intervention.
+- **Voice:** Agent-drafted product explanation; no personal experience or human review claimed. Drafter: Codex AI agent `/root/launch_finish`. Independent source/editorial review and rendered verification are owned by the integration agent before release.
+- **Film:** Retain the existing film. Its transcript accurately labels advisory findings, opt-in hosted calls, experimental local models, and source-checkout profiles. Move it after the practical guide; it is optional and makes no whole-task savings claim.
+- **Owner:** Sys1 maintainers. **Lifecycle:** Revision in review. **Reassess:** November 9, 2026, or a change to the commands, routing, or study conclusions.
+
+| Dimension | Score | Reason |
+| --- | ---: | --- |
+| Reader utility | 2 | A visitor can choose and install a skill for a specific repository task. |
+| Original evidence | 2 | The examples follow shipped command behavior and the owned studies. |
+| Factual confidence | 2 | Commands and claims are checked against source, with the model limits alongside them. |
+| Host fit | 2 | Sys1 owns the runtime and project skills. |
+| Voice integrity | 1 | Disclosed AI synthesis, without supplied human experience. |
+| Maintenance value | 2 | One maintained article links to detailed guides and preserved study reports. |
+| **Total** | **11/12** | **Revise the existing page.** |
+
+## Homepage, skills, and documentation review (September 30, 2026)
+
+Reviewer: Codex AI agent `/root/launch_finish`. Review type: independent
+source, editorial, and representative rendered review of the integration
+owner's homepage, skills, and documentation revisions. No human review is
+claimed. The reviewer supplied narrow preview-copy, illustration, and Jev
+definition corrections; the integration owner reviews those repairs as part
+of final delivery. Sys1 maintainers own these pages and their evidence.
+Reassess on November 10, 2026, or a release that changes the documented
+commands, installation requirements, or model behavior.
+
+### Homepage: `/`
+
+1. The reader can decide whether compact check output fits their agent's work
+   and choose installation or an optional review workflow.
+2. The page shows the command, returned result, and saved log together. It
+   supplies the short adoption decision that the command reference and study
+   reports do not, while `/skills` supplies the installation procedure.
+3. Sys1 is the right host because it maintains the optional workflows and can
+   explain their relationship to the separate System One Skills package.
+4. Installation requirements and release links would become stale first.
+   The replay figure remains a dated byte measurement, with no whole-task
+   token, cost, or time claim inferred from it.
+5. No first-person endorsement or personal experience is asserted. The
+   authored agent conversation and terminal examples are labelled illustrations.
+
+Keep the homepage URL: it offers a concise product choice before setup.
+
+### Skills: `/skills`
+
+1. The reader can install the compact-output package and project skill, run a
+   first check, find the saved log, and add optional review or completion checks.
+2. This page connects package installation, agent-specific skill directories,
+   first execution, and interpretation of the result. The homepage introduces
+   those choices; the runtime reference covers a broader set of commands.
+3. Sys1 maintains the project skills and links directly to the independent
+   compact-output package's released artifact and command reference.
+4. Release URLs, minimum runtimes, setup targets, and preview behavior are the
+   first claims to recheck when either package changes. Source review corrected
+   the verification preview description: it reports input type and model route,
+   not the message contents or collected evidence.
+5. No first-person sentence claims personal use or an unsupplied endorsement.
+
+Keep the skills URL: it owns the installation and first-run procedure for the
+three supported coding-agent environments.
+
+### Documentation: `/docs`
+
+1. The reader can install Sys1, configure a model, preview an agent workflow,
+   make an API request, and select a supported integration mode.
+2. The page joins setup, expected results, failure interpretation, and detailed
+   references in one navigable guide. The skills page remains focused on agent
+   installation; the launch article explains a worked use case.
+3. Sys1 owns the CLI, routing, configuration, and response validation described
+   here. Linked model documentation remains the provider's authority.
+4. CLI flags, activation settings, supported model IDs, and platform requirements
+   would fail first as the runtime changes. Review checked the setup and preview
+   instructions against the shipped CLI and retained the model and evidence limits.
+5. The page makes no first-person experience or human-review claim.
+
+Keep the documentation URL: it owns operational setup and application use.
+
+### Rendered evidence and decision
+
+The reviewer inspected the September 30 captures from the integration owner's
+browser suite: `1440-light-index.html.png`, `390-light-index.html.png`,
+`390-dark-skills.html.png`, and `1440-light-docs.html.png`, with readable crops
+of the headers, installation blocks, review instructions, and verification
+instructions. Additional `1440-light-introducing-sys1.html.png` and
+`390-dark-introducing-sys1.html.png` captures cover the revised article's
+opening and workflow presentation. The shared navigation, action hierarchy,
+code presentation, light/dark colors, and mobile wrapping show no material
+polish issue. Article source review is separately owned by the integration
+agent because this reviewer authored that revision.
+
+The inspected suite began with the `2026-09-30T04:54:25.943Z` capture. After
+the first-mention Jev correction, the integration owner reran all 80
+route/width/theme combinations, interactions, no-JavaScript reading, and
+reduced-motion checks. The final `/tmp/sys1-site-browser/results.json` records
+`2026-09-30T04:59:00.703Z`, Chrome for Testing `145.0.7632.6`, pinned Playwright
+`1.58.2`, and browser/server cleanup. This is local verification; production
+verification belongs to the delivery record.
+
+Decision: **no remaining source, editorial, or observed visual blocker** for
+these revisions. Compact output has a complete installation path; model
+features retain their advisory status beside their instructions. The whole-task
+savings limitation and completed baseline conclusion remain accessible without
+dominating the installation path.
+
+The earlier records below describe the publication history. This revision replaces their launch-thread and prospective-experiment reading path.
+
 ## Admission before drafting
 
 - **Route:** `https://sys1.io/introducing-sys1`
@@ -67,3 +181,12 @@ The optional 52-second film is user-started, has captions and a prose transcript
 - **Film:** the existing 52-second film is kept. A 1:1 cut (`site/media/sys1-launch-square.mp4`) was rendered from `media/sys1-launch/cuts.json` for feeds. No native portrait film: the slides are landscape compositions, and a letterboxed 9:16 would not read on a phone.
 - **Admission:** unchanged at 11/12; the page stays indexed. The addendum adds a scannable summary of claims the admitted article already makes, plus the scorecard from the dated roadmap.
 - **Review:** AI-drafted by a Claude Code agent from source; independent agent review happens on the pull request. No human review is claimed.
+
+
+## Product readiness revision (September 30, 2026)
+
+This revision replaces the nine-beat catalogue and repeated reference material with three illustrated workflows, a worked review example, setup, the decision API, and one evidence-and-limits section. The synthetic screening chart remains in its dated report; it is no longer the article’s central proof. The social kit remains repository material. Existing film, captions, transcript, and legacy section anchors are preserved.
+
+Drafted by Codex AI agent `/root/launch_finish`; independently reviewed by Codex AI agent `/root`. No human review is claimed. Root checked the commands and workflow against source, the compact-output figures against the published replay, the whole-task limits against the reports, and the completion baseline’s actual scope. The revised prose makes no claim of proven whole-task savings or review accuracy. Preview instructions match the command’s displayed input type and model route.
+
+Root inspected the rendered desktop launch page, mobile homepage, skills page, documentation, and share image. The final local browser sweep passed 80 route/width/theme combinations, plus interactions, no-JavaScript reading, reduced motion, and video playback. The browser was Playwright 1.58.2’s Chromium 145.0.7632.6, with verified cleanup. Aggregate validation passed 584 tests and the packed CLI check; native installation passed on macOS arm64. Publication and exact production verification remain the integration owner’s next delivery steps.
