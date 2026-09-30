@@ -55,12 +55,23 @@ test.skipIf(process.platform === "win32")("rejects a symlinked executable within
 test("merges feature switches while keeping Playwright's unrelated defaults", () => {
   const defaults = ["--keep-this-default", "--mute-audio", "--disable-features=OtherFeature,PaintHolding", "--disable-features=SecondFeature"];
   const policy = chromiumPolicyArguments(defaults);
-  const effective = [...defaults.filter(argument => !(policy.ignoreDefaultArgs as string[]).includes(argument)), ...policy.args!];
+  const effective = [...defaults, ...policy.args!].filter(argument => !(policy.ignoreDefaultArgs as string[]).includes(argument));
   expect(effective).toContain("--keep-this-default");
   expect(effective.filter(argument => argument === "--mute-audio")).toHaveLength(1);
   const disabled = effective.filter(argument => argument.startsWith("--disable-features="));
   expect(disabled).toHaveLength(1);
   expect(new Set(disabled[0]!.split("=")[1]!.split(","))).toEqual(new Set(["OtherFeature", "SecondFeature", "PaintHolding", "MacAppCodeSignClone"]));
+});
+
+test("retains already-correct feature switches and mutes defaults that omit the headless switch", () => {
+  for (const mute of [[], ["--mute-audio"]]) {
+    const defaults = [...mute, "--keep-this-default", "--disable-features=PaintHolding,MacAppCodeSignClone"];
+    const options = chromiumPolicyArguments(defaults);
+    const effective = [...defaults, ...options.args!].filter(argument => !(options.ignoreDefaultArgs as string[]).includes(argument));
+    expect(effective.filter(argument => argument === "--mute-audio")).toHaveLength(1);
+    expect(effective.filter(argument => argument.startsWith("--disable-features="))).toHaveLength(1);
+    expect(effective).toContain("--keep-this-default");
+  }
 });
 
 test("the actual pinned Playwright switch list keeps one merged feature switch", () => {
@@ -69,7 +80,8 @@ test("the actual pinned Playwright switch list keeps one merged feature switch",
   expect(policy.revision).toMatch(/^\d+$/u);
   expect(policy.browserVersion).toMatch(/^\d+\.\d+\.\d+\.\d+$/u);
   const options = chromiumPolicyArguments(policy.defaultArgs);
-  const effective = [...policy.defaultArgs.filter(argument => !(options.ignoreDefaultArgs as string[]).includes(argument)), ...options.args!];
+  const effective = [...policy.defaultArgs, ...options.args!].filter(argument => !(options.ignoreDefaultArgs as string[]).includes(argument));
+  expect(effective.filter(argument => argument === "--mute-audio")).toHaveLength(1);
   expect(effective.filter(argument => argument.startsWith("--disable-features="))).toHaveLength(1);
   expect(effective.find(argument => argument.startsWith("--disable-features="))?.split("=")[1]?.split(",")).toContain("MacAppCodeSignClone");
   for (const argument of policy.defaultArgs.filter(argument => !argument.startsWith("--disable-features=") && argument !== "--mute-audio")) expect(effective).toContain(argument);

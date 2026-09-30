@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { socialImageFit, socialImageSiteDetails } from "@hraness/web-discovery/social-image/card";
-import { checkSocialCards, socialPageAlt, socialPageCopy, socialPages, socialSite } from "../scripts/social-cards.ts";
+import { checkSocialCards, homeCopy, socialPageAlt, socialPageCopy, socialPages, socialSite } from "../scripts/social-cards.ts";
 
 const site = new URL("../site/", import.meta.url);
 const origin = "https://sys1.io";
@@ -38,8 +38,16 @@ test("every indexable page uses its shared-template social card", () => {
   expect(socialPages.map(page => page.url).sort()).toEqual([...sitemap].sort());
   expect(socialSite.name).toBe("Sys1");
   expect(socialSite.domain).toBe("sys1.io");
-  expect(socialSite.icon?.kind).toBe("mark");
-  expect(socialSite.icon?.src).toBe(`data:image/svg+xml;base64,${readFileSync(new URL("marks/sys1.svg", site)).toString("base64")}`);
+  // The card header matches the site header: its foil mark, name, and palette.
+  const home = read("index.html");
+  expect(socialSite.brandMark).toBe(`data:image/svg+xml;base64,${readFileSync(new URL("marks/sys1.svg", site)).toString("base64")}`);
+  expect(home).toContain('src="/marks/sys1.svg"');
+  expect(home).toContain(`data-palette="${socialSite.palette}"`);
+  expect(home).toContain(`<span class="brand-name">${socialSite.brand?.replace(".io", "<span>.io</span>")}</span>`);
+  expect(socialSite.icon).toBeUndefined();
+  // The home card carries the hero: its headline over the start of its summary.
+  expect(home).toContain(`<h1 id="hero-heading">${homeCopy.headline}</h1>`);
+  expect(home).toContain(`<p class="summary">${homeCopy.description}`);
   for (const page of socialPages) {
     const html = read(page.file.replace(/^site\//, ""));
     const card = new URL(page.image, origin).href;

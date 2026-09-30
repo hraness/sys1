@@ -69,12 +69,11 @@ export const launchBeats: readonly LaunchBeat[] = [
   {
     id: "limits",
     part: "limits",
-    headline: "Use the measured results at their stated scope",
-    post: "Whole-task savings have not been demonstrated. In {pairs} review task pairs, requiring review used more tokens and time. The separate {compactPairs}-pair compact-output study saw no voluntary skill use. Keep tests and investigate model findings.",
+    headline: "Investigate findings and missing evidence",
+    post: "Review findings are advisory. Check them against your source and tests. Verification distinguishes confirmed claims, contradictions and missing evidence, so the agent can fix a mismatch or collect what it needs before reporting back.",
     visual: { kind: "diagram", src: "#measured" },
-    alt: "A scorecard of what the whole-task tests measured for each skill and what is still unknown.",
-    facts: ["pairs", "compactPairs"],
-    detailHref: "https://github.com/hraness/sys1/blob/main/docs/proof-roadmap-2026-09.md",
+    alt: "Verification results distinguish confirmed claims, contradictions and missing evidence.",
+    detailHref: "/docs#verify",
   },
   {
     id: "status",

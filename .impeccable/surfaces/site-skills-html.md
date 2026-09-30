@@ -235,3 +235,16 @@ The Codex integration agent independently checked the added descriptions and
 links against the profile definitions and evaluator source. No unsupported
 quality claim or installable-skill claim was found. Focused static checks passed;
 the final browser and production checks are recorded with delivery evidence.
+
+
+## Evidence and caption refinement, September 30, 2026
+
+This refinement supersedes instructions to promote the synthetic workflow
+screen and blanket illustration captions. Marketing keeps the measured
+563-output replay and external JevBench comparisons. Plans and small screening
+results remain in their existing research reports. Demonstration context and
+accessible descriptions identify sample content; visible captions add information
+only when readers need it to interpret a result.
+
+Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
+and converged browser acceptance remain with the integration owner.
