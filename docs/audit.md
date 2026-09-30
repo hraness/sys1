@@ -1,6 +1,7 @@
 # Review changes with reusable rules
 
-`sys1 audit` gives a second opinion on a Git diff. It is experimental: each
+`sys1 audit` checks a selected Git diff against repository rules without saving
+review history. It is experimental: each
 reported item is a candidate to inspect, and its model score is not a calibrated
 probability of a defect. Run your normal tests and review alongside it.
 
@@ -9,7 +10,9 @@ For project skills, repeated checks, feedback, and rule drafting, use the
 
 ## Preview and run
 
-Choose an explicit backend and model. For Jev, TypeSafe's hosted decision model, provide
+Start with [Sys1 installed](../README.md#install). A preview needs no model;
+for a live check, choose an explicit backend and model. For Jev, TypeSafe's
+hosted decision model, provide
 `TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Enabling hosted
 Jev selects the hosted-only routing policy. The audit command sends changed
 source and nearby context to that configured backend.

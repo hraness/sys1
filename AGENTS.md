@@ -49,6 +49,13 @@
   advisory claim checks, and the portable verification skill. A linked open PR
   is not evidence that a message claimed it was merged; unavailable evidence
   must remain unverifiable.
+- `src/workflows/` owns check-then-review execution through ALGAL's public process
+  API, private journals and command logs, input binding, and conservative resume.
+  Persist intent before an effect. Never repeat an effect whose outcome is
+  uncertain. Keep command arguments, model bodies, rule prose, and credentials
+  out of journals; command logs are separate private, size- and time-limited files.
+  The ALGAL dependency is pinned to the complete commit of its published release
+  plus lockfile integrity; do not import from a sibling checkout or floating tag.
 - `src/client.ts` is the portable Node/Bun client and `/client` export.
 - `src/kev.ts` adapts explicit Kev endpoints, retaining two-decimal output and
   restoring Score legends only after validating their native rendering.

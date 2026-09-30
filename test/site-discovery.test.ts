@@ -64,10 +64,14 @@ test("every indexable page uses its shared-template social card", () => {
 test("every social card's copy fits the template as written", () => {
   for (const page of socialPages) {
     const copy = socialPageCopy(page);
-    const fit = socialImageFit(socialImageSiteDetails(socialSite, copy));
-    expect({ page: page.url, issues: fit.issues }).toEqual({ page: page.url, issues: [] });
-    // The template drops an eyebrow that repeats the headline; declare none instead.
-    expect({ page: page.url, eyebrow: fit.eyebrow }).toEqual({ page: page.url, eyebrow: copy.eyebrow });
+    const details = socialImageSiteDetails(socialSite, copy);
+    const fit = socialImageFit(details);
+    // Not strict: this also fails on the review findings (a reduced
+    // description, a missing or repeated eyebrow, a repeated tagline).
+    expect({ page: page.url, findings: fit.findings }).toEqual({ page: page.url, findings: [] });
+    // Every page card draws the eyebrow it declares or derives from its path.
+    expect({ page: page.url, eyebrow: fit.eyebrow }).toEqual({ page: page.url, eyebrow: details.eyebrow });
+    if (page.copy !== null) expect({ page: page.url, eyebrow: fit.eyebrow ?? "" }).not.toEqual({ page: page.url, eyebrow: "" });
     // Page cards carry their own summary, never the home tagline.
     if (page.copy !== null) expect(copy.description).not.toBe(socialSite.description);
   }

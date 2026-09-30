@@ -1,45 +1,41 @@
 # Sys1
 
-> Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted model, so the agent saves tokens and time.
+> Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.
 
-Install the `sys1-review` project skill for Codex, Claude Code, or Devin to preview Git changes, run reusable rules, investigate candidates, and record feedback. The independent `sys1-verify` project skill runs `sys1 verify` to compare an agent's completion message with reachable Git, pull-request, and page evidence. Install it with `sys1 verify setup codex`, `claude-code`, or `devin`. Both commands are experimental and advisory: model scores are not calibrated defect probabilities, and missing evidence does not prove completion.
+Start with `sys1 workflow check -- <command>` to run a repository check and save its result and private log. This needs a Git worktree on macOS or Linux, with no model or API key. `sys1 workflow review` runs a check before an optional scoped review; it requires an explicit model route and request limit. A paused review can continue with the same inputs within an hour. Changed inputs and uncertain interrupted steps require inspection and a new run. ALGAL handles execution and saved state inside Sys1; no separate ALGAL installation is needed. Saved results do not replace fresh required delivery checks.
 
-System One models evaluate supplied state and return typed decisions and probabilities. Jev is TypeSafe's hosted model in that category. Sys1 is the separate open-source toolkit that uses the System One API and also supports experimental local Qwen models or compatible HTTP servers. Hosted Jev requires explicit activation and an environment credential; selected source or message context goes to the selected backend. The same yes/no, choice, and score API is available through a Node or Bun client, an embedded Bun router, or a loopback HTTP daemon. A validated response can still be wrong; quality and calibration differ by model. Sys1 is MIT licensed.
+For compact test or build output, the independent System One Skills package runs a known noisy check once, preserves its exit status, and saves the full log in a private temporary directory. The system-one-verify project skill works with Codex, Claude Code, and Devin. It requires Node.js 20+ on macOS or Linux, with no model or API key. A replay of 563 validation outputs measured 35.20% fewer UTF-8 text bytes; whole-task token savings have not been demonstrated.
 
-Latest release: v0.17.0.
+Sys1 adds optional model-assisted tools. The sys1-review skill checks selected Git changes against repository rules; bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript. The sys1-verify skill compares completion messages with Git, linked pull requests, and live pages. Both are experimental and advisory. Missing evidence is unverifiable, model scores are not calibrated defect probabilities, and a result without contradictions does not prove completion.
 
-## Start with an agent workflow
+Jev is TypeSafe's hosted decision model. Sys1 also supports experimental local Qwen models and compatible HTTP services. Hosted Jev requires explicit activation and an environment credential. Selected source, messages, or state go to the configured backend. Setup installs project instructions without hooks or model calls. The MIT-licensed CLI requires Bun 1.3.14 or newer and supports macOS, Linux, and Windows.
 
-- [Introducing Sys1](https://sys1.io/introducing-sys1): Why the project exists, how evidence becomes a decision, and what the latest experiments show.
-- [Agent skills](https://sys1.io/skills): Choose project review instructions, completion checks, or a separate compact-output skill.
-- [Getting started](https://sys1.io/docs#getting-started): Install Sys1 and choose hosted Jev or a local model.
-- [Agent review](https://sys1.io/docs#audit): Install the project skill, preview selected changes, and investigate findings.
-- [Review guide](https://github.com/hraness/sys1/blob/main/docs/review.md): Configure Codex, Claude Code, or Devin, record feedback, and write repository rules.
-- [Verify completion claims](https://sys1.io/docs#verify): Pass a message from any agent; Devin also supports local transcript discovery.
-- [Verify command](https://github.com/hraness/sys1/blob/main/docs/verify.md): Evidence sources, preview mode, privacy, and exit codes.
+Latest release: v0.18.0.
+
+## Install and use
+
+- [Install Sys1](https://sys1.io/docs#getting-started): CLI installation and a first saved check.
+- [Saved workflows](https://github.com/hraness/sys1/blob/main/docs/workflows.md): Check-then-review commands, pause and resume, private logs, and execution records.
+- [Documentation](https://sys1.io/docs): Saved checks, model setup, preview commands, and the decision API.
+- [Install the compact-output skill](https://sys1.io/skills#install): The separate System One Skills package, agent-specific paths, and log recovery.
+- [Add code review](https://sys1.io/skills#review): Preview selected changes and rules before making model calls.
+- [Review guide](https://github.com/hraness/sys1/blob/main/docs/review.md): Repository rules, feedback, privacy, and troubleshooting.
+- [Add completion checks](https://sys1.io/skills#verify): Check a message from any agent; Devin also supports local transcript discovery.
+- [Verification guide](https://github.com/hraness/sys1/blob/main/docs/verify.md): Evidence sources, preview mode, and exit codes.
+- [Introducing Sys1](https://sys1.io/introducing-sys1): Illustrated examples of the three workflows and their limits.
 
 ## Build with the decision API
 
-- [Jev and System One models](https://sys1.io/docs#system-one): Define state and questions using Noul, Choice, and Score; distinguish the model from the Sys1 toolkit.
-- [First Jev request](https://sys1.io/docs#jev): Start the gateway, submit a version-pinned request, interpret its probability, and diagnose errors.
-- [Integration modes](https://sys1.io/docs#integration): Use the Node or Bun client, embedded Bun router, or local HTTP daemon.
-- [Backends and models](https://sys1.io/docs#backends): Hosted Jev, local models, and compatible servers.
-- [Profiles and evaluation](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
-- [Evaluations](https://sys1.io/docs/evaluations): Dated adapter reports with their workloads and limitations.
-- [Compare models](https://sys1.io/compare): External JevBench results and workload cost.
+Applications supply state and yes/no, choice, or score questions, then receive validated answer shapes and probabilities. A valid response can still be wrong. The same API is available through a Node or Bun client, an embedded Bun router, and a loopback HTTP daemon.
 
-## Separate compact-output skill
+- [First API request](https://sys1.io/docs#jev): Configure Jev, start the gateway, and submit a pinned request.
+- [Runtime reference](https://github.com/hraness/sys1/blob/main/docs/runtime.md): Client, embedded runtime, gateway, configuration, and local models.
+- [Decision profiles](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
+- [Compare models](https://sys1.io/compare): External JevBench scores, runtime choices, and workload cost estimates.
 
-- [system-one-verify](https://sys1.io/skills#shipped): Run a known noisy test or build once, return a short result, and retain its full local log. It belongs to System One Skills, needs no Sys1 backend, and is different from `sys1 verify`.
+## Evidence and source
 
-## Source-checkout experiments
-
-These experimental profiles and their evaluator require a Sys1 source checkout, Bun, and project dependencies. They are separate from the installed review and verification skills.
-
-
-- [Workflow profiles](https://sys1.io/skills#workflows): Explore failure triage, excerpt relevance, and support for claims using caller-supplied text.
-- [Profile evaluation](https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md): Validate labeled examples offline, then opt into model calls with request limits and per-question reports.
-
-## Source
-
-- [GitHub](https://github.com/hraness/sys1): Source, releases, and the endpoint reference in the README.
+- [Sys1 evaluations](https://sys1.io/docs/evaluations): Dated model and workflow studies with methods and limits.
+- [System One Skills scorecard](https://github.com/hraness/system-one-skills/blob/main/docs/SCORECARD.md): Output replay measurements and research candidates.
+- [Sys1 on GitHub](https://github.com/hraness/sys1): Source, releases, and contribution guide.
+- [System One Skills on GitHub](https://github.com/hraness/system-one-skills): The separate compact-output package.

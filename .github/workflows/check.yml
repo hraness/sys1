@@ -74,6 +74,8 @@ jobs:
       - run: ./node_modules/.bin/playwright-core install --with-deps chromium
       - name: Verify public routes and save visual evidence
         env:
+          # The hosted runner exports system Chrome; this job uses pinned Playwright.
+          CHROME_BIN: ""
           SYS1_BROWSER_ARTIFACTS: ${{ github.workspace }}/site-browser-artifacts
         run: bun scripts/verify-site-browser.ts
       - name: Upload site browser evidence

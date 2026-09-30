@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 import { chromium } from "playwright-core";
+import { closeSiteBrowser, siteBrowserLaunchPlan } from "./site-browser-policy.ts";
 import { checkLaunchMedia } from "./sync-launch-media.ts";
-import { ownedChromiumLaunchOptions, pinnedBrowserExecutable, pinnedChromiumDefinition, verifyOwnedChromium } from "./owned-browser.mjs";
+import { verifyOwnedChromium } from "./owned-browser.mjs";
 
 // Exercise the shipped static files with Vercel's clean URLs and security headers.
 await checkLaunchMedia();
@@ -14,9 +15,7 @@ const artifacts = resolve(process.env.SYS1_BROWSER_ARTIFACTS ?? "/tmp/sys1-site-
 await mkdir(artifacts, { recursive: true });
 const production = process.argv.includes("--production");
 assert.ok(process.argv.slice(2).every(argument => argument === "--production"), "Unknown argument");
-const executablePath = await pinnedBrowserExecutable(chromium.executablePath(), process.env.SYS1_BROWSER_EXECUTABLE);
-const { defaultArgs, expectedVersion } = pinnedChromiumDefinition();
-const launchOptions = ownedChromiumLaunchOptions(executablePath, defaultArgs);
+const launch = siteBrowserLaunchPlan();
 const server = production ? undefined : Bun.serve({
   hostname: "127.0.0.1", port: 0,
   async fetch(request) {
@@ -37,14 +36,18 @@ let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
 let browserProof: Awaited<ReturnType<typeof verifyOwnedChromium>> | undefined;
 const origin = new URL(production ? "https://sys1.io" : server!.url);
 const results: { route: string; width: number; theme: string }[] = [];
+let browserVersion: string | undefined;
 try {
   for (const redirect of config.redirects ?? []) {
     const response = await fetch(new URL(redirect.source, origin), { redirect: "manual" });
     assert.equal(response.status, redirect.permanent ? 308 : 307);
     assert.equal(new URL(response.headers.get("location")!, origin).pathname, redirect.destination);
   }
-  browser = await chromium.launch(launchOptions);
-  browserProof = await verifyOwnedChromium(browser, executablePath, expectedVersion);
+  browser = await chromium.launch(launch.options);
+  browserVersion = browser.version();
+  console.log(`Browser: ${launch.executablePath}\nVersion: ${browserVersion}; Playwright ${launch.playwrightVersion}`);
+  assert.equal(browserVersion, launch.expectedVersion, "Launched browser differs from the pinned Playwright version");
+  browserProof = await verifyOwnedChromium(browser, launch.executablePath, launch.expectedVersion);
   console.log(JSON.stringify({ browserProof }));
   for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
@@ -143,15 +146,15 @@ try {
         assert.ok(await page.locator("[data-demo-answer]").isVisible());
         assert.ok(!await page.locator("[data-question-type]").first().isVisible());
       } else {
-        await page.getByText("Read the chart as a table", { exact: true }).click();
-        assert.ok(await page.getByRole("table", { name: "Matched labels and errors" }).isVisible());
+        assert.ok(await page.locator("#measured").isVisible());
+        assert.equal(await page.locator(".launch-beat").count(), 3);
+        assert.ok(await page.locator(".launch-article-footer").getByRole("link", { name: "Install a project skill" }).isVisible());
       }
       await page.screenshot({ path: resolve(artifacts, `390-no-js-${route === "/" ? "home" : "launch"}.png`), fullPage: true });
     }
   } finally { await plain.close(); }
 } finally {
-  try { await browser?.close(); }
-  finally { await server?.stop(true); }
+  await closeSiteBrowser(browser, server);
 }
-await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), browserProof, cleanup: "browser and server closed", results }, null, 2) + "\n");
+await writeFile(resolve(artifacts, "results.json"), JSON.stringify({ origin: origin.href, production, source: process.env.GITHUB_SHA ?? null, capturedAt: new Date().toISOString(), browser: { executable: launch.executablePath, version: browserVersion, playwrightVersion: launch.playwrightVersion }, browserProof, cleanup: "browser and server closed", results }, null, 2) + "\n");
 console.log(`Verified ${results.length} route/viewport/theme combinations.`);

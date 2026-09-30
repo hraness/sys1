@@ -30,6 +30,8 @@ export interface ReviewCheckpointOptions extends ReviewRuntimeOptions {
   mode: DiffMode;
   since?: string;
   paths?: readonly string[];
+  /** Refuse changed prepared inputs before any model call or saved-state access. */
+  expectedSnapshot?: string;
 }
 export interface ReviewCheckpointReport {
   version: 1;
@@ -120,11 +122,18 @@ async function snapshotStillCurrent(options: ReviewCheckpointOptions, snapshot: 
 }
 
 export async function checkpointReview(options: ReviewCheckpointOptions): Promise<ReviewCheckpointReport> {
+  if (options.expectedSnapshot !== undefined && !/^[a-f0-9]{64}$/.test(options.expectedSnapshot)) {
+    throw new ReviewError("invalid_snapshot", "Expected review snapshot must be a SHA-256 identity", 2);
+  }
   const diff = await collect(options);
   const rules = await options.loadRules(diff.repoRoot);
   const selection = await selectionFor(diff, options.paths);
   const snapshot = reviewSnapshot(diff, rules, options.route, selection);
   const result = report(snapshot);
+  if (options.expectedSnapshot !== undefined && snapshot !== options.expectedSnapshot) {
+    result.status = "stale";
+    return result;
+  }
   // Compile/validate even when reusing a receipt. Preview must neither read nor create state.
   const preview = await evaluateAudit({ ...auditOptions(options), diff, rules, dryRun: true });
   if (options.dryRun) { result.audit = preview; return result; }

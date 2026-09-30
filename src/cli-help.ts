@@ -3,20 +3,25 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "help", "version",
+  "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "workflow", "help", "version",
 ] as const;
 
-const DESCRIPTION = `Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted
-model, so the agent saves tokens and time.`;
+const DESCRIPTION = `Sys1 runs checks and saves review workflows for coding agents.
+Use Jev or a local model for advisory reviews and structured answers.`;
 
 export function bareScreen(version: string): string {
   return `${DESCRIPTION}
 
 Start here
-  sys1 setup --dry-run       See what setup would download
-  sys1 setup                 Download the local model and turn it on
-  sys1 up                    Start the gateway in the background
-  echo '{…}' | sys1 eval     Ask a question through the gateway
+  sys1 --version             Confirm your installation
+  sys1 workflow --help       Run a check and save its result
+  sys1 review --help         Review Git changes with repository rules
+  sys1 verify --help         Check a proposed completion message
+
+Choose a model
+  sys1 jev enable            Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 setup --dry-run       Preview experimental local model setup
+  sys1 eval --help           See a complete request example
 
 Everyday
   sys1 status                Gateway state and which models can answer
@@ -33,16 +38,19 @@ export function rootHelp(settableKeys: readonly string[]): string {
 ${DESCRIPTION}
 
 Start here
-  sys1 setup [--dry-run]     Download the local model and turn it on
-  sys1 up                    Start the gateway in the background
-  sys1 eval [--file <path>]  Ask a question through the gateway
+  sys1 --version             Confirm your installation
+  sys1 workflow check -- bun test
+                             Run a check and save its result
+  sys1 workflow --help       Check, review, inspect, and resume a saved run
 
 Setup
   sys1 jev status|enable|disable
                              Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 setup [--dry-run]     Set up an experimental local model
   sys1 doctor                Check the install and say what to fix
 
 Gateway
+  sys1 up                    Start the gateway in the background
   sys1 status                Gateway state and which models can answer
   sys1 down                  Stop the background gateway
   sys1 serve                 Run the gateway in this terminal
@@ -97,6 +105,51 @@ function wrapList(items: readonly string[]): string {
 }
 
 const COMMAND_HELP: Readonly<Record<string, string>> = {
+  workflow: `Usage: sys1 workflow <check|review|list|show|resume|verify> [options]
+
+Run checks and keep an inspectable record. Check-only runs need no model,
+account, or gateway. Bun is required, as for the other Sys1 commands.
+Starting and resuming workflows currently supports macOS and Linux.
+
+  sys1 workflow check [--timeout-ms <n>] [--dry-run] -- <command> [args...]
+  sys1 workflow review <--worktree|--staged|--since <ref>>
+       --model <backend/model> --max-requests <n> [--path <path>] [--gateway]
+       [--pause-after-check] [--timeout-ms <n>] [--review-timeout-ms <n>]
+       [--dry-run]
+       -- <command> [args...]
+  sys1 workflow list
+  sys1 workflow show <id>
+  sys1 workflow resume <id> [--dry-run] -- <original-command> [args...]
+  sys1 workflow verify <id>     Verify the saved record's integrity
+
+Start with a check:
+  sys1 workflow check -- bun test
+
+Review changes after a passing check:
+  sys1 workflow review --worktree --model typesafe/jev-1.13.0 \\
+    --max-requests 10 --path src -- bun test
+
+Configure that model first: sys1 jev --help or sys1 setup --help.
+Model routes follow backend configuration and can change with that service.
+For a local model, start sys1 up and use --gateway. Repeat --path to select
+more paths. --pause-after-check saves a review run before making model calls.
+The check timeout defaults to 300000 ms (maximum 900000); review defaults to
+30000 ms (maximum 120000). --max-requests accepts 1 through 200.
+--dry-run previews a start or resume without running your check command,
+writing state, or making model calls. --json (or --agent) returns JSON.
+
+Resume requires the original command and unchanged review inputs.
+Arguments are hashed in metadata. Checks can be reused for at most 1 hour.
+Private check logs hold up to 4 MiB; extra output is omitted. Logs expire
+after 7 days and are pruned on later execution. Treat logs as sensitive.
+Model input, answers, and rule prose stay out of state. Review is advisory.
+Saved records do not replace a fresh final check before delivery.
+Review changes to external inputs before relying on a saved result.
+
+Use show and verify to inspect stopped runs. Expired or changed inputs need
+a new run. Investigate uncertain command or model outcomes first.
+Resume never automatically repeats an uncertain command or paid request.
+`,
   review: `Usage: sys1 review checkpoint <--staged|--worktree|--since <ref>>
                    --model <backend/model> [options] [-- paths...]
        sys1 review issues [--json]
@@ -354,8 +407,16 @@ Send one System One request to the running gateway and print the answer. The
 request is JSON from --file or standard input. With --profile, the input is
 {"state": ...} and the profile turns it into the request.
 
+First enable hosted Jev or set up a local model, then run sys1 up. See
+sys1 jev --help and sys1 setup --help for those choices.
+
 Example
-  sys1 eval --file request.json
+  echo '{
+    "state": "The build passed.",
+    "questions": {
+      "passed": { "type": "noul", "instructions": "Did the build pass?" }
+    }
+  }' | sys1 eval
 `,
   version: `Usage: sys1 version [--json]
 

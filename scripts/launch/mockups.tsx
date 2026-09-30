@@ -3,29 +3,29 @@ import type { ReactElement } from "react";
 import { launchFacts } from "./facts.ts";
 
 // Code-built illustrations of Sys1's real surfaces. Every command is one the
-// release ships; every output line follows the formats in src/verify/cli.ts,
-// docs/verify.md and docs/review.md. Accounts, repositories and paths are
-// made up. Agent and code-host chrome is neutral and unbranded.
+// release ships; output follows src/verify/cli.ts and the separate compact
+// runtime's src/reduce.js. Byte counts are abbreviated. Accounts, repositories,
+// and paths are made up. Agent and code-host chrome is neutral and unbranded.
 
 const MODEL = "typesafe/jev-1.13.0";
 
 export const compactLines: readonly TerminalLine[] = [
   { kind: "comment", text: "The agent runs a noisy check through the system-one-verify skill" },
-  { kind: "input", text: "bun run check" },
-  { kind: "output", text: "exit 1 · failed", tone: "error", beat: "result" },
+  { kind: "input", text: "system-one-skills check -- bun run check" },
+  { kind: "output", text: "exit=1 bytes=… omitted=…", tone: "error", beat: "result" },
   { kind: "output", text: "test/cart.test.ts › applies the member discount", tone: "error" },
   { kind: "output", text: "  expected 18.00, received 20.00" },
-  { kind: "output", text: "118,402 bytes left out · full log saved on disk", tone: "muted", beat: "log" },
+  { kind: "output", text: 'log="/tmp/system-one-…/check.log"', tone: "muted", beat: "log" },
 ];
 
 export const verifyLines: readonly TerminalLine[] = [
   { kind: "input", text: `sys1 verify --message /tmp/final-message.txt --model ${MODEL}` },
-  { kind: "output", text: "Verify complete: 1 contradiction, 2 requests.", beat: "summary" },
+  { kind: "output", text: "Verify complete: 1 contradiction, 1 request.", beat: "summary" },
   { kind: "output", text: "[contradicted] merged_or_pushed p=0.97", tone: "error", beat: "contradiction" },
   { kind: "output", text: "    2 commits are ahead of origin/main", tone: "muted" },
   { kind: "output", text: "[confirmed] committed p=0.95", tone: "ok" },
   { kind: "output", text: "[unverifiable] checks_passed p=0.88", tone: "warn" },
-  { kind: "output", text: "    no check-like command ran in the final turn", tone: "muted" },
+  { kind: "output", text: "    no transcript was checked; rerun with the harness session or compare the reported check command", tone: "muted" },
 ];
 
 export const decisionLines: readonly TerminalLine[] = [
@@ -90,14 +90,14 @@ function PrComment(): ReactElement {
   );
 }
 
-export type LaunchMockupId = "agent-review" | "compact" | "verify" | "pr-comment" | "decision" | "agent-verify" | "install";
+export type LaunchMockupId = "agent-review" | "compact" | "verify" | "pr-comment" | "decision" | "agent-verify" | "install" | "feedback";
 
 export function LaunchMockup({ id }: Readonly<{ id: LaunchMockupId }>): ReactElement {
   switch (id) {
     case "agent-review":
       return <AgentSession agent="generic-cli" describe="Illustration: a coding agent runs the sys1-review skill on the files it changed, gets one advisory finding, and fixes it." title="Coding agent · ~/code/orders-api" turns={reviewTurns} />;
     case "compact":
-      return <TerminalFrame describe={`Illustration: a failing check returns its exit status and a short excerpt while the full log stays on disk. In the study, results were ${launchFacts.reduction.value} shorter.`} lines={compactLines} title="orders-api · check" />;
+      return <TerminalFrame describe={`Illustration: a failing check returns its exit status and a short excerpt while the full log stays on disk. Replaying ${launchFacts.runs.value} recorded outputs returned ${launchFacts.reduction.value} less text in total.`} lines={compactLines} title="orders-api · check" />;
     case "verify":
       return <TerminalFrame describe="Illustration: sys1 verify reports that a message claiming a push is contradicted because two commits are still local." lines={verifyLines} title="orders-api · sys1 verify" />;
     case "pr-comment":
@@ -108,5 +108,10 @@ export function LaunchMockup({ id }: Readonly<{ id: LaunchMockupId }>): ReactEle
       return <AgentSession agent="generic-chat" describe="Illustration: asked whether it pushed, an agent checks its own claim, finds two local commits, and corrects itself." title="Assistant" turns={verifyTurns} />;
     case "install":
       return <TerminalFrame describe="Illustration: two setup commands write the review and verify skills into a project; setup makes no model calls." lines={installLines} title="orders-api · setup" />;
+    case "feedback":
+      return <TerminalFrame describe="Illustration: record feedback after investigating a review finding." lines={[
+        { kind: "input", text: "sys1 review feedback <finding-id> useful --json" },
+        { kind: "comment", text: "Mark a finding useful, incorrect, or unverifiable after checking the code." },
+      ]} title="orders-api · review feedback" />;
   }
 }

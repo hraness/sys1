@@ -211,15 +211,81 @@ scrollable block is keyboard-focusable and has a descriptive accessible name.
 No client dependency, product behavior, or model/approval claim changes. Source
 review and browser validation belong to the marketing integration owner.
 
+## Product readiness refinement — 2026-09-29
+
+The user requested a finished, useful installation experience and authorized
+revising the descriptions. Preserve the current Hraness Tokyo Night palette,
+shared controls, fonts, icon, footer, and responsive behavior. This refines the
+existing visual identity. The prior lead and navigation snapshots above are
+historical and superseded for this delivery.
+
+The homepage is Persuade. Its first task is to install the independent compact
+check skill; it needs Node 20+, macOS/Linux, and no model account. Show that
+workflow in the first viewport. Then explain the optional Sys1 review and
+completion-check tools, keeping their advisory status beside them. Put the typed
+decision API below those workflows, with a working offline illustration and a
+link to its reference. Keep one shared navigation: Skills, Docs, Evidence,
+GitHub. The primary action is Install skills. Model comparison and the launch
+story remain reachable from relevant sections and documentation.
+
+Retire the homepage's unfinished-comparison pitch, synthetic-screening chart,
+repeated backend/integration reference, speculative system narrative, and
+repeated FAQ. The research documents remain available; these blocks compete
+with installation and duplicate the documentation. A dated replay result may
+support a narrowly worded output-size claim. Whole-task savings remain unproven.
+
+Editorial admission: revise the existing `/` and `/skills` URLs. The homepage
+helps a coding-agent user choose a working check; `/skills` owns installation and
+first use. `/docs` owns the optional runtime reference, `/introducing-sys1` owns
+the explanatory guide, and `/compare` owns model comparison. Product source,
+released packages and the published studies supply first-party evidence; no
+personal endorsement or new customer claim is introduced. Scores for homepage:
+reader utility 2, original evidence 2, factual confidence 2, host fit 2, voice
+integrity 2, maintenance value 2. Scores for skills page: reader utility 2,
+original evidence 2, factual confidence 2, host fit 2, voice integrity 2,
+maintenance value 2. Evidence owner: Sys1 maintainers. Drafted by Codex. Independent AI editorial/source and rendered review by
+Codex agent `/root/launch_finish` found no remaining blockers; its five-question
+assessments and screenshot evidence are recorded in `docs/launch-editorial.md`.
+Root also inspected the desktop/mobile layouts and share image. The converged
+local browser sweep passed all 80 combinations and interactions on September
+30, 2026, with verified owned-browser cleanup. Reassess on
+2026-11-10 or with the next release, whichever comes first.
+
+## Unified Sys1 workflows — September 30, 2026
+
+The user asked to incorporate ALGAL into Sys1 underneath ready-made workflows.
+Retain the current Tokyo Night design, components, illustrations and interactions.
+The homepage now answers whether to install Sys1 to save a repository check and
+continue a scoped review; the primary action installs Sys1 itself. The separate
+System One Skills package remains an optional compact-output tool, with its own
+dated measurement. Do not transfer that measurement to the new workflow.
+
+The original contribution is the checked installation and execution path owned
+by this repository. /docs owns the procedure, /skills owns agent installation,
+and /introducing-sys1 remains the launch explanation; no new route is needed.
+Reader utility 2, original evidence 2, factual confidence 2, host fit 2, voice
+integrity 2, maintenance value 2: 12/12. Claims are
+bounded to saved results and guarded continuation, not improved review quality.
+Drafter and owner: Codex /root. Independent source/voice reviewer: Codex
+/root/install_experience; the reviewer confirmed the commands and measurement
+boundaries. No human review claimed. Root inspected mobile and desktop captures
+and the share cards; all 80 local browser combinations and interactions passed
+with the pinned Chromium 145.0.7632.6. The exact packed CLI also passed its
+model-free saved-check and cross-process inspection checks. The homepage's
+metadata retains the canonical product description while its hero introduces
+the saved workflow. Source-check date: 2026-09-30. State: admit. Release and
+production verification remain part of delivery. Reassess on
+2026-11-10 or the next feature release.
 
 ## Evidence and caption refinement, September 30, 2026
 
-This refinement supersedes instructions to promote the synthetic workflow
-screen and blanket illustration captions. Marketing keeps the measured
-563-output replay and external JevBench comparisons. Plans and small screening
-results remain in their existing research reports. Demonstration context and
-accessible descriptions identify sample content; visible captions add information
-only when readers need it to interpret a result.
+This refinement supplements the saved-workflow onboarding above. Retire
+promotional panels for the synthetic source-profile trial and blanket
+illustration captions. Keep the shipped saved-check and review experience,
+the measured 563-output replay, and external JevBench links. Research plans
+and small screening results remain in their existing reports. Demonstration
+context and accessible descriptions identify sample content; visible captions
+add useful information for interpreting the result.
 
 Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
 and converged browser acceptance remain with the integration owner.

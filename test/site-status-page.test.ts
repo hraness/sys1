@@ -19,7 +19,8 @@ test("the 404 page keeps the site chrome around the shared status page", async (
   expect(html.match(/<footer aria-label="Hraness network"/gu)).toHaveLength(1);
   expect(html).toContain('<main id="main" tabindex="-1">');
   expect(html).toContain('<div class="hraness-status-page" data-hraness-status-routes="');
-  expect(html).toContain('href="/#install">Install Sys1</a>');
+  expect(SYS1_STATUS_PAGE.primaryAction.href).toBe("/skills#install");
+  expect(html).toContain(`href="${SYS1_STATUS_PAGE.primaryAction.href}"`);
   expect(html).toContain('<link rel="stylesheet" href="/vendor/hraness-status-page/status-page.css" />');
   expect(html).toContain('<script src="/status-page.js" defer></script>');
   expect(html).not.toContain('rel="canonical"');
@@ -36,7 +37,7 @@ test("check rejects an edited status page region", async () => {
     }
     await checkStatusPage(copy);
     const html = await readFile(join(copy, "site/404.html"), "utf8");
-    await writeFile(join(copy, "site/404.html"), html.replace("Install Sys1", "Install it"));
+    await writeFile(join(copy, "site/404.html"), html.replaceAll(SYS1_STATUS_PAGE.primaryAction.label, "Install it"));
     await expect(checkStatusPage(copy)).rejects.toThrow("site/404.html");
   } finally {
     await rm(copy, { recursive: true, force: true });

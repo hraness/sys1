@@ -1,8 +1,8 @@
 # Kev, decision profiles, and fine-tuning
 
-Sys1 can route typed decisions to an operator-run [Kev server](https://github.com/jaredpalmer/kev). Kev supplies a Qwen-based LoRA adapter and pointer head; Sys1 supplies the application interface, routing policy, and reusable question definitions. Kev remains a separate Python process with its own checkpoint and hardware requirements.
+Connect a [Kev server](https://github.com/jaredpalmer/kev) to Sys1 and reuse its decisions from your application through versioned question profiles. You run the Kev server and choose its checkpoint; Sys1 provides the client, routing, and response validation. This is an advanced setup for an existing Kev deployment or a model you intend to train.
 
-This guide audits Kev source at [`e943f21e40574d99cefb2d292089333bcda9047c`](https://github.com/jaredpalmer/kev/tree/e943f21e40574d99cefb2d292089333bcda9047c). Compatibility checks establish the request and response contract. They do not establish a model's accuracy, calibration, latency, or fitness for your application. No Kev model inference or training was run for this integration.
+The instructions pin the server source and checkpoint for reproducibility. Start with [Sys1 installed](../README.md#install), then follow the setup below. The integration is contract-tested; model inference and training were not run for this integration, so evaluate your deployment on its own examples.
 
 ## Connect a Kev server
 
@@ -184,6 +184,8 @@ Serve the final local directory on a new port, register it under a new backend n
 Training data can contain private source text, and evaluation output includes per-example predictions and identifiers. Keep those files private by default. Local `kev.train` does not itself upload your examples; Modal execution or model publication is a separate operation with its own data destination and cost. Sys1 neither starts those operations nor stores inference payloads as training data.
 
 ## Adapter behavior and evidence boundaries
+
+This guide audits Kev source at [`e943f21e40574d99cefb2d292089333bcda9047c`](https://github.com/jaredpalmer/kev/tree/e943f21e40574d99cefb2d292089333bcda9047c). Compatibility checks establish the request and response contract. They do not establish a model's accuracy, calibration, latency, or fitness for your application. No Kev model inference or training was run for this integration.
 
 The `kev` adapter handles the specific differences in the pinned [API serializer](https://github.com/jaredpalmer/kev/blob/e943f21e40574d99cefb2d292089333bcda9047c/kev/api.py) and [HTTP server](https://github.com/jaredpalmer/kev/blob/e943f21e40574d99cefb2d292089333bcda9047c/kev/serve.py):
 

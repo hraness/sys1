@@ -161,15 +161,39 @@ decisions-v2 reports and the frozen workflow profiles. Drafter/source pass:
 Codex agent /root/trial_cases; no human review. Root owns independent copy
 review and the final browser check.
 
+## Saved-workflow onboarding — September 30, 2026
+
+The reader installs one Sys1 CLI, runs a model-free check from a Git worktree,
+and can then configure a model for advisory review. The guide now starts with
+Sys1 installation and its first check; the independent compact-output package
+appears as an optional tool. Existing visual hierarchy and components stay.
+
+This page owns runnable setup and first-use commands tied to the current CLI;
+the homepage explains the choice, /skills explains agent instructions, and the
+repository workflow guide owns recovery and storage detail. The procedure
+belongs here rather than in another indexable page. Reader utility 2, original
+evidence 2, factual confidence 2, host fit 2, voice integrity 2, maintenance
+value 2: 12/12. Keep prerequisites, one-hour reuse
+limit, advisory review, changed-input checks, and fresh delivery gates explicit.
+Drafter and owner: Codex /root. Independent source/voice reviewer: Codex
+/root/install_experience; no human review claimed. The reviewer checked setup
+order, commands, input checks, and measurement boundaries. The exact packed CLI
+passed its saved-check, cross-process inspection, and record-verification checks.
+Root inspected the rendered guide and share card; the 80-combination local
+browser sweep passed with Chromium 145.0.7632.6 and Playwright 1.58.2.
+Source-check date: 2026-09-30. State: admit. Release and production verification
+remain part of delivery. Reassess on
+2026-11-10 or the next CLI release.
 
 ## Evidence and caption refinement, September 30, 2026
 
-This refinement supersedes instructions to promote the synthetic workflow
-screen and blanket illustration captions. Marketing keeps the measured
-563-output replay and external JevBench comparisons. Plans and small screening
-results remain in their existing research reports. Demonstration context and
-accessible descriptions identify sample content; visible captions add information
-only when readers need it to interpret a result.
+This refinement supplements the saved-workflow onboarding above. Retire
+promotional panels for the synthetic source-profile trial and blanket
+illustration captions. Keep the shipped saved-check and review experience,
+the measured 563-output replay, and external JevBench links. Research plans
+and small screening results remain in their existing reports. Demonstration
+context and accessible descriptions identify sample content; visible captions
+add useful information for interpreting the result.
 
 Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
 and converged browser acceptance remain with the integration owner.
