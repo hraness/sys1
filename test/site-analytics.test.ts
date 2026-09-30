@@ -159,7 +159,7 @@ test("before_send keeps posthog-js session, window, and attribution properties w
   expect(result?.properties).toMatchObject({
     $session_id: "s1", $window_id: "w1", $pageview_id: "p1", $prev_pageview_pathname: "/docs",
     $session_entry_utm_source: "x", $initial_gclid: "g", $referrer: "$direct", $referring_domain: "$direct",
-    traffic_channel: "direct", $el_text: "Contact [email]", nested: { key: "Bearer [credential]", list: ["api_key=[redacted]"] },
+    traffic_channel: "direct", $el_text: "Contact [email]", nested: { list: ["api_key=[redacted]"] },
   });
   expect(result?.properties).not.toHaveProperty("_kx");
   expect(result?.properties).not.toHaveProperty("ref");
@@ -233,4 +233,38 @@ test("web vitals and exceptions use the posthog-js shapes and the package budget
   for (let index = 0; index < 18; index += 1) budget.allow(`b${index}`, 3);
   expect(budget.allow("c", 4)).toBe(false);
   expect(budget.allow("c", 60_010)).toBe(true);
+});
+
+
+test("before_send drops nested personal fields and redacts retained attribution", () => {
+  const result = sanitizeCapture({ event: "$pageview", properties: {
+    token: "phc_public", distinct_id: "$posthog_cookieless",
+    email: "opaque-person", $initial_access_token: "opaque-secret", AUTHORIZATION: "opaque-auth",
+    $set: { display: "profile" }, nested: { token: "opaque-nested", "api-key": "opaque-key", items: [{ password: "opaque-password", useful: true }] },
+    $current_url: "https://sys1.io/skills?utm_source=dev%40example.com&utm_campaign=token%3Dprivate-campaign",
+  } }, live, "");
+  expect(result?.properties).toMatchObject({ token: "phc_public", distinct_id: "$posthog_cookieless", utm_source: "[email]", utm_campaign: "token=[redacted]", nested: { items: [{ useful: true }] } });
+  const serialized = JSON.stringify(result);
+  for (const value of ["opaque-", "dev@example.com", "private-campaign", '"display"']) expect(serialized).not.toContain(value);
+});
+
+test("private current or historical paths remove all retained campaign properties", () => {
+  for (const properties of [
+    { $current_url: "https://sys1.io/%61ccount/person?utm_source=private-campaign" },
+    { $current_url: "https://sys1.io/skills?utm_source=private-campaign", $initial_current_url: "https://sys1.io/oauth/callback/person?gclid=private-click" },
+    { $session_entry_pathname: "/account/person" },
+  ]) {
+    const result = sanitizeCapture({ event: "$pageview", properties: { ...properties, utm_source: "private-campaign", $initial_gclid: "private-click", $session_entry_utm_campaign: "private-campaign", nested: { utm_source: "private-campaign" } } }, live, "https://sys1.io/account/person");
+    expect(result?.properties?.$referrer).toBe("https://sys1.io/private");
+    for (const value of ["/person", "private-campaign", "private-click"]) expect(JSON.stringify(result)).not.toContain(value);
+  }
+});
+
+test("actual SDK request bodies collapse private paths without attribution", () => {
+  const { bodies } = runHarness("https://sys1.io/account/private-person?utm_source=private-campaign&gclid=private-click", "https://sys1.io/oauth/callback/private-person");
+  expect(bodies.length).toBeGreaterThan(0);
+  for (const body of bodies) {
+    expect(body.properties.$pathname).toBe("/private");
+    for (const value of ["private-person", "private-campaign", "private-click"]) expect(JSON.stringify(body)).not.toContain(value);
+  }
 });
