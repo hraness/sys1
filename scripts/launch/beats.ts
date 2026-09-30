@@ -16,7 +16,7 @@ export const launchBeats: readonly LaunchBeat[] = [
     id: "short-logs",
     part: "does",
     headline: "Noisy test logs come back as a short result",
-    post: "Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over {runs} real runs, it returned {reduction} less text.",
+    post: "Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, {runs} recorded check outputs came back {reduction} smaller in total.",
     visual: { kind: "mockup", id: "compact", state: {} },
     alt: "Illustration: a failing check comes back as an exit status and a short excerpt, with the full log saved on disk.",
     facts: ["runs", "reduction"],

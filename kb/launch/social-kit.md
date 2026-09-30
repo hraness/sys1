@@ -17,7 +17,7 @@ Sys1 hands your coding agent's small decisions to a fast model, saving tokens an
 ### 2 of 9
 
 ```text
-Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over 563 real runs, it returned 35% less text.
+Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
 ### 3 of 9
@@ -77,7 +77,7 @@ Sys1 hands your coding agent's small decisions to a fast model, saving tokens an
 ### 2 of 9
 
 ```text
-Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over 563 real runs, it returned 35% less text.
+Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
 ### 3 of 9
@@ -137,7 +137,7 @@ Sys1 hands your coding agent's small decisions to a fast model, saving tokens an
 ### 2 of 9
 
 ```text
-Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over 563 real runs, it returned 35% less text.
+Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
 ### 3 of 9
@@ -189,7 +189,7 @@ https://sys1.io/introducing-sys1
 ```text
 Sys1 hands your coding agent's small decisions to a fast model, saving tokens and time. Did the test fail, does the diff break a rule, was it pushed: quick calls that leave your agent free for the code.
 
-Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over 563 real runs, it returned 35% less text.
+Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 
 Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 
@@ -223,7 +223,7 @@ Write the Show HN post and first comment yourself; use only these facts.
 
 - Hands your agent's small decisions to a fast model
 - Sys1 hands your coding agent's small decisions to a fast model, saving tokens and time. Did the test fail, does the diff break a rule, was it pushed: quick calls that leave your agent free for the code.
-- Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, hands back the result with a short excerpt, and keeps the full log on disk. Replayed over 563 real runs, it returned 35% less text.
+- Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 - Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 - sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 - Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
