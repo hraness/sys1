@@ -43,7 +43,7 @@
     "build:dist": "bun scripts/build-dist.ts",
     "check:package": "bun scripts/package-smoke.ts",
     "check:native": "bun scripts/check-native.ts",
-    "test": "bun test --parallel=4 ./src ./test",
+    "test": "bun test --parallel=4 ./src ./test ./scripts/owned-browser.test.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check": "bun run check:site-copy && bun run typecheck && bun run check:release-info && bun run brand:check && bun run social:check && bun run analytics:check && bun run launch:check && bun run test && bun run build:dist && bun run check:package",
     "prepack": "bun run check",
@@ -68,7 +68,7 @@
     "node-llama-cpp": "3.20.0"
   },
   "devDependencies": {
-    "@hraness/design-kit": "github:hraness/design-kit#v0.31.0",
+    "@hraness/design-kit": "github:hraness/design-kit#v0.32.0",
     "@hraness/web-discovery": "github:hraness/web-discovery#v0.13.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/bun": "1.3.14",

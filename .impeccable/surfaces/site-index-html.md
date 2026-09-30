@@ -276,3 +276,16 @@ metadata retains the canonical product description while its hero introduces
 the saved workflow. Source-check date: 2026-09-30. State: admit. Release and
 production verification remain part of delivery. Reassess on
 2026-11-10 or the next feature release.
+
+## Evidence and caption refinement, September 30, 2026
+
+This refinement supplements the saved-workflow onboarding above. Retire
+promotional panels for the synthetic source-profile trial and blanket
+illustration captions. Keep the shipped saved-check and review experience,
+the measured 563-output replay, and external JevBench links. Research plans
+and small screening results remain in their existing reports. Demonstration
+context and accessible descriptions identify sample content; visible captions
+add useful information for interpreting the result.
+
+Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
+and converged browser acceptance remain with the integration owner.
