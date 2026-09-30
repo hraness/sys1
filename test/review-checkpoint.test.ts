@@ -72,6 +72,29 @@ describe("agent review checkpoint", () => {
     expect((await listReviewIssues(f.options)).issues).toHaveLength(2);
   }, GIT_WORKFLOW_TIMEOUT_MS);
 
+  test("an expected snapshot rejects changed prepared inputs before model calls or state access", async () => {
+    for (const change of ["source", "rule", "route", "selection"] as const) {
+      const f = await fixture();
+      const preview = await checkpointReview({ ...f.options, dryRun: true });
+      const options: ReviewCheckpointOptions = { ...f.options, expectedSnapshot: preview.snapshot };
+      if (change === "source") await writeFile(join(f.cwd, "code.ts"), "export const later = 4;\n");
+      if (change === "rule") options.loadRules = async () => ruleset("A revised condition.");
+      if (change === "route") options.route = "fake/other";
+      if (change === "selection") options.paths = ["code.ts"];
+      const rejected = await checkpointReview(options);
+      expect(rejected).toMatchObject({ status: "stale", complete: false, requests: 0, findings: [], audit: null });
+      expect(rejected.snapshot).not.toBe(preview.snapshot);
+      expect(f.calls()).toBe(0);
+      await expect(lstat(f.home)).rejects.toMatchObject({ code: "ENOENT" });
+      const bound = { ...options, expectedSnapshot: rejected.snapshot };
+      expect(await checkpointReview(bound)).toMatchObject({ status: "complete", complete: true, requests: 1 });
+      expect(await checkpointReview(options)).toMatchObject({ status: "stale", complete: false, requests: 0, findings: [] });
+      expect(await checkpointReview(bound)).toMatchObject({ status: "unchanged", complete: true, requests: 0 });
+      expect(f.calls()).toBe(1);
+      expect((await readReviewState(f.home, f.cwd)).generation).toBe(1);
+    }
+  }, GIT_WORKFLOW_TIMEOUT_MS);
+
   test("a cached snapshot becoming stale during rule loading is never returned as unchanged", async () => {
     for (const change of ["source", "rule"] as const) {
       const f = await fixture(); await checkpointReview(f.options);

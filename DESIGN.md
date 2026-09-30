@@ -66,10 +66,10 @@ components:
 
 # Sys1 design system
 
-Current implementation, September 28, 2026. Sys1 uses Tokyo Night colors and
+Current implementation, September 30, 2026. Sys1 uses Tokyo Night colors and
 Nebula Sans throughout its marketing, documentation, and launch article. The
-homepage leads with agent review and completion verification, then introduces
-the typed decision API. Hosted Jev remains opt-in and local models experimental.
+homepage leads with compact test output from System One Skills, then explains
+optional Sys1 review, completion checks, and the typed decision API. Hosted Jev remains opt-in and local models experimental.
 
 This document describes the shipped HTML/CSS and the launch changes in this
 checkout. It replaces the older warm Paper palette, Instrument Serif headings,
@@ -117,7 +117,7 @@ The Book cut is preloaded. Code uses the platform monospace stack. No runtime
 font CDN or Instrument Serif stylesheet is required.
 
 Common heading rules request weight 550 and balanced wrapping. The homepage
-has a compact headline beside the decision demonstration; the article uses a
+has a compact headline beside a command/output illustration; the article uses a
 larger `clamp(3rem, 6.5vw, 5.75rem)` title. Reference pages use a smaller type
 scale. The body follows the browser's root size instead of setting a fixed
 pixel size. Ordinary introductions stay within 65ch; article prose stays
@@ -136,8 +136,8 @@ brand and actions. Preserve visible access to primary links and 44px phone
 targets. Do not hide primary navigation to make a header fit. Anchor offsets
 account for the taller mobile header, and the skip link sits above it.
 
-The homepage hero, film feature, and trial comparison stack below 760px. The
-API flow becomes two columns. The article's four-step review diagram becomes
+The homepage hero, film feature, evidence summary, and API demonstration stack
+below 760px. The article's four-step review diagram becomes
 two columns below 680px and one column below 440px. Its verification row
 stacks, and trial bars move below their labels on narrow phones. Wide data
 tables scroll inside labelled, keyboard-focusable containers; they must not
@@ -158,10 +158,9 @@ calls. Preserve the initial choice example when JavaScript is unavailable.
 Do not label authored numbers as measured model output.
 
 Workflow diagrams keep evidence selection, a chosen backend, response
-validation, and the application's action distinct. The launch chart counts
-all 16 submissions per workflow, including errors, and separates matched
-labels, misses, and request errors with text and shape as well as color.
-Keep its native data table and methodology link alongside the picture.
+validation, and the application's action distinct. The launch article illustrates three workflows and links to the underlying
+studies. Keep model-assisted findings clearly advisory and authored examples
+labelled as illustrations.
 
 Installation and API examples use code frames. Most code wraps; `.code-frame`
 blocks preserve lines with local horizontal scrolling. Copy controls report
@@ -202,8 +201,7 @@ behavior; no fixed bar or compensating spacer is needed.
 Check desktop and phone layouts in both appearances, including navigation,
 all three demo forms, no-JavaScript reading, reduced motion, focus, and media
 controls. Inspect screenshots as well as automated results. Test tables and
-long code at narrow widths without page overflow. Check the article chart's
-numbers against the linked frozen report whenever its source changes.
+long code at narrow widths without page overflow. Check numerical claims against their linked study whenever copy changes.
 
 The repository browser verifier owns the route/viewport/theme sweep; launch
 source review and rendered findings are recorded in

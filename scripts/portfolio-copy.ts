@@ -1,9 +1,9 @@
 // Copy is authored in hraness/jungle; this renderer uses its checked snapshot offline.
-export function renderPortfolioCopy(source: string, snapshot: { canonicalUrl?: string; messaging: { names: { name: string }; category: string; tagline: string; short: string; meta: string; hero: { heading: string; summary: string; primaryAction?: string; secondaryAction?: string }; headings: Readonly<Record<string, string>> } }, websiteName = snapshot.messaging.names.name, socialAlt?: string, siteSnapshot: { canonicalUrl?: string; messaging: { names: { name: string }; meta: string } } = snapshot): string {
+export function renderPortfolioCopy(source: string, snapshot: { canonicalUrl?: string; messaging: { names: { name: string }; category: string; tagline: string; short: string; meta: string; hero: { heading: string; summary: string; primaryAction?: string; secondaryAction?: string }; headings: Readonly<Record<string, string>> } }, websiteName = snapshot.messaging.names.name, socialAlt?: string, siteSnapshot: { canonicalUrl?: string; messaging: { names: { name: string }; meta: string; hero?: { primaryAction?: string } } } = snapshot): string {
   const copy = snapshot.messaging;
   const words = copy.hero.heading.split(" ");
   const fields: Readonly<Record<string, string | undefined>> = {
-    NAME: copy.names.name, SITE_NAME: websiteName, SITE_NAME_LOWER: websiteName.toLowerCase(), TITLE: `${copy.names.name} · ${copy.tagline}`, SOCIAL_ALT: socialAlt,
+    NAME: copy.names.name, SITE_NAME: websiteName, SITE_NAME_LOWER: websiteName.toLowerCase(), SITE_PRIMARY_ACTION: siteSnapshot.messaging.hero?.primaryAction, TITLE: `${copy.names.name} · ${copy.tagline}`, SOCIAL_ALT: socialAlt,
     META: copy.meta, SHORT: copy.short, TAGLINE: copy.tagline, CATEGORY: copy.category,
     NAME_LOWER: copy.names.name.toLowerCase(),
     HERO_HEADING: copy.hero.heading, HERO_SUMMARY: copy.hero.summary,
@@ -42,6 +42,11 @@ export function renderPortfolioCopy(source: string, snapshot: { canonicalUrl?: s
       : field === "HERO_END" ? words.slice(-accentWords).join(" ")
       : fields[field];
     if (value === undefined) throw new Error(`Missing canonical marketing copy: ${field}:${key ?? ""}`);
-    return escaped(value);
+    const encoded = escaped(value);
+    // Templates may keep an inline command styled as code without authoring
+    // another copy of the canonical hero paragraph.
+    return field === "HERO_SUMMARY" && key !== undefined
+      ? encoded.replaceAll(escaped(key), `<code>${escaped(key)}</code>`)
+      : encoded;
   });
 }

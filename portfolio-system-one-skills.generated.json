@@ -5,7 +5,7 @@
   "portfolio": {
     "contract": "hraness.portfolio-public/v1",
     "url": "https://hraness.com/portfolio.json",
-    "digest": "sha256:b207e78517ad39c572858d642d232da35fec25b8eb9e157ea1ad02e0cf8808c6"
+    "digest": "sha256:f01d45d73a113aac6c7e19581bd9e919e84fdfff6ff41a1688f4ba1b406c74d9"
   },
   "messaging": {
     "formatVersion": 1,
@@ -20,26 +20,28 @@
     "meta": "System One Skills gives Devin, Claude Code, and Codex one skill that runs a noisy check once, returns a short result, and saves the full log locally.",
     "medium": "System One Skills gives Devin, Claude Code, and Codex one skill, system-one-verify, for long test and build logs. It runs the command once, returns a short result with the exit status, and saves the full log on your machine.",
     "hero": {
-      "heading": "Cut noisy validation logs without a model call.",
-      "summary": "System One Skills gives Devin, Claude Code, and Codex one skill, system-one-verify, for long test and build logs. It runs the command once, returns a short result with the exit status, and saves the full log on your machine.",
+      "heading": "Give your agent shorter check results.",
+      "summary": "System One Skills runs your noisy tests and builds once, returns a short result, and saves the full log. Install the system-one-verify skill for Codex, Claude Code, or Devin.",
       "primaryAction": "install the skill"
     },
     "headings": {
-      "review-heading": "Review a batch of changes",
-      "verify-heading": "Check the completion message",
+      "review-heading": "Add a second pass on code changes.",
+      "verify-heading": "Check a completion message.",
       "workflows-heading": "Try decision workflows from source",
       "shipped-heading": "Keep noisy check output short",
       "use-it-for-a-status-decision": "Use it for a status decision.",
       "use-native-tools-for-diagnosis": "Use native tools for diagnosis.",
-      "evidence-heading": "The compact-output study",
+      "evidence-heading": "What has been measured.",
       "system-one-skills-research-candidates": "System One Skills research candidates",
       "catalog-heading": "Further compact-output research",
-      "install-heading": "Install system-one-verify for Devin, Claude Code, or Codex.",
-      "social-image-title": "Compact test and build output"
+      "install-heading": "Install in your project.",
+      "social-image-title": "Shorter test logs for your agent",
+      "skills-first-check-heading": "Run your first check",
+      "skills-further-reading-heading": "Further reading"
     },
     "channels": {
       "social": {
-        "imageDescription": "Run checks once and keep the full log."
+        "imageDescription": "No model or API key required."
       }
     },
     "status": {
@@ -408,7 +410,7 @@
     {
       "id": "sys1",
       "name": "Sys1",
-      "description": "gives coding agents tools to review code and check completion claims",
+      "description": "saves repository check results and adds scoped code review",
       "canonicalUrl": "https://sys1.io",
       "surface": {
         "actionLabel": "explore Sys1",
@@ -416,15 +418,15 @@
           "CLI",
           "SDK"
         ],
-        "proof": "code review, completion checks, and structured model answers through a CLI and SDK"
+        "proof": "saved repository checks, scoped code review, and structured model answers through a CLI and SDK"
       },
       "messaging": {
         "names": {
           "name": "Sys1",
           "command": "sys1"
         },
-        "short": "Gives coding agents tools to review code and check completion claims",
-        "tagline": "Give your coding agent a second check."
+        "short": "Saves repository check results and adds scoped code review",
+        "tagline": "Saved checks and code review"
       }
     },
     {

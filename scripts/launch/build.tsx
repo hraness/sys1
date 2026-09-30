@@ -41,7 +41,7 @@ function Scorecard(): ReactElement {
           <tr><th scope="row">Compact check output</th><td>{compactPairs.value}</td><td>Never called. No token or time change.</td></tr>
         </tbody>
       </table>
-      <p>Source: <code>docs/proof-roadmap-2026-09.md</code>. The next step is accuracy on real inputs.</p>
+      <p>Source: <a href="https://github.com/hraness/sys1/blob/main/docs/proof-roadmap-2026-09.md">the published study reports</a>. Whole-task savings have not been demonstrated.</p>
     </div>
   );
 }
@@ -72,7 +72,7 @@ function LaunchBeats({ beats }: Readonly<{ beats: readonly LaunchBeat[] }>): Rea
   assertLaunchBeats(beats);
   return (
     <div className="launch-beats" data-hraness-launch-beats="">
-      {beats.map((beat) => {
+      {beats.filter((beat) => beat.part === "does").map((beat) => {
         const anchor = launchBeatAnchor(beat);
         return (
           <section aria-labelledby={`${anchor}-heading`} className="launch-beat" data-part={beat.part} id={anchor} key={beat.id}>
@@ -83,7 +83,7 @@ function LaunchBeats({ beats }: Readonly<{ beats: readonly LaunchBeat[] }>): Rea
               <figcaption><span className="launch-beat-kind">{figureLabel[beat.visual.kind]}.</span> {sentenceCase(beat.alt.replace(/^Illustration: /u, ""))}</figcaption>
             </figure>
             {beat.detailHref === undefined ? null : (
-              <p className="launch-beat-detail"><a href={beat.detailHref}>More on this</a></p>
+              <p className="launch-beat-detail"><a href={beat.detailHref}>{beat.id === "short-logs" ? "Use compact check output" : beat.id === "rules" ? "Set up code review" : "Set up completion checks"}</a></p>
             )}
           </section>
         );
@@ -108,21 +108,6 @@ function region(file: string, name: string, body: string): { path: string; next:
   const to = current.indexOf(end);
   if (from < 0 || to < from) throw new Error(`${file} is missing the ${name} launch markers.`);
   return { path, current, next: `${current.slice(0, from + start.length)}\n${body}\n${current.slice(to)}` };
-}
-
-function kitSection(kit: SocialKit): string {
-  const esc = (text: string) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-  const list = (label: string, posts: readonly string[]) =>
-    `<h3>${label}</h3><ol>${posts.map((post) => `<li><pre>${esc(post)}</pre></li>`).join("")}</ol>`;
-  return [
-    `<details class="launch-social-kit" id="social-kit"><summary>Social kit: posts cut from this article</summary>`,
-    `<p>Each post is one section above, sized for its channel and linking back here. The full kit, with the fact sheet for Show HN and Product Hunt, is <a href="https://github.com/hraness/sys1/blob/main/kb/launch/social-kit.md">in the repository</a>.</p>`,
-    list(`X thread (${kit.x.length} posts)`, kit.x),
-    list(`Bluesky thread (${kit.bluesky.length} posts)`, kit.bluesky),
-    list(`Threads (${kit.threads.length} posts)`, kit.threads),
-    `<h3>LinkedIn</h3><pre>${esc(kit.linkedin)}</pre>`,
-    `</details>`,
-  ].join("");
 }
 
 function kitMarkdown(kit: SocialKit): string {
@@ -173,12 +158,11 @@ function kitMarkdown(kit: SocialKit): string {
 }
 
 const beatsHtml = markup(<LaunchBeats beats={resolvedBeats} />);
-const beatNav = resolvedBeats.map((beat) => `<li><a href="#${launchBeatAnchor(beat)}">${beat.headline}</a></li>`).join("");
 
 const homeHtml = markup(
   <div className="launch-home-mockups">
     <figure className="launch-home-figure"><LaunchMockup id="agent-review" /><figcaption>Illustration: an agent reviews its own change with <code>sys1-review</code>.</figcaption></figure>
-    <figure className="launch-home-figure"><LaunchMockup id="verify" /><figcaption>Illustration: <code>sys1 verify</code> catches a push that never happened.</figcaption></figure>
+    <figure className="launch-home-figure"><LaunchMockup id="verify" /><figcaption>Illustration: <code>sys1 verify</code> compares a claimed push with local Git evidence.</figcaption></figure>
   </div>,
 );
 
@@ -195,7 +179,7 @@ const provenance = `${JSON.stringify(
 )}\n`;
 
 const outputs: { path: string; current: string; next: string }[] = [
-  region("site/introducing-sys1.html", "beats", `${`<h2 id="short-version">The short version</h2><p class="launch-short-intro">Nine short pieces, one idea each. Each one is also a post in the launch thread.</p><nav class="launch-beats-nav" aria-label="The short version"><ol>${beatNav}</ol></nav>`}\n${beatsHtml}\n${kitSection(socialKit)}`),
+  region("site/introducing-sys1.html", "beats", `<h2 id="short-version">Put a check to work</h2><p class="launch-short-intro">Start with the part of your workflow that needs attention. Compact output runs locally; review and completion checks use your chosen model.</p>\n${beatsHtml}`),
   region("site/index.html", "mockups", homeHtml),
 ];
 for (const [file, next] of [

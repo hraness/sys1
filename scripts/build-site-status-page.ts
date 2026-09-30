@@ -24,9 +24,9 @@ const END = "<!-- hraness-status-page:end -->";
 /** The page content. primaryAction matches the homepage hero's primary button. */
 export const SYS1_STATUS_PAGE = {
   siteName: "Sys1",
-  primaryAction: { href: "/#install", label: "Install Sys1" },
+  primaryAction: { href: "/skills#install", label: "Install skills" },
   next: [
-    { href: "/docs", label: "Docs", description: "Install Sys1, pick hosted Jev or a local model, and call it from Node, Bun, or HTTP." },
+    { href: "/docs", label: "Docs", description: "Run a compact check, add repository review, or use the decision API." },
     { href: "/compare", label: "Compare models", description: "JevBench scores, where each model runs, and what your workload would cost." },
     { href: "/docs/evaluations", label: "Evaluations", description: "Sys1’s own tests of each backend, wrong answers and raw reports included." },
   ],

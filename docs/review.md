@@ -1,7 +1,8 @@
 # Review changes with your agent
 
-Use `sys1 review` after a batch of edits and tests to find candidates, investigate
-them, and record whether they helped. This workflow is experimental and
+Use `sys1 review` to check a batch of changes against repository rules. It
+keeps the selected paths, findings, and feedback together so your agent can
+investigate candidates and reuse an unchanged review. This workflow is experimental and
 advisory. Its scores rank candidates; they are not calibrated probabilities of
 a defect. Keep the repository's normal tests and review.
 
@@ -11,12 +12,9 @@ repository selects rules for its own code and conventions. The bundled pack
 checks newly empty catch blocks and removed test assertions in JavaScript and
 TypeScript. It does not provide general review coverage for every language.
 
-The [contract-based experiment](reviewer-contract-2026-09-27.md) missed its
-reproduced defect and flagged two of five control hunks. Investigate every
-candidate before treating it as a defect.
-
-Run these commands inside a Git worktree. Choose an enabled backend and its
-exact model. For Jev, TypeSafe's hosted decision model, provide
+Start with [Sys1 installed](../README.md#install) and run these commands inside
+a Git worktree. Skill setup and checkpoint previews need no model. For a live
+review, choose an enabled backend and its exact model. For Jev, TypeSafe's hosted decision model, provide
 `TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Selected source
 and surrounding diff context go to that backend. Inspect the files and preview
 before sending them. [Audit privacy and limits](audit.md#privacy-and-limits)
@@ -219,6 +217,12 @@ sys1 rules list --json
 rules load after bundled and user packs; a matching rule ID replaces the
 earlier definition. Use a deterministic check when it already covers the
 mistake reliably.
+
+## Evidence and example rules
+
+The [contract-based experiment](reviewer-contract-2026-09-27.md) missed its
+reproduced defect and flagged two of five control hunks. Investigate every
+candidate before treating it as a defect.
 
 The source repository also contains
 [four candidate rules and a historical corpus](../benchmarks/reviewer/README.md)

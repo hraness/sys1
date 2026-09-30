@@ -3,8 +3,9 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SYS1_HELP_TOPICS } from "../src/cli-help.ts";
+import { commandHelp, SYS1_HELP_TOPICS } from "../src/cli-help.ts";
 import { SYS1_VERSION } from "../src/gateway.ts";
+import { systemOneRequestSchema } from "../src/protocol.ts";
 
 const PROJECT_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const CLI = join(PROJECT_ROOT, "src", "cli.ts");
@@ -39,22 +40,18 @@ const widest = (text: string) => Math.max(...lines(text).map((line) => line.leng
 describe("sys1 help", () => {
   test("bare invocation is a short start screen", async () => {
     const result = await sys1([]);
-    expect(result).toEqual({ code: 0, stderr: "", stdout: `Sys1 hands your coding agent's small decisions to Jev, TypeSafe's fast hosted
-model, so the agent saves tokens and time.
-
-Start here
-  sys1 setup --dry-run       See what setup would download
-  sys1 setup                 Download the local model and turn it on
-  sys1 up                    Start the gateway in the background
-  echo '{…}' | sys1 eval     Ask a question through the gateway
-
-Everyday
-  sys1 status                Gateway state and which models can answer
-  sys1 doctor                Check the install and say what to fix
-
-All commands: sys1 --help · Command help: sys1 help <command>
-sys1 ${SYS1_VERSION}
-` });
+    expect(result.code).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toStartWith("Sys1 ");
+    expect(result.stdout).toContain("sys1 --version");
+    expect(result.stdout).toContain("sys1 review --help");
+    expect(result.stdout).toContain("sys1 verify --help");
+    expect(result.stdout).toContain("sys1 jev enable");
+    expect(result.stdout).toContain("TYPESAFE_API_KEY");
+    expect(result.stdout).toContain("sys1 setup --dry-run");
+    expect(result.stdout).toContain("experimental local");
+    expect(result.stdout).toContain("sys1 eval --help");
+    expect(result.stdout).toEndWith(`sys1 ${SYS1_VERSION}\n`);
     expect(lines(result.stdout).length).toBeLessThanOrEqual(25);
   });
 
@@ -63,7 +60,9 @@ sys1 ${SYS1_VERSION}
       const result = await sys1([flag]);
       expect(result.code).toBe(0);
       expect(lines(result.stdout)[0]).toBe("Usage: sys1 <command> [options]");
-      expect(result.stdout).toContain("Start here\n  sys1 setup [--dry-run]");
+      expect(result.stdout).toContain("sys1 --version");
+      expect(result.stdout).toContain("sys1 setup [--dry-run]");
+      expect(result.stdout).toContain("sys1 jev status|enable|disable");
       expect(lines(result.stdout).length).toBeLessThanOrEqual(60);
       expect(widest(result.stdout)).toBeLessThanOrEqual(80);
     }
@@ -80,6 +79,17 @@ sys1 ${SYS1_VERSION}
       expect(widest(outputs[0]!.stdout)).toBeLessThanOrEqual(80);
     }
   }, 120_000);
+
+  test("eval help contains a valid request and its setup prerequisites", () => {
+    const help = commandHelp("eval")!;
+    const example = /echo '([\s\S]*?)' \| sys1 eval/.exec(help);
+    expect(example).not.toBeNull();
+    const request = systemOneRequestSchema.parse(JSON.parse(example![1]!));
+    expect(Object.keys(request.questions)).toHaveLength(1);
+    expect(help).toContain("sys1 up");
+    expect(help).toContain("sys1 jev --help");
+    expect(help).toContain("sys1 setup --help");
+  });
 
   test("--version prints the name and version", async () => {
     for (const flag of ["--version", "-V", "version"]) {

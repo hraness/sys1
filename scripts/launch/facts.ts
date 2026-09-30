@@ -13,14 +13,6 @@ export const launchFacts = {
     value: "35%",
     source: "site/skills.html#evidence: 1,163,594 to 754,006 UTF-8 bytes, 35.20%",
   },
-  cost: {
-    value: "$0.0004",
-    source: "README.md and docs/model-comparison.md, TypeSafe's published workflow figures",
-  },
-  latency: {
-    value: "0.4 seconds",
-    source: "README.md and docs/model-comparison.md, TypeSafe's published workflow figures",
-  },
   pairs: {
     value: "32",
     source: "docs/proof-roadmap-2026-09.md, sys1 review checkpoint whole-task pairs",
@@ -54,8 +46,8 @@ export const launchRelease = {
 
 export const launchMessaging = {
   names: { name: "Sys1" },
-  tagline: "Hands your agent's small decisions to a fast model",
-  meta: "Project skills for Codex, Claude Code and Devin: completion-claim checks and rule-based review, with small questions answered by Jev or a local model. Open source, MIT.",
+  tagline: "Shorten test logs and add checks for your coding agent",
+  meta: "Sys1 helps coding agents read compact check output and add advisory code review and completion checks. Install skills for Codex, Claude Code, or Devin.",
 } as const;
 
 export const CANONICAL_URL = "https://sys1.io/introducing-sys1";

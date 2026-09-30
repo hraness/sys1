@@ -5,7 +5,7 @@
   "portfolio": {
     "contract": "hraness.portfolio-public/v1",
     "url": "https://hraness.com/portfolio.json",
-    "digest": "sha256:b207e78517ad39c572858d642d232da35fec25b8eb9e157ea1ad02e0cf8808c6"
+    "digest": "sha256:f01d45d73a113aac6c7e19581bd9e919e84fdfff6ff41a1688f4ba1b406c74d9"
   },
   "messaging": {
     "formatVersion": 1,
@@ -15,32 +15,52 @@
       "command": "sys1"
     },
     "category": "Coding agent tools",
-    "tagline": "Give your coding agent a second check.",
-    "short": "Gives coding agents tools to review code and check completion claims",
+    "tagline": "Saved checks and code review",
+    "short": "Saves repository check results and adds scoped code review",
     "meta": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.",
-    "medium": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Review and completion checks are advisory.",
-    "long": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Its code review and completion checks are experimental and advisory. Agents and applications can also ask yes/no, choice, and score questions and receive validated answers with probabilities. Choose TypeSafe’s hosted Jev, an experimental local model, or a compatible server. Use the Node or Bun client, embed the router, or call its local HTTP gateway. The Sys1 site also offers System One Skills, an independent package that compacts noisy test and build output without Sys1 or a model. Sys1 is MIT licensed.",
+    "medium": "Sys1 runs your repository check, keeps the output local, and saves a result you can inspect later. Add a scoped review when you need a second pass on the changes. Review and completion checks are advisory.",
+    "long": "Sys1 runs your repository check, keeps the output local, and saves a result you can inspect later. Add a scoped review when you need a second pass on the changes. Its code review and completion checks are experimental and advisory. Agents and applications can also ask yes/no, choice, and score questions and receive validated answers with probabilities. Choose TypeSafe’s hosted Jev, an experimental local model, or a compatible server. Use the Node or Bun client, embed the router, or call its local HTTP gateway. The Sys1 site also offers System One Skills, an independent package that compacts noisy test and build output without Sys1 or a model. Sys1 is MIT licensed.",
     "hero": {
-      "heading": "Keep noisy logs out of your agent’s context.",
-      "summary": "System One Skills keeps noisy test and build logs out of your coding agent's context. Sys1 adds review and completion checks backed by Jev or a local model.",
-      "primaryAction": "Install compact output",
-      "secondaryAction": "Explore Sys1"
+      "heading": "Keep checks and code review together.",
+      "summary": "Sys1 runs your repository check, keeps the output local, and saves a result you can inspect later. Add a scoped review when you need a second pass on the changes.",
+      "primaryAction": "Install Sys1",
+      "secondaryAction": "Explore the workflows"
     },
     "headings": {
-      "review-heading": "Three skills your agent runs itself.",
-      "benchmarks-heading": "Benchmarks against other skill packs are in progress.",
+      "review-heading": "Useful checks, inside your agent’s workflow.",
+      "benchmarks-heading": "For compact output alone.",
       "launch-heading": "Meet Sys1.",
       "system-heading": "Three parts, one system.",
-      "how-heading": "Put fast decisions in your own code.",
+      "how-heading": "Use small decisions in your own code.",
       "trial-heading": "Test the decision on your task.",
       "integration-heading": "Three ways to call Sys1.",
       "ecosystem-heading": "What Sys1 connects to.",
       "install-heading": "Install Sys1.",
-      "questions-heading": "Before you begin."
+      "questions-heading": "Before you begin.",
+      "docs-title": "Set up your first useful check",
+      "getting-started-title": "Install Sys1",
+      "workflows-title": "Save a check and continue its review",
+      "connect-jev-title": "Connect hosted Jev for model calls",
+      "audit-title": "Review changes with your agent",
+      "verify-title": "Check a completion message",
+      "compact-checks-title": "Compact test output",
+      "system-one-title": "Ask for a structured decision",
+      "integration-title": "Integration modes",
+      "backends-title": "Other backends",
+      "profiles-title": "Reuse application questions",
+      "research-title": "Evaluate a model for your task",
+      "workflow-review-heading": "Review a change against your rules",
+      "workflow-completion-heading": "Check what “done” means",
+      "docs-install-cli": "Install the CLI",
+      "docs-first-jev-request": "Make your first Jev request",
+      "docs-model-errors": "Choose the model and handle failures",
+      "docs-portable-client": "Portable client",
+      "docs-embedded-router": "Embedded Bun router",
+      "docs-loopback-http": "Loopback HTTP"
     },
     "channels": {
       "social": {
-        "imageDescription": "Stop spending big-model tokens on small decisions."
+        "imageDescription": "Keep checks and code review together."
       }
     },
     "status": {
@@ -410,7 +430,7 @@
     {
       "id": "sys1",
       "name": "Sys1",
-      "description": "gives coding agents tools to review code and check completion claims",
+      "description": "saves repository check results and adds scoped code review",
       "canonicalUrl": "https://sys1.io",
       "surface": {
         "actionLabel": "explore Sys1",
@@ -418,15 +438,15 @@
           "CLI",
           "SDK"
         ],
-        "proof": "code review, completion checks, and structured model answers through a CLI and SDK"
+        "proof": "saved repository checks, scoped code review, and structured model answers through a CLI and SDK"
       },
       "messaging": {
         "names": {
           "name": "Sys1",
           "command": "sys1"
         },
-        "short": "Gives coding agents tools to review code and check completion claims",
-        "tagline": "Give your coding agent a second check."
+        "short": "Saves repository check results and adds scoped code review",
+        "tagline": "Saved checks and code review"
       }
     },
     {
