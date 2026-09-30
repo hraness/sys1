@@ -2,20 +2,23 @@
   "schemaVersion": 1,
   "bun": "1.3.14",
   "posthogJs": "1.422.5",
-  "entry": "posthog-js/dist/module.slim.no-external",
+  "entry": [
+    "posthog-js/dist/module.slim.no-external",
+    "posthog-js/dist/web-vitals.js"
+  ],
   "sources": [
     {
       "path": "scripts/site-analytics.ts",
-      "sha256": "7a68172c3577bace24317718b00eea7f08e26dc2c1660b460cec67cccd9aadee"
+      "sha256": "b1c10a6997e6eddf29ee6fa3091ad57f4eeedb5891890dca52439048a7875936"
     },
     {
       "path": "scripts/site-analytics-entry.ts",
-      "sha256": "71af14d45e3a67166482035ce475a00758a5e2553607066d8c0ab9eab7b73005"
+      "sha256": "b22eab666ab134cdb9267c7c3f8f0cd5d14f26797ffc33184308a45a99cebbf1"
     }
   ],
   "output": {
     "path": "site/analytics.js",
-    "sha256": "dfaabbf114a5bc21e3f527e6216f8a345123c86d2b20ca942ea5a16c566ecf52",
-    "bytes": 146087
+    "sha256": "499c59e42a03222d06dd6a771dffff51cdc43719c17d42ff8cdef5482c8b2c09",
+    "bytes": 160967
   }
 }

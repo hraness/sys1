@@ -75,6 +75,11 @@
   examples, and baseline provenance; `docs/profile-evaluation.md` is the guide.
 - `CHANGELOG.md` holds one section per version; the release workflow copies
   that section onto the release page and fails when it is missing.
+- `scripts/site-analytics.ts` holds the sys1.io PostHog config and `before_send`,
+  mirroring `@hraness/posthog` v0.2.0 until it has a browser entry point;
+  `bun run analytics:build` rebuilds the committed `site/analytics.js`, and
+  `test/site-analytics.test.ts` checks real posthog-js request bodies through
+  `scripts/site-analytics-harness.ts`.
 - `site/` is the static sys1.io landing page; it has no product-runtime
   connection. `site/404.html` renders the shared design-kit status page;
   `scripts/build-site-status-page.ts --refresh` regenerates its markup,
