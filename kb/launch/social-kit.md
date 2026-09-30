@@ -8,58 +8,52 @@ Canonical post: https://sys1.io/introducing-sys1. Every post links to its sectio
 
 Limit: 280 characters a post.
 
-### 1 of 9
+### 1 of 8
 
 ```text
 Sys1 hands your coding agent's small decisions to a fast model, saving tokens and time. Did the test fail, does the diff break a rule, was it pushed: quick calls that leave your agent free for the code.
 ```
 
-### 2 of 9
+### 2 of 8
 
 ```text
 Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
-### 3 of 9
+### 3 of 8
 
 ```text
 Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 ```
 
-### 4 of 9
+### 4 of 8
 
 ```text
 sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 ```
 
-### 5 of 9
+### 5 of 8
 
 ```text
 Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
 ```
 
-### 6 of 9
+### 6 of 8
 
 ```text
-Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
+Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript, and you can add rules of your own.
 ```
 
-### 7 of 9
+### 7 of 8
 
 ```text
 A Sys1 profile freezes a set of questions so a decision runs the same way next time. ALGAL, a sibling language for agent programs, keeps whole procedures once they prove themselves. Both call the same Jev decision API.
 ```
 
-### 8 of 9
+### 8 of 8
 
 ```text
-The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
-```
-
-### 9 of 9
-
-```text
-Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
+Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on. Latest release: v0.17.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -68,58 +62,52 @@ https://sys1.io/introducing-sys1
 
 Limit: 300 characters a post.
 
-### 1 of 9
+### 1 of 8
 
 ```text
 Sys1 hands your coding agent's small decisions to a fast model, saving tokens and time. Did the test fail, does the diff break a rule, was it pushed: quick calls that leave your agent free for the code.
 ```
 
-### 2 of 9
+### 2 of 8
 
 ```text
 Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
-### 3 of 9
+### 3 of 8
 
 ```text
 Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 ```
 
-### 4 of 9
+### 4 of 8
 
 ```text
 sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 ```
 
-### 5 of 9
+### 5 of 8
 
 ```text
 Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
 ```
 
-### 6 of 9
+### 6 of 8
 
 ```text
-Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
+Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript, and you can add rules of your own.
 ```
 
-### 7 of 9
+### 7 of 8
 
 ```text
 A Sys1 profile freezes a set of questions so a decision runs the same way next time. ALGAL, a sibling language for agent programs, keeps whole procedures once they prove themselves. Both call the same Jev decision API.
 ```
 
-### 8 of 9
+### 8 of 8
 
 ```text
-The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
-```
-
-### 9 of 9
-
-```text
-Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
+Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on. Latest release: v0.17.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -128,58 +116,52 @@ https://sys1.io/introducing-sys1
 
 Limit: 500 characters a post.
 
-### 1 of 9
+### 1 of 8
 
 ```text
 Sys1 hands your coding agent's small decisions to a fast model, saving tokens and time. Did the test fail, does the diff break a rule, was it pushed: quick calls that leave your agent free for the code.
 ```
 
-### 2 of 9
+### 2 of 8
 
 ```text
 Long test and build logs eat an agent's context. The companion system-one-verify skill runs the check once, returns a short excerpt, and keeps the full log on disk. Replayed through it, 563 recorded check outputs came back 35% smaller in total.
 ```
 
-### 3 of 9
+### 3 of 8
 
 ```text
 Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 ```
 
-### 4 of 9
+### 4 of 8
 
 ```text
 sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 ```
 
-### 5 of 9
+### 5 of 8
 
 ```text
 Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
 ```
 
-### 6 of 9
+### 6 of 8
 
 ```text
-Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
+Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript, and you can add rules of your own.
 ```
 
-### 7 of 9
+### 7 of 8
 
 ```text
 A Sys1 profile freezes a set of questions so a decision runs the same way next time. ALGAL, a sibling language for agent programs, keeps whole procedures once they prove themselves. Both call the same Jev decision API.
 ```
 
-### 8 of 9
+### 8 of 8
 
 ```text
-The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
-```
-
-### 9 of 9
-
-```text
-Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
+Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on. Latest release: v0.17.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -197,13 +179,11 @@ sys1 review checks a batch of changes against your repository's rules. When it c
 
 Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
 
-Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
+Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript, and you can add rules of your own.
 
 A Sys1 profile freezes a set of questions so a decision runs the same way next time. ALGAL, a sibling language for agent programs, keeps whole procedures once they prove themselves. Both call the same Jev decision API.
 
-The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
-
-Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
+Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on. Latest release: v0.17.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -227,9 +207,8 @@ Write the Show HN post and first comment yourself; use only these facts.
 - Agents sometimes say they pushed when they didn't. sys1 verify compares the agent's final message with Git, pull requests and live pages. A claimed push with nothing pushed shows up as a contradiction.
 - sys1 review checks a batch of changes against your repository's rules. When it catches a real mistake, turn that into a new rule and every later review looks for it. Findings are advisory, and unchanged code isn't paid for twice.
 - Each small question goes to Jev, TypeSafe's hosted decision model, or a local model you pick. You get back a yes/no, a choice or a score with probabilities. TypeSafe's published figures put a decision at about $0.0004 and 0.4 seconds.
-- Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript; other languages need rules of your own.
-- The honest part: in whole-task tests (32 for review, 26 for compact output), agents never reached for either skill on their own. Telling them to use review cost more tokens and time. Nobody has measured a whole-task saving yet. Keep your tests.
-- Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on, and review and verify are experimental. Latest release: v0.17.0.
+- Sys1 is for developers who run Codex, Claude Code or Devin on real repositories. Verify reads the final message from any agent. Review ships rules for JavaScript and TypeScript, and you can add rules of your own.
+- Sys1 is open source under MIT. Install it from GitHub with Bun and add a skill with one setup command. Hosted Jev stays off until you turn it on. Latest release: v0.17.0.
 - Latest release: v0.17.0. https://sys1.io/introducing-sys1
 
 ## Media
@@ -266,10 +245,7 @@ Write the Show HN post and first comment yourself; use only these facts.
 - `x.6`: beat:reuse
 - `bluesky.6`: beat:reuse
 - `threads.6`: beat:reuse
-- `x.7`: beat:limits
-- `bluesky.7`: beat:limits
-- `threads.7`: beat:limits
-- `x.8`: beat:status
-- `bluesky.8`: beat:status
-- `threads.8`: beat:status
-- `linkedin`: beat:context,beat:short-logs,beat:done-check,beat:rules,beat:probabilities,beat:who,beat:reuse,beat:limits,beat:status
+- `x.7`: beat:status
+- `bluesky.7`: beat:status
+- `threads.7`: beat:status
+- `linkedin`: beat:context,beat:short-logs,beat:done-check,beat:rules,beat:probabilities,beat:who,beat:reuse,beat:status
