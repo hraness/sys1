@@ -12,7 +12,7 @@ test("the install blocks match the recorded design-kit platform marks", async ()
 });
 
 test("home and docs list macOS, Linux, and Windows in order with the released command", async () => {
-  const version = JSON.parse(await readFile(join(root, "package.json"), "utf8")).version;
+  const version = JSON.parse(await readFile(join(root, "site/published-release.json"), "utf8")).version;
   expect(installCommand).toBe(`npm install --global --allow-scripts=node-llama-cpp https://github.com/hraness/sys1/releases/download/v${version}/hraness-sys1-${version}.tgz`);
   for (const block of SYS1_PLATFORM_BLOCKS) {
     expect(block.targets.map((target) => target.id)).toEqual(["macos", "linux", "windows"]);
