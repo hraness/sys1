@@ -52,7 +52,7 @@ export const socialPages: readonly SocialPage[] = [
   { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: `${primary.messaging.names.name} evaluations`, description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
   { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: `${primary.messaging.names.name}’s first tests: 20 questions, five models.` } },
   { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: `Models ${primary.messaging.names.name} can use`, description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: skills.messaging.names.name, headline: skills.messaging.headings["social-image-title"], description: skills.messaging.channels.social.imageDescription } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "Skills", headline: skills.messaging.headings["social-image-title"], description: skills.messaging.channels.social.imageDescription } },
 ];
 
 const escape = (text: string): string => text
