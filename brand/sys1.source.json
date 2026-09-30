@@ -12,7 +12,7 @@
     "background": "#000000"
   },
   "recipe": {
-    "iconInset": 0.125,
+    "iconInset": 0,
     "webIconSize": 512,
     "appleTouchSize": 180
   }

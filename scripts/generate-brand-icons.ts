@@ -4,8 +4,8 @@ import { resolve } from "node:path";
 import sharp from "sharp";
 import { z } from "zod";
 
-// Compact path-only marks and black-background app icons follow the same
-// 160-unit, 12.5%-inset recipe as the Hraness brand asset compositor.
+// Favicon variants follow the actual header mark: pure white, tightly
+// centered, transparent for browsers and black for Apple touch.
 const root = resolve(import.meta.dir, "..");
 const sourceBytes = await readFile(resolve(root, "brand/sys1.source.json"));
 const generatorBytes = await readFile(import.meta.filename);
@@ -15,7 +15,7 @@ const source = z.strictObject({
   version: z.literal(1), name: z.literal("Sys1"), inspiration: z.string(),
   viewBox: z.literal("0 0 160 160"), box: path, one: path,
   palette: z.strictObject({mark: color, primary: color, secondary: color, background: color}),
-  recipe: z.strictObject({iconInset: z.literal(0.125), webIconSize: z.literal(512), appleTouchSize: z.literal(180)}),
+  recipe: z.strictObject({iconInset: z.literal(0), webIconSize: z.literal(512), appleTouchSize: z.literal(180)}),
 }).parse(JSON.parse(sourceBytes.toString()));
 const check = process.argv.slice(2).includes("--check");
 if (process.argv.slice(2).some(arg => arg !== "--check")) throw new Error("Only --check is supported");
@@ -43,10 +43,12 @@ for (const size of [16, 32]) {
 }
 
 for (const [file,size] of [["icon.png",512],["apple-icon.png",180],["favicon-32.png",32],["favicon-16.png",16]] as const) {
-  const inset = size * source.recipe.iconInset;
-  const scale = size * (1-2*source.recipe.iconInset) / 160;
-  const composed = svg(size, `  <rect width="${size}" height="${size}" fill="${source.palette.background}"/>\n  <g transform="translate(${inset} ${inset}) scale(${scale})">\n${duotonePaths}\n  </g>`);
-  artifacts.set(`site/${file}`, await sharp(Buffer.from(composed)).flatten({background:source.palette.background}).png({adaptiveFiltering:false,compressionLevel:9}).toBuffer());
+  // The header's path bounds are 16..144 on both axes. Its transparent
+  // numeral cutout is preserved through the even-odd fill rule.
+  const composed = mark.replace('viewBox="0 0 160 160"', 'viewBox="16 16 128 128"').replace(`fill="${source.palette.mark}"`, 'fill="#ffffff"');
+  let image = sharp(Buffer.from(composed)).resize(size, size);
+  if (file === "apple-icon.png") image = image.flatten({background:"#000000"});
+  artifacts.set(`site/${file}`, await image.png({adaptiveFiltering:false,compressionLevel:9}).toBuffer());
 }
 // PNG-backed ICO directory for older browsers, using those same two sizes.
 const icons = [16,32].map(size=>({size,data:artifacts.get(`site/favicon-${size}.png`)!}));
