@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sys1 · Saved checks and code review</title>
-    <meta name="description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <title>{{PORTFOLIO_TITLE}}</title>
+    <meta name="description" content="{{PORTFOLIO_META}}" />
     <link rel="canonical" href="https://sys1.io/" />
-    <meta property="og:title" content="Sys1 · Saved checks and code review" />
-    <meta property="og:description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <meta property="og:title" content="{{PORTFOLIO_TITLE}}" />
+    <meta property="og:description" content="{{PORTFOLIO_META}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Sys1" />
+    <meta property="og:site_name" content="{{PORTFOLIO_SITE_NAME}}" />
     <meta property="og:url" content="https://sys1.io/" />
     <meta property="og:image" content="https://sys1.io/og.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sys1: Keep checks and code review together." />
+    <meta property="og:image:alt" content="{{PORTFOLIO_SOCIAL_ALT}}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sys1 · Saved checks and code review" />
-    <meta name="twitter:description" content="Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model." />
+    <meta name="twitter:title" content="{{PORTFOLIO_TITLE}}" />
+    <meta name="twitter:description" content="{{PORTFOLIO_META}}" />
     <meta name="twitter:image" content="https://sys1.io/og.png" />
-    <meta name="twitter:image:alt" content="Sys1: Keep checks and code review together." />
+    <meta name="twitter:image:alt" content="{{PORTFOLIO_SOCIAL_ALT}}" />
     <!-- sys1-launch-media:start -->
     <script type="application/ld+json" data-sys1-launch-video>
 {
@@ -76,10 +76,7 @@
       "@id": "https://sys1.io/#website",
       "url": "https://sys1.io/",
       "name": "Sys1",
-      "publisher": {
-        "@id": "https://hraness.com/#organization"
-      },
-      "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model."
+      "publisher": { "@id": "https://hraness.com/#organization" }
     },
     {
       "@type": "Organization",
@@ -97,21 +94,11 @@
       "operatingSystem": "macOS, Linux, Windows",
       "softwareVersion": "0.18.0",
       "license": "https://github.com/hraness/sys1/blob/main/LICENSE",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "downloadUrl": "https://github.com/hraness/sys1/releases/latest",
-      "sameAs": [
-        "https://github.com/hraness/sys1"
-      ],
-      "publisher": {
-        "@id": "https://hraness.com/#organization"
-      },
-      "isPartOf": {
-        "@id": "https://sys1.io/#website"
-      }
+      "sameAs": ["https://github.com/hraness/sys1"],
+      "publisher": { "@id": "https://hraness.com/#organization" },
+      "isPartOf": { "@id": "https://sys1.io/#website" }
     }
   ]
 }
@@ -138,7 +125,7 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header hraness-marketing-header">
       <div class="header-inner">
-        <a class="wordmark hraness-foil-text" href="/" aria-label="Sys1 home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">sys1<span>.io</span></span></a>
+        <a class="wordmark hraness-foil-text" href="/" aria-label="{{PORTFOLIO_SITE_NAME}} home" data-foil><span class="hraness-foil-mark"><img class="brand-mark hraness-marketing-brand-mark hraness-foil-mark__image" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="hraness-foil-mark__paint" aria-hidden="true"></span></span><span class="brand-name">{{PORTFOLIO_SITE_NAME_LOWER}}<span>.io</span></span></a>
         <nav aria-label="Primary">
           <a href="/skills">Skills</a>
           <a href="/docs">Docs</a>
@@ -146,7 +133,7 @@
           <a href="https://github.com/hraness/sys1">GitHub</a>
         </nav>
         <div class="header-actions">
-          <a class="button button-small" href="/docs#getting-started" data-analytics-cta="header-install-sys1">Install Sys1</a>
+          <a class="button button-small" href="/docs#getting-started" data-analytics-cta="header-install-sys1">{{PORTFOLIO_SITE_PRIMARY_ACTION}}</a>
           <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
             <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
             <div class="hraness-design-theme-toggle__popover" hidden>
@@ -164,11 +151,11 @@
     <main id="main" tabindex="-1">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-copy">
-          <h1 id="hero-heading">Keep checks and code review together.</h1>
-          <p class="summary">Sys1 runs your repository check, keeps the output local, and saves a result you can inspect later. Add a scoped review when you need a second pass on the changes.</p>
+          <h1 id="hero-heading">{{PORTFOLIO_HERO_HEADING}}</h1>
+          <p class="summary">{{PORTFOLIO_HERO_SUMMARY}}</p>
           <div class="actions">
-            <a class="button" href="#install" data-analytics-cta="hero-install-sys1">Install Sys1 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
-            <a class="text-link" href="#how-it-works" data-analytics-cta="hero-workflows">Explore the workflows</a>
+            <a class="button" href="#install" data-analytics-cta="hero-install-sys1">{{PORTFOLIO_PRIMARY_ACTION}} <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
+            <a class="text-link" href="#how-it-works" data-analytics-cta="hero-workflows">{{PORTFOLIO_SECONDARY_ACTION}}</a>
           </div>
           <p class="hero-note">Free and open source · Bun 1.3.14+<br>Saved workflows on macOS and Linux. No model needed for checks.</p>
         </div>
@@ -185,13 +172,13 @@
 
       <section id="how-it-works" class="section" aria-labelledby="review-heading">
         <div class="section-intro">
-          <h2 id="review-heading">Useful checks, inside your agent’s workflow.</h2>
+          <h2 id="review-heading">{{PORTFOLIO_HEADING:review-heading}}</h2>
           <p>Use your existing check commands. Sys1 saves their results and can review the selected changes against your repository’s rules.</p>
         </div>
         <dl class="workflow-list">
-          <div><dt>Save a check and continue its review<code>sys1 workflow</code></dt><dd><p>Run a check, inspect the result, then continue an optional review with the same files, command, and environment. List saved runs or inspect their execution records from the CLI.</p><p class="workflow-note">Resume refuses changed inputs and uncertain interrupted steps. Run fresh required checks before delivery.</p><a href="/docs#workflows" data-analytics-cta="saved-workflows">Run your first saved check →</a></dd></div>
-          <div><dt>Review a change against your rules<code>sys1-review · Sys1</code></dt><dd><p>Preview a batch of Git changes, check it against repository rules, and investigate the findings. Bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript.</p><p class="workflow-note">Uses Jev, TypeSafe’s hosted decision model, or a local model. Experimental and advisory; keep your tests and ordinary review.</p><a href="/skills#review" data-analytics-cta="skills-review">Set up code review →</a></dd></div>
-          <div><dt>Check what “done” means<code>sys1-verify · Sys1</code></dt><dd><p>Compare a completion message with Git, linked pull requests, and live pages. Inspect whether work was committed, pushed, or made live. Missing evidence is marked unverifiable.</p><p class="workflow-note">Uses Jev or a local model. Experimental and advisory; a result without contradictions does not prove completion.</p><a href="/skills#verify" data-analytics-cta="skills-verify">Set up completion checks →</a></dd></div>
+          <div><dt>{{PORTFOLIO_HEADING:workflows-title}}<code>sys1 workflow</code></dt><dd><p>Run a check, inspect the result, then continue an optional review with the same files, command, and environment. List saved runs or inspect their execution records from the CLI.</p><p class="workflow-note">Resume refuses changed inputs and uncertain interrupted steps. Run fresh required checks before delivery.</p><a href="/docs#workflows" data-analytics-cta="saved-workflows">Run your first saved check →</a></dd></div>
+          <div><dt>{{PORTFOLIO_HEADING:workflow-review-heading}}<code>sys1-review · Sys1</code></dt><dd><p>Preview a batch of Git changes, check it against repository rules, and investigate the findings. Bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript.</p><p class="workflow-note">Uses Jev, TypeSafe’s hosted decision model, or a local model. Experimental and advisory; keep your tests and ordinary review.</p><a href="/skills#review" data-analytics-cta="skills-review">Set up code review →</a></dd></div>
+          <div><dt>{{PORTFOLIO_HEADING:workflow-completion-heading}}<code>sys1-verify · Sys1</code></dt><dd><p>Compare a completion message with Git, linked pull requests, and live pages. Inspect whether work was committed, pushed, or made live. Missing evidence is marked unverifiable.</p><p class="workflow-note">Uses Jev or a local model. Experimental and advisory; a result without contradictions does not prove completion.</p><a href="/skills#verify" data-analytics-cta="skills-verify">Set up completion checks →</a></dd></div>
         </dl>
 <!-- launch:mockups:start (generated by scripts/launch/build.tsx) -->
 <div class="launch-home-mockups"><figure class="launch-home-figure"><div aria-label="Illustration: a coding agent runs the sys1-review skill on the files it changed, gets one advisory finding, and fixes it." class="hkm-root hkm-agent" data-hkm-kind="agent" data-nosnippet="" role="img"><div class="hkm-window" data-hkm-agent="generic-cli"><div aria-hidden="true" class="hkm-title-bar"><span aria-hidden="true" class="hkm-lights"><i></i><i></i><i></i></span><span class="hkm-title">Coding agent · ~/code/orders-api</span><span></span></div><div class="hkm-page hkm-agent-body"><ol class="hkm-agent-turns"><li class="hkm-agent-turn" data-hkm-role="user"><span aria-hidden="true" class="hkm-agent-marker">›</span><span class="hkm-agent-text"><span class="hkm-sample">Add input validation to the orders endpoint, then tell me when it&#x27;s done.</span></span></li><li class="hkm-agent-turn" data-hkm-role="agent"><span aria-hidden="true" class="hkm-agent-marker"><svg aria-hidden="true" class="hkm-glyph" fill="none" focusable="false" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24" width="14"><path d="M12 3.5 13.8 10l6.7 2-6.7 2L12 20.5 10.2 14l-6.7-2 6.7-2z"></path></svg></span><span class="hkm-agent-text"><span class="hkm-sample">Done with the change. Before I report back, I&#x27;ll run a review checkpoint on the files I touched.</span></span></li><li class="hkm-agent-turn" data-hkm-beat="checkpoint" data-hkm-role="tool" data-hkm-tone="ok"><span class="hkm-agent-tool"><span class="hkm-agent-tool-name"><span class="hkm-agent-status"></span>Run sys1-review</span><span class="hkm-agent-tool-output"><span class="hkm-sample">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 --max-requests 10 -- src</span></span></span></li><li class="hkm-agent-turn" data-hkm-beat="finding" data-hkm-role="tool" data-hkm-tone="warn"><span class="hkm-agent-tool"><span class="hkm-agent-tool-name"><span class="hkm-agent-status"></span>Finding · advisory</span><span class="hkm-agent-tool-output"><span class="hkm-sample">core-new-empty-catch · src/orders/parse.ts:42 · a new catch block swallows the error</span></span></span></li><li class="hkm-agent-turn" data-hkm-role="agent"><span aria-hidden="true" class="hkm-agent-marker"><svg aria-hidden="true" class="hkm-glyph" fill="none" focusable="false" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24" width="14"><path d="M12 3.5 13.8 10l6.7 2-6.7 2L12 20.5 10.2 14l-6.7-2 6.7-2z"></path></svg></span><span class="hkm-agent-text"><span class="hkm-sample">That one is real: the catch hid a parse failure. I fixed it, reran the tests, and marked the finding useful.</span></span></li></ol></div></div></div><figcaption>Illustration: an agent reviews its own change with <code>sys1-review</code>.</figcaption></figure><figure class="launch-home-figure"><div aria-label="Illustration: sys1 verify reports that a message claiming a push is contradicted because two commits are still local." class="hkm-root hkm-terminal" data-hkm-kind="terminal" data-nosnippet="" role="img"><div class="hkm-window"><div aria-hidden="true" class="hkm-title-bar"><span aria-hidden="true" class="hkm-lights"><i></i><i></i><i></i></span><span class="hkm-title">orders-api · sys1 verify</span><span></span></div><div class="hkm-page hkm-terminal-body"><div class="hkm-terminal-lines"><div class="hkm-terminal-line" data-hkm-line="input"><span class="hkm-terminal-prompt">$</span><span class="hkm-sample">sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0</span></div><div class="hkm-terminal-line" data-hkm-beat="summary" data-hkm-line="output"><span class="hkm-sample">Verify complete: 1 contradiction, 1 request.</span></div><div class="hkm-terminal-line" data-hkm-beat="contradiction" data-hkm-line="output" data-hkm-tone="error"><span class="hkm-sample">[contradicted] merged_or_pushed p=0.97</span></div><div class="hkm-terminal-line" data-hkm-line="output" data-hkm-tone="muted"><span class="hkm-sample">    2 commits are ahead of origin/main</span></div><div class="hkm-terminal-line" data-hkm-line="output" data-hkm-tone="ok"><span class="hkm-sample">[confirmed] committed p=0.95</span></div><div class="hkm-terminal-line" data-hkm-line="output" data-hkm-tone="warn"><span class="hkm-sample">[unverifiable] checks_passed p=0.88</span></div><div class="hkm-terminal-line" data-hkm-line="output" data-hkm-tone="muted"><span class="hkm-sample">    no transcript was checked; rerun with the harness session or compare the reported check command</span></div><div aria-hidden="true" class="hkm-terminal-line" data-hkm-line="input"><span class="hkm-terminal-prompt">$</span><span class="hkm-caret"></span></div></div></div></div></div><figcaption>Illustration: <code>sys1 verify</code> compares a claimed push with local Git evidence.</figcaption></figure></div>
@@ -200,7 +187,7 @@
 
       <section id="benchmarks" class="section evidence-summary" aria-labelledby="benchmarks-heading">
         <div class="section-intro">
-          <h2 id="benchmarks-heading">For compact output alone.</h2>
+          <h2 id="benchmarks-heading">{{PORTFOLIO_HEADING:benchmarks-heading}}</h2>
           <p>The separate <a href="/skills#install">System One Skills package</a> keeps noisy logs out of your agent’s context without a model. In a replay of 563 validation outputs, it returned <strong>35.20% less text</strong>. Large outputs were shortened; small outputs stayed intact.</p>
           <a class="text-link" href="/skills#evidence" data-analytics-cta="benchmarks-study">Read the measurement and its limits →</a>
         </div>
@@ -213,7 +200,7 @@
 
       <section id="decision-api" class="section decision-section" aria-labelledby="how-heading">
         <div class="section-intro" id="integrate">
-          <h2 id="how-heading">Use small decisions in your own code.</h2>
+          <h2 id="how-heading">{{PORTFOLIO_HEADING:how-heading}}</h2>
           <p>Sys1 also gives applications typed yes/no, choice, and score answers. Supply your context and questions; Sys1 routes the request and validates the response.</p>
           <p id="backends">Choose Jev, TypeSafe’s hosted decision model, an experimental local Qwen model, or a compatible server. Hosted requests are opt-in. Local answers need evaluation on your own task.</p>
           <p id="system">Use the Node and Bun client, embed the router in Bun, or call the local HTTP gateway.</p>
@@ -224,7 +211,7 @@
             <div class="decision-bar"><strong>A small decision, made explicit</strong><span>Illustrative example</span></div>
             <div class="decision-input"><span class="decision-label">Your context</span><p>The check failed because <code>config.json</code> is missing.</p></div>
             <div class="decision-connector" aria-hidden="true"></div>
-            <div class="decision-core"><img src="/marks/sys1.svg" width="40" height="40" alt="" /><div><strong>Sys1</strong><p>You choose Jev, local Qwen, or your server.</p></div></div>
+            <div class="decision-core"><img src="/marks/sys1.svg" width="40" height="40" alt="" /><div><strong>{{PORTFOLIO_SITE_NAME}}</strong><p>You choose Jev, local Qwen, or your server.</p></div></div>
             <div class="decision-forms js-only" role="group" aria-label="Choose an example question type">
               <button type="button" data-question-type="noul" aria-pressed="false">Yes / no</button>
               <button type="button" data-question-type="choice" aria-pressed="true">Choice</button>
@@ -239,7 +226,7 @@
 
       <section id="install" class="section" aria-labelledby="install-heading">
         <div class="section-intro">
-          <h2 id="install-heading">Install Sys1.</h2>
+          <h2 id="install-heading">{{PORTFOLIO_HEADING:install-heading}}</h2>
           <p>Install Bun 1.3.14 or later, then the released CLI. ALGAL is included. Start with a saved check on macOS or Linux; configure a model when you want review or completion checks.</p>
         </div>
 <!-- hraness-platform-install:start -->
@@ -282,7 +269,7 @@
       </section>
 
 <section class="section launch-feature" aria-labelledby="launch-heading">
-        <div><h2 id="launch-heading">Meet Sys1.</h2><p>See how repository review, completion checks, and small model decisions fit into your agent’s work.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
+        <div><h2 id="launch-heading">{{PORTFOLIO_HEADING:launch-heading}}</h2><p>See how repository review, completion checks, and small model decisions fit into your agent’s work.</p><a class="text-link" href="/introducing-sys1">Read the launch story <span aria-hidden="true">↗</span></a></div>
         <figure>
           <video controls playsinline preload="none" width="1920" height="1080" poster="/media/sys1-launch-poster.jpg" aria-label="Introducing Sys1 launch film" aria-describedby="film-caption">
             <source src="/media/sys1-launch.mp4" type="video/mp4" />
