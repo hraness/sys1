@@ -28,7 +28,11 @@ async function manifest(bundle: string) {
   const pinned = JSON.parse(await readFile(resolve(root, "package.json"), "utf8")).devDependencies["posthog-js"] as string;
   if (posthogVersion !== pinned) throw new Error(`Installed posthog-js ${posthogVersion} does not match pinned ${pinned}`);
   const files = await Promise.all(sources.map(async (path) => ({ path, sha256: digest(await readFile(resolve(root, path))) })));
-  return { schemaVersion: 1, bun: Bun.version, posthogJs: posthogVersion, entry: ["posthog-js/dist/module.slim.no-external", "posthog-js/dist/web-vitals.js"], sources: files, output: { path: output, sha256: digest(bundle), bytes: Buffer.byteLength(bundle) } };
+  const consent = await Promise.all(["@hraness/posthog/consent", "@hraness/site-footer/consent"].map(async entry => ({
+    entry,
+    sha256: digest(await readFile(Bun.resolveSync(entry, root))),
+  })));
+  return { schemaVersion: 2, bun: Bun.version, posthogJs: posthogVersion, consent, entry: ["posthog-js/dist/module.slim.no-external", "posthog-js/dist/web-vitals.js"], sources: files, output: { path: output, sha256: digest(bundle), bytes: Buffer.byteLength(bundle) } };
 }
 
 const mode = process.argv[2];

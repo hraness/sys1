@@ -438,6 +438,8 @@ export function posthogConfig(before_send: (capture: Capture | null) => Capture 
     autocapture: false,
     capture_pageview: true,
     capture_pageleave: true,
+    // Consent is checked for every event; do not retain a queue after a changed choice.
+    request_batching: false,
     // The slim core cannot load the web-vitals extension; the entry sends
     // $web_vitals itself (see webVitalsProperties).
     capture_performance: false,

@@ -70,6 +70,8 @@ Current implementation, September 30, 2026. Sys1 uses Tokyo Night colors and
 Nebula Sans throughout its marketing, documentation, and launch article. The
 homepage leads with compact test output from System One Skills, then explains
 optional Sys1 review, completion checks, and the typed decision API. Hosted Jev remains opt-in and local models experimental.
+The copyable platform installer sits beneath the hero summary at `#install`;
+the later `#setup` section explains the first run.
 
 This document describes the shipped HTML/CSS and the launch changes in this
 checkout. It replaces the older warm Paper palette, Instrument Serif headings,
@@ -99,9 +101,13 @@ Paper, marketing, Lantern, and appearance are pinned to design-kit v0.23.0,
 commit `3df4c411c7f5e5cbc02448463571696f0d47cee5`. The normal-flow footer release
 is recorded in [its provenance](site/vendor/hraness-site-footer/provenance.json).
 Directory-local provenance manifests bind the admitted assets to source and
-hashes. Preserve those manifests, licenses, font notices, and the static
-footer adapter. Regenerate shared assets through the repository scripts;
+hashes. Preserve those manifests, licenses, and font notices.
+Regenerate shared assets through the repository scripts;
 keep product layout changes outside immutable snapshots.
+
+The shared cookie note is a compact corner control and checks regional policy.
+Analytics starts after acceptance where required; an unavailable policy keeps
+collection off until a choice is made. Pages share one consent choice.
 
 ## Color and typography
 
@@ -122,6 +128,7 @@ larger `clamp(3rem, 6.5vw, 5.75rem)` title. Reference pages use a smaller type
 scale. The body follows the browser's root size instead of setting a fixed
 pixel size. Ordinary introductions stay within 65ch; article prose stays
 within 67ch with a 1.78 line height.
+Prose links use dotted underlines; navigation and buttons keep their own states.
 
 ## Layout and navigation
 
@@ -191,9 +198,9 @@ and a text transcript. It uses `preload="none"` and does not autoplay.
 The article remains complete without playback. Film source and render
 receipts live in [media/sys1-launch](media/sys1-launch).
 
-The footer's static adapter removes the unused consent subtree. It exposes
-Hraness attribution and social links, with no mailing-list form or consent
-runtime. Keep its normal-flow placement and the flex page's short-viewport
+The released footer exposes Hraness attribution and social links, with no
+mailing-list form. Its shared consent initializer activates the compact corner
+control. Keep the footer's normal-flow placement and the flex page's short-viewport
 behavior; no fixed bar or compensating spacer is needed.
 
 ## Verification and maintenance

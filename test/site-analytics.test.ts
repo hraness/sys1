@@ -49,10 +49,10 @@ test("every page loads the local analytics bundle and no remote script", () => {
   }
 });
 
-test("CSP allows only the PostHog ingest host beyond self", () => {
+test("CSP allows the PostHog ingest host and Accounts consent policy", () => {
   const policy: string = JSON.parse(read("vercel.json")).headers.flatMap((entry: { headers: { key: string; value: string }[] }) => entry.headers)
     .find((header: { key: string }) => header.key === "Content-Security-Policy").value;
-  expect(policy.match(/(?:^|;\s*)connect-src ([^;]+)/u)?.[1]).toBe(POSTHOG_API_HOST);
+  expect(policy.match(/(?:^|;\s*)connect-src ([^;]+)/u)?.[1]?.split(" ").sort()).toEqual([POSTHOG_API_HOST, "https://account.hraness.com"].sort());
   expect(policy.match(/(?:^|;\s*)script-src ([^;]+)/u)?.[1]).toBe("'self'");
 });
 

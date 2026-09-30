@@ -1,6 +1,8 @@
 // Browser entry for site/analytics.js. Built by scripts/build-site-analytics.ts;
 // the deployed site never loads a remote script.
 import posthog from "posthog-js/dist/module.slim.no-external";
+import { getBrowserConsent } from "@hraness/posthog/consent";
+import { initHranessCookieConsent } from "@hraness/site-footer/consent";
 // Registers the web-vitals library on window.__PosthogExtensions__ locally.
 import "posthog-js/dist/web-vitals.js";
 import {
@@ -25,14 +27,19 @@ import {
 
 type VitalsCallbacks = Record<"onLCP" | "onCLS" | "onFCP" | "onINP", (report: (metric: WebVitalMetric) => void) => void>;
 
-if (shouldLoad(window.location, navigator as Navigator & { globalPrivacyControl?: boolean })) {
+initHranessCookieConsent();
+const consent = getBrowserConsent();
+
+function startAnalytics(): void {
   const referrer = document.referrer;
-  posthog.init(POSTHOG_PROJECT_TOKEN, posthogConfig((capture: Capture | null) => sanitizeCapture(capture, window.location, referrer)) as never);
+  posthog.init(POSTHOG_PROJECT_TOKEN, posthogConfig((capture: Capture | null) =>
+    consent?.allowed() ? sanitizeCapture(capture, window.location, referrer) : null) as never);
 
   const notFound = notFoundEvent(window.location.pathname, referrer);
   if (notFound !== undefined) posthog.capture("page not found", notFound);
 
   document.addEventListener("click", (event) => {
+    if (!consent?.allowed()) return;
     const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-analytics-cta], [data-copy]") : null;
     if (target === null) return;
     const install = installEvent(target.dataset.copy);
@@ -55,9 +62,11 @@ if (shouldLoad(window.location, navigator as Navigator & { globalPrivacyControl?
       if (buffer.length === 0) return;
       const metrics = buffer;
       buffer = [];
+      if (!consent?.allowed()) return;
       posthog.capture("$web_vitals", webVitalsProperties(metrics, window.location.href), { transport: "sendBeacon" });
     };
     const report = (metric: WebVitalMetric) => {
+      if (!consent?.allowed()) return;
       if (!acceptWebVital(metric)) return;
       buffer = [...buffer.filter((item) => item.name !== metric.name), { ...metric, timestamp: Date.now() }];
       if (buffer.length === WEB_VITALS_METRICS.length) flush();
@@ -71,10 +80,20 @@ if (shouldLoad(window.location, navigator as Navigator & { globalPrivacyControl?
   // Exceptions: budgeted and scrubbed; capture_exceptions stays off.
   const budget = new ExceptionBudget();
   const reportError = (value: unknown, origin: "window_error" | "unhandled_rejection") => {
+    if (!consent?.allowed()) return;
     const error = sanitizeError(value);
     const fingerprint = errorFingerprint(error);
     if (budget.allow(fingerprint)) posthog.capture("$exception", exceptionProperties(error, origin, fingerprint));
   };
   window.addEventListener("error", (event) => reportError(event.error, "window_error"));
   window.addEventListener("unhandledrejection", (event) => reportError(event.reason, "unhandled_rejection"));
+}
+
+if (shouldLoad(window.location, navigator as Navigator & { globalPrivacyControl?: boolean })) {
+  let started = false;
+  consent?.subscribe(() => {
+    if (started || !consent?.allowed()) return;
+    started = true;
+    startAnalytics();
+  });
 }

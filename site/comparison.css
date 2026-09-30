@@ -113,7 +113,7 @@
 .model-compare #price-source { font-size: .8rem; }
 .model-compare .source-list { margin-bottom: 2rem; }
 .model-compare .source-list > a { display: block; padding-block: 1.15rem; border-top: 1px solid var(--grid); text-decoration: none; }
-.model-compare .source-list strong { display: block; font-weight: 500; text-decoration: underline; text-underline-offset: .2em; }
+.model-compare .source-list strong { display: block; font-weight: 500; text-decoration: underline dotted; text-underline-offset: .2em; }
 .model-compare .source-list span { display: block; font-size: .85rem; color: var(--muted); margin-top: .35rem; }
 .model-compare [hidden] { display: none !important; }
 @media (max-width: 800px) {
