@@ -1,6 +1,6 @@
 # Check an agent's completion message
 
-`sys1 verify` checks the claims in a coding agent's final message against
+`sys1 verify` checks the claims in a coding agent's proposed final message against
 reachable evidence: the Git worktree, linked pull requests, check-command
 results from the local Devin transcript, and fetched live pages. The command is
 experimental and advisory. A confirmation means the evidence agrees; it does
@@ -9,7 +9,8 @@ before trusting the message.
 
 ## Install the project skill
 
-Install the standalone verification instructions for your coding agent:
+With [Sys1 installed](../README.md#install), run these commands inside the
+repository to add standalone verification instructions for your coding agent:
 
 ```sh
 sys1 verify setup codex --dry-run --json
@@ -131,8 +132,10 @@ Exit 0 means nothing contradicted the reachable evidence. Exit 7 means at least
 one claim was contradicted; fix the work or the message and rerun. Exit 8 means
 the run was incomplete, for example after a backend failure.
 
-`--dry-run` plans the claims and evidence with local Git state only: no model
-calls and no fetches. `--json` prints the machine-readable report.
+`--dry-run` reports the input type, selected model route, and claim categories
+without model calls or fetches. It does not display the message or gathered
+evidence. Read the message file and inspect its links before evaluating it.
+`--json` prints the machine-readable report.
 
 The displayed claim probability measures whether the model thinks the message
 makes that claim. A page-match probability is a separate judgment about the

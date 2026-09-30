@@ -18,12 +18,6 @@ describe("launch facts", () => {
     expect(Math.round((1 - 754_006 / 1_163_594) * 100)).toBe(Number.parseInt(launchFacts.reduction.value, 10));
   });
 
-  test("Jev cost and latency match the README", () => {
-    const readme = read("README.md");
-    expect(readme).toContain(launchFacts.cost.value);
-    expect(readme).toContain(launchFacts.latency.value.replace(" seconds", ""));
-  });
-
   test("whole-task results match the proof roadmap", () => {
     const roadmap = read("docs/proof-roadmap-2026-09.md");
     expect(roadmap).toContain(`| \`system-one-verify\` (compact noisy output) | ${launchFacts.compactPairs.value} whole-task pairs`);

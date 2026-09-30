@@ -27,7 +27,7 @@ const mark = readFileSync(resolve(root, "site/marks/sys1.svg"));
 export const socialSite = defineSocialImageSite({
   name: "Sys1",
   domain: "sys1.io",
-  description: "Stop spending big-model tokens on small decisions.",
+  description: "Keep noisy logs out of your agent’s context.",
   // Product names the card must not break across lines.
   keepTogether: ["System One"],
   icon: { kind: "mark", src: `data:image/svg+xml;base64,${mark.toString("base64")}` },
@@ -45,12 +45,12 @@ type SocialPage = Readonly<{
 
 export const socialPages: readonly SocialPage[] = [
   { file: "site/index.html", url: `${origin}/`, image: "/og.png", copy: null },
-  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { path: "/introducing-sys1", eyebrow: "Launch", headline: "Introducing Sys1", description: "Sys1 hands your agent’s small yes-or-no calls to Jev, a fast model." } },
-  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { path: "/docs", eyebrow: "Documentation", headline: "Getting started with Sys1", description: "Install skills, pick a backend, send a request." } },
+  { file: "site/introducing-sys1.html", url: `${origin}/introducing-sys1`, image: "/og/introducing-sys1.png", copy: { path: "/introducing-sys1", eyebrow: "Launch", headline: "Introducing Sys1", description: "Compact check output, code review, and completion checks." } },
+  { file: "site/docs.html", url: `${origin}/docs`, image: "/og/docs.png", copy: { path: "/docs", eyebrow: "Documentation", headline: "Set up your first useful check", description: "Install skills and run your first check." } },
   { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
   { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 questions, five models." } },
   { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: "Models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "System One Skills", headline: "Skills for reviewing agent work", description: "Code review, completion checks, test output." } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "System One Skills", headline: "Shorter test logs for your agent", description: "No model or API key required." } },
 ];
 
 const escape = (text: string): string => text

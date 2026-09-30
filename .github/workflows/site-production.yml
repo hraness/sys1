@@ -45,6 +45,8 @@ jobs:
         run: node node_modules/playwright-core/cli.js install --with-deps chromium
       - name: Check public pages in a browser
         env:
+          # The hosted runner exports system Chrome; this job uses pinned Playwright.
+          CHROME_BIN: ""
           SYS1_BROWSER_ARTIFACTS: ${{ runner.temp }}/site-browser
         run: bun scripts/verify-site-browser.ts --production
       - name: Save public page screenshots

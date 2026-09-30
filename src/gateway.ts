@@ -25,7 +25,7 @@ import { ModelStoreError } from "./local/store.ts";
 import { validateResponseForRequest } from "./response.ts";
 import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
 
-export const SYS1_VERSION = "0.17.0";
+export const SYS1_VERSION = "0.17.1";
 const MAX_ATTEMPTS = 2;
 
 export interface GatewayDeps {
