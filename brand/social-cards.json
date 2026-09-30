@@ -1,55 +1,55 @@
 {
   "version": 1,
-  "template": "0.12.0",
+  "template": "0.13.0",
   "cards": [
     {
       "page": "https://sys1.io/",
       "path": "site/og.png",
-      "input": "cd579bed18a92d2bae5979200e69e55873276f99fb7951e4b05d9a43ef924f4c",
-      "bytes": 154428,
-      "sha256": "702e86ed4afeda8d9095c416f9763894c744b74b926cf7494e2edbf80a603115"
+      "input": "1603c92165421d75c32d576fc7bd6269f0e6731f29d46bb0d9998edb1e202ee0",
+      "bytes": 61337,
+      "sha256": "d343d0989a674be0bc99498e5972bdccb86a4ec70b6ed3bf8dfac8635e78c1fe"
     },
     {
       "page": "https://sys1.io/introducing-sys1",
       "path": "site/og/introducing-sys1.png",
-      "input": "a0a8662e429610ca960232183289ae8118c0fc5103a788d61967675a7974cb20",
-      "bytes": 130320,
-      "sha256": "6c3edb10af3042a9fa30945f4b746946ca660a02d60a95c725890350e575c37c"
+      "input": "b2f86c2058a730da9ca3f391275026bf6e2a34a05496f4368a71ca9357894be5",
+      "bytes": 46122,
+      "sha256": "4fcfab5c6f5ada2282ccdfc2ffe11584de6514af649ff51b4d299cc77176ed44"
     },
     {
       "page": "https://sys1.io/docs",
       "path": "site/og/docs.png",
-      "input": "d115b84eec5d7f0f84950ff41ada5ca29646b57ae54a9923a273c77c59e6c18b",
-      "bytes": 133467,
-      "sha256": "7fffdb4230c092eac3b8116f0f89a05d274b0a121f7a3fedf3853b0293e1047b"
+      "input": "fe8cbe1d43fe3d3eb4f54b7b88bdadba536429086d415899fc93da10dfb8c0d8",
+      "bytes": 49858,
+      "sha256": "7ba0bf5089d93a9229208e9d37231059b0489eeff7c27830184cd003f98a336d"
     },
     {
       "page": "https://sys1.io/docs/evaluations",
       "path": "site/og/docs-evaluations.png",
-      "input": "aa477d131c427782d9f178d11020ce5b32bb51d7ac8335bcd520ee4622ef11ca",
-      "bytes": 135083,
-      "sha256": "62013848a4021c1697bd8a54cbf3224f4b4a4c630317b9113f60ad2851d14304"
+      "input": "685e7f355675bda799de6af5631cacdb0942d91876458e6b8e522aa6b780c4ae",
+      "bytes": 49930,
+      "sha256": "bde26d69d9686d225edf255bed7174ada7763d523210f71e703583a15e75e6c5"
     },
     {
       "page": "https://sys1.io/docs/evaluations-history",
       "path": "site/og/docs-evaluations-history.png",
-      "input": "17541090c49f521687101ab00f2dde32534f3d269efe0314932b20496606995e",
-      "bytes": 138763,
-      "sha256": "582c25a486db341ea0657dbc30c5862289531ab57cc635d7a063397b7248b977"
+      "input": "19134a1d71cadd10088ea6d39064a5c7c68055397301a992502e02fafa3cf9c3",
+      "bytes": 53335,
+      "sha256": "db4f894488a7ba35c91c0d9576d42f8d78e58a6a107c828e5f4dd6fdcd204dfb"
     },
     {
       "page": "https://sys1.io/compare",
       "path": "site/og/compare.png",
-      "input": "6bc3ef85caa372b041aa39a5224a62e3dc4ad922bae600c181cb21b9060cf12b",
-      "bytes": 137330,
-      "sha256": "4759bacb099bd5444061075e372ff6777a065ddd948eaba4d053ff7aaf1d4c19"
+      "input": "c91430dc1e77342c75bd41ad4b88a2611a36b6342b9289cd987834c82aa54fa6",
+      "bytes": 50615,
+      "sha256": "3854ce2611df2f991089d3dbd475e2c585a2021c6537d1a7d8e7855ebf278cf7"
     },
     {
       "page": "https://sys1.io/skills",
       "path": "site/og/skills.png",
-      "input": "c64031944fc6c00ea45d48d8be8fb5872833572e7724a535fb7f08aac0c0e7c5",
-      "bytes": 130700,
-      "sha256": "c8154e3bd947ed563920ce46fca6fa12abb852e6ae9a765656fabeff64407c8a"
+      "input": "dbe92e5a04d139ba462d0553ad0d9d6eb3958796bf4f8ef7133fbdecf6628f41",
+      "bytes": 47831,
+      "sha256": "185e3019fecf5b35bab324dbf0d47b6396a708c237f24ff8b33220b18275eb0d"
     }
   ]
 }

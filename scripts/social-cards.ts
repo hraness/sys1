@@ -20,10 +20,8 @@ const root = resolve(import.meta.dir, "..");
 const origin = "https://sys1.io";
 const manifestPath = "brand/social-cards.json";
 
-// The single-ink header mark (brand:generate). As a template `mark`, the card
-// paints the keycap white on an accent tile, and the numeral stays cut out so
-// it reads in the accent. The black app icon would sit as a grey keycap on a
-// black tile.
+// The mark the site header paints in foil (site/index.html .brand-mark). The
+// card uses only its alpha.
 const mark = readFileSync(resolve(root, "site/marks/sys1.svg"));
 
 export const socialSite = defineSocialImageSite({
@@ -32,9 +30,11 @@ export const socialSite = defineSocialImageSite({
   description: primary.messaging.channels.social.imageDescription,
   // Product names the card must not break across lines.
   keepTogether: ["System One"],
-  icon: { kind: "mark", src: `data:image/svg+xml;base64,${mark.toString("base64")}` },
-  // Light-mode Tokyo Night tokens from DESIGN.md.
-  theme: { accent: "#1d4e90", background: "#e1e2e7", foreground: "#1c3161", muted: "#414c76" },
+  // The header's foil mark, product name as the nav shows it, and the
+  // Design Kit palette from <html data-palette>.
+  brand: "sys1.io",
+  brandMark: `data:image/svg+xml;base64,${mark.toString("base64")}`,
+  palette: "tokyo-night",
 });
 
 type SocialPage = Readonly<{
@@ -59,12 +59,25 @@ const escape = (text: string): string => text
   .replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const sha256 = (data: Uint8Array | string): string => createHash("sha256").update(data).digest("hex");
 
-/** The card copy for one page: the site card for the home page, else page copy. */
+// The home card mirrors the hero: its headline over the first sentence of its
+// summary (site/index.html). The header already names the product, and the
+// header name ("sys1.io") differs from the product name, so the card is told
+// it is the product layout rather than left to infer it.
+export const homeCopy = {
+  layout: "product",
+  headline: primary.messaging.channels.social.imageDescription,
+  description: "Sys1 runs your repository check, keeps the output local, and saves a result you can inspect later.",
+} as const satisfies SocialImagePage;
+
+/** The card copy for one page: the hero for the home page, else page copy. */
 export function socialPageCopy(page: SocialPage): SocialImagePage {
-  return page.copy ?? {};
+  return page.copy ?? homeCopy;
 }
 
 export function socialPageAlt(page: SocialPage): string {
+  // The template's product alt reads "<headline>, from <name>", which leaves
+  // "together., from Sys1" after a full-stop headline; keep the named form.
+  if (page.copy === null) return `${socialSite.name}: ${homeCopy.headline}`;
   return socialImageAlt(socialSite, socialPageCopy(page));
 }
 
