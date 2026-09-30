@@ -50,7 +50,7 @@ export const socialPages: readonly SocialPage[] = [
   { file: "site/docs/evaluations.html", url: `${origin}/docs/evaluations`, image: "/og/docs-evaluations.png", copy: { path: "/docs/evaluations", headline: "Sys1 evaluations", description: "Our own tests of Jev, local Qwen, and Laya, wrong answers included." } },
   { file: "site/docs/evaluations-history.html", url: `${origin}/docs/evaluations-history`, image: "/og/docs-evaluations-history.png", copy: { path: "/docs/evaluations-history", eyebrow: "Evaluation history", headline: "The original form-action comparison", description: "Sys1’s first tests: 20 questions, five models." } },
   { file: "site/compare.html", url: `${origin}/compare`, image: "/og/compare.png", copy: { path: "/compare", eyebrow: "Comparison", headline: "Models Sys1 can use", description: "JevBench scores, where each model runs, and what your workload costs." } },
-  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "System One Skills", headline: "Shorter test logs for your agent", description: "No model or API key required." } },
+  { file: "site/skills.html", url: `${origin}/skills`, image: "/og/skills.png", copy: { path: "/skills", eyebrow: "Skills", headline: "Shorter test logs for your agent", description: "No model or API key required." } },
 ];
 
 const escape = (text: string): string => text
