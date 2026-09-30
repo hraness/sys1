@@ -17,7 +17,7 @@ const generator = "scripts/build-site-syntax.ts";
 type Language = "shell" | "typescript" | "json";
 export const pageLanguages: Record<string, readonly Language[]> = {
   "site/index.html": ["shell", "shell", "shell"],
-  "site/docs.html": ["shell", "shell", "shell", "shell", "shell", "shell", "shell", "shell", "json", "shell", "shell", "json", "typescript"],
+  "site/docs.html": ["shell", "shell", "shell", "shell", "shell", "shell", "shell", "shell", "shell", "json", "shell", "shell", "json", "typescript"],
   "site/skills.html": ["shell", "shell", "shell", "shell"],
   "site/introducing-sys1.html": ["shell"],
 };

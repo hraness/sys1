@@ -9,7 +9,8 @@ description: Review a coherent batch of Git changes with Sys1's advisory rules, 
 # Sys1 review
 
 Use the repository's configured rule packs and exact backend/model route.
-Read \`sys1 review --help\` and \`sys1 rules --help\` for the installed version.
+Read \`sys1 workflow --help\`, \`sys1 review --help\`, and \`sys1 rules --help\`
+for the installed version.
 Choose rules that match the change and the repository's languages. Bundled
 rules have path scopes; inspect active rules and skipped coverage instead of
 assuming every language is covered. Select actual task-owned files or
@@ -18,7 +19,40 @@ Hosted Jev (TypeSafe's hosted decision model) needs explicit activation and
 receives selected source diff context. Local models are experimental.
 Installing this skill configures neither a backend nor automatic hooks.
 
-After a coherent edit and test batch, preview the intended files:
+When a repository-required check and an advisory review both remain to run,
+use a saved workflow on macOS or Linux. Find the exact check command in the
+repository instructions, including any required scheduler and its absolute
+path. Do not invent a check, add another check just for this skill, or bypass
+a scheduler. Preview the combined run with the check's complete argv after
+\`--\`, and repeat \`--path\` for additional task-owned selections:
+
+\`\`\`sh
+sys1 workflow review --worktree --model <backend/model> --max-requests 10 \\
+  --path <path> --dry-run --json -- <required-check-command> [args...]
+\`\`\`
+
+Inspect the selected mode, paths, model route, request cap, and timeout.
+With command execution and source transmission already authorized, repeat
+without \`--dry-run\`. The review starts only after a passing check. Add
+\`--pause-after-check\` to stop before review, or \`--gateway\` for a running
+local model. \`--timeout-ms\` bounds the check; \`--review-timeout-ms\` bounds
+the review separately. Workflows use all active rules for the selected paths.
+
+Use \`sys1 workflow show <id>\` to inspect the saved observation. To resume a
+paused run, supply the original check argv again:
+
+\`\`\`sh
+sys1 workflow resume <id> --json -- <required-check-command> [args...]
+\`\`\`
+
+Resume keeps the original selection, route, and request cap. Changed, expired,
+or uncertain evidence needs investigation and a new run; never automatically
+repeat a command or paid call whose outcome is unknown. Saved observations
+bind tracked inputs; external services and model routes can change. Use
+\`sys1 workflow verify <id>\` to verify record integrity. Always run a fresh
+required final gate before delivery, even when a saved check is reusable.
+
+When only review remains, or selected rule IDs are needed, preview a checkpoint:
 
 \`\`\`sh
 sys1 review checkpoint --worktree --model <backend/model> --dry-run --json -- <paths>
@@ -32,7 +66,7 @@ within the user's task. With source transmission authorized, repeat without
 \`--max-requests 10 --timeout-ms 60000\`. Use \`--gateway\` for a running local
 model. An unchanged complete batch can reuse a recent review without new calls.
 
-To run chosen checks, find active IDs with \`sys1 rules list --json\` and add
+For a checkpoint, find active IDs with \`sys1 rules list --json\` and add
 \`--rule <id>\` for each one. Omitting \`--rule\` uses all active rules. Unknown
 IDs fail before model calls; drafts stay inactive. Keep the same selected
 rules and paths between preview and evaluation, and inspect skipped evidence.
@@ -59,8 +93,13 @@ not accept \`--rule\`. After a repair, run the relevant tests and a fresh
 checkpoint on the repaired batch. Inspect incomplete coverage and exit 8;
 zero new candidates or suppressed repeats do not prove correctness.
 
-State in SYS1_HOME stores only review metadata and explicit feedback. It does
+Review state in SYS1_HOME stores metadata and explicit feedback. It does
 not store source, raw answers, rule prose, model scores, or freeform notes.
+Saved workflows also keep private check logs, capped at 4 MiB. Logs expire
+after 7 days and are pruned on later execution; they may contain sensitive
+command output. Metadata stores a command argv hash instead of its values;
+logs can contain anything the command prints. Inspect skipped evidence and
+incomplete outcomes before using results.
 The ordinary \`sys1 audit\` command remains stateless.
 
 Before reporting completion, check your final message against reachable

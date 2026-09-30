@@ -24,6 +24,10 @@ advisory. Neither package has demonstrated whole-task token or time savings.
 
 ## Capabilities and Constraints
 
+- Sys1 includes ALGAL for saved check-then-review workflows on macOS and Linux.
+  Check-only runs need no model. Review requires an explicit route and request
+  limit; resume checks input identity and refuses uncertain effects. Historical
+  check results never replace fresh required delivery checks.
 - Project-local review and verification skills install instructions only;
   they do not add hooks, activate backends, or call models during setup.
 - Review accepts staged, working-tree, or committed Git changes and explicit
@@ -83,7 +87,8 @@ guides; update a brief in the same change as its page.
   code, check completion claims, and get structured answers from Jev or a local
   model.” The portfolio registry owns the shared product messaging. Keep the
   independent System One Skills package distinct in homepage and install copy.
-- The homepage leads with compact output and links to optional Sys1 features.
+- The homepage leads with Sys1's saved check and review workflow. The independent
+  System One Skills package remains a compact-output option.
   It does not promise whole-task token, time, or cost savings. Give the scope
   and date beside a numerical measurement.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package

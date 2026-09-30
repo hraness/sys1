@@ -160,3 +160,27 @@ and report links remain unchanged. Sources: the existing forms-v1 and
 decisions-v2 reports and the frozen workflow profiles. Drafter/source pass:
 Codex agent /root/trial_cases; no human review. Root owns independent copy
 review and the final browser check.
+
+## Saved-workflow onboarding — September 30, 2026
+
+The reader installs one Sys1 CLI, runs a model-free check from a Git worktree,
+and can then configure a model for advisory review. The guide now starts with
+Sys1 installation and its first check; the independent compact-output package
+appears as an optional tool. Existing visual hierarchy and components stay.
+
+This page owns runnable setup and first-use commands tied to the current CLI;
+the homepage explains the choice, /skills explains agent instructions, and the
+repository workflow guide owns recovery and storage detail. The procedure
+belongs here rather than in another indexable page. Reader utility 2, original
+evidence 2, factual confidence 2, host fit 2, voice integrity 2, maintenance
+value 2: 12/12. Keep prerequisites, one-hour reuse
+limit, advisory review, changed-input checks, and fresh delivery gates explicit.
+Drafter and owner: Codex /root. Independent source/voice reviewer: Codex
+/root/install_experience; no human review claimed. The reviewer checked setup
+order, commands, input checks, and measurement boundaries. The exact packed CLI
+passed its saved-check, cross-process inspection, and record-verification checks.
+Root inspected the rendered guide and share card; the 80-combination local
+browser sweep passed with Chromium 145.0.7632.6 and Playwright 1.58.2.
+Source-check date: 2026-09-30. State: admit. Release and production verification
+remain part of delivery. Reassess on
+2026-11-10 or the next CLI release.

@@ -2,18 +2,22 @@
 
 > Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.
 
-Start with the independent System One Skills package when you want compact test or build output. It runs a known noisy check once, preserves its exit status, and saves the full log in a private temporary directory. The system-one-verify project skill works with Codex, Claude Code, and Devin. It requires Node.js 20+ on macOS or Linux, with no model or API key. A replay of 563 validation outputs measured 35.20% fewer UTF-8 text bytes; whole-task token savings have not been demonstrated.
+Start with `sys1 workflow check -- <command>` to run a repository check and save its result and private log. This needs a Git worktree on macOS or Linux, with no model or API key. `sys1 workflow review` runs a check before an optional scoped review; it requires an explicit model route and request limit. A paused review can continue with the same inputs within an hour. Changed inputs and uncertain interrupted steps require inspection and a new run. ALGAL handles execution and saved state inside Sys1; no separate ALGAL installation is needed. Saved results do not replace fresh required delivery checks.
+
+For compact test or build output, the independent System One Skills package runs a known noisy check once, preserves its exit status, and saves the full log in a private temporary directory. The system-one-verify project skill works with Codex, Claude Code, and Devin. It requires Node.js 20+ on macOS or Linux, with no model or API key. A replay of 563 validation outputs measured 35.20% fewer UTF-8 text bytes; whole-task token savings have not been demonstrated.
 
 Sys1 adds optional model-assisted tools. The sys1-review skill checks selected Git changes against repository rules; bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript. The sys1-verify skill compares completion messages with Git, linked pull requests, and live pages. Both are experimental and advisory. Missing evidence is unverifiable, model scores are not calibrated defect probabilities, and a result without contradictions does not prove completion.
 
 Jev is TypeSafe's hosted decision model. Sys1 also supports experimental local Qwen models and compatible HTTP services. Hosted Jev requires explicit activation and an environment credential. Selected source, messages, or state go to the configured backend. Setup installs project instructions without hooks or model calls. The MIT-licensed CLI requires Bun 1.3.14 or newer and supports macOS, Linux, and Windows.
 
-Latest release: v0.17.1.
+Latest release: v0.18.0.
 
 ## Install and use
 
-- [Install the compact-output skill](https://sys1.io/skills#install): Package installation, agent-specific paths, a first check, and log recovery.
-- [Documentation](https://sys1.io/docs): Compact checks, optional Sys1 setup, preview commands, and the decision API.
+- [Install Sys1](https://sys1.io/docs#getting-started): CLI installation and a first saved check.
+- [Saved workflows](https://github.com/hraness/sys1/blob/main/docs/workflows.md): Check-then-review commands, pause and resume, private logs, and execution records.
+- [Documentation](https://sys1.io/docs): Saved checks, model setup, preview commands, and the decision API.
+- [Install the compact-output skill](https://sys1.io/skills#install): The separate System One Skills package, agent-specific paths, and log recovery.
 - [Add code review](https://sys1.io/skills#review): Preview selected changes and rules before making model calls.
 - [Review guide](https://github.com/hraness/sys1/blob/main/docs/review.md): Repository rules, feedback, privacy, and troubleshooting.
 - [Add completion checks](https://sys1.io/skills#verify): Check a message from any agent; Devin also supports local transcript discovery.

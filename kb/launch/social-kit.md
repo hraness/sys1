@@ -53,7 +53,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.17.1.
+Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.18.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -107,7 +107,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.17.1.
+Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.18.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -161,7 +161,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.17.1.
+Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.18.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -183,7 +183,7 @@ Sys1 installs project skills for Codex, Claude Code, and Devin. Other agents can
 
 Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps that feedback locally, suppresses repeated findings, and reuses a recent unchanged review without another model call.
 
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.17.1.
+Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.18.0.
 
 https://sys1.io/introducing-sys1
 ```
@@ -208,8 +208,8 @@ Write the Show HN post and first comment yourself; use only these facts.
 - Use sys1 verify to compare a proposed completion message with Git, linked pull requests, and live pages. It reports agreement, contradictions, and unavailable evidence. Inspect the advisory result before relying on the claim.
 - Sys1's API returns yes/no, choice, and score answers with probabilities. Use TypeSafe's hosted Jev, an experimental local model, or a compatible server you configure. Sys1 checks each answer against the question asked.
 - Sys1 installs project skills for Codex, Claude Code, and Devin. Other agents can use the CLI. The bundled review rules cover JavaScript and TypeScript; add repository rules for other languages and conventions.
-- Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.17.1.
-- Latest release: v0.17.1. https://sys1.io/introducing-sys1
+- Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.18.0.
+- Latest release: v0.18.0. https://sys1.io/introducing-sys1
 
 ## Media
 

@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sys1",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.",
   "type": "module",
   "license": "MIT",
@@ -59,6 +59,7 @@
     "analytics:check": "bun scripts/build-site-analytics.ts --check"
   },
   "dependencies": {
+    "@hraness/algal": "https://codeload.github.com/hraness/algal/tar.gz/741f19ec9f0e82bb8d87a89ff39eeee6e82d01e3",
     "zod": "4.6.2"
   },
   "optionalDependencies": {

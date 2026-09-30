@@ -27,7 +27,7 @@ type PlatformId = "macos" | "linux" | "windows";
 interface Target { id: PlatformId; command?: string; shell: string; note?: string; unavailableNote?: string }
 interface Block { page: string; prefix: string; badges: readonly (PlatformId | { id: PlatformId; note: string })[]; targets: readonly Target[] }
 
-const releaseUrl = "https://github.com/hraness/sys1/releases/download/v0.17.1/hraness-sys1-0.17.1.tgz";
+const releaseUrl = "https://github.com/hraness/sys1/releases/download/v0.18.0/hraness-sys1-0.18.0.tgz";
 /** One line so it pastes into PowerShell as well as a POSIX shell. */
 export const installCommand = `npm install --global --allow-scripts=node-llama-cpp ${releaseUrl}`;
 const note = "Requires Bun 1.3.14+";
