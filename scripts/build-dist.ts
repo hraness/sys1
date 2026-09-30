@@ -55,7 +55,9 @@ async function buildDist(): Promise<void> {
   await run([
     process.execPath,
     "build",
-    "src/cli.ts",
+    "src/cli-entry.ts",
+    "--entry-naming",
+    "cli.js",
     "--outdir",
     outdir,
     "--root",

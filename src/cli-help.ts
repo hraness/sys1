@@ -3,7 +3,7 @@
 
 export const SYS1_COMMANDS = [
   "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
-  "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "workflow", "help", "version",
+  "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "workflow", "help", "version", "update",
 ] as const;
 
 const DESCRIPTION = `Sys1 runs checks and saves review workflows for coding agents.
@@ -79,6 +79,7 @@ Routing
                              Manage your own System One HTTP servers
   sys1 config path|get|set|unset
                              Show or change settings
+  sys1 update                Update the CLI (sys1 update --help)
 
 Options
   --json          Print JSON (the default when an agent runs sys1)
@@ -105,6 +106,17 @@ function wrapList(items: readonly string[]): string {
 }
 
 const COMMAND_HELP: Readonly<Record<string, string>> = {
+  update: `Usage: sys1 update [check|status|enable|disable] [--json]
+
+Install a newer release, check availability, or manage automatic updates.
+Supported Bun and npm global installations on macOS and Linux check at most
+once a day before work starts. Automatic updates are enabled by default.
+
+Use sys1 update disable to keep this version, or HRANESS_NO_UPDATE=1 for
+one invocation. Exact Bun version pins require sys1 update enable.
+
+Stop the gateway with sys1 down (or Ctrl-C for sys1 serve) before updating.
+`,
   workflow: `Usage: sys1 workflow <check|review|list|show|resume|verify> [options]
 
 Run checks and keep an inspectable record. Check-only runs need no model,

@@ -142,7 +142,7 @@ export async function daemonUp(options: {
     stdin: "ignore",
     stdout: log,
     stderr: log,
-    env: { ...env, SYS1_HOME: home },
+    env: { ...env, SYS1_HOME: home, SYS1_UPDATE_NESTED: "1" },
     detached: true,
   });
   child.unref();

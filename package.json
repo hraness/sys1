@@ -1,6 +1,6 @@
 {
   "name": "@hraness/sys1",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.",
   "type": "module",
   "license": "MIT",
@@ -62,7 +62,8 @@
   },
   "dependencies": {
     "@hraness/algal": "https://codeload.github.com/hraness/algal/tar.gz/741f19ec9f0e82bb8d87a89ff39eeee6e82d01e3",
-    "zod": "4.6.2"
+    "zod": "4.6.2",
+    "@hraness/cli-update": "https://github.com/hraness/cli-update/releases/download/v0.1.0/hraness-cli-update-0.1.0.tgz"
   },
   "optionalDependencies": {
     "node-llama-cpp": "3.20.0"

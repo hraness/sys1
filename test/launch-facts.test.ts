@@ -27,10 +27,10 @@ describe("launch facts", () => {
     );
   });
 
-  test("status comes from the package version", () => {
-    const pkg = JSON.parse(read("package.json")) as { version: string };
-    expect(launchFacts.version.value).toBe(pkg.version);
-    expect(launchRelease.status as string).toBe(`Latest release: v${pkg.version}`);
+  test("status comes from the verified public release", () => {
+    const published = JSON.parse(read("site/published-release.json")) as { version: string };
+    expect(launchFacts.version.value).toBe(published.version);
+    expect(launchRelease.status as string).toBe(`Latest release: v${published.version}`);
   });
 
   test("every beat resolves, and the status beat carries the release status", () => {

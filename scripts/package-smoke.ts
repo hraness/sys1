@@ -15,6 +15,7 @@ import { dirname, join, resolve } from "node:path";
 const PACKAGE_ROOT = resolve(import.meta.dir, "..");
 const PACKAGE_NAME = "@hraness/sys1";
 const ALGAL_RELEASE = "https://codeload.github.com/hraness/algal/tar.gz/741f19ec9f0e82bb8d87a89ff39eeee6e82d01e3";
+const CLI_UPDATE_RELEASE = "https://github.com/hraness/cli-update/releases/download/v0.1.0/hraness-cli-update-0.1.0.tgz";
 const MAX_OUTPUT_BYTES = 4 * 1_024 * 1_024;
 
 const REQUIRED = [
@@ -104,18 +105,21 @@ function record(value: unknown, label: string): Record<string, unknown> {
 function exactDependencies(manifest: Record<string, unknown>): string[] {
   const dependencies = record(manifest["dependencies"], "dependencies");
   const names = Object.keys(dependencies).sort();
-  if (names.length !== 2 || names[0] !== "@hraness/algal" || names[1] !== "zod") {
+  if (names.length !== 3 || names[0] !== "@hraness/algal" || names[1] !== "@hraness/cli-update" || names[2] !== "zod") {
     throw new Error(`packed dependencies are unexpected: ${names.join(", ")}`);
   }
   if (dependencies["@hraness/algal"] !== ALGAL_RELEASE) {
     throw new Error("ALGAL must use the verified published release commit");
+  }
+  if (dependencies["@hraness/cli-update"] !== CLI_UPDATE_RELEASE) {
+    throw new Error("CLI updater must use the verified immutable release archive");
   }
   const optional = record(manifest["optionalDependencies"], "optionalDependencies");
   if (Object.keys(optional).length !== 1 || optional["node-llama-cpp"] === undefined) {
     throw new Error("native runtime must be the only optional dependency");
   }
   for (const [name, version] of Object.entries({ ...dependencies, ...optional })) {
-    if (name === "@hraness/algal") continue;
+    if (name === "@hraness/algal" || name === "@hraness/cli-update") continue;
     if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
       throw new Error(`dependency ${name} is not exactly pinned`);
     }

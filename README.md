@@ -37,6 +37,12 @@ and Windows. `--allow-scripts=node-llama-cpp` allows the optional local inferenc
 runtime’s install script; installation downloads no model weights and enables
 no hosted backend. The release includes a SHA-256 checksum.
 
+## CLI updates
+
+Sys1 0.19.0 and newer support automatic updates for Bun and npm globals
+on macOS and Linux. Use `sys1 update disable` to keep a version. See
+[update controls and supported installations](docs/cli-updates.md).
+
 ## Save a check and continue its review
 
 From a Git worktree on macOS or Linux, run your repository’s check command:

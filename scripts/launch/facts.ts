@@ -1,5 +1,5 @@
 import type { LaunchFacts, LaunchRelease } from "@hraness/design-kit/launch";
-import pkg from "../../package.json" with { type: "json" };
+import published from "../../site/published-release.json" with { type: "json" };
 
 // The one typed place for every number in the launch beats, the social kit,
 // and the launch mockups. Each value names the file that backs it; tests pin
@@ -30,17 +30,17 @@ export const launchFacts = {
     source: "docs/proof-roadmap-2026-09.md, directed sys1 review checkpoint baseline: 29/32 correct",
   },
   version: {
-    value: pkg.version,
-    source: "package.json version, the release at publication",
+    value: published.version,
+    source: "site/published-release.json version, the verified public release",
   },
 } as const satisfies LaunchFacts;
 
 export type LaunchFactKey = keyof typeof launchFacts;
 
-// Status comes from the release record: the package version the release
-// workflow publishes to GitHub Releases. Sys1 has a public install from there.
+// Public status follows the verified release record independently of source
+// versions that have not completed publication.
 export const launchRelease = {
-  status: `Latest release: v${pkg.version}` as `Latest release: v${number}.${number}.${number}`,
+  status: `Latest release: v${published.version}` as `Latest release: v${number}.${number}.${number}`,
   tags: ["Developer Tools", "Artificial Intelligence", "Open Source"],
 } as const satisfies LaunchRelease;
 
