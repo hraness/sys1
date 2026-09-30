@@ -137,7 +137,7 @@ try {
         assert.ok(!await page.locator("[data-question-type]").first().isVisible());
       } else {
         await page.getByText("Read the chart as a table", { exact: true }).click();
-        assert.ok(await page.getByRole("table").isVisible());
+        assert.ok(await page.getByRole("table", { name: "Matched labels and errors" }).isVisible());
       }
       await page.screenshot({ path: resolve(artifacts, `390-no-js-${route === "/" ? "home" : "launch"}.png`), fullPage: true });
     }

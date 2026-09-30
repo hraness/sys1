@@ -1,0 +1,72 @@
+{
+  "kind": "slopcamera.html-film-delivery",
+  "schemaVersion": 1,
+  "source": {
+    "path": "media/sys1-launch/artifacts/.../scene.mp4 (render of cuts.json)",
+    "bytes": 8082289,
+    "sha256": "21b07bbd47c9b79233be435b30303e733d1c4d454f79a6a1316d7b9054c7022b",
+    "duration": 52
+  },
+  "outputDirectory": "(local /tmp)",
+  "receipt": "out/sys1-launch-receipt.json",
+  "files": [
+    {
+      "role": "mp4",
+      "path": "out/sys1-launch.mp4",
+      "bytes": 1033581,
+      "sha256": "e5f2d0de5b3b445afbbc29119ae0c8bbcb20343e6f5f6b1a0edfd7afe750f7cb",
+      "budget": 12000000,
+      "withinBudget": true
+    },
+    {
+      "role": "webm",
+      "path": "out/sys1-launch.webm",
+      "bytes": 854584,
+      "sha256": "f661f864b23206145c2f158a3a3e92ea30c9b9a959d6ebfaad7642d1003aa399",
+      "budget": 10000000,
+      "withinBudget": true
+    },
+    {
+      "role": "poster",
+      "path": "out/sys1-launch-poster.jpg",
+      "bytes": 34297,
+      "sha256": "6e0a78a10361f2689b5befb46379bdb683dd36386dc2575a7821be99c9c1f91c",
+      "budget": 250000,
+      "withinBudget": true
+    },
+    {
+      "role": "social",
+      "path": "out/sys1-launch-social.jpg",
+      "bytes": 14094,
+      "sha256": "f27ecd767002b8f0a6a83e835ece0c36e886346cf534868590a38e981187089f",
+      "budget": 250000,
+      "withinBudget": true
+    },
+    {
+      "role": "cut",
+      "path": "out/sys1-launch-1x1.mp4",
+      "bytes": 567881,
+      "sha256": "0d8aa9cc3f713f5fdea8c8b970a929c9b6486d933b4ffe53a0ea73d0a83917f5",
+      "budget": 12000000,
+      "withinBudget": true,
+      "cut": "1:1"
+    },
+    {
+      "role": "cut",
+      "path": "out/sys1-launch-9x16.mp4",
+      "bytes": 736140,
+      "sha256": "c86f228d24f6ff653c4593e9a3e3fadd31bef87b4278183443ae47f5b7292188",
+      "budget": 12000000,
+      "withinBudget": true,
+      "cut": "9:16"
+    }
+  ],
+  "withinBudget": true,
+  "deliveredAt": "2026-09-29T17:26:38.362Z",
+  "budgets": {
+    "mp4": 12000000,
+    "webm": 10000000,
+    "jpg": 250000
+  },
+  "note": "Square cut shipped as site/media/sys1-launch-square.mp4. Landscape master is the existing site/media/sys1-launch.mp4. 9:16 blurred-fill cut not shipped: 16:9 text is too small in portrait."
+}

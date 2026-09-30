@@ -1,0 +1,24 @@
+{
+  "kind": "slopcamera.html-scene",
+  "schemaVersion": 1,
+  "name": "Introducing Sys1 (1080p for cuts)",
+  "document": {
+    "path": "scene.html"
+  },
+  "libraries": [],
+  "seed": 1,
+  "parameters": {},
+  "resources": [],
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1
+  },
+  "timing": {
+    "durationUs": 52000000,
+    "fps": 24
+  },
+  "audio": {
+    "path": "score.wav"
+  }
+}

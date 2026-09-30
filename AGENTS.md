@@ -187,3 +187,12 @@
 - GitHub Release pages follow `RELEASES.md` in hraness/.github: the title is the registry product name and the tag, and the body is a summary, `## Changes`, `## Install`, `## Verify`, then the repository's identity record as a trailing HTML comment.
 - The summary and changes come from the version's section of `CHANGELOG.md` in the tagged commit. Write that section in the version bump pull request. The release workflow copies it, generates Install and Verify from the release record, fails when the section is missing or empty, and never uses GitHub's generated notes.
 <!-- hraness-releases:end -->
+
+<!-- hraness-launch:start -->
+- Launch posts, their social posts, product mockups, and launch films follow the launch beats and social posts addendum in `GENERATION_STYLE.md` and the beats shape under “Introducing a product” in `ARTICLE_COPY.md` in `@hraness/design-kit`. Channel limits are in the launch posts section of `MESSAGING.md`.
+- Build them with the `product-launch` agent skill, the `./mockups` and `./launch` exports of `@hraness/design-kit`, and `slopcamera html init --template launch-film`.
+- Take every number in a beat, social post, film caption, or store listing from the product's launch facts module, and the status from the release record. Label mockups as illustrations.
+- The social kit emits posts for X, Bluesky, Threads, and LinkedIn, and a fact sheet for the Show HN post and the Product Hunt first comment. A person writes those two.
+<!-- hraness-launch:additions -->
+- In this repository the launch facts, beats and mockups live in `scripts/launch/`. `bun run launch:build` regenerates the short version in `site/introducing-sys1.html`, the homepage illustrations and `kb/launch/social-kit.md`; `bun run check` fails when they are stale.
+<!-- hraness-launch:end -->
