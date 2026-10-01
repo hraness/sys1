@@ -5,6 +5,13 @@ the section in the pull request that bumps the version: a one-line summary
 paragraph, then one bullet per change a user or operator would notice. Keep
 each paragraph and bullet on one line; release pages render line breaks.
 
+## 0.19.1 - 2026-10-01
+
+Page claim checks exclude script and stylesheet bodies with HTML closing-tag whitespace or trailing attributes.
+
+- Keep hidden script and style text out of page evidence when closing tags contain HTML whitespace or trailing attributes, or the fetched page ends inside a raw-text body.
+- Preserve visible text in similarly named custom elements and retain existing fetch and evidence limits.
+
 ## 0.19.0 - 2026-09-30
 
 Sys1 can update supported global CLI installations before work starts.

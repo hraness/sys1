@@ -180,7 +180,10 @@ export async function fetchPage(
       }
       const text = new TextDecoder().decode(whole);
       evidence.ok = true;
-      evidence.excerpt = text.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ")
+      // Raw-text bodies are not visible evidence. Accept HTML close-tag whitespace
+      // and discard an unfinished body when the bounded page ends inside it.
+      evidence.excerpt = text.replace(/<script(?=[\t\n\f\r />])[^>]*>[\s\S]*?(?:<\/script(?=[\t\n\f\r />])[^>]*>|$)/gi, " ")
+        .replace(/<style(?=[\t\n\f\r />])[^>]*>[\s\S]*?(?:<\/style(?=[\t\n\f\r />])[^>]*>|$)/gi, " ")
         .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, EVIDENCE_LIMITS.maxPageBytes);
       return evidence;
     } catch {
