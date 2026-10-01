@@ -5,7 +5,7 @@ structured answers from Jev or a local model. Jev is TypeSafe’s hosted decisio
 model. Project skills work with Codex, Claude Code, and Devin; applications can
 use the same tools through a CLI, Node/Bun client, or HTTP API.
 
-Latest release: v0.19.0. Install the GitHub release with npm and run it with
+Latest release: v0.19.1. Install the GitHub release with npm and run it with
 Bun 1.3.14 or newer. MIT licensed.
 
 [Get started](#install) · [Agent skills](https://sys1.io/skills) · [Documentation](https://sys1.io/docs) · [Releases](https://github.com/hraness/sys1/releases)
@@ -28,7 +28,7 @@ available, then run:
 
 ```sh
 npm install --global --allow-scripts=node-llama-cpp \
-  https://github.com/hraness/sys1/releases/download/v0.19.0/hraness-sys1-0.19.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.19.1/hraness-sys1-0.19.1.tgz
 sys1 --version
 ```
 
@@ -148,7 +148,7 @@ For an application using Node 24 or Bun, install the portable client:
 
 ```sh
 npm install --omit=optional \
-  https://github.com/hraness/sys1/releases/download/v0.19.0/hraness-sys1-0.19.0.tgz
+  https://github.com/hraness/sys1/releases/download/v0.19.1/hraness-sys1-0.19.1.tgz
 ```
 
 With a backend configured, run `sys1 up` to start the gateway, then call it:
