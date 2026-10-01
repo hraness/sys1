@@ -86,12 +86,13 @@ try {
       await page.goto(origin.href);
       if (!production) {
         const cookieNote = page.locator('[data-slot="hraness-cookie-consent"]');
-        await cookieNote.waitFor({ state: "visible" });
-        await cookieNote.locator('[data-slot="hraness-cookie-consent-accept"]').click();
-        await cookieNote.waitFor({ state: "hidden" });
+        const cookiePrompt = cookieNote.locator("[data-consent-prompt]");
+        await cookiePrompt.waitFor({ state: "visible" });
+        await cookiePrompt.click();
+        await cookiePrompt.waitFor({ state: "hidden" });
         assert.equal(await page.evaluate(() => localStorage.getItem("hraness-consent-cookies-v1")), "accepted");
         await page.reload();
-        await cookieNote.waitFor({ state: "hidden" });
+        await cookiePrompt.waitFor({ state: "hidden" });
       }
       const demo = page.locator("[data-decision-demo]");
       for (const [type, answer] of [["noul", '"noul": 0.94'], ["choice", '"choice": "configuration"'], ["score", '"score": 1.8']] as const) {
