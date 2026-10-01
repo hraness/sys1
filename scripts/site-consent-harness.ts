@@ -19,6 +19,7 @@ const listeners = (target: EventTarget) => ({
   dispatchEvent: target.dispatchEvent.bind(target),
 });
 const documentValue = {
+  nodeType: 9, defaultView: globalThis,
   ...listeners(documentEvents), body: null, cookie: "", documentElement: {},
   createElement: () => ({ ...listeners(new EventTarget()), setAttribute() {}, style: {} }),
   getElementsByTagName: () => [], querySelector: () => null, querySelectorAll: () => [],

@@ -12,7 +12,7 @@
       "devDependencies": {
         "@hraness/design-kit": "github:hraness/design-kit#v0.35.0",
         "@hraness/posthog": "https://github.com/hraness/posthog/releases/download/v0.3.9/hraness-posthog-0.3.9.tgz",
-        "@hraness/site-footer": "https://github.com/hraness/site-footer/releases/download/v0.20.5/hraness-site-footer-0.20.5.tgz",
+        "@hraness/site-footer": "https://github.com/hraness/site-footer/releases/download/v0.20.7/hraness-site-footer-0.20.7.tgz",
         "@hraness/web-discovery": "github:hraness/web-discovery#v0.13.0",
         "@resvg/resvg-js": "2.6.2",
         "@types/bun": "1.3.14",
@@ -46,7 +46,7 @@
 
     "@hraness/posthog": ["@hraness/posthog@https://github.com/hraness/posthog/releases/download/v0.3.9/hraness-posthog-0.3.9.tgz", { "dependencies": { "@posthog/nextjs-config": "1.10.0", "posthog-js": "1.422.5", "posthog-node": "5.51.4" }, "peerDependencies": { "next": ">=16.2.0 <17.0.0", "react": ">=19.2.0 <20.0.0" }, "optionalPeers": ["next", "react"] }, "sha512-faPyaByfdEEY5lSL32XXrGEtJ1PCiuRi0xE+7l7AR4FlPDFVjpd6jfl0/0KL8qtl/BkE6JvCpzWwd/W6V8Wkug=="],
 
-    "@hraness/site-footer": ["@hraness/site-footer@https://github.com/hraness/site-footer/releases/download/v0.20.5/hraness-site-footer-0.20.5.tgz", { "peerDependencies": { "react": ">=18 <20" }, "optionalPeers": ["react"] }, "sha512-TjjjT7cZeg73p9PKzDIJUGvWdV6eYt8IMDI4LtKswwYNzRceedsBnuuRnYb5FcLEyrV3TweEs1eAyqHGYt1XoA=="],
+    "@hraness/site-footer": ["@hraness/site-footer@https://github.com/hraness/site-footer/releases/download/v0.20.7/hraness-site-footer-0.20.7.tgz", { "peerDependencies": { "react": ">=18 <20" }, "optionalPeers": ["react"] }, "sha512-0t2p999hJMoxqYt+kFvNvR0fXkKsLKoF4fQkN6chCiRWFF+Xw18AdP9PxBBFbcFavtedNsgeDlPiFSwQopEAIg=="],
 
     "@hraness/web-discovery": ["@hraness/web-discovery@github:hraness/web-discovery#2c1ccc8", { "dependencies": { "@hraness/design-kit": "github:hraness/design-kit#v0.5.0" }, "peerDependencies": { "next": ">=16.2.0 <17.0.0", "react": ">=19.0.0 <20.0.0" }, "optionalPeers": ["next"] }, "hraness-web-discovery-2c1ccc8", "sha512-wGlNX06htObH2keRQHlcnUuKNPsTcE83ehGWWn9qLGgXDTTEdk8kILlCUDrRR0rwCuLopYRR0UlwvvZilxIbsQ=="],
 
