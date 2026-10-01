@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "source": {
     "repository": "https://github.com/hraness/site-footer",
-    "commit": "ceb70523f8caf259f6d19636bf80461c0dde0807",
-    "version": "0.20.5"
+    "commit": "3e26490b5f69e18b931115f689108d26021bc4c5",
+    "version": "0.20.7"
   },
   "files": {
     "stylex.css": {
       "path": "dist/stylex.css",
-      "sha256": "8581a2f7ae8c57117c444e7cfacbdf3e4630103d4a7e0649cbd88996a2b05ffe",
-      "bytes": 35006
+      "sha256": "91c89dc2b110b7e8e43c1b1d75eac913e53ee71c382c85f802705aa15d0fd432",
+      "bytes": 36469
     },
     "LICENSE": {
       "path": "LICENSE",
@@ -31,15 +31,15 @@
   },
   "renderer": {
     "path": "dist/index.js",
-    "sha256": "8a9dd446cc2a911895acf05297b9a37384c821e8437a0ff430b53f0be11a4f99",
+    "sha256": "07781536452f89e5a41ab5c7fa0247c12ce855dc85f07d331892a1bd22c3ac91",
     "options": {
       "mailingList": {
         "kind": "none"
       }
     },
     "output": {
-      "sha256": "9163d2faceb41bfd74944e9d782440c0996a141448c50026bc615eca1118834d",
-      "bytes": 12821
+      "sha256": "2a437aa9e54d663e5a3caad2d254709f60f10c9ab33be4f5b810a5007ac6b2ac",
+      "bytes": 13019
     }
   }
 }

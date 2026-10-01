@@ -4,7 +4,14 @@ html { scroll-padding-bottom: 4rem; scroll-behavior: smooth; scroll-padding-top:
 body { min-height: 100dvh; display: flex; flex-direction: column; margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-text); line-height: 1.65; }
 ::selection { background: var(--primary-soft); color: var(--foreground); }
 a:not(:where(.hraness-site-footer a, .hraness-status-page a)) { color: var(--primary); text-underline-offset: .2em; text-decoration-thickness: 1px; text-decoration-style: dotted; }
-a:not(:where(.hraness-site-footer a, .hraness-status-page a)):hover { text-decoration: underline dotted; }
+a:not(:where(.hraness-site-footer a, .hraness-status-page a)):hover { text-decoration-line: underline; text-decoration-style: dotted; }
+@media (forced-colors: none) {
+  a:not(:where(.hraness-site-footer a, .hraness-status-page a)) { text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+  a:not(:where(.hraness-site-footer a, .hraness-status-page a)):is(:hover, :focus-visible) { text-decoration-color: currentColor; }
+}
+@media (forced-colors: active) {
+  a:not(:where(.hraness-site-footer a, .hraness-status-page a)) { text-decoration-color: LinkText; }
+}
 button, select { font: inherit; }
 button, a, select, summary { -webkit-tap-highlight-color: transparent; }
 :focus-visible:not(:where(.hraness-site-footer *, [data-hraness-appearance-menu] *)) { outline: 2px solid var(--focus); outline-offset: 4px; }

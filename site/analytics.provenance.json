@@ -9,7 +9,7 @@
     },
     {
       "entry": "@hraness/site-footer/consent",
-      "sha256": "59efe96b7d0771b707f2faa238244d306e93ae52fa13d30a3539271d175d3991"
+      "sha256": "82583be56ad35fe92298d59d65ac4147234f36a701bef9760ae4950fdcfb23e0"
     }
   ],
   "entry": [
@@ -28,7 +28,7 @@
   ],
   "output": {
     "path": "site/analytics.js",
-    "sha256": "96e38ffd96a309005a02c80c65c21027a7412579bfc3375b0812e4dfa3161849",
-    "bytes": 168342
+    "sha256": "81c370b2ef0f40d1c0abf8bc5e0de96ada5510191ce82f0a0d9880f9983f74da",
+    "bytes": 170691
   }
 }
