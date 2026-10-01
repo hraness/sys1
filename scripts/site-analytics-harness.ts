@@ -66,7 +66,7 @@ posthog.capture("$web_vitals", site.webVitalsProperties([
 ], pageUrl), options);
 posthog.capture("$exception", site.exceptionProperties(error, "window_error", site.errorFingerprint(error)), options);
 posthog.capture("page not found", site.notFoundEvent(pageLocation.pathname, referrer) ?? { requested_path: "/known" }, options);
-posthog.capture("cta clicked", { ...site.ctaEvent("hero-install-sys1") }, options);
+posthog.capture("cta clicked", { ...site.ctaEvent("header-install-sys1") }, options);
 posthog.capture("install command copied", { ...site.installEvent("install-command-macos") }, options);
 posthog.capture("$autocapture", {}, options);
 

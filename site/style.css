@@ -3,8 +3,8 @@
 html { scroll-padding-bottom: 4rem; scroll-behavior: smooth; scroll-padding-top: 6rem; scrollbar-color: var(--line) var(--background); }
 body { min-height: 100dvh; display: flex; flex-direction: column; margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-text); line-height: 1.65; }
 ::selection { background: var(--primary-soft); color: var(--foreground); }
-a:not(:where(.hraness-site-footer a, .hraness-status-page a)) { color: var(--primary); text-underline-offset: .2em; text-decoration-thickness: 1px; }
-a:not(:where(.hraness-site-footer a, .hraness-status-page a)):hover { text-decoration: underline; }
+a:not(:where(.hraness-site-footer a, .hraness-status-page a)) { color: var(--primary); text-underline-offset: .2em; text-decoration-thickness: 1px; text-decoration-style: dotted; }
+a:not(:where(.hraness-site-footer a, .hraness-status-page a)):hover { text-decoration: underline dotted; }
 button, select { font: inherit; }
 button, a, select, summary { -webkit-tap-highlight-color: transparent; }
 :focus-visible:not(:where(.hraness-site-footer *, [data-hraness-appearance-menu] *)) { outline: 2px solid var(--focus); outline-offset: 4px; }
@@ -50,6 +50,7 @@ pre code { font-size: inherit; }
 .summary { max-width: 42rem; margin: 0 0 1.75rem; color: var(--muted); font-size: 1.125rem; line-height: 1.6; }
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem 1.5rem; }
 .text-link { display: inline-flex; align-items: center; min-height: 2.875rem; font-weight: 500; }
+.hero-install { margin-block: 1.75rem 1rem; min-width: 0; }
 .hero-note { color: var(--muted); font-size: .85rem; margin: 1.5rem 0 0; }
 .code-frame { min-width: 0; overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); border: 1px solid var(--grid); border-radius: .75rem; }
 .code-frame pre { padding: 1.25rem 1.4rem; font-size: .8rem; line-height: 1.7; overflow-x: auto; white-space: pre; overflow-wrap: normal; }

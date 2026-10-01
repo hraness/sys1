@@ -2503,6 +2503,25 @@
     }
   }
 
+  /* Folder tabs share an edge with the stable-height walkthrough stage. */
+  .hkm-showcase.hkm-steps { gap: 0; }
+  .hkm-showcase.hkm-steps .hkm-showcase-controls { padding: 0; border: 0; border-radius: 0; background: transparent; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs { gap: 6px; margin: 0; padding: 0; border: 0; position: relative; z-index: 1; }
+  .hkm-showcase.hkm-steps .hkm-tab { min-block-size: 48px; padding: 12px 18px; border: 1px solid var(--hkm-sc-line); border-block-end: 0; border-radius: 12px 12px 0 0; background: var(--hkm-sc-field); color: var(--hkm-sc-muted); }
+  .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"] { background: var(--hkm-sc-bg); color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-tab:hover { color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-step-stage { display: grid; border: 1px solid var(--hkm-sc-line); border-radius: 0 12px 12px 12px; background: var(--hkm-sc-bg); margin-block-start: -1px; overflow: clip; }
+  .hkm-step-panel { grid-area: 1 / 1; min-inline-size: 0; align-self: start; }
+  .hkm-step-panel[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+  .hkm-showcase.hkm-steps .hkm-step-panel .hkm-root { border-start-start-radius: 0; border-start-end-radius: 0; box-shadow: none; }
+  .hkm-showcase.hkm-steps .hkm-step-nav { justify-content: space-between; padding-block-start: 18px; gap: 16px; }
+  .hkm-showcase.hkm-steps .hkm-step-button { display: inline-grid; place-items: center; min-inline-size: 52px; min-block-size: 52px; padding: 10px; border: 0; border-radius: 12px; background: transparent; color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-step-button[data-hkm-primary] { background: var(--hkm-sc-fg); color: var(--hkm-sc-bg); }
+  .hkm-showcase.hkm-steps .hkm-step-button:disabled { color: var(--hkm-sc-muted); background: transparent; }
+  .hkm-showcase.hkm-steps .hkm-step-button[data-hkm-primary]:disabled { background: var(--hkm-sc-field); }
+  .hkm-showcase.hkm-steps .hkm-step-announcement { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .hkm-showcase.hkm-steps .hkm-showcase-caption { margin-block-start: 1rem; }
+
   /* ---------------------------------------------------------------- */
   /* Motion                                                           */
   /* ---------------------------------------------------------------- */

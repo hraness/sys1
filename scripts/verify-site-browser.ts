@@ -52,6 +52,7 @@ try {
   for (const width of [360, 390, 768, 820, 1440]) for (const theme of ["light", "dark"] as const) {
     const context = await browser.newContext({ viewport: { width, height: width === 360 ? 740 : width === 390 ? 844 : 900 }, colorScheme: theme });
     try {
+      if (!production) await context.route("https://account.hraness.com/api/consent/region", route => route.fulfill({ json: { required: true } }));
       const page = await context.newPage();
       const errors: string[] = [];
       const movieRequests: string[] = [];
@@ -83,6 +84,16 @@ try {
         results.push({ route, width, theme });
       }
       await page.goto(origin.href);
+      if (!production) {
+        const cookieNote = page.locator('[data-slot="hraness-cookie-consent"]');
+        const cookiePrompt = cookieNote.locator("[data-consent-prompt]");
+        await cookiePrompt.waitFor({ state: "visible" });
+        await cookiePrompt.click();
+        await cookiePrompt.waitFor({ state: "hidden" });
+        assert.equal(await page.evaluate(() => localStorage.getItem("hraness-consent-cookies-v1")), "accepted");
+        await page.reload();
+        await cookiePrompt.waitFor({ state: "hidden" });
+      }
       const demo = page.locator("[data-decision-demo]");
       for (const [type, answer] of [["noul", '"noul": 0.94'], ["choice", '"choice": "configuration"'], ["score", '"score": 1.8']] as const) {
         const control = demo.locator(`[data-question-type="${type}"]`);

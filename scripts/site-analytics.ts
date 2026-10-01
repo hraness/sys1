@@ -42,7 +42,6 @@ export type InstallMethod = (typeof INSTALL_METHODS)[number];
 // The CTA list: the page's data-analytics-cta value maps to a stable id and placement.
 export const CTAS: Readonly<Record<string, Readonly<{ cta: string; placement: Placement }>>> = {
   "header-install-sys1": { cta: "install_sys1", placement: "nav" },
-  "hero-install-sys1": { cta: "install_sys1", placement: "hero" },
   "hero-workflows": { cta: "explore_workflows", placement: "hero" },
   "benchmarks-study": { cta: "read_study", placement: "inline" },
   "benchmarks-evaluations": { cta: "browse_evaluations", placement: "inline" },
@@ -54,9 +53,9 @@ export const CTAS: Readonly<Record<string, Readonly<{ cta: string; placement: Pl
 // Copy buttons on install commands. Other copy buttons (usage examples) send nothing.
 export const INSTALL_COMMANDS: Readonly<Record<string, Readonly<{ install_method: InstallMethod; placement: Placement }>>> = {
   "install-command": { install_method: "npm", placement: "inline" },
-  "install-command-macos": { install_method: "npm", placement: "inline" },
-  "install-command-linux": { install_method: "npm", placement: "inline" },
-  "install-command-windows": { install_method: "npm", placement: "inline" },
+  "install-command-macos": { install_method: "npm", placement: "hero" },
+  "install-command-linux": { install_method: "npm", placement: "hero" },
+  "install-command-windows": { install_method: "npm", placement: "hero" },
   "docs-install-command-macos": { install_method: "npm", placement: "docs" },
   "docs-install-command-linux": { install_method: "npm", placement: "docs" },
   "docs-install-command-windows": { install_method: "npm", placement: "docs" },
@@ -455,6 +454,8 @@ export function posthogConfig(before_send: (capture: Capture | null) => Capture 
     autocapture: false,
     capture_pageview: true,
     capture_pageleave: true,
+    // Consent is checked for every event; do not retain a queue after a changed choice.
+    request_batching: false,
     // The slim core cannot load the web-vitals extension; the entry sends
     // $web_vitals itself (see webVitalsProperties).
     capture_performance: false,

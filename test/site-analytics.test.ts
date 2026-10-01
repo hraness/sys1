@@ -49,10 +49,10 @@ test("every page loads the local analytics bundle and no remote script", () => {
   }
 });
 
-test("CSP allows only the PostHog ingest host beyond self", () => {
+test("CSP allows the PostHog ingest host and Accounts consent policy", () => {
   const policy: string = JSON.parse(read("vercel.json")).headers.flatMap((entry: { headers: { key: string; value: string }[] }) => entry.headers)
     .find((header: { key: string }) => header.key === "Content-Security-Policy").value;
-  expect(policy.match(/(?:^|;\s*)connect-src ([^;]+)/u)?.[1]).toBe(POSTHOG_API_HOST);
+  expect(policy.match(/(?:^|;\s*)connect-src ([^;]+)/u)?.[1]?.split(" ").sort()).toEqual([POSTHOG_API_HOST, "https://account.hraness.com"].sort());
   expect(policy.match(/(?:^|;\s*)script-src ([^;]+)/u)?.[1]).toBe("'self'");
 });
 
@@ -134,8 +134,8 @@ test("posthog-js request bodies keep web analytics properties and drop personal 
   const byEvent = Object.fromEntries(bodies.map((body) => [body.event, body.properties]));
   expect(byEvent["$web_vitals"]).toMatchObject({ $web_vitals_LCP_value: 1200, $web_vitals_CLS_value: 0.02 });
   expect(byEvent["$exception"]).toMatchObject({ error_surface: "client", error_origin: "window_error", error_fingerprint: expect.stringMatching(/^e_[0-9a-f]{8}$/u) });
-  expect(byEvent["cta clicked"]).toMatchObject({ cta: "install_sys1", placement: "hero" });
-  expect(byEvent["install command copied"]).toMatchObject({ install_method: "npm", placement: "inline" });
+  expect(byEvent["cta clicked"]).toMatchObject({ cta: "install_sys1", placement: "nav" });
+  expect(byEvent["install command copied"]).toMatchObject({ install_method: "npm", placement: "hero" });
 });
 
 test("a 404 render sends page not found with the requested path and referrer host", () => {

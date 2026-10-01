@@ -10,7 +10,7 @@
 .docs-sidebar-title { color: var(--foreground); font-size: .82rem; font-weight: 600; margin: 0 0 .8rem; }
 .docs-nav { display: grid; gap: .65rem; }
 .docs-nav a, .docs-related { color: var(--muted); font-size: .82rem; text-decoration: none; }
-.docs-nav a:hover, .docs-nav a:focus-visible, .docs-related:hover, .docs-related:focus-visible { color: var(--foreground); text-decoration: underline; }
+.docs-nav a:hover, .docs-nav a:focus-visible, .docs-related:hover, .docs-related:focus-visible { color: var(--foreground); text-decoration: underline dotted; }
 .docs-related { display: block; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--grid); }
 .docs-content { min-width: 0; }
 .docs-section { padding-block: var(--sys1-reference-space); scroll-margin-top: 5rem; }
@@ -30,7 +30,7 @@
 .docs-mode { padding: 0 1.5rem 0 0; border-right: 1px solid var(--grid); }
 .docs-mode:last-child { border-right: 0; padding-right: 0; }
 .docs-mode a, .docs-links a { display: inline-block; margin-top: .8rem; font-size: .84rem; text-decoration: none; }
-.docs-mode a:hover, .docs-links a:hover { text-decoration: underline; }
+.docs-mode a:hover, .docs-links a:hover { text-decoration: underline dotted; }
 .docs-code-block { margin-top: 2.5rem; border: 1px solid var(--line); border-radius: .875rem; overflow: hidden; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-ink); }
 .docs-code-heading { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; color: var(--hraness-marketing-terminal-muted); background: var(--hraness-marketing-terminal-chrome); font-size: .78rem; }
 .docs-code-block pre { padding: 1.35rem; color: var(--hraness-marketing-terminal-command); font-size: .875rem; line-height: 1.8; }
