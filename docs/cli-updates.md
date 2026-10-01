@@ -1,7 +1,7 @@
 # Update Sys1
 
-Automatic updates require Sys1 0.19.0 or newer. After that release is
-published, upgrade an older installation once through its package manager.
+Automatic updates require Sys1 0.19.0 or newer. Upgrade an older installation
+once through its package manager to enable them.
 
 Supported Bun and npm global installations on macOS and Linux check for a
 newer release at most once a day before a command starts. Automatic updates are

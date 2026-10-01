@@ -248,3 +248,9 @@ only when readers need it to interpret a result.
 
 Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
 and converged browser acceptance remain with the integration owner.
+
+## Evergreen editorial cleanup — October 1, 2026
+
+Keep one command-reference link after installation. Adjacent links to the same destination add no navigation value. Existing evidence, installation requirements, and optional model-assisted workflow limits remain intact.
+
+Independent editorial review: Codex AI agent `/root/ghostget_editorial`. This is a bounded copy review, not a new model study or human review. Final aggregate and rendered verification belong to the integration owner.

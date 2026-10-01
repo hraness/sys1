@@ -197,3 +197,7 @@ add useful information for interpreting the result.
 
 Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
 and converged browser acceptance remain with the integration owner.
+
+## Evidence navigation repair — October 1, 2026
+
+The evaluations page links workflow screening directly to its recorded study and sends application integration readers to the current docs integration section. Preserve historical measurements, sources, dates, and limitations. This is a navigation repair, not a new model review. Independent reviewer: Codex AI agent `/root/ghostget_editorial`.
