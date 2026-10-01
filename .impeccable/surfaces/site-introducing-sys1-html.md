@@ -54,3 +54,9 @@ only when readers need it to interpret a result.
 
 Draft/source pass: Codex agent /root/portfolio_audit. Independent source review
 and converged browser acceptance remain with the integration owner.
+
+## Evergreen editorial cleanup — October 1, 2026
+
+Keep the Hraness byline and accurate article metadata. Omit visible publication dates and the old release-at-publication badge; installation links lead to the current release. Name the recorded Codex AI reviewers in the disclosure. Historical study dates and negative outcomes remain beside their measurements.
+
+Independent editorial review: Codex AI agent `/root/ghostget_editorial`. This is a bounded copy review, not a new model study or human review. Final aggregate and rendered verification belong to the integration owner.

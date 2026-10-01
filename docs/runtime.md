@@ -164,7 +164,7 @@ sys1 jev status
 `hosted.enabled: true`, and sets routing to `hosted-only`. The key remains in the
 environment; Sys1 never writes it to its config or prints it. Avoid putting
 the key in source files or shell history. Restart a gateway that was
-started before the key was exported. To return to local-only operation:
+started before the key was exported. To disable hosted Jev:
 
 ```sh
 sys1 jev disable
@@ -514,6 +514,9 @@ sys1 backend list|add|check|remove
 sys1 config path|get|set|unset
 sys1 --version|--help
 ```
+
+See [saved checks and review workflows](workflows.md) for `sys1 workflow`
+commands and the [update guide](cli-updates.md) for `sys1 update`.
 
 Supporting commands accept `--json`. When an agent runs sys1 (Claude Code,
 Codex, Cursor, Gemini CLI, or `AI_AGENT` is set), JSON is the default;
