@@ -234,6 +234,10 @@ publishing an immutable GitHub Release. Release notes come from
 [CHANGELOG.md](CHANGELOG.md). The optional npm mirror publishes that same
 tarball after the package’s one-time registry setup.
 
+When a pull request that bumps the `package.json` version merges and Check
+passes on `main`, the tag is created automatically. Pushing the tag by hand
+still works.
+
 ## Development
 
 ```sh
