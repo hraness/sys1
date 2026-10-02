@@ -168,6 +168,9 @@
   repository release immutability, and npm publication of only the released
   tarball through trusted publishing. Never add an npm token.
   Write the version's `CHANGELOG.md` section in the version bump pull request.
+  `.github/workflows/auto-tag.yml` creates that tag through the
+  `hraness-release-tagger` App once `Check` passes on the merged bump; a
+  manually pushed tag still works.
 - Keep the public repository independently buildable. No sibling checkouts,
   private packages, internal project names, or unpublished provenance.
 
