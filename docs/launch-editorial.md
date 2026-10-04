@@ -163,7 +163,7 @@ The architecture figure follows an agent's chosen Git evidence and repository ru
 
 The trial chart gives each workflow 16 submitted examples. Jev has 16, 13, and 16 label matches; evidence relevance also has three errors. Baseline matches are 16, six, and six. Baseline misses and model errors use different shapes and labels. The chart does not use probability outputs as accuracy, hide errors from the denominator, imply real-repository coverage, or transfer its findings to the installed review skill. The literal-match claim baseline is identified as weak.
 
-The optional 52-second film is user-started, has captions and a prose transcript, and loads no video body until playback is requested. Its poster and captions are provided by the film owner. The article remains complete without playback or JavaScript.
+The optional 34-second film is user-started, has captions and a prose transcript, and loads no video body until playback is requested. Its poster and captions are provided by the film owner. The article remains complete without playback or JavaScript.
 
 ## Validation and release review
 
@@ -178,7 +178,7 @@ The optional 52-second film is user-started, has captions and a prose transcript
 - **Sources:** every number comes from `scripts/launch/facts.ts`, which names its source file; `test/launch-facts.test.ts` pins each value to that file. The status is `Latest release: v<package version>` and follows `scripts/sync-public-release.ts`.
 - **Illustrations:** built from `@hraness/design-kit/mockups` (neutral agent, terminal and browser chrome), labelled "Illustration" in captions and accessible descriptions, with made-up repositories and accounts (`orders-api`, `jmoreno`, `code.example`). No vendor chrome or marks.
 - **Limits beat:** reports the proof roadmap's whole-task results without softening: the review skill was never called when optional, and directed use cost more tokens and time with 22 of 32 correct against 29 of 32.
-- **Film:** the existing 52-second film is kept. A 1:1 cut (`site/media/sys1-launch-square.mp4`) was rendered from `media/sys1-launch/cuts.json` for feeds. No native portrait film: the slides are landscape compositions, and a letterboxed 9:16 would not read on a phone.
+- **Film:** replaced on 2026-10-04 by the 34-second story film in `media/story` (dark palette, foil header mark, ask-your-agent end card), with its 1:1 cut (`site/media/sys1-launch-square.mp4`) from the same engine. The earlier 52-second film's sources stay in `media/sys1-launch` for its record.
 - **Admission:** unchanged at 11/12; the page stays indexed. The addendum adds a scannable summary of claims the admitted article already makes, plus the scorecard from the dated roadmap.
 - **Review:** AI-drafted by a Claude Code agent from source; independent agent review happens on the pull request. No human review is claimed.
 
