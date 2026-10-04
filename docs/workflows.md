@@ -95,6 +95,21 @@ again when resuming. The selected review and its limits come from the saved run.
 A saved check is historical evidence. Run fresh required checks before merging,
 releasing, or deploying, even when the saved run still matches your files.
 
+## Troubleshoot a saved run
+
+| Result | Next action |
+| --- | --- |
+| `failed` or `incomplete` | Run `sys1 workflow show <id>`, inspect its private log, fix the failure, and start a new run. A failed check does not proceed to review. |
+| `stale` | Start a new workflow with the current command and review selection. The saved check has expired or its inputs changed. |
+| `uncertain` | Inspect the command's effects and log before starting a new run. Resume does not repeat a step whose outcome is unknown. |
+| `Inputs changed during the check` | Finish the command's generated-file changes, then start a fresh workflow. The saved observation cannot be reused. |
+
+If a check times out, set `--timeout-ms` before `--`; the default is `300000`
+and the maximum is `900000`. For a longer required check, run it through your
+repository's normal validation process rather than treating a timed-out saved
+run as a pass. `sys1 workflow verify <id>` verifies the saved record, not the
+current code or the correctness of the check.
+
 ## Inspect saved data
 
 `sys1 workflow show <id>` displays the check, review status, and log location.
