@@ -37,13 +37,14 @@ test("every sitemap URL is an indexable page whose canonical, og:url, and titles
 test("every indexable page uses its shared-template social card", () => {
   expect(socialPages.map(page => page.url).sort()).toEqual([...sitemap].sort());
   expect(socialSite.name).toBe("Sys1");
+  expect(socialSite.brand).toBe(socialSite.name);
   expect(socialSite.domain).toBe("sys1.io");
   // The card header matches the site header: its foil mark, name, and palette.
   const home = read("index.html");
   expect(socialSite.brandMark).toBe(`data:image/svg+xml;base64,${readFileSync(new URL("marks/sys1.svg", site)).toString("base64")}`);
   expect(home).toContain('src="/marks/sys1.svg"');
   expect(home).toContain(`data-palette="${socialSite.palette}"`);
-  expect(home).toContain(`<span class="brand-name">${socialSite.brand?.replace(".io", "<span>.io</span>")}</span>`);
+  expect(home).toContain(`<span class="brand-name">${socialSite.name}</span>`);
   expect(socialSite.icon).toBeUndefined();
   // The home card carries the hero: its headline over the start of its summary.
   expect(home).toContain(`<h1 id="hero-heading">${homeCopy.headline}</h1>`);

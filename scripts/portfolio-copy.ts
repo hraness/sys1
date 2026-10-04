@@ -3,9 +3,8 @@ export function renderPortfolioCopy(source: string, snapshot: { canonicalUrl?: s
   const copy = snapshot.messaging;
   const words = copy.hero.heading.split(" ");
   const fields: Readonly<Record<string, string | undefined>> = {
-    NAME: copy.names.name, SITE_NAME: websiteName, SITE_NAME_LOWER: websiteName.toLowerCase(), SITE_PRIMARY_ACTION: siteSnapshot.messaging.hero?.primaryAction, TITLE: `${copy.names.name} · ${copy.tagline}`, SOCIAL_ALT: socialAlt,
+    NAME: copy.names.name, SITE_NAME: websiteName, SITE_PRIMARY_ACTION: siteSnapshot.messaging.hero?.primaryAction, TITLE: `${copy.names.name} · ${copy.tagline}`, SOCIAL_ALT: socialAlt,
     META: copy.meta, SHORT: copy.short, TAGLINE: copy.tagline, CATEGORY: copy.category,
-    NAME_LOWER: copy.names.name.toLowerCase(),
     HERO_HEADING: copy.hero.heading, HERO_SUMMARY: copy.hero.summary,
     HERO_START: words.slice(0, -3).join(" "), HERO_END: words.slice(-3).join(" "),
     PRIMARY_ACTION: copy.hero.primaryAction, SECONDARY_ACTION: copy.hero.secondaryAction,
