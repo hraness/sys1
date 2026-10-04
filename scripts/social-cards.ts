@@ -32,7 +32,7 @@ export const socialSite = defineSocialImageSite({
   keepTogether: ["System One"],
   // The header's foil mark, product name as the nav shows it, and the
   // Design Kit palette from <html data-palette>.
-  brand: "sys1.io",
+  brand: primary.messaging.names.name,
   brandMark: `data:image/svg+xml;base64,${mark.toString("base64")}`,
   palette: "tokyo-night",
 });
