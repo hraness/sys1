@@ -3,6 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 import { chromium } from "playwright-core";
 import { closeSiteBrowser, siteBrowserLaunchPlan } from "./site-browser-policy.ts";
+import { launchMedia } from "../media/sys1-launch/site-media.ts";
 import { checkLaunchMedia } from "./sync-launch-media.ts";
 import { verifyOwnedChromium } from "./owned-browser.mjs";
 
@@ -124,7 +125,7 @@ try {
         });
         assert.equal(media.width, 1920);
         assert.equal(media.height, 1080);
-        assert.ok(Math.abs(media.duration - 52) < 0.5, "Film duration differs from published metadata");
+        assert.ok(Math.abs(media.duration - launchMedia.video.durationSeconds) < 0.5, "Film duration differs from published metadata");
         assert.equal(media.error, undefined);
       }
       await page.getByRole("button", { name: /^Appearance:/u }).click();

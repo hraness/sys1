@@ -1,87 +1,12 @@
 {
   "schemaVersion": 1,
-  "draftedBy": "Codex launch-film agent",
+  "draftedBy": "Devin launch-film agent (story-film engine), 2026-10-04",
   "reviews": [
     {
-      "reviewer": "Codex integration agent",
-      "kind": "AI agent review",
-      "scope": "Storyboard, factual scope, status qualifications, pacing plan, and final-card hold",
-      "result": "Approved with request to verify the completion verdict's native term. Native contradicted verdict confirmed in src/verify/verify.ts."
-    },
-    {
-      "reviewer": "Codex launch-docs agent",
-      "kind": "AI agent review",
-      "scope": "Scene source, captions, and transcript against current product source",
-      "result": "Approved after corrections: supported session transcript identified; profiles reduced to names/status. Caption review measured 100\u2013160 words/minute across eight contiguous cues covering 52 seconds. Review covers source, claims, and pacing only, not rendered pixels or audio.",
-      "sha256": {
-        "media/sys1-launch/storyboard.md": "2611730a9a33767ffe9cf56fb985b60f5324cb43c5a3bd09a9e5df417f54323f",
-        "media/sys1-launch/scene.template.html": "1047ada79fda459e05f72d5490b7f2fa8845edae95c479e84adebf04a7d9e29f",
-        "site/media/sys1-launch.vtt": "eed082294c8e6a4e4272afa46b8fc0d8d46ed0abedc28ef63e7c2379c11258c8",
-        "site/media/sys1-launch-transcript.txt": "69d47c4a903f43f56bb9fb53002b0497073826a11aa64c0a32191577c81fb283"
-      }
-    },
-    {
-      "reviewer": "Codex integration agent",
-      "kind": "AI agent visual review",
-      "scope": "Eight-frame Slopcamera preview contact sheet",
-      "result": "Approved clear hierarchy, readable diagrams, coherent light/dark scenes, and no clipping or missing type. Native 4K master authorized."
-    },
-    {
-      "reviewer": "Codex integration agent",
-      "kind": "AI agent visual review",
-      "scope": "Final 1200x630 social JPEG",
-      "result": "Approved full title, tagline, URL, mark, and safe margins.",
-      "sha256": "2af57ae2e4356d8170209e418a084e7dc00acea9f2e50d7762898669e8aec4e2"
-    },
-    {
-      "reviewer": "Codex launch-film agent",
-      "kind": "AI agent visual review",
-      "scope": "32 temporal samples from the final 1080p video, including first/last, each scene entrance, boundary, and settled state",
-      "result": "Approved readable settled states, coherent staged reveals, aligned diagrams, complete final-card hold, and no clipping or missing fonts. Start-frame mark reveal and brief transition wipes are intentional.",
-      "frameNumbers": [
-        0,
-        12,
-        72,
-        143,
-        144,
-        156,
-        240,
-        287,
-        288,
-        303,
-        408,
-        479,
-        480,
-        495,
-        600,
-        671,
-        672,
-        687,
-        792,
-        839,
-        840,
-        855,
-        960,
-        1007,
-        1008,
-        1023,
-        1080,
-        1103,
-        1104,
-        1112,
-        1200,
-        1247
-      ]
-    },
-    {
-      "reviewer": "Codex integration agent",
-      "kind": "Independent AI agent visual review",
-      "scope": "32 final-video temporal samples, including first/last frame, staged entrances, boundaries and settled states",
-      "result": "Approved readable settled states, staged reveals, consistent diagrams and final hold. First-frame brand fade and boundary wipes are intentional.",
-      "sha256": {
-        "site/media/sys1-launch.mp4": "638570d71ff06a9c1609256428e003bf31af10f0d31d11da90f4838ae5dc9438"
-      },
-      "reviewSheetSha256": "ac6b66632c8b59b45ac744a0f5158d8fdec2ffdccb83ddae1a3dd954b78f9b25"
+      "reviewer": "Devin launch-film agent",
+      "kind": "AI agent self-review, not independent",
+      "scope": "Contact sheets of every act at 16:9, a transition check of the terminal act, and delivered MP4 frames",
+      "result": "Approved after fixing wrapped terminal lines; claim names and verdicts match src/verify/verify.ts; numbers from scripts/launch/facts.ts"
     }
   ]
 }

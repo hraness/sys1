@@ -11,7 +11,7 @@ Limit: 280 characters a post.
 ### 1 of 8
 
 ```text
-Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Select a change or a message, inspect the result, and decide what needs attention.
+A coding agent's "done" can claim more than it did. Sys1 checks completion claims against Git, pull requests and live pages, and reviews code against your rules. You decide what needs attention.
 ```
 
 ### 2 of 8
@@ -53,7 +53,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
+Sys1 is open source under MIT. Ask your agent to install Sys1 from sys1.io, then add a project skill. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
 
 https://sys1.io/introducing-sys1
 ```
@@ -65,7 +65,7 @@ Limit: 300 characters a post.
 ### 1 of 8
 
 ```text
-Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Select a change or a message, inspect the result, and decide what needs attention.
+A coding agent's "done" can claim more than it did. Sys1 checks completion claims against Git, pull requests and live pages, and reviews code against your rules. You decide what needs attention.
 ```
 
 ### 2 of 8
@@ -107,7 +107,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
+Sys1 is open source under MIT. Ask your agent to install Sys1 from sys1.io, then add a project skill. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
 
 https://sys1.io/introducing-sys1
 ```
@@ -119,7 +119,7 @@ Limit: 500 characters a post.
 ### 1 of 8
 
 ```text
-Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Select a change or a message, inspect the result, and decide what needs attention.
+A coding agent's "done" can claim more than it did. Sys1 checks completion claims against Git, pull requests and live pages, and reviews code against your rules. You decide what needs attention.
 ```
 
 ### 2 of 8
@@ -161,7 +161,7 @@ Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps tha
 ### 8 of 8
 
 ```text
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
+Sys1 is open source under MIT. Ask your agent to install Sys1 from sys1.io, then add a project skill. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
 
 https://sys1.io/introducing-sys1
 ```
@@ -169,7 +169,7 @@ https://sys1.io/introducing-sys1
 ## LinkedIn
 
 ```text
-Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Select a change or a message, inspect the result, and decide what needs attention.
+A coding agent's "done" can claim more than it did. Sys1 checks completion claims against Git, pull requests and live pages, and reviews code against your rules. You decide what needs attention.
 
 The separate system-one-verify skill returns a check's exit status and a short excerpt, keeping the full log on disk. Across 563 recorded outputs, replay returned 35% less text. It needs no model.
 
@@ -183,7 +183,7 @@ Sys1 installs project skills for Codex, Claude Code, and Devin. Other agents can
 
 Record each review finding as useful, incorrect, or unverifiable. Sys1 keeps that feedback locally, suppresses repeated findings, and reuses a recent unchanged review without another model call.
 
-Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
+Sys1 is open source under MIT. Ask your agent to install Sys1 from sys1.io, then add a project skill. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
 
 https://sys1.io/introducing-sys1
 ```
@@ -202,18 +202,18 @@ Sys1 helps coding agents read compact check output and add advisory code review 
 Write the Show HN post and first comment yourself; use only these facts.
 
 - Shorten test logs and add checks for your coding agent
-- Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model. Select a change or a message, inspect the result, and decide what needs attention.
+- A coding agent's "done" can claim more than it did. Sys1 checks completion claims against Git, pull requests and live pages, and reviews code against your rules. You decide what needs attention.
 - The separate system-one-verify skill returns a check's exit status and a short excerpt, keeping the full log on disk. Across 563 recorded outputs, replay returned 35% less text. It needs no model.
 - Use sys1 review to check selected changes against repository rules, such as keeping test assertions or handling errors. Each advisory finding names the rule and source location for your agent to investigate.
 - Use sys1 verify to compare a proposed completion message with Git, linked pull requests, and live pages. It reports agreement, contradictions, and unavailable evidence. Inspect the advisory result before relying on the claim.
 - Sys1's API returns yes/no, choice, and score answers with probabilities. Use TypeSafe's hosted Jev, an experimental local model, or a compatible server you configure. Sys1 checks each answer against the question asked.
 - Sys1 installs project skills for Codex, Claude Code, and Devin. Other agents can use the CLI. The bundled review rules cover JavaScript and TypeScript; add repository rules for other languages and conventions.
-- Sys1 is open source under MIT. Install from GitHub with Bun, then add a project skill for your agent. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
+- Sys1 is open source under MIT. Ask your agent to install Sys1 from sys1.io, then add a project skill. Setup writes instructions without calling a model. Hosted Jev requires your key and explicit activation. Latest release: v0.19.1.
 - Latest release: v0.19.1. https://sys1.io/introducing-sys1
 
 ## Media
 
-- Landscape film (52 s, captions): https://sys1.io/media/sys1-launch.mp4
+- Landscape film (34 s, captions): https://sys1.io/media/sys1-launch.mp4
 - Square cut for feeds: https://sys1.io/media/sys1-launch-square.mp4
 - Captions: https://sys1.io/media/sys1-launch.vtt
 
