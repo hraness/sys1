@@ -52,8 +52,10 @@ sys1 workflow check -- bun test
 sys1 workflow list
 ```
 
-Sys1 saves the result and command output locally. This check needs no model or
-API key. After configuring a backend, `sys1 workflow review` can run the check
+The result prints a workflow ID, the check's status and exit code, and a
+`Private check log` path. Use `sys1 workflow show <id>` with that ID to inspect
+the saved result without repeating the command. Child output stays in the log,
+not in the workflow report. This check needs no model or API key. After configuring a backend, `sys1 workflow review` can run the check
 and then review the selected changes. You can pause after the check and resume
 with the same inputs; uncertain interrupted steps are never silently repeated.
 ALGAL handles execution and saved state inside Sys1.
