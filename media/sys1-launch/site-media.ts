@@ -36,16 +36,16 @@ export const launchMedia: LaunchMedia = {
   poster: {
     src: "/media/sys1-launch-poster.jpg", contentType: "image/jpeg", width: 1920, height: 1080,
     alt: "Introducing Sys1: review changes and check completion claims, with the Sys1 mark and sys1.io.",
-    bytes: 88241, sha256: "958494b0fbc4cd0c6b4285f65422d3cb6872362c9641c764ef3e35d6d44f8c7c",
+    bytes: 55234, sha256: "8dc70cfbe0f090fb86d83baf557f8eac856b81e571e0f1c1cecd29a3935cbd48",
   },
   social: {
     src: "/media/sys1-launch-share.jpg", contentType: "image/jpeg", width: 1200, height: 630,
     alt: "Introducing Sys1: review changes and check completion claims, with the Sys1 mark and sys1.io.",
-    bytes: 46904, sha256: "2af57ae2e4356d8170209e418a084e7dc00acea9f2e50d7762898669e8aec4e2",
+    bytes: 30462, sha256: "c325d57e52c612d856477e1ca66044f663607690c43b4f0bd29ee6b9336c4db7",
   },
   video: {
     src: "/media/sys1-launch.mp4", contentType: "video/mp4", width: 1920, height: 1080,
-    durationSeconds: 52, bytes: 3132193, sha256: "638570d71ff06a9c1609256428e003bf31af10f0d31d11da90f4838ae5dc9438",
+    durationSeconds: 52, bytes: 3127866, sha256: "1db13169747b1603651e713e7e77b2f40660445b1a88032f9184ad84e57e73e3",
   },
   captions: { src: "/media/sys1-launch.vtt", contentType: "text/vtt", bytes: 1008, sha256: "eed082294c8e6a4e4272afa46b8fc0d8d46ed0abedc28ef63e7c2379c11258c8" },
   transcript: { src: "/media/sys1-launch-transcript.txt", contentType: "text/plain", bytes: 2127, sha256: "69d47c4a903f43f56bb9fb53002b0497073826a11aa64c0a32191577c81fb283" },

@@ -5,23 +5,23 @@
   "assets": {
     "video": {
       "path": "site/media/sys1-launch.mp4",
-      "bytes": 3132193,
-      "sha256": "638570d71ff06a9c1609256428e003bf31af10f0d31d11da90f4838ae5dc9438",
+      "bytes": 3127866,
+      "sha256": "1db13169747b1603651e713e7e77b2f40660445b1a88032f9184ad84e57e73e3",
       "width": 1920,
       "height": 1080,
       "durationSeconds": 52
     },
     "poster": {
       "path": "site/media/sys1-launch-poster.jpg",
-      "bytes": 88241,
-      "sha256": "958494b0fbc4cd0c6b4285f65422d3cb6872362c9641c764ef3e35d6d44f8c7c",
+      "bytes": 55234,
+      "sha256": "8dc70cfbe0f090fb86d83baf557f8eac856b81e571e0f1c1cecd29a3935cbd48",
       "width": 1920,
       "height": 1080
     },
     "social": {
       "path": "site/media/sys1-launch-share.jpg",
-      "bytes": 46904,
-      "sha256": "2af57ae2e4356d8170209e418a084e7dc00acea9f2e50d7762898669e8aec4e2",
+      "bytes": 30462,
+      "sha256": "c325d57e52c612d856477e1ca66044f663607690c43b4f0bd29ee6b9336c4db7",
       "width": 1200,
       "height": 630
     },
@@ -37,16 +37,16 @@
     }
   },
   "toolchain": {
-    "slopcamera": "3.4.0",
-    "ffmpeg": "7.1.5",
-    "python": "3.14.6",
-    "numpy": "2.5.3"
+    "slopcamera": "3.9.1",
+    "ffmpeg": "7.1.1",
+    "python": "3.13",
+    "numpy": "2.2.5"
   },
   "authoredSources": [
     {
       "path": "media/sys1-launch/scene.template.html",
-      "bytes": 9350,
-      "sha256": "1047ada79fda459e05f72d5490b7f2fa8845edae95c479e84adebf04a7d9e29f"
+      "bytes": 9315,
+      "sha256": "03068326e4a3525bb7232a48a9123f78618d1e8b6a2560dcf3f539c0ff9fb3fe"
     },
     {
       "path": "media/sys1-launch/build-source.py",
@@ -74,24 +74,24 @@
       "sha256": "2611730a9a33767ffe9cf56fb985b60f5324cb43c5a3bd09a9e5df417f54323f"
     }
   ],
-  "renderedDocumentSha256": "56e3f2a4c9fa8ffdb8150814af65e135c6b53762075272173f3ab18bca32aafb",
+  "renderedDocumentSha256": "488ef16eeab18419b00b663521372c008419c9674e0740f5c152350985c7a072",
   "nativeMaster": {
     "width": 3840,
     "height": 2160,
     "fps": 24,
     "frameCount": 1248,
     "durationSeconds": 52,
-    "bytes": 5058573,
-    "sha256": "3addfff7fdda1e482ed7c60dfe090249960cd5175e222a1b9f5871127ffd07f7",
-    "slopcameraReceiptSha256": "4042c41adbccf407b340982f940e0e4537406cae1fd94510be2390528ae260cf",
-    "projectId": "project_html_4e6b6e42dc704e41b8116b6fb7a85042"
+    "bytes": 5045733,
+    "sha256": "71b941399a17fb50a2d693d275773116efc56050860891fddc51ed5a1f9675c5",
+    "slopcameraReceiptSha256": "759681132cd80c383892a36c9c82fefc000abcdd1c2da838b651a622739e0fe1",
+    "projectId": "project_html_3028c9f1a07c4cb3a8acdee50386f354"
   },
   "preview": {
     "width": 1920,
     "height": 1080,
     "frameCount": 8,
-    "sha256": "3151938c19ed37a57e35fe71869902ef6299987957bdfe8290834fec2a62334b",
-    "slopcameraReceiptSha256": "bed270df712994831df6036908ee38040e05b7a6a46ee1bf2e92171939bdd7db",
+    "sha256": "36174620fae9b34d637432f40517a4d0c4d633b8a136c988743cc9f1648f9763",
+    "slopcameraReceiptSha256": "8efccce7327003dde278956b19f30431bb657c4b775c57fa4b11ffc28f8f0f19",
     "sourceTimesSeconds": [
       3,
       10,
@@ -105,8 +105,8 @@
   },
   "derivatives": {
     "video": "Lanczos scale to 1920x1080; libx264 slow CRF 22, yuv420p; original master AAC copied; faststart MP4.",
-    "poster": "Final reviewed native 1080p preview frame, JPEG quality 2.",
-    "social": "Final reviewed native 1080p preview frame; crop 1920x1008 at y=36; Lanczos scale to 1200x630; JPEG quality 2."
+    "poster": "Final native 4K master frame scaled to 1920x1080 with Lanczos, JPEG quality 3.",
+    "social": "Final poster frame scaled to 1200x675 and centre-cropped to 1200x630, JPEG quality 85."
   },
   "validation": {
     "fullVideoAndAudioDecode": "Passed with no FFmpeg error output.",
@@ -143,5 +143,11 @@
     "motion": "Original code-native motion under the repository MIT license.",
     "music": "Original deterministic oscillator score; no samples or third-party music.",
     "font": "Existing Nebula Sans assets in site/vendor/nebula-sans/ with included SIL Open Font License and provenance."
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-04",
+      "change": "Removed the studio name from the opening and closing cards; the Sys1 mark remains. Re-rendered master, cuts and all derivatives."
+    }
+  ]
 }
