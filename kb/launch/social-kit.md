@@ -213,7 +213,7 @@ Write the Show HN post and first comment yourself; use only these facts.
 
 ## Media
 
-- Landscape film (52 s, captions): https://sys1.io/media/sys1-launch.mp4
+- Landscape film (34 s, captions): https://sys1.io/media/sys1-launch.mp4
 - Square cut for feeds: https://sys1.io/media/sys1-launch-square.mp4
 - Captions: https://sys1.io/media/sys1-launch.vtt
 
