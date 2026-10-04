@@ -48,7 +48,7 @@ for (const key of ["poster", "social", "video", "captions", "transcript"] as con
 ts = ts.replace(/durationSeconds: \d+,/u, `durationSeconds: ${seconds},`)
   .replace(/  published: "[^"]+",/u, `  published: "${created}",`)
   .replace(/  description: "[^"]+",/u, `  description: "A ${seconds}-second introduction to Sys1: a coding agent's completion claim, each claim checked against Git, pull requests and live pages, the compact-output skill, and how to ask your agent to install Sys1. English captions and a visual transcript accompany the film.",`)
-  .replace(/  credit: "[^"]+",/u, `  credit: "Original motion graphics, rendered for Sys1 with the Hraness story-film engine.",`)
+  .replace(/  credit: "[^"]+",/u, `  credit: "Original motion graphics, rendered for Sys1.",`)
   .replace(/reviewedBy: "[^"]+"/u, `reviewedBy: "Devin launch-film agent: contact-sheet review of every act and the delivered frames; not an independent review. Scope in receipts/review.json"`);
 writeFileSync(mediaFile, ts);
 console.log(JSON.stringify({ seconds, created, video: assets.video.bytes }));

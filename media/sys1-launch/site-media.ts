@@ -28,7 +28,7 @@ export const launchMedia: LaunchMedia = {
   name: "Introducing Sys1",
   description: "A 34-second introduction to Sys1: a coding agent's completion claim, each claim checked against Git, pull requests and live pages, the compact-output skill, and how to ask your agent to install Sys1. English captions and a visual transcript accompany the film.",
   published: "2026-10-04T16:50:18Z",
-  credit: "Original motion graphics, rendered for Sys1 with the Hraness story-film engine.",
+  credit: "Original motion graphics, rendered for Sys1.",
   pages: [
     { file: "site/index.html", url: "https://sys1.io/", article: false },
     { file: "site/introducing-sys1.html", url: "https://sys1.io/introducing-sys1", article: true },
