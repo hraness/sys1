@@ -34,9 +34,11 @@ below directly.
 Run verify inside the Git worktree the agent changed. Choose an enabled
 backend/model route. For hosted Jev, provide `TYPESAFE_API_KEY` in your
 environment and run `sys1 jev enable`; the selected backend receives the
-message excerpt and, for a live-page claim, the fetched page excerpt. To use
-an installed local model, start `sys1 up`, select its `local-<id>/<id>` route,
-and add `--gateway`.
+message excerpt and, for a live-page claim, the fetched page excerpt. The part
+of a route before the slash may use only lowercase letters, digits, and
+hyphens, so verify rejects the bundled local Qwen routes such as
+`local-qwen3-1.7b/qwen3-1.7b`. A route to a server registered with
+`sys1 backend add` is accepted with or without `--gateway`.
 
 Save the proposed final message to a text file outside the Git worktree,
 then preview the check. These examples use `/tmp/final-message.txt`; choose

@@ -131,7 +131,7 @@ Send a decision:
 ```sh
 sys1 eval <<'EOF'
 {
-  "state": "Help! My payouts have been failing for 3 days.",
+  "state": "My payouts have been failing for 3 days.",
   "questions": {
     "urgent": {
       "type": "noul",
@@ -218,9 +218,9 @@ Current provider limits and prices are in [TypeSafe's model reference](https://d
 
 `sys1 setup` and `sys1 pull` manage model artifacts under
 `~/.sys1/models` (or `$SYS1_HOME/models`). Downloads stream to a temporary
-file, enforce an 8 GiB ceiling, verify SHA-256, run bounded GGUF structural
-validation, and only then atomically enter the model store. Manifest filenames
-cannot escape the store, symbolic-link weights are not admitted, and the daemon
+file, enforce an 8 GiB ceiling, verify SHA-256, run GGUF structural
+validation within fixed read limits, and only then atomically enter the model store. Manifest filenames
+cannot escape the store, symbolic-link weights are rejected, and the daemon
 never downloads weights implicitly.
 
 ```sh
@@ -254,7 +254,7 @@ current GGUF store.
 
 ### Generic GGUF adapter
 
-For builtin GGUF models, Sys1 renders a bounded question prompt, evaluates
+For builtin GGUF models, Sys1 renders a length-limited question prompt, evaluates
 the full first-token vocabulary distribution with llama.cpp, and sums
 probability mass over constrained answer labels. Choice and score use unique
 one-character labels to avoid ambiguous multi-token option names. Builtin
@@ -279,8 +279,8 @@ Adapter quality signals stay outside those answer objects:
 allowed labels, and `x-sys1-local-min-concentration` is the least
 distribution concentration in the batch. Low coverage means the model did not
 cleanly follow the decision instruction. These are useful local signals, not
-a calibration guarantee. Use hosted Jev or a task-qualified System One-specific
-backend when its behavior has been evaluated for your task.
+a calibration guarantee. Use hosted Jev, or a System One-specific backend
+whose behavior has been evaluated for your task.
 
 An unlisted public Hugging Face GGUF can be installed explicitly:
 
@@ -387,17 +387,17 @@ sys1 backend add \
   --model openjev-latest
 ```
 
-Before routing agents to an operator backend, qualify its discovery, limits,
+Before routing agents to an operator backend, check its discovery, limits,
 and all three answer shapes:
 
 ```sh
 sys1 backend check --name openjev
 ```
 
-Select it in a request with `"model": "openjev/openjev-latest"`. Registration
-and qualification do not add an HTTP service to automatic routing.
+Select it in a request with `"model": "openjev/openjev-latest"`. Registering
+and checking a service do not add it to automatic routing.
 
-The check makes bounded calls to `/v1/models`, `/v1/limits`, and
+The check makes a limited number of calls to `/v1/models`, `/v1/limits`, and
 `/v1/systemone`; validates the official response schema, probability
 normalization, and Score arithmetic; and never prints or persists request or
 response bodies. Backends that do not publish limits receive a warning unless
@@ -548,17 +548,17 @@ context, timeout, or residency settings. Environment variables are inherited whe
 the daemon starts, so restart it after exporting a new Jev credential. Already
 loaded GGUFs stay resident up to `local.max_loaded_models` (default one) and are
 released on eviction or daemon shutdown. Local requests are serialized
-to keep context state isolated and residency bounded. GGUF inference lives in
+to keep context state isolated and the number of loaded models limited. GGUF inference lives in
 an owned worker process; abort, timeout, or disposal terminates and collects
 that worker before the next request can reuse the engine slot.
 
 The decision endpoint accepts loopback binds only and has no application
-authentication. Network admission blocks browser-originated decision dispatch and
+authentication. The network listener blocks browser-originated decision requests and
 non-loopback Host authorities, but it does not authenticate local processes.
 Any process that can connect locally can dispatch decisions using the gateway's
 enabled backends and credentials; use it only on a trusted local machine.
-The in-process `createRouter`/`createFetchHandler` surface leaves admission to
-its owning application. Daemon shutdown uses a per-instance
+The in-process `createRouter`/`createFetchHandler` API leaves request filtering
+to its owning application. Daemon shutdown uses a per-instance
 secret from its private pid file and an authenticated control endpoint. Sys1
 never signals an arbitrary PID read from that file.
 

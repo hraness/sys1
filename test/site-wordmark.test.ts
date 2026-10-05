@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import primary from "../portfolio-messaging.generated.json";
 
-const pages = ["index.html", "introducing-sys1.html", "docs.html", "docs/evaluations.html", "docs/evaluations-history.html", "compare.html", "skills.html", "404.html"];
+const pages = ["index.html", "introducing-sys1.html", "docs.html", "docs/evaluations.html", "docs/evaluations-history.html", "docs/runtime.html", "docs/review.html", "compare.html", "skills.html", "404.html"];
 
 for (const page of pages) {
   test(`${page} renders the canonical product name, not its command or domain`, async () => {

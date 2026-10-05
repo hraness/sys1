@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" data-hraness-theme="paper" data-palette="tokyo-night" data-hraness-material="lantern" data-hraness-pattern="none" data-hraness-marketing-preset="editorial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Review agent changes against repository rules · Sys1</title>
+    <meta name="description" content="Check a batch of Git changes against repository rules with sys1 review: preview the requests, investigate each finding, and fix common errors." />
+    <link rel="canonical" href="https://sys1.io/docs/review" />
+    <meta property="og:title" content="Review agent changes against repository rules · Sys1" />
+    <meta property="og:description" content="Check a batch of Git changes against repository rules with sys1 review: preview the requests, investigate each finding, and fix common errors." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sys1" />
+    <meta property="og:url" content="https://sys1.io/docs/review" />
+    <meta property="og:image" content="https://sys1.io/og/docs-review.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Review agent changes against your rules, from Sys1" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Review agent changes against repository rules · Sys1" />
+    <meta name="twitter:description" content="Check a batch of Git changes against repository rules with sys1 review: preview the requests, investigate each finding, and fix common errors." />
+    <meta name="twitter:image" content="https://sys1.io/og/docs-review.png" />
+    <meta name="twitter:image:alt" content="Review agent changes against your rules, from Sys1" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+    <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://sys1.io/docs/review",
+  "url": "https://sys1.io/docs/review",
+  "name": "Review agent changes against repository rules · Sys1",
+  "description": "Check a batch of Git changes against repository rules with sys1 review: preview the requests, investigate each finding, and fix common errors.",
+  "isPartOf": {
+    "@id": "https://sys1.io/#website"
+  },
+  "about": {
+    "@id": "https://sys1.io/#software"
+  },
+  "publisher": {
+    "@id": "https://hraness.com/#organization"
+  }
+}
+    </script>
+    <script src="/appearance.js"></script>
+    <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
+    <link rel="stylesheet" href="/vendor/hraness-paper/paper-theme.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/palette-bridge.css" />
+    <link rel="stylesheet" href="/vendor/hraness-lantern/lantern-material.css" />
+    <link rel="stylesheet" href="/vendor/hraness-marketing/product-marketing-preset.css" />
+    <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/comparison.css" />
+    <link rel="stylesheet" href="/docs.css" />
+    <script src="/site.js" defer></script>
+    <script src="/analytics.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header hraness-marketing-header">
+      <div class="header-inner">
+        <a class="wordmark" href="/" aria-label="Sys1 home"><img class="brand-mark hraness-marketing-brand-mark" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="brand-name">Sys1</span></a>
+        <nav aria-label="Primary">
+          <a href="/skills">Skills</a>
+          <a href="/docs">Docs</a>
+          <a href="/docs/evaluations">Evidence</a>
+          <a href="https://github.com/hraness/sys1">GitHub</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-small" href="/docs#getting-started" data-analytics-cta="header-install-sys1">Install Sys1</a>
+          <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
+            <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
+            <div class="hraness-design-theme-toggle__popover" hidden>
+              <div class="hraness-design-theme-toggle__menu" id="appearance-menu" role="menu" aria-label="Appearance">
+                <div class="hraness-design-theme-toggle__item" data-theme-value="light" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="light"></span><span>Light</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="dark" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="dark"></span><span>Dark</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="system" role="menuitemradio" aria-checked="true" tabindex="-1" data-selected="true"><span aria-hidden="true" data-appearance-icon="system"></span><span>System</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1" class="docs-page reference-page">
+      <section class="docs-hero" aria-labelledby="guide-title">
+        <div class="docs-hero-inner">
+          <h1 id="guide-title">Review changes with your agent</h1>
+          <p class="docs-lede">Install the sys1-review project skill, preview the files and rules a review will send, and investigate each finding. Review is experimental and advisory: scores rank candidates and are not defect probabilities.</p>
+          <div class="docs-meta"><span>Rendered from docs/review.md</span><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Source on GitHub</a></div>
+        </div>
+      </section>
+
+      <div class="docs-shell">
+        <aside class="docs-sidebar" aria-label="Review guide sections">
+          <p class="docs-sidebar-title">On this page</p>
+          <nav class="docs-nav">
+            <a href="#install-the-project-skill">Install the project skill</a>
+            <a href="#preview-and-run-a-checkpoint">Preview and run a checkpoint</a>
+            <a href="#investigate-and-record-feedback">Investigate and record feedback</a>
+            <a href="#check-the-completion-message">Check the completion message</a>
+            <a href="#repeated-checks-and-local-data">Repeated checks and local data</a>
+            <a href="#see-how-often-agents-use-sys1">See how often agents use Sys1</a>
+            <a href="#draft-a-repository-rule">Draft a repository rule</a>
+            <a href="#evidence-and-example-rules">Evidence and example rules</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+          </nav>
+          <a class="docs-related" href="/docs">Sys1 documentation</a>
+        </aside>
+
+        <div class="docs-content docs-guide">
+<p>Use <code>sys1 review</code> to check a batch of changes against repository rules. It
+keeps the selected paths, findings, and feedback together so your agent can
+investigate candidates and reuse an unchanged review. This workflow is experimental and
+advisory. Its scores rank candidates; they are not calibrated probabilities of
+a defect. Keep the repository's normal tests and review.</p>
+<p>The project skill supplies the workflow; rule packs supply the checks. You can
+use the same workflow across Git repositories and coding agents, while each
+repository selects rules for its own code and conventions. The bundled pack
+checks newly empty catch blocks and removed test assertions in JavaScript and
+TypeScript. It does not provide general review coverage for every language.</p>
+<p>Start with <a href="/docs#getting-started">Sys1 installed</a> and run these commands inside
+a Git worktree. Skill setup and checkpoint previews need no model. For a live
+review, choose an enabled backend and its exact model. For Jev, TypeSafe's hosted decision model, provide
+<code>TYPESAFE_API_KEY</code> in the environment and run <code>sys1 jev enable</code>. Selected source
+and surrounding diff context go to that backend. Inspect the files and preview
+before sending them. <a href="https://github.com/hraness/sys1/blob/main/docs/audit.md#privacy-and-limits">Audit privacy and limits</a>
+explain exclusions and the limits of hunk context.</p>
+<h2 id="install-the-project-skill">Install the project skill</h2>
+<p>Preview the destination, then install the instructions for your agent:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review setup codex --dry-run --json
+sys1 review setup codex --json
+</code></pre>
+<p>Codex receives <code>.agents/skills/sys1-review/SKILL.md</code>. For Claude Code, run
+<code>sys1 review setup claude-code</code>; its path is
+<code>.claude/skills/sys1-review/SKILL.md</code>. For Devin, run
+<code>sys1 review setup devin</code>; its path is <code>.devin/skills/sys1-review/SKILL.md</code>.
+Repeating setup preserves an identical file and refuses to overwrite different
+content, including an older Sys1 template. Update existing instructions
+through the repository's normal review.
+Commit the skill if the repository should share it.</p>
+<p>Setup installs instructions only. It does not activate models, add hooks, or
+change the repository's required checks. Other agents can use the CLI
+directly, following this guide. Review needs a Git worktree and an enabled
+model route; it does not need an agent transcript or a particular framework.</p>
+<h2 id="preview-and-run-a-checkpoint">Preview and run a checkpoint</h2>
+<p>Select the files in your current task, with a request cap and deadline:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+  --max-requests 10 --timeout-ms 60000 --dry-run --json -- src test
+</code></pre>
+<p>Inspect <code>audit.targets</code>, <code>audit.skipped</code>, and <code>audit.planned_requests</code>. The
+preview makes no model calls or metadata writes. Run the same selection when
+the source is ready to send:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+  --max-requests 10 --timeout-ms 60000 --json -- src test
+</code></pre>
+<p>Choose exactly one source mode. <code>--worktree</code> compares tracked and nonignored
+untracked files with <code>HEAD</code>; <code>--staged</code> reads the index; <code>--since &lt;ref&gt;</code> compares
+committed changes from that ref to <code>HEAD</code>. Paths after <code>--</code> are files or
+directory prefixes inside the worktree. Deleted text is included.</p>
+<p>The defaults are 20 requests and 30,000 ms of model-call time; the maximums are
+200 requests and 120,000 ms. There are no model retries or fallback to a
+different route. Add <code>--gateway</code> to send the review through a running
+<code>sys1 up</code> gateway. The part of a route before the slash may use only lowercase
+letters, digits, and hyphens, so review currently rejects the bundled local
+Qwen routes such as <code>local-qwen3-1.7b/qwen3-1.7b</code>. A route to a compatible
+server registered with <code>sys1 backend add</code> is accepted with or without
+<code>--gateway</code>.
+Checkpoints use the <a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">same rule packs and coverage limits</a> as
+<code>sys1 audit</code>.</p>
+<p>Use <code>sys1 rules list --json</code> to find active IDs, then add <code>--rule</code> to run a
+chosen check:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+  --rule core-removed-test-assertions --max-requests 10 --timeout-ms 60000 \
+  --dry-run --json -- test
+</code></pre>
+<p>Repeat <code>--rule &lt;id&gt;</code> to select several rules, up to 256 selections. Omit it to
+use all active rules. Unknown or malformed IDs fail with exit 2 before model
+calls or metadata writes. Selection does not activate drafts or expand a rule's
+file filters. Preserve the chosen rules and paths when running the previewed
+batch.</p>
+<h2 id="investigate-and-record-feedback">Investigate and record feedback</h2>
+<p>Inspect each finding's rule and before/after evidence in the code. Check the
+relevant callers and tests when the hunk leaves an important fact uncertain.
+Fix a supported defect and run the relevant tests. A code change made in
+response to a warning does not establish that the warning was correct.</p>
+<p>List recorded candidates and choose one feedback outcome after investigation:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review issues --json
+sys1 review feedback &lt;finding-id&gt; useful --json
+</code></pre>
+<p>Use the ID from the checkpoint or <code>issues</code> report. The other outcomes are
+<code>incorrect</code> and <code>unverifiable</code>. Feedback records your judgment and can be
+revised. <code>issues</code> lists historical observations, including candidates whose
+source has since changed; it is not a list of confirmed current defects.</p>
+<p>To evaluate a recorded candidate again, keep its original route:</p>
+<pre tabindex="0"><code class="language-sh">sys1 review recheck &lt;finding-id&gt; --model typesafe/jev-1.13.0 \
+  --max-requests 10 --timeout-ms 60000 --json
+</code></pre>
+<p>Recheck makes a fresh evaluation when the original rule and diff evidence are
+available. It uses only the finding's original rule and does not accept
+<code>--rule</code>. It preserves your feedback. After a repair changes that evidence,
+run a new checkpoint on the repaired batch, alongside its tests.</p>
+<div class="table-scroll" role="region" aria-label="Investigate and record feedback" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Status</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>planned</code></td><td>Preview only.</td></tr>
+<tr><td><code>complete</code></td><td>The checkpoint covered its selected evidence.</td></tr>
+<tr><td><code>unchanged</code></td><td>The same complete batch was checked within 24 hours; no new requests.</td></tr>
+<tr><td><code>reported</code> / <code>not_reported</code></td><td>Recheck did / did not produce a candidate on the original evidence.</td></tr>
+<tr><td><code>incomplete</code></td><td>Some selected evidence could not be evaluated; inspect <code>audit.skipped</code>.</td></tr>
+<tr><td><code>stale</code></td><td>Source or rules changed during the operation; run a fresh checkpoint.</td></tr>
+<tr><td><code>superseded</code></td><td>The recorded rule or diff evidence changed. This does not mean fixed.</td></tr>
+<tr><td><code>unavailable</code></td><td>The finding, source, or original route is unavailable; inspect <code>reason</code>.</td></tr>
+</tbody>
+</table></div>
+<p>Exit 0 includes previews, completed checks, unchanged batches, and advisory
+findings. Exit 8 covers <code>incomplete</code>, <code>stale</code>, <code>superseded</code>, and <code>unavailable</code>.
+Neither an empty report nor <code>not_reported</code> proves a fix.</p>
+<h2 id="check-the-completion-message">Check the completion message</h2>
+<p>After finishing the work, compare the proposed final message with the current
+repository and any linked pull requests or live pages. Save the draft outside
+the Git worktree so the message itself does not become an uncommitted file:</p>
+<pre tabindex="0"><code class="language-sh">sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --json
+</code></pre>
+<p>Use a file or <code>--message -</code> with any coding agent. Automatic message discovery
+and check-command evidence are available for local Devin sessions. The
+<a href="https://github.com/hraness/sys1/blob/main/docs/verify.md">verification guide</a> explains the evidence, exit codes, and limits.</p>
+<h2 id="repeated-checks-and-local-data">Repeated checks and local data</h2>
+<p>Complete batches can be reused for up to 24 hours. Changing the selected paths
+or rules, source, a selected rule's revision, or route triggers evaluation again.
+Reordering or repeating rule IDs has no effect. Changes to unselected rules do
+not trigger evaluation. Previously recorded
+candidates are suppressed from new checkpoint output regardless of their
+feedback. <code>suppressed_count</code> reports those repeats; <code>issues</code> keeps them
+available. Recheck bypasses reuse.</p>
+<p>Under <code>$SYS1_HOME/review</code> (<code>~/.sys1/review</code> by default), each worktree has private
+metadata: finding IDs, paths and lines, rule revisions, routes, evidence hashes,
+selection, timestamps, and feedback. Sys1 does not persist source, raw answers,
+rule prose, scores, or freeform notes there. The command's immediate report can
+contain scores and findings.</p>
+<p>Each worktree can store up to 2,000 findings and 64 completed batches, subject
+to size limits. A full store rejects additional finding metadata instead of
+deleting feedback. Use <code>sys1 audit</code> when you need a stateless check.</p>
+<h2 id="see-how-often-agents-use-sys1">See how often agents use Sys1</h2>
+<p><code>sys1 usage</code> reads the local Devin, Claude Code, and Codex transcripts on your
+machine and counts <code>sys1</code> subcommands, <code>system-one-skills check</code> runs, and loads
+of Sys1 or System One skills, per agent and per day:</p>
+<pre tabindex="0"><code class="language-sh">sys1 usage --days 30 --json
+</code></pre>
+<p>It is read-only, makes no model calls, and prints counts only: no prompt text,
+command text, paths, or source. Counts come from what agents sent to their
+tools, so an agent working on Sys1 itself also adds to them. Devin events are
+dated by session start. Combine it with <code>sys1 review issues</code> to see whether
+the checkpoints that ran produced findings worth keeping.</p>
+<h2 id="draft-a-repository-rule">Draft a repository rule</h2>
+<p>Start with a recurring mistake, an actual violation, and a clean counterexample.
+Use the repository guide's wording and narrow the file selection. Match the
+rule's paths to the code responsible for meeting the requirement, even when
+the requirement comes from a different caller or consumer. Confirm that the
+checkpoint preview includes the intended code and rule. For a guide
+at <code>docs/auth.md</code> that requires token persistence before login reports success:</p>
+<pre tabindex="0"><code class="language-sh">sys1 rules draft await-success \
+  --ensure 'Login waits for required token persistence before reporting success.' \
+  --breaks 'Login reports success while required token persistence is still pending or has failed.' \
+  --path 'src/auth/**/*.ts' --source docs/auth.md --json
+sys1 rules check .sys1/drafts/await-success --json
+</code></pre>
+<p>These commands make no model calls. The draft is inactive at
+<code>.sys1/drafts/await-success/pack.yaml</code>; <code>check</code> validates its schema and request
+compilation, not its accuracy. Review its wording and
+<a href="https://github.com/hraness/sys1/blob/main/docs/audit.md#evaluate-a-rule">evaluate examples</a> before activating it. When
+<code>.sys1/rules/await-success</code> does not already exist:</p>
+<pre tabindex="0"><code class="language-sh">mkdir -p .sys1/rules
+mv .sys1/drafts/await-success .sys1/rules/await-success
+sys1 rules list --json
+</code></pre>
+<p><code>list</code> shows active rules, revisions, sources, and overrides. The repository's
+rules load after bundled and user packs; a matching rule ID replaces the
+earlier definition. Use a deterministic check when it already covers the
+mistake reliably.</p>
+<h2 id="evidence-and-example-rules">Evidence and example rules</h2>
+<p>The <a href="https://github.com/hraness/sys1/blob/main/docs/reviewer-contract-2026-09-27.md">contract-based experiment</a> missed its
+reproduced defect and flagged two of five control hunks. Investigate every
+candidate before treating it as a defect.</p>
+<p>The source repository also contains
+<a href="https://github.com/hraness/sys1/blob/main/benchmarks/reviewer/README.md">four candidate rules and a historical corpus</a>
+from Sys1, Ghostget, and design-kit. These rules are opt-in research examples
+outside the packaged and default packs. The corpus links original commits,
+independent label review, and deterministic checks. It is discovery evidence,
+not a held-out accuracy estimate. In the <a href="https://github.com/hraness/sys1/blob/main/docs/reviewer-evaluation-2026-09-27.md">dated evaluation</a>,
+the candidate rules detected one of four labeled defects on hosted Jev and
+raised no findings on nine clean controls. Their authors had seen the repairs,
+so these results describe only the selected examples and do not estimate
+accuracy on unseen changes.
+The <a href="https://github.com/hraness/sys1/blob/main/docs/reviewer-followup-2026-09-27.md">focused-review follow-up</a> compares specific
+requirements with added source context and records the remaining limitations.
+The <a href="https://github.com/hraness/sys1/blob/main/docs/reviewer-contract-2026-09-27.md">contract-based experiment</a> tests a rule
+written from an existing requirement before its author saw the defect.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Quoted messages are the text <code>sys1 review</code> prints. With <code>--json</code>, the same
+text arrives as the error message in the JSON object.</p>
+<div class="table-scroll" role="region" aria-label="Troubleshooting" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Symptom</th><th>What to check</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Could not identify the Git worktree</code> (setup) or <code>Review could not read the selected changes, rules, or metadata</code> (checkpoint)</td><td>Run the command inside the Git worktree you are reviewing. If you are already there, run <code>sys1 rules list --json</code> to confirm the rules load.</td></tr>
+<tr><td><code>Choose one of --worktree, --staged, or --since &lt;ref&gt;; put paths after --</code></td><td>Pass exactly one source mode, and list files or directories after <code>--</code>.</td></tr>
+<tr><td><code>--model needs an explicit backend/model route</code></td><td>Name a full route such as <code>typesafe/jev-1.13.0</code>. The part before the slash may use only lowercase letters, digits, and hyphens, so the bundled local Qwen routes are rejected.</td></tr>
+<tr><td><code>--max-requests</code> or <code>--timeout-ms</code> is rejected</td><td>Use 1 to 200 requests and 1 to 120,000 ms. The defaults are 20 requests and 30,000 ms.</td></tr>
+<tr><td><code>Start sys1 up and add --gateway for a local model</code></td><td>Start the gateway with <code>sys1 up</code>, then add <code>--gateway</code> to the review command.</td></tr>
+<tr><td><code>Unknown active rule &lt;id&gt;; run sys1 rules list</code></td><td>Run <code>sys1 rules list --json</code> and copy an active ID. The command exits 2 before any model call or metadata write.</td></tr>
+<tr><td>The preview plans no requests</td><td>Inspect <code>audit.skipped</code>, the selected paths, and the active rules.</td></tr>
+<tr><td>A hosted request fails</td><td>Check <code>sys1 jev status</code> and <code>sys1 doctor</code>. Hosted Jev needs <code>TYPESAFE_API_KEY</code> in the environment and <code>sys1 jev enable</code>. With <code>--gateway</code>, restart a gateway that started before you exported the key.</td></tr>
+<tr><td><code>Project file already exists with different content; review it manually</code></td><td>Setup keeps a skill file that differs from its template, including an older Sys1 template. Update it through the repository's normal review.</td></tr>
+<tr><td>Exit 8 with <code>incomplete</code>, <code>stale</code>, <code>superseded</code>, or <code>unavailable</code></td><td>Read the <a href="#investigate-and-record-feedback">status table</a>: inspect <code>audit.skipped</code> or <code>reason</code>, and run a fresh checkpoint after the source or rules change.</td></tr>
+<tr><td><code>Review state is busy; retry this command</code></td><td>Another process is using this worktree's review metadata. Retry when it finishes.</td></tr>
+<tr><td><code>Review finding metadata is full</code></td><td>The store keeps existing findings and feedback and rejects new ones. Use <code>sys1 audit</code> for a check without saved review history.</td></tr>
+</tbody>
+</table></div>
+        </div>
+      </div>
+    </main>
+    <footer aria-label="Hraness network" class="hraness-site-footer x1ktp55a x8d9m59 x96ybla x14z8vex x8c10za xdg0xw2 x1munjs5 xsctza4 xtq98z5 x1w6jg7m x3luoqq x1xgbxbt x9cmhvv x4sry57 xys6ka6 x18ca4t7 x1sphz0r x1a0dqq5 x1h47zgc x1ghcxmq xd04x30 xwk8b0x x1dsv906 x1baz8l3 xiuoait x1g4142m xprmc4t xkpwil5 x12mkk0b" data-brand="visible" data-mailing-list="none" data-slot="hraness-site-footer" id="hraness-site-footer"><div class="hraness-site-footer__inner x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x9fpagd x10xu2di x1n2onr6 xrvj5dj x182hbjg x83lif4 x1rkzygb x1o8kq85 xx97v1z xiuoait xzlj3eo x5vl0wm x1tec7hu xesnm00 xc26acl x6s0dn4 x1n78d84 x1lfezxm x1b1eqt9 x3so8kt x1hdm9tg x1np48w9 x1hhhz6w x9yvj25 x1qtgzxc xpcvst1 xhvvu7z x1dyck8u"><a aria-label="Hraness home" class="hraness-site-footer__brand x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 x1pmbb8p xamitd3 x1lqcxt8 xl56j7k xart1r9 xeuuy2l x6i6fhv x1d3i0y6 x1heor9g xxeg0yr x19s9jnd x130jcwj xo5v014 x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/" lang="en" dir="ltr"><span aria-hidden="true" class="hraness-site-footer__mark-root x1c4vz4f x2lah0s xdl72j9 x1n2onr6 x3nfvp2 xif76xs x1wugil3 x14ju556" data-foil=""><svg class="hraness-site-footer__mark x1c4vz4f x2lah0s xdl72j9 xif76xs x1wugil3 x1lliihq" data-slot="hraness-mark" focusable="false" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z" fill="currentColor" fill-rule="evenodd"></path><path d="M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z" fill="currentColor"></path><path d="M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z" fill="currentColor" fill-rule="evenodd"></path><path d="M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z" fill="currentColor"></path><circle cx="166" cy="307" fill="currentColor" r="8"></circle></svg><span class="hraness-site-footer__mark-paint x35j2r9 x1dscx4y xmntjkq x14xjb22 x1xbl91z x1iiaa4z x47qxf1 x1n6b76k x13hwd88 x1z0t8xj xx7v8hi x1bbyikp xq2h55 x1lhcm7p xr9ynje x1apl0kd x10l6tqk x10a8y8t x47corl xyowimg xi9drc3 x5e4rk6 x16fucec x1rudrqi x2k2kcx" data-slot="hraness-mark-paint"></span></span><span class="hraness-site-footer__brand-name xj5idha x1dcheo9 xk50ysn x1i21sxh xuxw1ft">by Hraness</span></a><div class="hraness-site-footer__consent x9f619 xmkeg23 x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xixxii4 xf5e64p xcc8yhp xs1cnaw x78zum5 xvgho8r x6s0dn4 x15qkubi x1o5vn8x xllzysa x1e6avla x1hhhz6w x9yvj25 xim0ftz xwaqzdf xj5idha x1dcheo9 x132q4wb xuxw1ft" data-slot="hraness-cookie-consent" hidden=""><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-consent-prompt="" data-slot="hraness-cookie-consent-accept" type="button">Accept cookies</button><details class="hraness-site-footer__consent-more xt0psk2 x1n2onr6"><summary aria-label="About cookies" title="About cookies" data-notice="required" class="hraness-site-footer__consent-learn x1ypdohk x3nfvp2 x1i5lizr x6s0dn4 xl56j7k xlashs9 xart1r9 xvpgqt4 x1m71csk x1e6avla x3ct3a4 x1lziwak xjbqb8w x1voprv7 x1heor9g xxeg0yr x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma"><span class="hraness-site-footer__consent-label x3nfvp2 xvgho8r x6s0dn4" data-consent-icon=""><svg aria-hidden="true" class="hraness-site-footer__support-icon x1milg1j x38bysi" data-slot="hraness-support-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle><path d="M9.5 9.5C9.5 8.11929 10.6193 7 12 7C13.3807 7 14.5 8.11929 14.5 9.5C14.5 10.3569 14.0689 11.1131 13.4117 11.5636C12.7283 12.0319 12 12.6716 12 13.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M12.125 16.75H12M12.25 16.75C12.25 16.8881 12.1381 17 12 17C11.8619 17 11.75 16.8881 11.75 16.75C11.75 16.6119 11.8619 16.5 12 16.5C12.1381 16.5 12.25 16.6119 12.25 16.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span><span class="hraness-site-footer__consent-label x3nfvp2 xvgho8r x6s0dn4" data-consent-label="" hidden="">Analytics preferences</span></summary><div class="hraness-site-footer__consent-panel x9f619 xmkeg23 x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc x10l6tqk xhtitgo xu668xk x1odjw0f x1smivkc xtijo5x x146urod x1ljtl1n xim0ftz xwaqzdf x13eudtd x1ryrjj2 x116uinm x1hhhz6w x9yvj25 xj5idha x1dcheo9 xfrs9s4 xeaf4i8">Your browser remembers your appearance setting and this choice. We use analytics to understand how the site is used. None of it is used for advertising or cross-site tracking. You can change your analytics choice here at any time. <a class="hraness-site-footer__consent-link x1g4142m x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/privacy">Privacy policy</a><div class="hraness-site-footer__consent-actions x78zum5 x1a02dak xvh977a x1gixskw x1qughib"><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-slot="hraness-cookie-consent-accept" type="button">Accept analytics</button><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-slot="hraness-cookie-consent-decline" type="button">Decline analytics</button></div></div></details></div><nav aria-label="Hraness links" class="hraness-site-footer__links x78zum5 x6s0dn4 xt33hwp xgc5ccc x12h1iku xiuoait xesnm00 x1jfo8e8 xjsudho"><ul class="hraness-site-footer__socials x78zum5 xesnm00 x1jfo8e8 x1enigpx x1ghz6dp x1717udv x3ct3a4 x43c9pm xnbnhf8"><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1lliihq"><a aria-label="Hraness on Substack" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://substack.com/@hraness" rel="me" title="Substack"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836ZM1.46 10.812v2.836h21.08v-2.836H1.46ZM22.54 16.218V24L12 18.11 1.46 24v-7.782h21.08ZM1.46 0v2.836h21.08V0H1.46Z" fill="currentColor"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xhzsqoz x6w72mi"><a aria-label="Hraness on X" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://x.com/hraness" rel="me" title="X"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg x18g50z5 x101cbvv"><a aria-label="Hraness on LinkedIn" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://www.linkedin.com/company/hraness" rel="me" title="LinkedIn"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M7.125 6.75H7M7.25 6.75C7.25 6.88807 7.13807 7 7 7C6.86193 7 6.75 6.88807 6.75 6.75C6.75 6.61193 6.86193 6.5 7 6.5C7.13807 6.5 7.25 6.61193 7.25 6.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3C16.2426 3 18.364 3 19.682 4.31802C21 5.63604 21 7.75736 21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xir82yx xwl02xf"><a aria-label="Hraness on GitHub" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://github.com/hraness" rel="me" title="GitHub"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li></ul></nav></div></footer>
+
+  </body>
+</html>
