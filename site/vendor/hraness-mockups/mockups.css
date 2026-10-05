@@ -107,6 +107,39 @@
     flex: none;
   }
 
+  /* Brand marks are app-icon tiles: the vendor glyph in readable ink on the
+   * vendor color. The glyph variant follows the surrounding text instead. */
+  .hkm-root .hkm-brand-mark {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--hkm-mark-size, 32px);
+    block-size: var(--hkm-mark-size, 32px);
+    border-radius: calc(var(--hkm-mark-size, 32px) * 0.26);
+    background: var(--hkm-mark-accent, var(--hkm-field));
+    color: var(--hkm-mark-ink, var(--hkm-muted));
+    box-shadow: inset 0 0 0 1px light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1));
+    font: 650 calc(var(--hkm-mark-size, 32px) * 0.36)/1 var(--hkm-font);
+    letter-spacing: 0.01em;
+  }
+
+  .hkm-root .hkm-brand-mark svg {
+    display: block;
+    inline-size: 56%;
+    block-size: 56%;
+  }
+
+  .hkm-root .hkm-brand-mark[data-hkm-variant="glyph"] {
+    background: none;
+    box-shadow: none;
+    color: inherit;
+  }
+
+  .hkm-root .hkm-brand-mark[data-hkm-variant="glyph"] svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
   .hkm-root .hkm-avatar {
     display: inline-grid;
     flex: none;
@@ -331,6 +364,15 @@
     padding: 16px 18px 18px;
     font: 400 13.5px/1.6 var(--hkm-mono);
     font-variant-ligatures: none;
+  }
+
+  .hkm-root .hkm-terminal-body[data-hkm-density="presentation"] {
+    font-size: var(--hkm-terminal-presentation-size, 1rem);
+    line-height: 1.5;
+  }
+
+  .hkm-root .hkm-terminal-body[data-hkm-density="presentation"] .hkm-terminal-line {
+    min-block-size: 1.5em;
   }
 
   .hkm-root .hkm-terminal-lines {
@@ -2320,20 +2362,11 @@
   }
 
   .hkm-showcase .hkm-step-number {
-    display: inline-grid;
-    place-items: center;
-    inline-size: 20px;
-    block-size: 20px;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-    font-size: 11px;
+    flex: none;
+    color: var(--hkm-sc-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
     font-variant-numeric: tabular-nums;
-  }
-
-  .hkm-showcase .hkm-tab[data-hkm-done] .hkm-step-number {
-    border-color: var(--hkm-accent);
-    background: var(--hkm-accent);
-    color: var(--hkm-accent-foreground);
   }
 
   .hkm-showcase .hkm-showcase-settings {
@@ -2403,11 +2436,26 @@
     outline-color: var(--hkm-accent-foreground);
   }
 
+  .hkm-showcase .hkm-showcase-hints {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .hkm-showcase .hkm-showcase-hints > .hkm-showcase-hint {
+    grid-area: 1 / 1;
+  }
+
+  .hkm-showcase .hkm-showcase-hint[data-hkm-reserving] {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   .hkm-showcase .hkm-showcase-hint {
     min-block-size: 2.9em;
     margin: 0;
     color: var(--hkm-sc-muted);
     font-size: 13px;
+    overflow-wrap: anywhere;
   }
 
   .hkm-showcase .hkm-showcase-stage {
@@ -2503,24 +2551,186 @@
     }
   }
 
-  /* Folder tabs share an edge with the stable-height walkthrough stage. */
-  .hkm-showcase.hkm-steps { gap: 0; }
+  /* Mode selectors retain a shared edge with their preview panel. */
+  .hkm-showcase:is(.hkm-steps, .hkm-modes) { gap: 0; }
   .hkm-showcase.hkm-steps .hkm-showcase-controls { padding: 0; border: 0; border-radius: 0; background: transparent; }
-  .hkm-showcase.hkm-steps .hkm-step-tabs { gap: 6px; margin: 0; padding: 0; border: 0; position: relative; z-index: 1; }
-  .hkm-showcase.hkm-steps .hkm-tab { min-block-size: 48px; padding: 12px 18px; border: 1px solid var(--hkm-sc-line); border-block-end: 0; border-radius: 12px 12px 0 0; background: var(--hkm-sc-field); color: var(--hkm-sc-muted); }
-  .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"] { background: var(--hkm-sc-bg); color: var(--hkm-sc-fg); }
-  .hkm-showcase.hkm-steps .hkm-tab:hover { color: var(--hkm-sc-fg); }
-  .hkm-showcase.hkm-steps .hkm-step-stage { display: grid; border: 1px solid var(--hkm-sc-line); border-radius: 0 12px 12px 12px; background: var(--hkm-sc-bg); margin-block-start: -1px; overflow: clip; }
+  .hkm-showcase .hkm-folder-tabs { gap: 6px; margin: 0; padding: 0; border: 0; position: relative; z-index: 1; }
+  .hkm-showcase .hkm-folder-tabs .hkm-tab { min-block-size: 48px; padding: 12px 18px; border: 1px solid var(--hkm-sc-line); border-block-end: 0; border-radius: 12px 12px 0 0; background: var(--hkm-sc-field); color: var(--hkm-sc-muted); }
+  .hkm-showcase .hkm-folder-tabs .hkm-tab[aria-selected="true"] { background: var(--hkm-sc-bg); color: var(--hkm-sc-fg); }
+  .hkm-showcase .hkm-folder-tabs .hkm-tab:hover { color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-step-stage { display: grid; min-inline-size: 0; border: 1px solid var(--hkm-sc-line); border-radius: var(--hkm-step-radius, 12px); background: var(--hkm-sc-bg); overflow: clip; }
+  .hkm-showcase.hkm-modes .hkm-mode-panel { border: 1px solid var(--hkm-sc-line); border-radius: 12px; background: var(--hkm-sc-bg); overflow: clip; }
+  .hkm-showcase.hkm-modes .hkm-folder-tabs + .hkm-mode-panel { border-start-start-radius: 0; margin-block-start: -1px; }
+  .hkm-showcase.hkm-modes .hkm-showcase-controls { border: 0; border-block-end: 1px solid var(--hkm-sc-line); border-radius: 0; }
+  .hkm-mode-stage { display: grid; min-inline-size: 0; }
+  .hkm-mode-surface { grid-area: 1 / 1; min-inline-size: 0; align-self: start; }
+  .hkm-mode-surface[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+  .hkm-showcase.hkm-modes .hkm-mode-surface > .hkm-fit > .hkm-fit-inner > .hkm-root,
+  .hkm-showcase.hkm-modes .hkm-mode-surface > .hkm-fit > .hkm-fit-inner > .hkm-root > .hkm-window,
+  .hkm-showcase.hkm-steps .hkm-step-panel > .hkm-fit > .hkm-fit-inner > .hkm-root,
+  .hkm-showcase.hkm-steps .hkm-step-panel > .hkm-fit > .hkm-fit-inner > .hkm-root > .hkm-window { border: 0; border-radius: 0; box-shadow: none; }
   .hkm-step-panel { grid-area: 1 / 1; min-inline-size: 0; align-self: start; }
   .hkm-step-panel[aria-hidden="true"] { visibility: hidden; pointer-events: none; }
-  .hkm-showcase.hkm-steps .hkm-step-panel .hkm-root { border-start-start-radius: 0; border-start-end-radius: 0; box-shadow: none; }
-  .hkm-showcase.hkm-steps .hkm-step-nav { justify-content: space-between; padding-block-start: 18px; gap: 16px; }
-  .hkm-showcase.hkm-steps .hkm-step-button { display: inline-grid; place-items: center; min-inline-size: 52px; min-block-size: 52px; padding: 10px; border: 0; border-radius: 12px; background: transparent; color: var(--hkm-sc-fg); }
-  .hkm-showcase.hkm-steps .hkm-step-button[data-hkm-primary] { background: var(--hkm-sc-fg); color: var(--hkm-sc-bg); }
-  .hkm-showcase.hkm-steps .hkm-step-button:disabled { color: var(--hkm-sc-muted); background: transparent; }
-  .hkm-showcase.hkm-steps .hkm-step-button[data-hkm-primary]:disabled { background: var(--hkm-sc-field); }
+  /* Browser and app titles use the same chrome geometry inside a sequence. */
+  .hkm-showcase .hkm-root :is(.hkm-title-bar, .hkm-browser-bar) { block-size: 44px; font-size: 13px; }
+  /* Fill uses the tallest complete slide as its natural height. It does not
+   * scale text or ask fitted font sizes to determine the stage height. */
+  .hkm-showcase[data-hkm-fit="fill"] [data-hkm-measuring] [data-hkm-fill-frame] > .hkm-window > .hkm-page { max-block-size: none; }
+
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) {
+    block-size: var(--hkm-showcase-fill-height, auto);
+  }
+
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) > :is(.hkm-step-panel, .hkm-mode-surface) {
+    align-self: stretch;
+    min-block-size: 0;
+  }
+
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) > :is(.hkm-step-panel, .hkm-mode-surface) > .hkm-fit,
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) > :is(.hkm-step-panel, .hkm-mode-surface) > .hkm-fit > .hkm-fit-inner,
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) :is([data-hkm-fill-frame], [data-hkm-fill-frame] > .hkm-window) {
+    block-size: 100%;
+    min-block-size: 0;
+  }
+
+  /* A slide never leaves an empty band under a shorter frame. Each panel's
+   * single top-level frame grows to the stage through any product wrappers
+   * (marked as the fill path), and its window body takes the remaining height. */
+  /* Important so a product wrapper's own single-column grid or block layout
+   * cannot leave the extra height in its rows instead of the frame. */
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-path] {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-path] > :is([data-hkm-fill-path], [data-hkm-fill-frame]) {
+    flex: 1 1 auto;
+    block-size: auto;
+    min-block-size: 0;
+  }
+
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-path] > [data-hkm-fill-frame] > .hkm-window {
+    block-size: 100%;
+  }
+
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-frame] > .hkm-window:has(> .hkm-page),
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-path] > [data-hkm-fill-frame] > .hkm-window {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-path] > [data-hkm-fill-frame] > .hkm-window > :last-child:not(.hkm-title-bar, .hkm-browser-bar) {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  .hkm-showcase[data-hkm-fit="fill"] :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-frame] > .hkm-window > .hkm-page {
+    flex: 1 1 auto;
+    block-size: auto;
+    min-block-size: 0;
+    max-block-size: none;
+  }
+
+  .hkm-showcase :is(.hkm-step-stage, .hkm-mode-stage):not([data-hkm-measuring]) [data-hkm-fill-frame] > .hkm-window > :is(.hkm-title-bar, .hkm-browser-bar) {
+    flex: none;
+  }
+
+  /* The panel draws the frame, so a wrapped window drops its own edge too. */
+  .hkm-showcase :is(.hkm-step-panel, .hkm-mode-surface) [data-hkm-fill-path] > [data-hkm-fill-frame],
+  .hkm-showcase :is(.hkm-step-panel, .hkm-mode-surface) [data-hkm-fill-path] > [data-hkm-fill-frame] > .hkm-window {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* A walkthrough stage is at least as tall as its tallest slide and its step
+   * list, so a selected step never hangs past the preview's edge. Natural
+   * walkthroughs stretch their unscaled slides the same way. */
+  .hkm-showcase.hkm-steps[data-hkm-fit="fill"] .hkm-step-stage:not([data-hkm-measuring]) {
+    block-size: auto;
+    min-block-size: var(--hkm-showcase-fill-height, 0px);
+  }
+
+  .hkm-showcase.hkm-steps:not([data-hkm-fit="fill"]) .hkm-step-stage > .hkm-step-panel {
+    align-self: stretch;
+  }
+
+  .hkm-showcase.hkm-steps:not([data-hkm-fit="fill"]) .hkm-step-panel > .hkm-fit:not(:has(> [data-hkm-scaled])),
+  .hkm-showcase.hkm-steps:not([data-hkm-fit="fill"]) .hkm-step-panel > .hkm-fit > .hkm-fit-inner:not([data-hkm-scaled]) {
+    block-size: 100%;
+  }
+
+  /* A walkthrough is one tabbed selector: the steps and the preview share an
+   * edge. Compact layouts attach a tab strip to the preview's top edge between
+   * Back and Next. Wide layouts stack the steps on its start edge, flush with
+   * a square corner, and put Back and Next under them. The selected tab takes
+   * the window-chrome color so it reads as part of the frame below it. */
+  .hkm-showcase.hkm-steps {
+    --hkm-step-radius: 12px;
+    --hkm-step-tab-radius: 10px;
+    --hkm-step-tab-selected: var(--hkm-chrome);
+    --hkm-step-tab-hover: color-mix(in srgb, var(--hkm-chrome) 55%, transparent);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .hkm-showcase .hkm-step-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "controls" "stage" "descriptions"; align-items: start; min-inline-size: 0; }
+  .hkm-showcase.hkm-steps .hkm-step-controls { grid-area: controls; position: relative; z-index: 1; min-inline-size: 0; margin-block-end: -1px; }
+  .hkm-showcase.hkm-steps .hkm-step-stage { grid-area: stage; }
+  .hkm-showcase.hkm-steps .hkm-step-nav { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; grid-template-areas: "back tabs next"; align-items: end; gap: 6px; min-inline-size: 0; padding: 0; }
+  .hkm-showcase.hkm-steps .hkm-step-button { display: inline-grid; place-items: center; inline-size: 44px; min-inline-size: 44px; min-block-size: 44px; margin-block-end: 1px; padding: 0; border: 0; border-radius: var(--hkm-step-tab-radius); background: transparent; color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-step-button:first-child { grid-area: back; }
+  .hkm-showcase.hkm-steps .hkm-step-button:last-child { grid-area: next; }
+  .hkm-showcase.hkm-steps .hkm-step-button:hover:enabled { background: var(--hkm-step-tab-hover); }
+  .hkm-showcase.hkm-steps .hkm-step-button:disabled { background: transparent; color: var(--hkm-sc-muted); cursor: default; }
+  .hkm-showcase .hkm-step-count { display: none; grid-area: count; color: var(--hkm-sc-muted); font: 500 0.8125rem/1 var(--hkm-mono); font-variant-numeric: tabular-nums; text-align: center; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs { grid-area: tabs; display: flex; gap: 2px; min-inline-size: 0; margin: 0; padding: 0; overflow-x: auto; overflow-y: hidden; border: 0; scrollbar-width: none; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs::-webkit-scrollbar { display: none; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab { display: inline-flex; flex: 0 1 auto; align-items: center; gap: 10px; min-inline-size: 44px; min-block-size: 44px; padding: 10px 16px; border: 1px solid transparent; border-block-end: 0; border-radius: var(--hkm-step-tab-radius) var(--hkm-step-tab-radius) 0 0; background: transparent; color: var(--hkm-sc-muted); font-size: 0.9375rem; line-height: 1.4; font-weight: 550; text-align: start; white-space: nowrap; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab:hover { background: var(--hkm-step-tab-hover); color: var(--hkm-sc-fg); }
+  .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab[aria-selected="true"] { border-color: var(--hkm-sc-line); background: var(--hkm-step-tab-selected); color: var(--hkm-sc-fg); }
+  /* A preview pinned to its own theme lends that theme to the selected tab,
+   * so a dark window on a light page still reads as one frame. */
+  .hkm-showcase.hkm-steps:has(.hkm-step-panel[aria-hidden="false"] .hkm-root[data-hkm-theme="dark"]) .hkm-step-tabs .hkm-tab[aria-selected="true"] { color-scheme: dark; }
+  .hkm-showcase.hkm-steps:has(.hkm-step-panel[aria-hidden="false"] .hkm-root[data-hkm-theme="light"]) .hkm-step-tabs .hkm-tab[aria-selected="true"] { color-scheme: light; }
+  .hkm-showcase.hkm-steps:has(.hkm-step-panel[aria-hidden="false"] .hkm-root[data-hkm-theme]) .hkm-step-tabs .hkm-tab[aria-selected="true"] { color: var(--hkm-fg); }
+  .hkm-showcase.hkm-steps:has(.hkm-step-panel[aria-hidden="false"] .hkm-root[data-hkm-theme]) .hkm-step-tabs .hkm-tab[aria-selected="true"] :is(.hkm-step-number, .hkm-step-label) { color: var(--hkm-fg); }
+  .hkm-showcase.hkm-steps:has(.hkm-step-panel[aria-hidden="false"] .hkm-root[data-hkm-theme]) .hkm-step-tabs .hkm-tab[aria-selected="true"] .hkm-step-hint { color: var(--hkm-muted); }
+  .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab:focus-visible { outline-offset: -3px; }
+  .hkm-showcase.hkm-steps .hkm-step-number { color: var(--hkm-sc-muted); font: 500 0.8125rem/1.4 var(--hkm-mono); }
+  .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"] .hkm-step-number { color: var(--hkm-sc-fg); }
+  .hkm-showcase .hkm-step-copy { display: flex; flex-direction: column; gap: 4px; min-inline-size: 0; }
+  .hkm-showcase .hkm-step-label { overflow: hidden; font: inherit; text-overflow: ellipsis; }
+  .hkm-showcase .hkm-step-hint { display: none; color: var(--hkm-sc-muted); font-size: 0.875rem; line-height: 1.45; font-weight: 400; }
+  .hkm-showcase .hkm-step-descriptions { grid-area: descriptions; display: grid; padding: 12px 4px 0; }
+  .hkm-showcase .hkm-step-description { grid-area: 1 / 1; margin: 0; color: var(--hkm-sc-muted); font-size: 0.875rem; line-height: 1.5; }
+  .hkm-showcase .hkm-step-description:not([data-hkm-active]) { visibility: hidden; }
+  .hkm-showcase .hkm-step-panel:focus-visible { outline: 2px solid var(--hkm-accent); outline-offset: -4px; }
+  /* A strip too narrow for every label keeps the selected label and shows
+   * numbers for the rest; each label stays the tab's accessible name. */
+  .hkm-showcase.hkm-steps .hkm-step-tabs[data-hkm-compact] .hkm-tab:not([aria-selected="true"]) { flex: none; justify-content: center; padding-inline: 12px; }
+  .hkm-showcase.hkm-steps .hkm-step-tabs[data-hkm-compact] .hkm-tab:not([aria-selected="true"]) .hkm-step-copy { display: none; }
+  @container hkm-showcase (max-width: 519px) {
+    .hkm-showcase.hkm-steps .hkm-step-nav { grid-template-columns: 40px minmax(0, 1fr) 40px; gap: 4px; }
+    .hkm-showcase.hkm-steps .hkm-step-button { inline-size: 40px; min-inline-size: 40px; }
+    .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab { gap: 8px; padding-inline: 12px; font-size: 0.875rem; }
+  }
+  @container hkm-showcase (min-width: 720px) {
+    .hkm-showcase .hkm-step-layout { grid-template-columns: minmax(200px, 0.72fr) minmax(0, 1.6fr); grid-template-areas: "controls stage"; align-items: stretch; }
+    .hkm-showcase.hkm-steps .hkm-step-controls { margin-block-end: 0; margin-inline-end: -1px; }
+    .hkm-showcase.hkm-steps .hkm-step-stage { align-self: stretch; border-start-start-radius: 0; }
+    .hkm-showcase.hkm-steps .hkm-step-nav { grid-template-areas: "tabs tabs tabs" "back count next"; align-items: center; row-gap: 14px; column-gap: 6px; }
+    .hkm-showcase.hkm-steps .hkm-step-button { margin: 0; }
+    .hkm-showcase .hkm-step-count { display: block; }
+    .hkm-showcase.hkm-steps .hkm-step-tabs { flex-direction: column; gap: 2px; overflow: visible; }
+    .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab { display: grid; flex: none; grid-template-columns: 2.5ch minmax(0, 1fr); align-items: start; gap: 12px; padding: 14px 16px; border: 1px solid transparent; border-inline-end: 0; border-radius: var(--hkm-step-tab-radius) 0 0 var(--hkm-step-tab-radius); white-space: normal; }
+    .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab[aria-selected="true"] { border-color: var(--hkm-sc-line); }
+    .hkm-showcase.hkm-steps .hkm-step-number { padding-block-start: 0.1rem; }
+    .hkm-showcase .hkm-step-label { overflow: visible; }
+    .hkm-showcase .hkm-step-hint { display: block; }
+    .hkm-showcase .hkm-step-descriptions { display: none; }
+  }
   .hkm-showcase.hkm-steps .hkm-step-announcement { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .hkm-showcase.hkm-steps .hkm-showcase-caption { margin-block-start: 1rem; }
+  .hkm-showcase:is(.hkm-steps, .hkm-modes) .hkm-showcase-caption { margin-block-start: 1rem; }
 
   /* ---------------------------------------------------------------- */
   /* Motion                                                           */
@@ -2626,12 +2836,26 @@
 
     .hkm-showcase .hkm-tab[aria-selected="true"],
     .hkm-showcase .hkm-segmented button[aria-pressed="true"],
-    .hkm-showcase .hkm-tab[data-hkm-done] .hkm-step-number,
+    .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"],
+    .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab[aria-selected="true"],
     .hkm-root .hkm-popover-item[data-hkm-selected],
     .hkm-root .hkm-work-mark {
       forced-color-adjust: none;
       background: Highlight;
       color: HighlightText;
+    }
+
+    .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"] :is(.hkm-step-number, .hkm-step-hint) {
+      color: HighlightText;
+    }
+
+    /* Fill stages reserve their authored field for the live preview. Keep the
+     * selected tab in the system pair even when that fill rule is authored by
+     * a consumer layer with a stronger declaration. */
+    .hkm-showcase[data-hkm-fit="fill"].hkm-steps .hkm-tab[aria-selected="true"] {
+      forced-color-adjust: none;
+      background: Highlight !important;
+      color: HighlightText !important;
     }
 
     .hkm-showcase .hkm-segmented button[aria-pressed="true"]:disabled {
@@ -2653,5 +2877,20 @@
     .hkm-showcase .hkm-segmented button[aria-pressed="true"]:focus-visible {
       outline-color: HighlightText;
     }
+  }
+}
+
+/* Consumer layers and palette variable chains can add stronger declarations
+ * after the legacy component layer. Keep the system selection pair as the
+ * final forced-colors contract. */
+@media (forced-colors: active) {
+  .hkm-showcase.hkm-steps .hkm-step-tabs .hkm-tab[aria-selected="true"] {
+    forced-color-adjust: none;
+    background: Highlight !important;
+    color: HighlightText !important;
+  }
+
+  .hkm-showcase.hkm-steps .hkm-tab[aria-selected="true"] :is(.hkm-step-number, .hkm-step-hint) {
+    color: HighlightText !important;
   }
 }
