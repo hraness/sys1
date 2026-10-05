@@ -25,7 +25,12 @@ const escapeText = (text: string): string =>
   text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
 function decodeText(html: string): string {
-  return html.replace(/<[^>]+>/gu, "")
+  let text = html;
+  for (let previous = ""; previous !== text;) {
+    previous = text;
+    text = text.replace(/<[^<>]*>/gu, "");
+  }
+  return text.replaceAll("<", "").replaceAll(">", "")
     .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", '"').replaceAll("&#39;", "'").replaceAll("&amp;", "&");
 }
 

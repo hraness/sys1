@@ -1,8 +1,9 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { checkGuideLinks, guideFragments, renderGuide, SITE_GUIDES } from "../scripts/site-docs.ts";
 
-const root = new URL("../", import.meta.url).pathname;
+const root = resolve(import.meta.dir, "..");
 const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const text = (html: string) => html.replace(/<[^>]+>/gu, " ").replace(/&amp;/gu, "&").replace(/\s+/gu, " ");
 
