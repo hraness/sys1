@@ -198,7 +198,7 @@
             <p>With Jev enabled, inspect the source selection and repeat without <code>--dry-run</code> to send it. Use <code>--staged</code> for the index or <code>--since &lt;ref&gt;</code> for committed changes. Setup adds project instructions without automatic hooks.</p>
             <p>The bundled rules check newly empty catch blocks and removed test assertions in JavaScript and TypeScript. Use a linter for exact syntax patterns; add and evaluate your own rules for conventions that need judgment. Review and completion checks are experimental and advisory. Investigate findings and keep your normal tests and review.</p>
             <p>Record a candidate as <code>useful</code>, <code>incorrect</code>, or <code>unverifiable</code>. Complete unchanged batches can reuse their review for up to 24 hours. Local feedback metadata stores no source or model answers.</p>
-            <div class="docs-links"><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Feedback, rechecks, and custom rules <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">Run a stateless audit <span aria-hidden="true">↗</span></a></div>
+            <div class="docs-links"><a href="/docs/review">Feedback, rechecks, and custom rules</a><a href="https://github.com/hraness/sys1/blob/main/docs/audit.md">Run a stateless audit <span aria-hidden="true">↗</span></a></div>
           </section>
 
           <section id="verify" class="docs-section" aria-labelledby="verify-title">
@@ -263,9 +263,9 @@
             <p class="docs-intro">Use the same request and answer format from application code. Choose whether your app calls a server, runs the router itself, or connects to a local daemon.</p>
             <div class="docs-mode-list">
               <div class="docs-mode"><h3>{{PORTFOLIO_HEADING:docs-portable-client}}</h3><p>Use the dependency-light <code>@hraness/sys1/client</code> entry from Node 24 or Bun. It validates requests, bounds response bodies, propagates cancellation, and makes one explicit HTTP attempt.</p><pre tabindex="0"><code class="syntax-code language-shell" data-language="shell"><span class="syntax-token syntax-token--command">npm</span> install <span class="syntax-token syntax-token--flag">--omit=optional</span> \
-  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.19.1/hraness-sys1-0.19.1.tgz</span></code></pre><a href="https://github.com/hraness/sys1#use-as-a-module">Client guide <span aria-hidden="true">↗</span></a></div>
-              <div class="docs-mode"><h3>{{PORTFOLIO_HEADING:docs-embedded-router}}</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="https://github.com/hraness/sys1#use-as-a-module">Embedded guide <span aria-hidden="true">↗</span></a></div>
-              <div class="docs-mode"><h3>{{PORTFOLIO_HEADING:docs-loopback-http}}</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="https://github.com/hraness/sys1#the-endpoint">HTTP reference <span aria-hidden="true">↗</span></a></div>
+  <span class="syntax-token syntax-token--command">https://github.com/hraness/sys1/releases/download/v0.19.1/hraness-sys1-0.19.1.tgz</span></code></pre><a href="/docs/runtime#use-as-a-module">Client guide</a></div>
+              <div class="docs-mode"><h3>{{PORTFOLIO_HEADING:docs-embedded-router}}</h3><p>Use <code>createRouter</code> when your Bun application owns routing and local model lifecycle. It opens no port and exposes <code>evaluate</code>, <code>fetch</code>, and <code>dispose</code>.</p><a href="/docs/runtime#use-as-a-module">Embedded guide</a></div>
+              <div class="docs-mode"><h3>{{PORTFOLIO_HEADING:docs-loopback-http}}</h3><p>Run <code>sys1 up</code> for a local daemon. The endpoint is <code>POST /v1/systemone</code>; discovery is <code>GET /v1/models</code>; liveness is <code>GET /healthz</code>.</p><a href="/docs/runtime#the-endpoint">HTTP reference</a></div>
             </div>
             <div class="docs-code-block">
               <div class="docs-code-heading"><span>One typed request</span><span>System One</span></div>
@@ -293,7 +293,7 @@
               <div><dt>Kev</dt><dd>Kev is a set of trainable decision models that runs as your own server. Register it with <code>--adapter kev</code>. Sys1 handles its required fields, two-decimal probability output, and structured score labels. You own the checkpoint, server, and any training.</dd></div>
             </dl>
             <p>Local Qwen models are experimental. The broader studies found 32/72 correct answers for Qwen3 1.7B and 44/72 for Qwen3.5 4B on a different fresh fixture. Evaluate the model on your own cases; a shared answer format does not establish equal accuracy or calibration. <a href="/docs/evaluations">Read the model studies</a>.</p>
-            <div class="docs-links"><a href="https://github.com/hraness/sys1#external-system-one-backends">External backend guide <span aria-hidden="true">↗</span></a><a href="https://github.com/hraness/sys1#local-models">Local model lifecycle <span aria-hidden="true">↗</span></a></div>
+            <div class="docs-links"><a href="/docs/runtime#external-system-one-backends">External backend guide</a><a href="/docs/runtime#local-models">Local model lifecycle</a></div>
           </section>
 
           <section id="profiles" class="docs-section" aria-labelledby="profiles-title">

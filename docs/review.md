@@ -68,8 +68,12 @@ directory prefixes inside the worktree. Deleted text is included.
 
 The defaults are 20 requests and 30,000 ms of model-call time; the maximums are
 200 requests and 120,000 ms. There are no model retries or fallback to a
-different route. For an already installed local model, start `sys1 up`, select
-its `local-<id>/<id>` route, and add `--gateway`. Local models are experimental.
+different route. Add `--gateway` to send the review through a running
+`sys1 up` gateway. The part of a route before the slash may use only lowercase
+letters, digits, and hyphens, so review currently rejects the bundled local
+Qwen routes such as `local-qwen3-1.7b/qwen3-1.7b`. A route to a compatible
+server registered with `sys1 backend add` is accepted with or without
+`--gateway`.
 Checkpoints use the [same rule packs and coverage limits](audit.md) as
 `sys1 audit`.
 
@@ -229,9 +233,32 @@ The source repository also contains
 from Sys1, Ghostget, and design-kit. These rules are opt-in research examples
 outside the packaged and default packs. The corpus links original commits,
 independent label review, and deterministic checks. It is discovery evidence,
-not a held-out accuracy estimate. The [dated evaluation](reviewer-evaluation-2026-09-27.md)
-reports detections, misses, clean controls, and workflow checks.
+not a held-out accuracy estimate. In the [dated evaluation](reviewer-evaluation-2026-09-27.md),
+the candidate rules detected one of four labeled defects on hosted Jev and
+raised no findings on nine clean controls. Their authors had seen the repairs,
+so these results describe only the selected examples and do not estimate
+accuracy on unseen changes.
 The [focused-review follow-up](reviewer-followup-2026-09-27.md) compares specific
 requirements with added source context and records the remaining limitations.
 The [contract-based experiment](reviewer-contract-2026-09-27.md) tests a rule
 written from an existing requirement before its author saw the defect.
+
+## Troubleshooting
+
+Quoted messages are the text `sys1 review` prints. With `--json`, the same
+text arrives as the error message in the JSON object.
+
+| Symptom | What to check |
+| --- | --- |
+| `Could not identify the Git worktree` (setup) or `Review could not read the selected changes, rules, or metadata` (checkpoint) | Run the command inside the Git worktree you are reviewing. If you are already there, run `sys1 rules list --json` to confirm the rules load. |
+| `Choose one of --worktree, --staged, or --since <ref>; put paths after --` | Pass exactly one source mode, and list files or directories after `--`. |
+| `--model needs an explicit backend/model route` | Name a full route such as `typesafe/jev-1.13.0`. The part before the slash may use only lowercase letters, digits, and hyphens, so the bundled local Qwen routes are rejected. |
+| `--max-requests` or `--timeout-ms` is rejected | Use 1 to 200 requests and 1 to 120,000 ms. The defaults are 20 requests and 30,000 ms. |
+| `Start sys1 up and add --gateway for a local model` | Start the gateway with `sys1 up`, then add `--gateway` to the review command. |
+| `Unknown active rule <id>; run sys1 rules list` | Run `sys1 rules list --json` and copy an active ID. The command exits 2 before any model call or metadata write. |
+| The preview plans no requests | Inspect `audit.skipped`, the selected paths, and the active rules. |
+| A hosted request fails | Check `sys1 jev status` and `sys1 doctor`. Hosted Jev needs `TYPESAFE_API_KEY` in the environment and `sys1 jev enable`. With `--gateway`, restart a gateway that started before you exported the key. |
+| `Project file already exists with different content; review it manually` | Setup keeps a skill file that differs from its template, including an older Sys1 template. Update it through the repository's normal review. |
+| Exit 8 with `incomplete`, `stale`, `superseded`, or `unavailable` | Read the [status table](#investigate-and-record-feedback): inspect `audit.skipped` or `reason`, and run a fresh checkpoint after the source or rules change. |
+| `Review state is busy; retry this command` | Another process is using this worktree's review metadata. Retry when it finishes. |
+| `Review finding metadata is full` | The store keeps existing findings and feedback and rejects new ones. Use `sys1 audit` for a check without saved review history. |

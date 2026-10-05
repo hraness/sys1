@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" data-hraness-theme="paper" data-palette="tokyo-night" data-hraness-material="lantern" data-hraness-pattern="none" data-hraness-marketing-preset="editorial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Call the System One decision API locally or with Jev · Sys1</title>
+    <meta name="description" content="Call the System One decision API from Node, Bun, or HTTP on 127.0.0.1, routed to hosted Jev or an experimental local model, with every setting and command." />
+    <link rel="canonical" href="https://sys1.io/docs/runtime" />
+    <meta property="og:title" content="Call the System One decision API locally or with Jev · Sys1" />
+    <meta property="og:description" content="Call the System One decision API from Node, Bun, or HTTP on 127.0.0.1, routed to hosted Jev or an experimental local model, with every setting and command." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sys1" />
+    <meta property="og:url" content="https://sys1.io/docs/runtime" />
+    <meta property="og:image" content="https://sys1.io/og/docs-runtime.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Call the System One decision API, from Sys1" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Call the System One decision API locally or with Jev · Sys1" />
+    <meta name="twitter:description" content="Call the System One decision API from Node, Bun, or HTTP on 127.0.0.1, routed to hosted Jev or an experimental local model, with every setting and command." />
+    <meta name="twitter:image" content="https://sys1.io/og/docs-runtime.png" />
+    <meta name="twitter:image:alt" content="Call the System One decision API, from Sys1" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+    <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e1e2e7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1b26" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://sys1.io/docs/runtime",
+  "url": "https://sys1.io/docs/runtime",
+  "name": "Call the System One decision API locally or with Jev · Sys1",
+  "description": "Call the System One decision API from Node, Bun, or HTTP on 127.0.0.1, routed to hosted Jev or an experimental local model, with every setting and command.",
+  "isPartOf": {
+    "@id": "https://sys1.io/#website"
+  },
+  "about": {
+    "@id": "https://sys1.io/#software"
+  },
+  "publisher": {
+    "@id": "https://hraness.com/#organization"
+  }
+}
+    </script>
+    <script src="/appearance.js"></script>
+    <link rel="preload" href="/vendor/nebula-sans/NebulaSans-Book.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/vendor/nebula-sans/fonts.css" />
+    <link rel="stylesheet" href="/vendor/hraness-paper/paper-theme.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/palette-bridge.css" />
+    <link rel="stylesheet" href="/vendor/hraness-lantern/lantern-material.css" />
+    <link rel="stylesheet" href="/vendor/hraness-marketing/product-marketing-preset.css" />
+    <link rel="stylesheet" href="/vendor/hraness-site-footer/stylex.css" />
+    <link rel="stylesheet" href="/vendor/hraness-appearance/appearance-menu.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/comparison.css" />
+    <link rel="stylesheet" href="/docs.css" />
+    <script src="/site.js" defer></script>
+    <script src="/analytics.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header hraness-marketing-header">
+      <div class="header-inner">
+        <a class="wordmark" href="/" aria-label="Sys1 home"><img class="brand-mark hraness-marketing-brand-mark" src="/marks/sys1.svg" width="32" height="32" alt="" aria-hidden="true" /><span class="brand-name">Sys1</span></a>
+        <nav aria-label="Primary">
+          <a href="/skills">Skills</a>
+          <a href="/docs">Docs</a>
+          <a href="/docs/evaluations">Evidence</a>
+          <a href="https://github.com/hraness/sys1">GitHub</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-small" href="/docs#getting-started" data-analytics-cta="header-install-sys1">Install Sys1</a>
+          <div class="hraness-design-theme-toggle js-only" aria-busy="true" data-display="icons" data-hraness-appearance-menu data-presentation="menu" data-ready="false" data-theme-value="system">
+            <button class="hraness-design-theme-toggle__trigger" type="button" aria-controls="appearance-menu" aria-expanded="false" aria-haspopup="menu" aria-label="Appearance: System" disabled><span aria-hidden="true" data-current-appearance-icon="system"></span></button>
+            <div class="hraness-design-theme-toggle__popover" hidden>
+              <div class="hraness-design-theme-toggle__menu" id="appearance-menu" role="menu" aria-label="Appearance">
+                <div class="hraness-design-theme-toggle__item" data-theme-value="light" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="light"></span><span>Light</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="dark" role="menuitemradio" aria-checked="false" tabindex="-1"><span aria-hidden="true" data-appearance-icon="dark"></span><span>Dark</span></div>
+                <div class="hraness-design-theme-toggle__item" data-theme-value="system" role="menuitemradio" aria-checked="true" tabindex="-1" data-selected="true"><span aria-hidden="true" data-appearance-icon="system"></span><span>System</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1" class="docs-page reference-page">
+      <section class="docs-hero" aria-labelledby="guide-title">
+        <div class="docs-hero-inner">
+          <h1 id="guide-title">Sys1 runtime reference</h1>
+          <p class="docs-lede">Use the Node or Bun client, the embedded router, or the loopback HTTP endpoint. Route requests to hosted Jev, an experimental local Qwen model, or a compatible server you run.</p>
+          <div class="docs-meta"><span>Rendered from docs/runtime.md</span><a href="https://github.com/hraness/sys1/blob/main/docs/runtime.md">Source on GitHub</a></div>
+        </div>
+      </section>
+
+      <div class="docs-shell">
+        <aside class="docs-sidebar" aria-label="Runtime reference sections">
+          <p class="docs-sidebar-title">On this page</p>
+          <nav class="docs-nav">
+            <a href="#use-as-a-module">Use as a module</a>
+            <a href="#experimental-local-decisions">Experimental local decisions</a>
+            <a href="#add-hosted-jev">Add hosted Jev</a>
+            <a href="#local-models">Local models</a>
+            <a href="#the-endpoint">The endpoint</a>
+            <a href="#routing">Routing</a>
+            <a href="#external-system-one-backends">External System One backends</a>
+            <a href="#kev-and-decision-profiles">Kev and decision profiles</a>
+            <a href="#diagnostics">Diagnostics</a>
+            <a href="#commands">Commands</a>
+            <a href="#configuration">Configuration</a>
+          </nav>
+          <a class="docs-related" href="/docs">Sys1 documentation</a>
+        </aside>
+
+        <div class="docs-content docs-guide">
+<p>Configure the decision API, use the Node/Bun client, or run a local model.
+For installation and an agent workflow, start with the <a href="/docs#getting-started">getting-started guide</a>.</p>
+<h2 id="use-as-a-module">Use as a module</h2>
+<p>For a Node 24 or Bun application that calls a running gateway, follow the
+<a href="https://github.com/hraness/sys1/blob/main/README.md#use-as-a-module">client installation</a>, which omits the optional
+native runtime. Start the configured gateway with <code>sys1 up</code>, then send a request:</p>
+<pre tabindex="0"><code class="language-ts">import { createClient } from &quot;@hraness/sys1/client&quot;;
+
+const sys1 = createClient(); // http://127.0.0.1:13900
+const { response, metadata } = await sys1.evaluate({
+  state: &quot;The build failed after a dependency upgrade.&quot;,
+  questions: {
+    action: {
+      type: &quot;choice&quot;,
+      criteria: { repair: &quot;Fix the build&quot;, continue: &quot;Continue work&quot; },
+    },
+  },
+}, { signal: AbortSignal.timeout(5_000) });
+
+console.log(response.answers.action, metadata.backend);
+</code></pre>
+<p>The client validates inputs and correlates every returned answer with its
+question. It bounds response bytes, supports cancellation, and returns stable
+sanitized <code>Sys1ClientError</code> codes. It never retries, reads credentials from the
+environment, starts a daemon, downloads weights, or imports native inference.
+Supply <code>baseUrl</code> and <code>headers</code> explicitly for another approved endpoint.
+Import schemas and request/response types from the same <code>/client</code> entry point.</p>
+<p>For a Bun application that owns routing and model lifecycle in-process:</p>
+<pre tabindex="0"><code class="language-ts">import { createRouter, DEFAULT_CONFIG } from &quot;@hraness/sys1&quot;;
+
+const router = createRouter({
+  config: DEFAULT_CONFIG,
+  env: process.env,
+  home: &quot;/absolute/path/to/sys1-state&quot;, // previously installed models
+});
+try {
+  const result = await router.evaluate({
+    state: &quot;All required checks passed.&quot;,
+    questions: { ready: { type: &quot;noul&quot;, instructions: &quot;Are the checks passing?&quot; } },
+  });
+  console.log(result.response.answers.ready);
+} finally {
+  await router.dispose();
+}
+</code></pre>
+<p>The embedded router opens no port. It uses the same routing and validation as
+the daemon and owns its local runner until disposal. Its runtime requires Bun;
+the <code>/client</code> entry point is portable to Node. Keep one router per application,
+not one per request. The root package also exposes lower-level routing and
+model-management APIs; applications should normally use <code>createClient</code> or
+<code>createRouter</code>.</p>
+<h3 id="adopting-sys1-in-an-existing-jev-application">Adopting Sys1 in an existing Jev application</h3>
+<p>Keep domain questions, deterministic fallback, action authorization, and quality
+thresholds in the application. Put endpoint configuration, transport, routing,
+response validation, and local engine lifecycle behind Sys1. Existing HTTP
+clients in other languages can use the same daemon without a JavaScript module.</p>
+<p>Use <code>model: &quot;auto&quot;</code> or omit <code>model</code> to use the configured routing policy and
+selected local model. A hardcoded <code>jev-1.13.0</code> remains a model pin and cannot
+select an unrelated local model.
+Local calls need no hosted API key; hosted activation stays explicit. A remote
+server's loopback address points to that server. A browser running on the user's
+machine can address local services, so Sys1's network listener rejects browser
+origins and Fetch Metadata site headers, requires a loopback request authority,
+and accepts decision POSTs only as <code>application/json</code>.</p>
+<p>Start with an opt-in, non-authoritative pilot. Compare decisions on the
+application's representative fixtures and record backend/adapter identity,
+latency, errors, abstentions, and disagreement with the current decision path.
+Do not reuse Jev probability thresholds for generic GGUF output
+without model-specific evidence. A local-only policy also constrains explicit
+pins; a pin never bypasses the policy. Broad production adoption requires the
+consumer's own quality and operational acceptance, not just wire compatibility.</p>
+<h2 id="experimental-local-decisions">Experimental local decisions</h2>
+<pre tabindex="0"><code class="language-sh">sys1 setup      # verifies the native runtime, installs and selects Qwen3 1.7B
+sys1 up         # starts the gateway on 127.0.0.1:13900
+sys1 status
+</code></pre>
+<p>Local Qwen is experimental. Do not treat it as a drop-in replacement for Jev.
+The broader tests found 32/72 correct decisions for Qwen3 1.7B and 44/72 for
+Qwen3.5 4B on a different fresh fixture. <a href="/docs/evaluations">Read the evidence</a>
+before using local decisions to drive actions.</p>
+<p><code>setup</code> is the explicit weight-download boundary. It installs Qwen3 1.7B and
+persists that choice as <code>local.model</code>, regardless of system memory. Inspect
+without changing anything:</p>
+<pre tabindex="0"><code class="language-sh">sys1 setup --dry-run --json
+</code></pre>
+<p><code>sys1 setup --tier compact</code> explicitly installs and selects the experimental
+Qwen3 0.6B diagnostic model. It is not an automatic low-memory fallback.
+<code>sys1 setup --tier quality</code> returns the selection to Qwen3 1.7B.</p>
+<p>The pinned llama.cpp runtime selects the best available backend automatically:</p>
+<div class="table-scroll" role="region" aria-label="Experimental local decisions" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Package target</th><th align="right">Runtime preference</th></tr>
+</thead>
+<tbody>
+<tr><td>macOS ARM64</td><td align="right">Metal (the pinned runtime's only automatic selection)</td></tr>
+<tr><td>macOS x64</td><td align="right">CPU</td></tr>
+<tr><td>Linux x64</td><td align="right">CUDA, Vulkan, then CPU</td></tr>
+<tr><td>Linux ARM64</td><td align="right">CPU</td></tr>
+<tr><td>Windows x64</td><td align="right">CUDA, Vulkan, then CPU</td></tr>
+<tr><td>Windows ARM64</td><td align="right">CPU</td></tr>
+</tbody>
+</table></div>
+<p>Other platform/architecture pairs fail closed before downloading a model. The
+release artifact and package smoke are exercised on Ubuntu, macOS, and Windows.
+This matrix does not prove every OS/architecture pair above; run
+<code>sys1 doctor</code> on the actual host before use.</p>
+<p>Send a decision:</p>
+<pre tabindex="0"><code class="language-sh">sys1 eval &lt;&lt;'EOF'
+{
+  &quot;state&quot;: &quot;My payouts have been failing for 3 days.&quot;,
+  &quot;questions&quot;: {
+    &quot;urgent&quot;: {
+      &quot;type&quot;: &quot;noul&quot;,
+      &quot;instructions&quot;: &quot;Does this need immediate attention?&quot;,
+      &quot;criteria&quot;: {
+        &quot;true&quot;: &quot;A customer-impacting incident is ongoing&quot;,
+        &quot;false&quot;: &quot;This can wait for normal triage&quot;
+      }
+    }
+  }
+}
+EOF
+</code></pre>
+<p>Or point any System One client at <code>http://127.0.0.1:13900</code>.</p>
+<h2 id="add-hosted-jev">Add hosted Jev</h2>
+<p>Hosted Jev is disabled by default, even if <code>TYPESAFE_API_KEY</code> is already set in
+the environment. Obtain a key from <a href="https://console.typesafe.ai/">TypeSafe</a>,
+provide it through your shell or secret manager, and enable the backend:</p>
+<pre tabindex="0"><code class="language-sh"># Provide TYPESAFE_API_KEY privately in this shell first.
+sys1 jev enable
+sys1 jev status
+</code></pre>
+<p><code>jev enable</code> requires the credential to be present, stores only
+<code>hosted.enabled: true</code>, and sets routing to <code>hosted-only</code>. The key remains in the
+environment; Sys1 never writes it to its config or prints it. Avoid putting
+the key in source files or shell history. Restart a gateway that was
+started before the key was exported. To disable hosted Jev:</p>
+<pre tabindex="0"><code class="language-sh">sys1 jev disable
+</code></pre>
+<p>Enabling Jev selects <code>hosted-only</code>: a hosted outage or missing credential returns
+an error without substituting Qwen. To experiment with local fallback after
+measuring its quality on your application, explicitly run
+<code>sys1 config set routing.policy auto</code>. That policy prefers reachable Jev, then
+the installed model named by <code>local.model</code>. Disabling Jev returns a hosted-only
+configuration to <code>auto</code> for the selected local model. Installing additional
+models does not change the selection. If no eligible route is available, Sys1
+reports an error instead of silently choosing another installed model.</p>
+<h3 id="make-your-first-jev-api-request">Make your first Jev API request</h3>
+<p>After enabling Jev, start the loopback daemon with <code>sys1 up</code>. Save this as
+<code>request.json</code>; it asks about a small, supplied piece of evidence:</p>
+<pre tabindex="0"><code class="language-json">{
+  &quot;model&quot;: &quot;typesafe/jev-1.13.0&quot;,
+  &quot;state&quot;: { &quot;result&quot;: &quot;The check exited with code 1.&quot; },
+  &quot;questions&quot;: {
+    &quot;failed&quot;: {
+      &quot;type&quot;: &quot;noul&quot;,
+      &quot;instructions&quot;: &quot;Does the supplied result report a failed check?&quot;
+    }
+  }
+}
+</code></pre>
+<pre tabindex="0"><code class="language-sh">sys1 eval --file request.json --json
+</code></pre>
+<p>Read <code>answers.failed.noul</code> as the model's probability of yes. This request
+demonstrates the API; code should read an available exit status directly.
+Pinning <code>typesafe/jev-1.13.0</code> selects the hosted route and version. TypeSafe's
+<a href="https://docs.typesafe.ai/models"><code>jev-latest</code> alias</a> can move to a new version;
+Sys1's default remains the configured version until you change it. Review and
+verify commands can call Jev directly without starting the daemon; the client,
+<code>sys1 eval</code>, and commands using <code>--gateway</code> need a running gateway.</p>
+<p>For a failed request, check <code>sys1 jev status</code> and <code>sys1 doctor</code>. Restart the
+daemon after changing its environment. An HTTP error from a backend is
+returned without a retry; the client does not silently try a different model.
+Current provider limits and prices are in <a href="https://docs.typesafe.ai/models">TypeSafe's model reference</a>.</p>
+<h2 id="local-models">Local models</h2>
+<p><code>sys1 setup</code> and <code>sys1 pull</code> manage model artifacts under
+<code>~/.sys1/models</code> (or <code>$SYS1_HOME/models</code>). Downloads stream to a temporary
+file, enforce an 8 GiB ceiling, verify SHA-256, run GGUF structural
+validation within fixed read limits, and only then atomically enter the model store. Manifest filenames
+cannot escape the store, symbolic-link weights are rejected, and the daemon
+never downloads weights implicitly.</p>
+<pre tabindex="0"><code class="language-sh">sys1 pull --list
+sys1 pull qwen3-1.7b
+sys1 model list
+sys1 model verify qwen3-1.7b
+</code></pre>
+<p>The curated registry contains three experimental GGUF models:</p>
+<div class="table-scroll" role="region" aria-label="Local models" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Model</th><th align="right">Kind</th><th align="right">Download</th><th align="right">Role</th></tr>
+</thead>
+<tbody>
+<tr><td><code>qwen3-1.7b</code></td><td align="right"><code>gguf</code></td><td align="right">1.03 GiB</td><td align="right">default local experiment</td></tr>
+<tr><td><code>qwen3-0.6b</code></td><td align="right"><code>gguf</code></td><td align="right">365 MiB</td><td align="right">diagnostic model; explicit selection only</td></tr>
+<tr><td><code>qwen3.5-4b</code></td><td align="right"><code>gguf</code></td><td align="right">2.55 GiB</td><td align="right">larger candidate; explicit selection only</td></tr>
+</tbody>
+</table></div>
+<p>All entries are pinned to the publisher's Hugging Face LFS SHA-256. Weight
+licenses and terms remain those of their publishers; weights are not included
+in the Sys1 package.</p>
+<p><code>sys1 pull</code> defaults to Qwen3 1.7B and only installs an artifact; it does not
+change <code>local.model</code>. To change the local route, install the model first, then
+select its installed ID with <code>sys1 config set local.model MODEL</code>. Other
+installed models require a request-level model pin. This keeps a new download
+from becoming an unintended fallback.</p>
+<p>Older inventories containing removed CUA-S1 or Needle artifacts fail closed.
+Sys1 preserves those files and the manifest; use a new <code>SYS1_HOME</code> for the
+current GGUF store.</p>
+<h3 id="generic-gguf-adapter">Generic GGUF adapter</h3>
+<p>For builtin GGUF models, Sys1 renders a length-limited question prompt, evaluates
+the full first-token vocabulary distribution with llama.cpp, and sums
+probability mass over constrained answer labels. Choice and score use unique
+one-character labels to avoid ambiguous multi-token option names. Builtin
+inference supports up to 35 options per question; hosted and external
+backends retain the protocol's 255-option limit. Builtin answers use the
+official Jev wire shapes and disclose <code>generic-gguf</code> in the
+<code>x-sys1-local-adapter</code> response header:</p>
+<ul>
+<li>Noul returns only <code>type</code> and probability-of-yes <code>noul</code>;</li>
+<li>Choice returns <code>choice</code>, keyed <code>probabilities</code>, and <code>confidence</code>;</li>
+<li>Score returns a zero-based probability-weighted fractional <code>score</code>, keyed
+<code>legend</code>, keyed <code>probabilities</code>, and <code>confidence</code>.</li>
+</ul>
+<p>Adapter input bounds fail closed: Sys1 never silently truncates state,
+instructions, or criteria. Generic GGUF accepts up to 6,000 state characters,
+2,000 instruction characters, 96 characters per option name/criterion, and
+16,000 characters for the complete rendered prompt. An input beyond the adapter's
+bounds returns an error without being sent to a different backend.</p>
+<p>Adapter quality signals stay outside those answer objects:
+<code>x-sys1-local-min-coverage</code> is the least total probability mass assigned to
+allowed labels, and <code>x-sys1-local-min-concentration</code> is the least
+distribution concentration in the batch. Low coverage means the model did not
+cleanly follow the decision instruction. These are useful local signals, not
+a calibration guarantee. Use hosted Jev, or a System One-specific backend
+whose behavior has been evaluated for your task.</p>
+<p>An unlisted public Hugging Face GGUF can be installed explicitly:</p>
+<pre tabindex="0"><code class="language-sh">sys1 pull 'hf:owner/repository:path/model.gguf' --sha256 &lt;64-hex-digest&gt;
+</code></pre>
+<h2 id="the-endpoint">The endpoint</h2>
+<div class="table-scroll" role="region" aria-label="The endpoint" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Route</th><th align="right">Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>POST /v1/systemone</code></td><td align="right">Evaluate <code>{model?, state, questions}</code> through the selected backend</td></tr>
+<tr><td><code>GET /v1/models</code></td><td align="right">List model ids, backend names, kinds, and reachability</td></tr>
+<tr><td><code>GET /healthz</code></td><td align="right">Report daemon liveness and version</td></tr>
+</tbody>
+</table></div>
+<p>Responses carry <code>x-sys1-backend</code> and <code>x-sys1-attempts</code>; builtin responses
+also carry the local adapter and diagnostic headers above. Any HTTP response
+from a remote backend, including 4xx or 5xx, is definitive. Only a transport
+failure may re-dispatch, at most once, and never for a pinned <code>backend/model</code>.</p>
+<p><code>state</code>, <code>instructions</code>, and criterion descriptions accept text, JSON objects,
+JSON arrays, or <code>null</code> where the official Jev contract permits it. The public
+package exports request and response schemas for boundary validation.</p>
+<h3 id="request-example">Request example</h3>
+<pre tabindex="0"><code class="language-json">{
+  &quot;model&quot;: &quot;auto&quot;,
+  &quot;state&quot;: { &quot;tests&quot;: &quot;failing&quot;, &quot;branch&quot;: &quot;main&quot; },
+  &quot;questions&quot;: {
+    &quot;action&quot;: {
+      &quot;type&quot;: &quot;choice&quot;,
+      &quot;instructions&quot;: &quot;What should the agent do next?&quot;,
+      &quot;criteria&quot;: {
+        &quot;fix&quot;: &quot;Repair the failure before continuing&quot;,
+        &quot;continue&quot;: &quot;The failure is unrelated and safe to defer&quot;,
+        &quot;escalate&quot;: &quot;Human judgment is required&quot;
+      }
+    },
+    &quot;risk&quot;: {
+      &quot;type&quot;: &quot;score&quot;,
+      &quot;instructions&quot;: &quot;Rate merge risk&quot;,
+      &quot;criteria&quot;: [&quot;low&quot;, &quot;moderate&quot;, &quot;high&quot;]
+    }
+  }
+}
+</code></pre>
+<h2 id="routing">Routing</h2>
+<p>For unpinned requests (<code>model: &quot;auto&quot;</code> or omitted), <code>routing.policy</code> controls
+the order of enabled hosted Jev and the installed model named by <code>local.model</code>:</p>
+<div class="table-scroll" role="region" aria-label="Routing" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Policy</th><th align="right">Order</th></tr>
+</thead>
+<tbody>
+<tr><td><code>auto</code> (default)</td><td align="right">hosted Jev, then the selected local model</td></tr>
+<tr><td><code>prefer-local</code></td><td align="right">selected local model, then hosted Jev</td></tr>
+<tr><td><code>prefer-hosted</code></td><td align="right">hosted Jev, then the selected local model</td></tr>
+<tr><td><code>local-only</code></td><td align="right">selected local model only</td></tr>
+<tr><td><code>hosted-only</code></td><td align="right">hosted Jev only</td></tr>
+</tbody>
+</table></div>
+<p>Other installed models and all registered HTTP services require an explicit
+request model or backend/model pin. They never receive unpinned fallback
+traffic. A missing selected model does not promote another installed model.
+Registered HTTP services are local only when their URL uses a
+loopback host; off-machine URLs count as hosted. Redirects are never followed.
+<code>local-only</code> decisions neither probe nor dispatch to hosted endpoints. Explicit
+model discovery and doctor may probe all configured backends. Backend names must
+be unique; <code>typesafe</code> and <code>local-*</code> are reserved for managed candidates. Requests can pin either a model id or an exact backend/model:</p>
+<ul>
+<li><code>&quot;model&quot;: &quot;jev-1.13.0&quot;</code> selects a backend serving that hosted model;</li>
+<li><code>&quot;model&quot;: &quot;local-qwen3-1.7b/qwen3-1.7b&quot;</code> pins the builtin Qwen runner;</li>
+<li><code>&quot;model&quot;: &quot;local-qwen3-0.6b/qwen3-0.6b&quot;</code> explicitly selects the experimental model;</li>
+<li><code>&quot;model&quot;: &quot;openjev/openjev-latest&quot;</code> pins a registered HTTP backend that advertises that alias.</li>
+</ul>
+<p>Selection is capability-aware. Sys1 compares each request's largest option
+count and total question count against the backend's published limits. A backend the request exceeds is skipped; when no configured backend
+can serve the request at all the gateway answers <code>422 request_unsupported</code>
+rather than dispatching a request that would fail downstream. Builtin
+backends publish their adapter limit (<code>generic-gguf</code> 35 options); remote backends
+are probed at <code>GET /v1/limits</code> (openjev-style <code>max_answers_per_question</code> and
+<code>max_questions</code>). A backend that publishes nothing has unknown capacity; Sys1 can enforce only
+its configured limits and the common protocol envelope. Missing limits never
+mean zero capability.</p>
+<h2 id="external-system-one-backends">External System One backends</h2>
+<p>Sys1 can route to an <a href="https://github.com/razorback16/openjev">OpenJev</a> server
+through its standard System One decision API. OpenJev's image, chat, and
+advanced sampling extensions are not supported. A server you register answers
+only requests that select it; adding one does not change the default route.</p>
+<p>Any service implementing <code>POST /v1/systemone</code> and <code>GET /v1/models</code> can join the
+same router. For an existing OpenJev server, first inspect its advertised model
+IDs. The example uses OpenJev's documented <code>openjev-latest</code> alias; replace it if
+your server advertises a different ID:</p>
+<pre tabindex="0"><code class="language-sh">curl http://127.0.0.1:8080/v1/models
+sys1 backend add \
+  --name openjev \
+  --url http://127.0.0.1:8080 \
+  --model openjev-latest
+</code></pre>
+<p>Before routing agents to an operator backend, check its discovery, limits,
+and all three answer shapes:</p>
+<pre tabindex="0"><code class="language-sh">sys1 backend check --name openjev
+</code></pre>
+<p>Select it in a request with <code>&quot;model&quot;: &quot;openjev/openjev-latest&quot;</code>. Registering
+and checking a service do not add it to automatic routing.</p>
+<p>The check makes a limited number of calls to <code>/v1/models</code>, <code>/v1/limits</code>, and
+<code>/v1/systemone</code>; validates the official response schema, probability
+normalization, and Score arithmetic; and never prints or persists request or
+response bodies. Backends that do not publish limits receive a warning unless
+static caps were configured. All configured HTTP processes remain
+operator-owned: Sys1 probes and forwards to them but does not download their
+weights, mutate credentials, or own their lifecycle.</p>
+<h2 id="kev-and-decision-profiles">Kev and decision profiles</h2>
+<p><a href="https://github.com/jaredpalmer/kev">Kev</a> servers use a dedicated adapter
+(<code>--adapter kev</code>) that handles Kev's two-decimal probability output and
+structured Score legends. Versioned decision profiles reuse task instructions
+with Jev, local models, or a separately trained Kev checkpoint.
+<a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev and tuning guide</a>.</p>
+<p>After starting and verifying a separately owned Kev server, register it explicitly:</p>
+<pre tabindex="0"><code class="language-sh">sys1 backend add --adapter kev --name kev \
+  --url http://127.0.0.1:8009 --model kev-latest
+sys1 backend check --name kev
+</code></pre>
+<p>Kev remains outside automatic routing. A versioned profile pins the route and
+reuses the same instructions and criteria while each call supplies new state:</p>
+<pre tabindex="0"><code class="language-ts">import { createClient, createProfile } from &quot;@hraness/sys1/client&quot;;
+
+const triage = createProfile({
+  version: 1, id: &quot;ticket-triage&quot;, revision: &quot;1&quot;, model: &quot;kev/kev-latest&quot;,
+  questions: {
+    urgent: { type: &quot;noul&quot;, instructions: &quot;Does the ticket describe an active outage?&quot; },
+  },
+});
+const result = await createClient().evaluate(triage.request(&quot;Checkout is unavailable.&quot;));
+</code></pre>
+<p>Profiles work with the Node/Bun client and embedded router. Definitions are
+validated and frozen; each request is a fresh ordinary System One request.
+Only model, state, and questions cross the wire. No templating, hidden prompt
+injection, global profile registry, or automatic training is involved. Save
+the definition as JSON for <code>sys1 eval --profile triage.json</code>, which accepts
+only <code>{&quot;state&quot;: ...}</code> on stdin or <code>--file</code>.
+<a href="https://github.com/hraness/sys1/blob/main/examples/ticket-triage.profile.json">Start from the ticket-triage profile</a>.</p>
+<p>From a source checkout, <a href="https://github.com/hraness/sys1/blob/main/docs/profile-evaluation.md">evaluate profiles on labeled examples</a>
+with an offline preview, request limits, and per-question results. Experimental
+<a href="https://github.com/hraness/sys1/tree/main/examples/workflows">profiles</a> cover failure triage, excerpt relevance, and claim
+support. These experiments require Bun and the project dependencies; they are
+separate from the installed review and verification skills. Read the
+<a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 trial</a> for the
+method, recorded outcomes, and limits.</p>
+<p>That trial submitted 48 frozen synthetic examples to Jev 1.13.0 once each:</p>
+<div class="table-scroll" role="region" aria-label="Kev and decision profiles" tabindex="0"><table class="comparison-table">
+<thead>
+<tr><th>Source workflow</th><th align="right">Correct / submitted</th><th align="right">Errors</th><th align="right">Deterministic baseline</th></tr>
+</thead>
+<tbody>
+<tr><td>Claim support</td><td align="right">16/16</td><td align="right">0</td><td align="right">6/16 with literal text matching</td></tr>
+<tr><td>Failure triage</td><td align="right">16/16</td><td align="right">0</td><td align="right">16/16 with error signatures</td></tr>
+<tr><td>Excerpt relevance</td><td align="right">13/16</td><td align="right">3</td><td align="right">6/16 with token overlap</td></tr>
+</tbody>
+</table></div>
+<p>Claim support is a candidate for a larger trial against stronger comparators.
+Triage tied ordinary error matching. Relevance needs response-format diagnosis.
+These small synthetic sets do not establish production accuracy, and the
+literal-match claim baseline is deliberately weak. Errors remain in the
+denominators; profiles, labels, and thresholds were unchanged after the run.</p>
+<p>For a direct Kev endpoint, use <code>createClient({ baseUrl: &quot;http://127.0.0.1:8009&quot;, adapter: &quot;kev&quot; })</code> with an ordinary request containing <code>model: &quot;kev-latest&quot;</code>.
+When calling the Sys1 gateway, leave the client adapter unset. Routing metadata
+identifies Kev and its two-decimal precision; probabilities are not renormalized.</p>
+<p>The backend/model pin identifies a route, not its weights. Kev always advertises
+<code>kev-latest</code>; verify the server's actual checkpoint separately. The
+<a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">setup and tuning guide</a> covers pinned checkpoints, prompt revisions,
+fine-tuning, calibration, and held-out evaluation. Model downloads and training
+remain explicit Kev operations. Protocol tests do not establish model quality.</p>
+<h2 id="diagnostics">Diagnostics</h2>
+<p><code>sys1 doctor</code> checks the install and prints one line per check (✓, ⚠ or ✗),
+a count, and the command to run next. It verifies the
+Bun floor, state-directory access, config, native llama.cpp runtime/backend,
+the installed-model list, every installed model's GGUF header, leftover or
+unknown files in the model folder, routing candidates, and daemon ownership. It does not hash entire model
+files; use <code>sys1 model verify MODEL</code> for exact SHA-256 verification.</p>
+<pre tabindex="0"><code class="language-sh">sys1 doctor
+sys1 doctor --json
+</code></pre>
+<p>Warnings do not fail readiness. Failed checks return exit code 6. JSON is
+versioned (<code>version: 1</code>) and check identifiers are stable and additive.</p>
+<h2 id="commands">Commands</h2>
+<pre tabindex="0"><code class="language-text">sys1 setup [--tier compact|quality] [--dry-run]
+sys1 jev status|enable|disable
+sys1 up|down|serve|status|doctor
+sys1 pull [MODEL]|pull --list
+sys1 model list|verify|remove
+sys1 models
+sys1 eval
+sys1 audit --staged|--worktree|--since &lt;ref&gt; --model &lt;backend/model&gt;
+sys1 review checkpoint|issues|feedback|recheck|setup
+sys1 rules list|check|draft
+sys1 verify setup codex|claude-code|devin
+sys1 verify --model &lt;backend/model&gt; [--message &lt;file|-&gt;]
+sys1 usage [--days &lt;n&gt;]
+sys1 backend list|add|check|remove
+sys1 config path|get|set|unset
+sys1 --version|--help
+</code></pre>
+<p>See <a href="https://github.com/hraness/sys1/blob/main/docs/workflows.md">saved checks and review workflows</a> for <code>sys1 workflow</code>
+commands and the <a href="https://github.com/hraness/sys1/blob/main/docs/cli-updates.md">update guide</a> for <code>sys1 update</code>.</p>
+<p>Supporting commands accept <code>--json</code>. When an agent runs sys1 (Claude Code,
+Codex, Cursor, Gemini CLI, or <code>AI_AGENT</code> is set), JSON is the default;
+<code>HRANESS_AUDIENCE=human</code> or <code>agent</code> overrides the guess. Machine data goes to
+stdout; diagnostics, next-step hints and download progress go to stderr. Every
+command has its own help (<code>sys1 setup --help</code>). Errors are one sentence and the
+command to run next; with <code>--json</code> they are one <code>{&quot;ok&quot;:false,&quot;error&quot;:{...}}</code>
+object on stdout. <code>sys1 setup --dry-run</code> shows the model, its size and the
+folder it would be downloaded to.</p>
+<h2 id="configuration">Configuration</h2>
+<p><code>~/.sys1/config.json</code> is created on the first write. <code>SYS1_HOME</code> overrides
+the state directory. Settable keys:</p>
+<ul>
+<li><code>routing.policy</code>;</li>
+<li><code>gateway.host</code> (loopback addresses only), <code>gateway.port</code>,
+<code>gateway.request_timeout_ms</code>, <code>gateway.probe_timeout_ms</code>;</li>
+<li><code>hosted.base_url</code>, <code>hosted.model</code>, <code>hosted.api_key_env</code> (activation uses
+<code>sys1 jev</code>);</li>
+<li><code>local.enabled</code>, <code>local.model</code>, <code>local.context_tokens</code>, <code>local.eval_timeout_ms</code>,
+<code>local.max_loaded_models</code>.</li>
+</ul>
+<p>Fresh config uses <code>routing.policy: auto</code>, <code>local.enabled: true</code>,
+<code>local.model: qwen3-1.7b</code>, <code>hosted.model: jev-1.13.0</code>, and
+<code>hosted.enabled: false</code>. The daemon reads config per request, so routing and
+backend changes do not need a restart. Restart after changing local runtime
+context, timeout, or residency settings. Environment variables are inherited when
+the daemon starts, so restart it after exporting a new Jev credential. Already
+loaded GGUFs stay resident up to <code>local.max_loaded_models</code> (default one) and are
+released on eviction or daemon shutdown. Local requests are serialized
+to keep context state isolated and the number of loaded models limited. GGUF inference lives in
+an owned worker process; abort, timeout, or disposal terminates and collects
+that worker before the next request can reuse the engine slot.</p>
+<p>The decision endpoint accepts loopback binds only and has no application
+authentication. The network listener blocks browser-originated decision requests and
+non-loopback Host authorities, but it does not authenticate local processes.
+Any process that can connect locally can dispatch decisions using the gateway's
+enabled backends and credentials; use it only on a trusted local machine.
+The in-process <code>createRouter</code>/<code>createFetchHandler</code> API leaves request filtering
+to its owning application. Daemon shutdown uses a per-instance
+secret from its private pid file and an authenticated control endpoint. Sys1
+never signals an arbitrary PID read from that file.</p>
+        </div>
+      </div>
+    </main>
+    <footer aria-label="Hraness network" class="hraness-site-footer x1ktp55a x8d9m59 x96ybla x14z8vex x8c10za xdg0xw2 x1munjs5 xsctza4 xtq98z5 x1w6jg7m x3luoqq x1xgbxbt x9cmhvv x4sry57 xys6ka6 x18ca4t7 x1sphz0r x1a0dqq5 x1h47zgc x1ghcxmq xd04x30 xwk8b0x x1dsv906 x1baz8l3 xiuoait x1g4142m xprmc4t xkpwil5 x12mkk0b" data-brand="visible" data-mailing-list="none" data-slot="hraness-site-footer" id="hraness-site-footer"><div class="hraness-site-footer__inner x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x9fpagd x10xu2di x1n2onr6 xrvj5dj x182hbjg x83lif4 x1rkzygb x1o8kq85 xx97v1z xiuoait xzlj3eo x5vl0wm x1tec7hu xesnm00 xc26acl x6s0dn4 x1n78d84 x1lfezxm x1b1eqt9 x3so8kt x1hdm9tg x1np48w9 x1hhhz6w x9yvj25 x1qtgzxc xpcvst1 xhvvu7z x1dyck8u"><a aria-label="Hraness home" class="hraness-site-footer__brand x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 x1pmbb8p xamitd3 x1lqcxt8 xl56j7k xart1r9 xeuuy2l x6i6fhv x1d3i0y6 x1heor9g xxeg0yr x19s9jnd x130jcwj xo5v014 x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/" lang="en" dir="ltr"><span aria-hidden="true" class="hraness-site-footer__mark-root x1c4vz4f x2lah0s xdl72j9 x1n2onr6 x3nfvp2 xif76xs x1wugil3 x14ju556" data-foil=""><svg class="hraness-site-footer__mark x1c4vz4f x2lah0s xdl72j9 xif76xs x1wugil3 x1lliihq" data-slot="hraness-mark" focusable="false" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M372 141a116 116 0 1 1-232 0 116 116 0 1 1 232 0Zm-14 0a102 102 0 1 0-204 0 102 102 0 1 0 204 0Zm-8 0a94 94 0 1 1-188 0 94 94 0 1 1 188 0Z" fill="currentColor" fill-rule="evenodd"></path><path d="M211 252c75-8 154 30 204 94 32 40 51 89 59 142H184c20-28 29-57 22-87-9-39-26-71-28-99-2-22 9-39 33-50Z" fill="currentColor"></path><path d="M246 270c-27-20-67-23-100-9-25 11-42 31-46 56l-34 20 38 12c4 25 14 47 31 66 15 13 22 32 18 56l-14 17h116c-20-27-23-50-8-68 6-8 14-14 23-21 23-20 34-50 28-79-5-22-23-40-52-50ZM132 309c9-14 22-22 38-22 13 0 25 7 34 19-10 14-23 22-39 22-14 0-25-6-33-19Z" fill="currentColor" fill-rule="evenodd"></path><path d="M151 410c-2 30-16 57-43 78h197c-19-27-40-49-63-63-28-18-59-23-91-15Z" fill="currentColor"></path><circle cx="166" cy="307" fill="currentColor" r="8"></circle></svg><span class="hraness-site-footer__mark-paint x35j2r9 x1dscx4y xmntjkq x14xjb22 x1xbl91z x1iiaa4z x47qxf1 x1n6b76k x13hwd88 x1z0t8xj xx7v8hi x1bbyikp xq2h55 x1lhcm7p xr9ynje x1apl0kd x10l6tqk x10a8y8t x47corl xyowimg xi9drc3 x5e4rk6 x16fucec x1rudrqi x2k2kcx" data-slot="hraness-mark-paint"></span></span><span class="hraness-site-footer__brand-name xj5idha x1dcheo9 xk50ysn x1i21sxh xuxw1ft">by Hraness</span></a><div class="hraness-site-footer__consent x9f619 xmkeg23 x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xixxii4 xf5e64p xcc8yhp xs1cnaw x78zum5 xvgho8r x6s0dn4 x15qkubi x1o5vn8x xllzysa x1e6avla x1hhhz6w x9yvj25 xim0ftz xwaqzdf xj5idha x1dcheo9 x132q4wb xuxw1ft" data-slot="hraness-cookie-consent" hidden=""><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-consent-prompt="" data-slot="hraness-cookie-consent-accept" type="button">Accept cookies</button><details class="hraness-site-footer__consent-more xt0psk2 x1n2onr6"><summary aria-label="About cookies" title="About cookies" data-notice="required" class="hraness-site-footer__consent-learn x1ypdohk x3nfvp2 x1i5lizr x6s0dn4 xl56j7k xlashs9 xart1r9 xvpgqt4 x1m71csk x1e6avla x3ct3a4 x1lziwak xjbqb8w x1voprv7 x1heor9g xxeg0yr x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma"><span class="hraness-site-footer__consent-label x3nfvp2 xvgho8r x6s0dn4" data-consent-icon=""><svg aria-hidden="true" class="hraness-site-footer__support-icon x1milg1j x38bysi" data-slot="hraness-support-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></circle><path d="M9.5 9.5C9.5 8.11929 10.6193 7 12 7C13.3807 7 14.5 8.11929 14.5 9.5C14.5 10.3569 14.0689 11.1131 13.4117 11.5636C12.7283 12.0319 12 12.6716 12 13.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M12.125 16.75H12M12.25 16.75C12.25 16.8881 12.1381 17 12 17C11.8619 17 11.75 16.8881 11.75 16.75C11.75 16.6119 11.8619 16.5 12 16.5C12.1381 16.5 12.25 16.6119 12.25 16.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span><span class="hraness-site-footer__consent-label x3nfvp2 xvgho8r x6s0dn4" data-consent-label="" hidden="">Analytics preferences</span></summary><div class="hraness-site-footer__consent-panel x9f619 xmkeg23 x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc x10l6tqk xhtitgo xu668xk x1odjw0f x1smivkc xtijo5x x146urod x1ljtl1n xim0ftz xwaqzdf x13eudtd x1ryrjj2 x116uinm x1hhhz6w x9yvj25 xj5idha x1dcheo9 xfrs9s4 xeaf4i8">Your browser remembers your appearance setting and this choice. We use analytics to understand how the site is used. None of it is used for advertising or cross-site tracking. You can change your analytics choice here at any time. <a class="hraness-site-footer__consent-link x1g4142m x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://hraness.com/privacy">Privacy policy</a><div class="hraness-site-footer__consent-actions x78zum5 x1a02dak xvh977a x1gixskw x1qughib"><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-slot="hraness-cookie-consent-accept" type="button">Accept analytics</button><button class="hraness-site-footer__consent-accept x9f619 x18o3ruo x1y4qj14 x1cwfr1t x182nak8 x12koezg x1u7o2vf x1fdtg7e x1y0btm7 x11ngh50 x1ylmb6m x18sabzy x1jleocg x1pjjote x1e53mt7 xgkqhyc xlashs9 xjb2p0i x1qlqyl8 x1t35e8 x1aazh3f x1xh6y1q x15bjb6t xd4aj15 xvmqkbn x10rt0pk x1rcybi7 x61gc8y xkyhvkk x3nfvp2 xvgho8r x6s0dn4 xt970qd xvpgqt4 xc342km x1e6avla x1ypdohk xjbqb8w x1voprv7 x1g4142m xh88oxj x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" data-slot="hraness-cookie-consent-decline" type="button">Decline analytics</button></div></div></details></div><nav aria-label="Hraness links" class="hraness-site-footer__links x78zum5 x6s0dn4 xt33hwp xgc5ccc x12h1iku xiuoait xesnm00 x1jfo8e8 xjsudho"><ul class="hraness-site-footer__socials x78zum5 xesnm00 x1jfo8e8 x1enigpx x1ghz6dp x1717udv x3ct3a4 x43c9pm xnbnhf8"><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1lliihq"><a aria-label="Hraness on Substack" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://substack.com/@hraness" rel="me" title="Substack"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836ZM1.46 10.812v2.836h21.08v-2.836H1.46ZM22.54 16.218V24L12 18.11 1.46 24v-7.782h21.08ZM1.46 0v2.836h21.08V0H1.46Z" fill="currentColor"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xhzsqoz x6w72mi"><a aria-label="Hraness on X" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://x.com/hraness" rel="me" title="X"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg x18g50z5 x101cbvv"><a aria-label="Hraness on LinkedIn" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://www.linkedin.com/company/hraness" rel="me" title="LinkedIn"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M11 13V17M11 13C11 11.3431 12.3431 10 14 10C15.6569 10 17 11.3431 17 13V17M11 13V10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M7.125 6.75H7M7.25 6.75C7.25 6.88807 7.13807 7 7 7C6.86193 7 6.75 6.88807 6.75 6.75C6.75 6.61193 6.86193 6.5 7 6.5C7.13807 6.5 7.25 6.61193 7.25 6.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3C16.2426 3 18.364 3 19.682 4.31802C21 5.63604 21 7.75736 21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li><li class="hraness-site-footer__social-item x175cv4s x1bxml6c x1c4vz4f x2lah0s x4hbtdw xesnm00 x159srwy x1s85apg xir82yx xwl02xf"><a aria-label="Hraness on GitHub" class="hraness-site-footer__social-link x78zum5 x6s0dn4 x1c4vz4f x2lah0s xdl72j9 xiuoait xuxy95z xl56j7k x1e6avla xj5idha xxeg0yr x1voprv7 x8o3jvd xwt2121 x1f6hyc3 x1x226zn xsq4hlx x156efcn xlkrsup x1ylmb6m x1hl2dhg x784prv x9v5kkp xxuwnm0 xz4eswf xj3ae5l x105zyf9 x1ntgrh1 xma2t0n x7ctuma" href="https://github.com/hraness" rel="me" title="GitHub"><svg aria-hidden="true" class="hraness-site-footer__social-icon x1milg1j x38bysi" data-slot="social-icon" fill="none" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></a></li></ul></nav></div></footer>
+
+  </body>
+</html>

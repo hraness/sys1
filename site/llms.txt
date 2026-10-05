@@ -19,7 +19,7 @@ Latest release: v0.19.1.
 - [Documentation](https://sys1.io/docs): Saved checks, model setup, preview commands, and the decision API.
 - [Install the compact-output skill](https://sys1.io/skills#install): The separate System One Skills package, agent-specific paths, and log recovery.
 - [Add code review](https://sys1.io/skills#review): Preview selected changes and rules before making model calls.
-- [Review guide](https://github.com/hraness/sys1/blob/main/docs/review.md): Repository rules, feedback, privacy, and troubleshooting.
+- [Review guide](https://sys1.io/docs/review): Repository rules, feedback, privacy, and troubleshooting.
 - [Add completion checks](https://sys1.io/skills#verify): Check a message from any agent; Devin also supports local transcript discovery.
 - [Verification guide](https://github.com/hraness/sys1/blob/main/docs/verify.md): Evidence sources, preview mode, and exit codes.
 - [Introducing Sys1](https://sys1.io/introducing-sys1): Illustrated examples of the three workflows and their limits.
@@ -29,7 +29,7 @@ Latest release: v0.19.1.
 Applications supply state and yes/no, choice, or score questions, then receive validated answer shapes and probabilities. A valid response can still be wrong. The same API is available through a Node or Bun client, an embedded Bun router, and a loopback HTTP daemon.
 
 - [First API request](https://sys1.io/docs#jev): Configure Jev, start the gateway, and submit a pinned request.
-- [Runtime reference](https://github.com/hraness/sys1/blob/main/docs/runtime.md): Client, embedded runtime, gateway, configuration, and local models.
+- [Runtime reference](https://sys1.io/docs/runtime): Client, embedded router, loopback endpoint and request format, routing, configuration, and local models.
 - [Decision profiles](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
 - [Compare models](https://sys1.io/compare): External JevBench scores, runtime choices, and workload cost estimates.
 

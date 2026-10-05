@@ -75,3 +75,17 @@
 .docs-content > .docs-section > p { max-width: 68ch; }
 .docs-section h3[id] { scroll-margin-top: 5rem; }
 .docs-section > h3 { margin-top: 2.5rem; }
+/* Repository guides rendered from Markdown (scripts/site-docs.ts). */
+.docs-guide { padding-block: var(--sys1-reference-space); }
+.docs-guide > :is(h2, h3)[id] { scroll-margin-top: 5rem; }
+.docs-guide > h2 { margin: 3.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--grid); }
+.docs-guide > h3 { margin: 2.25rem 0 .75rem; }
+.docs-guide > :is(p, ul, ol) { max-width: 68ch; }
+.docs-guide > :is(ul, ol) { padding-left: 1.25rem; }
+.docs-guide li + li { margin-top: .35rem; }
+.docs-guide :is(li, td, th) code { overflow-wrap: anywhere; }
+.docs-guide pre { margin: 1rem 0 1.5rem; padding: .95rem 1rem; background: var(--hraness-marketing-terminal-background); color: var(--hraness-marketing-terminal-command); font-size: .875rem; line-height: 1.7; overflow-x: auto; white-space: pre; overflow-wrap: normal; }
+.docs-guide .table-scroll { margin: 1rem 0 1.75rem; }
+@media (max-width: 560px) {
+  .docs-guide pre { font-size: .8rem; }
+}

@@ -41,7 +41,7 @@ function runHarness(pageUrl: string, referrer: string): { bodies: Wire[]; receiv
 }
 
 test("every page loads the local analytics bundle and no remote script", () => {
-  expect(pages.length).toBe(8);
+  expect(pages.length).toBe(10);
   for (const page of pages) {
     const html = read(`site/${page}`);
     expect(html).toContain('<script src="/analytics.js" defer></script>');
@@ -207,6 +207,8 @@ test("paths keep real public routes and class 404s", () => {
   expect(canonicalPath("/docs/evaluations/")).toBe("/docs/evaluations");
   expect(canonicalPath("/private/token")).toBe("/404");
   expect(pageKind("/introducing-sys1")).toBe("article");
+  expect(pageKind("/docs/runtime")).toBe("runtime_reference");
+  expect(pageKind("/docs/review/")).toBe("review_guide");
   expect(notFoundEvent("/skills", "")).toBeUndefined();
   expect(notFoundEvent("/x".repeat(200), "https://t.co/abc")).toEqual({ requested_path: "/x".repeat(128), referrer_host: "t.co" });
   expect(sanitizeReferrer("javascript:alert(1)")).toBe("$direct");

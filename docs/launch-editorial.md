@@ -196,3 +196,102 @@ Root inspected the rendered desktop launch page, mobile homepage, skills page, d
 The article header keeps its byline and current installation links, removes visible publication dates and the old release badge, and names Codex AI reviewers in its disclosure. Publication metadata remains accurate; the revision date is October 1. The skills page keeps one command-reference link. The update guide describes the shipped updater in the present tense while retaining the 0.19.0 minimum. The runtime guide accurately labels disabling Jev and links to the workflow and update commands.
 
 Drafted by Codex AI agent `/root`; independently reviewed by Codex AI agent `/root/ghostget_editorial` on October 1, 2026. The reviewer read both complete page bodies and the updater guide, and checked the updater minimum against the changelog, release version, entry point, and installation-lock behavior. No new study, model-quality, human, or professional review is claimed. The existing article admission remains 11/12; reassess on November 9, 2026, or a relevant behavior change. Final aggregate and browser verification are recorded with the pull request.
+
+## Runtime and review guides on the site, and Claude Code and RTK notes on /skills (October 4, 2026)
+
+`docs/runtime.md` and `docs/review.md` are now rendered at `/docs/runtime` and
+`/docs/review` by `scripts/site-docs.ts`; `bun run check:site-copy` fails when a
+guide changes without its page. `/docs`, `/skills`, `llms.txt`, and the sitemap
+point to the site pages instead of the GitHub files. Internal vocabulary in both
+guides was translated for readers without changing the documented behavior.
+
+- **Drafter:** Devin AI agents, October 4, 2026. One agent started the pages
+  and stopped before review; a second agent finished them and checked them
+  against source.
+- **Independent reviewer:** pending. The pull request reviewer records identity
+  and type here before merge. No human review is claimed.
+- **Owner:** Sys1 maintainers. **Reassess on:** November 1, 2026, or a release
+  that changes the documented commands, routes, or review rules, whichever comes
+  first.
+
+### Runtime reference: `/docs/runtime`
+
+- **Reader job:** Call the System One decision API from Node, Bun, or HTTP, and
+  choose a route among hosted Jev, an experimental local model, or a registered
+  server.
+- **Non-obvious answer:** Unpinned requests follow `routing.policy` and the one
+  selected local model; registered servers and other installed models answer only
+  pinned requests, and a missing route returns an error instead of a substitute.
+- **Primary evidence checked:** October 4, 2026, against `src/gateway.ts`,
+  `src/router.ts`, `src/protocol.ts`, and `src/config.ts`. A local run of the
+  source CLI (v0.19.1) in a temporary `SYS1_HOME`, with a fixture System One
+  server on 127.0.0.1 registered through `sys1 backend add`, returned
+  `{"ok":true,"version":"0.19.1"}` from `GET /healthz`; `200` with
+  `x-sys1-backend: stub` and `x-sys1-attempts: 1` for the request example pinned
+  to that server; `503 no_backend_available` for the same example with
+  `"model": "auto"` and no hosted or local route; and `403` for a request with a
+  browser `Origin`. `sys1 backend check` passed its three checks. The fixture's
+  answers are fixed test values. No hosted Jev or local model call was made, and
+  no third-party Jev SDK was tried against the loopback address.
+
+| Dimension | Score | Reason |
+| --- | ---: | --- |
+| Reader utility | 2 | Endpoint table, request example, routing policies, and adoption steps for a specific integration task. |
+| Original evidence | 2 | First-party source, plus a reproducible loopback run that shows the documented headers and errors. |
+| Factual confidence | 2 | Checked against source; local Qwen results (32/72 and 44/72) and the Jev version pin stay beside the instructions. |
+| Host fit | 2 | Sys1 owns the client, router, and gateway. |
+| Voice integrity | 1 | Agent-drafted reference in product voice; no human experience claimed. |
+| Maintenance value | 2 | Rendered from the maintained guide with a freshness check. |
+| **Total** | **11/12** | **Index.** |
+
+### Review guide: `/docs/review`
+
+- **Reader job:** Review a batch of Git changes against repository rules, preview
+  what will be sent, investigate findings, and fix common errors.
+- **Non-obvious answer:** The preview shows the files, rules, and planned
+  requests without a model call, and repeated candidates are suppressed while
+  feedback stays local. The route check accepts only lowercase letters, digits,
+  and hyphens before the slash, so review currently rejects the bundled local
+  Qwen routes; the guide now says so instead of describing a local route that
+  fails.
+- **Primary evidence checked:** October 4, 2026, against `src/review/cli.ts`,
+  `src/review/state.ts`, `src/review/checkpoint.ts`,
+  `src/review/project-files.ts`, `src/audit/select.ts`, and `src/cli.ts`. In a
+  temporary Git repository with an emptied catch block and a removed assertion,
+  `sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 --max-requests 10 --dry-run -- src test`
+  printed `Audit preview: 2 diff units, 1 requests to typesafe/jev-1.13.0.`
+  Eight troubleshooting messages were reproduced with their exit codes,
+  including `--model needs an explicit backend/model route` for
+  `local-qwen3-1.7b/qwen3-1.7b`. No live review ran, so the advisory output was
+  not observed. The evaluation numbers quoted in the guide come from
+  `docs/reviewer-evaluation-2026-09-27.md`.
+
+| Dimension | Score | Reason |
+| --- | ---: | --- |
+| Reader utility | 2 | A complete task with a troubleshooting table keyed to the printed messages. |
+| Original evidence | 2 | First-party source and reproduced command output on a fixture repository. |
+| Factual confidence | 1 | Review is experimental and advisory, scores are uncalibrated, and the rule pack is changing. |
+| Host fit | 2 | Sys1 owns the review workflow and rule packs. |
+| Voice integrity | 1 | Agent-drafted guide in product voice; no human experience claimed. |
+| Maintenance value | 2 | Rendered from the maintained guide with a freshness check. |
+| **Total** | **10/12** | **Index.** |
+
+### Skills: `/skills` revision
+
+- **Change:** Two dated notes after the first check. "With Claude Code"
+  summarizes Claude Code's documented output limits and the September 2026
+  whole-task trial in which Claude Code with Sonnet 5.5 never called the skill.
+  "Compared with RTK" describes RTK v0.51.0 and when to choose each tool. The
+  review section no longer offers an experimental local model, and links the
+  review guide on the site.
+- **Sources checked on October 4, 2026:**
+  [Claude Code tools reference, output limits](https://code.claude.com/docs/en/tools-reference#output-limits)
+  and [environment variables](https://code.claude.com/docs/en/env-vars)
+  (`BASH_MAX_OUTPUT_LENGTH` default 30,000, maximum 150,000);
+  [RTK README at v0.51.0](https://github.com/rtk-ai/rtk/blob/v0.51.0/README.md)
+  (Apache-2.0, released October 2, 2026); System One Skills `README.md` and
+  `docs/WHOLE-TASK-RESULT-2026-09.md` on `main`.
+- **Limits kept on the page:** the 563-output replay used Codex and Devin
+  sessions only; no Claude Code token saving is claimed.
+- **Admission:** the existing page stays indexed; this revision adds a missing
+  reader answer and does not change the page's job.

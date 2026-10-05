@@ -27,6 +27,8 @@ const ROUTES = new Map<string, string>([
   ["/docs", "docs"],
   ["/docs/evaluations", "evaluations"],
   ["/docs/evaluations-history", "evaluations_history"],
+  ["/docs/runtime", "runtime_reference"],
+  ["/docs/review", "review_guide"],
   ["/compare", "compare"],
   ["/introducing-sys1", "article"],
 ]);
