@@ -3,7 +3,7 @@ import { createClient } from "../src/client.ts";
 import { configSchema } from "../src/config.ts";
 import { createRouter } from "../src/runtime.ts";
 import { qualifyBackend } from "../src/qualification.ts";
-import type { SystemOneRequest } from "../src/protocol.ts";
+import { PROTOCOL_LIMITS, type SystemOneRequest } from "../src/protocol.ts";
 
 // Source-derived wire fixture: Kev e943f21 rounds each probability to two decimals.
 const input: SystemOneRequest = {
@@ -81,11 +81,11 @@ describe("explicit Kev integration", () => {
       config: configSchema.parse({ version: 1, backends: [{ name: "kev", base_url: "http://127.0.0.1:8009", model: "kev-latest", adapter: "kev" }] }),
       env: {}, fetchFn: nativeFixture(calls),
     });
-    const criteria = Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`o${i}`, "x".repeat(1024)]));
+    const criteria = Object.fromEntries(Array.from({ length: 255 }, (_, i) => [`o${i}`, "x".repeat(820)]));
     const questions = Object.fromEntries(Array.from({ length: 64 }, (_, i) => [`q${i}`, { type: "choice", criteria }]));
     const request = { model: "kev/kev-latest", state: "", questions };
-    request.state = "x".repeat(1_048_576 - JSON.stringify(request).length);
-    expect(JSON.stringify(request).length).toBe(1_048_576);
+    request.state = "x".repeat(PROTOCOL_LIMITS.maxBodyBytes - JSON.stringify(request).length);
+    expect(JSON.stringify(request).length).toBe(PROTOCOL_LIMITS.maxBodyBytes);
     expect(JSON.stringify(request.state).length).toBeLessThan(262_144);
     try {
       const response = await router.fetch(new Request("http://embedded/v1/systemone", { method: "POST", body: JSON.stringify(request) }));

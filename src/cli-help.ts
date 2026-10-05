@@ -170,7 +170,8 @@ Resume never automatically repeats an uncertain command or paid request.
        sys1 review setup codex|claude-code|devin [--dry-run] [--json]
 
 Review a batch of Git changes, investigate candidates, and record feedback.
-Experimental and advisory. Hosted Cloudflare Clef is opt-in; local models are experimental.
+Experimental and advisory. Hosted Cloudflare Clef is opt-in; local models are
+experimental.
 
 Checkpoint/recheck options
   --model <route>       Exact backend/model, with no fallback
@@ -309,9 +310,10 @@ Rules load from bundled packs, SYS1_HOME/rules, then .sys1/rules in the repo.
 Later rules replace earlier rules with the same id. Only hunk rules run.
 Omit --rule to use all active rules. Find IDs with sys1 rules list.
 Unknown IDs fail before model calls; selection does not activate draft rules.
-Source diff context goes to the pinned configured backend. Hosted Cloudflare Clef must be
-enabled explicitly. Sensitive/generated paths and oversized evidence are
-skipped and reported. No source, answers, or findings are saved by audit.
+Source diff context goes to the pinned configured backend. Hosted Cloudflare
+Clef must be enabled explicitly. Sensitive/generated paths and oversized
+evidence are skipped and reported. No source, answers, or findings are saved
+by audit.
 
 Exit 0: completed or previewed (including advisory findings).
 Exit 8: incomplete coverage or a model error; inspect skipped in the report.
@@ -337,7 +339,8 @@ Example
   clef: `Usage: sys1 clef status|enable|disable [--model clef|clef-flash] [--json]
 
 Use Cloudflare Workers AI for structured decisions. Enable requires a 32-hex
-CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (CLOUDFLARE_AUTH_TOKEN is an alias).
+CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (CLOUDFLARE_AUTH_TOKEN is an
+alias).
 Default model: clef. Enable selects hosted-only; disable restores auto routing.
 Credentials stay in the environment. Status checks configuration, not inference.
 Existing legacy hosted settings are saved as legacy_hosted when switching.
@@ -430,8 +433,8 @@ Send one System One request to the running gateway and print the answer. The
 request is JSON from --file or standard input. With --profile, the input is
 {"state": ...} and the profile turns it into the request.
 
-First enable hosted Cloudflare Clef or set up a local model, then run sys1 up. See
-sys1 clef --help and sys1 setup --help for those choices.
+First enable hosted Cloudflare Clef or set up a local model, then run
+sys1 up. See sys1 clef --help and sys1 setup --help for those choices.
 
 Example
   echo '{

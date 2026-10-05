@@ -103,8 +103,8 @@ describe("compileUnit", () => {
 
   test("splits before the body limit when questions are large", () => {
     const big = "x".repeat(PROTOCOL_LIMITS.maxCriterionChars - 1);
-    const options = Object.fromEntries(Array.from({ length: 120 }, (_, index) => [`o${index}`, big]));
-    const rules = Array.from({ length: 8 }, (_, index) =>
+    const options = Object.fromEntries(Array.from({ length: 255 }, (_, index) => [`o${index}`, big]));
+    const rules = Array.from({ length: 64 }, (_, index) =>
       rule({ id: `wide-${index}`, type: "choice", ask: "Which?", options, violations: ["o1"] }));
     const largeState = "y".repeat(PROTOCOL_LIMITS.maxStateBytes - 2);
     const requests = compileUnit(rules, largeState);
@@ -119,8 +119,8 @@ describe("compileUnit", () => {
 
   test("packs requests as full as the body limit allows", () => {
     const big = "x".repeat(PROTOCOL_LIMITS.maxCriterionChars - 1);
-    const options = Object.fromEntries(Array.from({ length: 120 }, (_, index) => [`o${index}`, big]));
-    const rules = Array.from({ length: 8 }, (_, index) =>
+    const options = Object.fromEntries(Array.from({ length: 255 }, (_, index) => [`o${index}`, big]));
+    const rules = Array.from({ length: 64 }, (_, index) =>
       rule({ id: `wide-${index}`, type: "choice", ask: "Which?", options, violations: ["o1"] }));
     const largeState = "y".repeat(PROTOCOL_LIMITS.maxStateBytes - 2);
     const requests = compileUnit(rules, largeState);
