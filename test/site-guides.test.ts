@@ -68,9 +68,13 @@ test("the skills page dates its Claude Code and RTK notes and keeps the replay's
   expect(html).toContain('href="https://github.com/hraness/system-one-skills/blob/main/docs/WHOLE-TASK-RESULT-2026-09.md"');
   expect(claude).toContain("used Codex and Devin sessions only.");
   expect(claude).not.toContain("no Claude Code sessions have been measured");
+  expect(claude).toContain("bashOutputMaxChars");
+  expect(html).toContain('href="https://code.claude.com/docs/en/settings-reference#bashoutputmaxchars"');
   const rtk = text(html.slice(html.indexOf('<div id="rtk"'), html.indexOf("</section>", html.indexOf('<div id="rtk"'))));
-  expect(rtk).toContain("at v0.51.0 on October 4, 2026");
+  expect(rtk).toContain("October 4, 2026");
+  expect(rtk).toContain("v0.51.0");
   expect(html).toContain('href="https://github.com/rtk-ai/rtk"');
+  expect(html).toContain('href="https://github.com/rtk-ai/rtk/blob/v0.51.0/README.md"');
   expect(html).toContain('<a href="#claude-code">Claude Code and RTK</a>');
   expect(html).not.toContain("You can also choose an experimental local model");
 });
@@ -80,6 +84,6 @@ test("rendered guides follow the public copy rules", () => {
     const html = read(`site${page}.html`);
     const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
     expect(main).not.toContain("—");
-    expect(text(main)).not.toMatch(/\b(?:admission|custody|bounded|seamless|robust|powerful|leverage)\b/iu);
+    expect(text(main)).not.toMatch(/\b(?:admission|custody|receipt|bounded|lane|gate|surface|projection|significant|notable|pivotal|landscape|amid|delve|underscore|showcase|leverage|seamless|robust|powerful|genuinely|actually|simply|honest)\b/iu);
   }
 });

@@ -208,8 +208,21 @@ guides was translated for readers without changing the documented behavior.
 - **Drafter:** Devin AI agents, October 4, 2026. One agent started the pages
   and stopped before review; a second agent finished them and checked them
   against source.
-- **Independent reviewer:** pending. The pull request reviewer records identity
-  and type here before merge. No human review is claimed.
+- **Independent reviewer:** Devin independent editorial review (AI), 2026-10-04.
+  Reviewer type: AI. It did not draft these pages. It read the full pull request
+  diff, checked each command, quoted message, route, default, and limit against
+  source, and reproduced the review preview and the route, source-mode, request
+  limit, unknown-rule, and outside-a-worktree errors with the source CLI (v0.19.1)
+  in a temporary `SYS1_HOME`, using dry runs with no model call. It opened the
+  third-party sources listed under the `/skills` revision on October 4, 2026.
+  No human review is claimed.
+- **Changes from review:** `/skills` now says the 30,000-character inline limit
+  is a default and names the `bashOutputMaxChars` setting that replaces
+  `BASH_MAX_OUTPUT_LENGTH` when set; the RTK note dates its claims to the
+  README at the v0.51.0 release and links that README; the `/docs/review`
+  description lists three tasks instead of four; `docs/audit.md` and
+  `docs/verify.md` no longer tell readers to use a bundled local Qwen route,
+  which the same route check rejects in audit and verify.
 - **Owner:** Sys1 maintainers. **Reassess on:** November 1, 2026, or a release
   that changes the documented commands, routes, or review rules, whichever comes
   first.
@@ -285,12 +298,25 @@ guides was translated for readers without changing the documented behavior.
   review section no longer offers an experimental local model, and links the
   review guide on the site.
 - **Sources checked on October 4, 2026:**
-  [Claude Code tools reference, output limits](https://code.claude.com/docs/en/tools-reference#output-limits)
-  and [environment variables](https://code.claude.com/docs/en/env-vars)
-  (`BASH_MAX_OUTPUT_LENGTH` default 30,000, maximum 150,000);
+  [Claude Code tools reference, output limits](https://code.claude.com/docs/en/tools-reference#output-limits),
+  [environment variables](https://code.claude.com/docs/en/env-vars)
+  (`BASH_MAX_OUTPUT_LENGTH` default 30,000, maximum 150,000), and
+  [settings reference](https://code.claude.com/docs/en/settings-reference#bashoutputmaxchars)
+  (`bashOutputMaxChars`, Claude Code v2.1.261 or later, 4,000 to 128,000,
+  unset by default);
   [RTK README at v0.51.0](https://github.com/rtk-ai/rtk/blob/v0.51.0/README.md)
   (Apache-2.0, released October 2, 2026); System One Skills `README.md` and
   `docs/WHOLE-TASK-RESULT-2026-09.md` on `main`.
+- **RTK claims and where each was checked:**
+
+  | Claim on `/skills` | Source | Checked |
+  | --- | --- | --- |
+  | Latest release is v0.51.0 | [GitHub release](https://github.com/rtk-ai/rtk/releases/tag/v0.51.0), published October 2, 2026; later tags are `dev-0.51.1-rc` prereleases | October 4, 2026 |
+  | Apache-2.0 | README "License" section and `LICENSE` at v0.51.0 | October 4, 2026 |
+  | Command-line proxy whose hook rewrites `git status` to `rtk git status` | README at v0.51.0: tagline and "Hook-based agents rewrite Bash commands" | October 4, 2026 |
+  | Filters the output of more than 100 commands | README at v0.51.0: "100+ supported commands" | October 4, 2026 |
+  | Saves the full output of a failed command for `rtk recall` | README at v0.51.0, "Configuration": "When a command fails, RTK saves the full unfiltered output" | October 4, 2026 |
+  | Up to 90% less Bash output, not a 90% smaller bill | README at v0.51.0, "How Savings Work" | October 4, 2026 |
 - **Limits kept on the page:** the 563-output replay used Codex and Devin
   sessions only; no Claude Code token saving is claimed.
 - **Admission:** the existing page stays indexed; this revision adds a missing
