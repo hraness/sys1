@@ -174,6 +174,25 @@ describe("Sys1 client", () => {
     expect(calls).toBe(0);
   });
 
+  test("does not dispatch when cancellation arrives before the queued fetch", async () => {
+    let calls = 0;
+    const controller = new AbortController();
+    const pending = createClient({ fetch: stub(() => { calls++; return Response.json(answer); }) })
+      .evaluate(request, { signal: controller.signal });
+    controller.abort("private reason");
+    await expect(pending).rejects.toMatchObject({ code: "aborted" });
+    expect(calls).toBe(0);
+  });
+
+  test("observes cancellation during request serialization", async () => {
+    let calls = 0;
+    const controller = new AbortController();
+    const input = { ...request, toJSON() { controller.abort("private reason"); return request; } };
+    await expect(createClient({ fetch: stub(() => { calls++; return Response.json(answer); }) })
+      .evaluate(input, { signal: controller.signal })).rejects.toMatchObject({ code: "aborted" });
+    expect(calls).toBe(0);
+  });
+
   test("bounds a transport that ignores cancellation", async () => {
     let calls = 0;
     const client = createClient({ timeoutMs: 10, fetch: stub(() => { calls++; return new Promise(() => undefined); }) });

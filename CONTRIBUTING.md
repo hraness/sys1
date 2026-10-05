@@ -53,7 +53,7 @@ temporary paths for recovery instead of deleting potentially live files.
   may re-dispatch, once, and never for pinned models.
 - Keep fake-engine tests deterministic. Put heavyweight live qualification
   outside the ordinary test gate.
-- Keep the default routes explicit: opt-in hosted Jev and the installed model
+- Keep the default routes explicit: opt-in Cloudflare Clef and the installed model
   named by `local.model` (Qwen3 1.7B by default). Other installed models and
   configured HTTP services require a request pin. A new download or registration
   must not change automatic fallback behavior.

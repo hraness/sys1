@@ -1,7 +1,7 @@
 {
   "name": "@hraness/sys1",
   "version": "0.19.1",
-  "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.",
+  "description": "Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Cloudflare Clef or a local model.",
   "type": "module",
   "license": "MIT",
   "packageManager": "bun@1.3.14",
@@ -93,7 +93,7 @@
     "coding-agents",
     "agent-skills",
     "code-review",
-    "jev",
+    "cloudflare-clef",
     "system-one",
     "typescript",
     "codex",

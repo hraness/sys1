@@ -45,7 +45,7 @@ export const localBackendSchema = z.object({
     .min(1)
     .max(64)
     .regex(/^[a-z0-9][a-z0-9-]*$/, "lowercase letters, digits, hyphens")
-    .refine((name) => name !== "typesafe" && !name.startsWith("local-"), "typesafe and local-* names are reserved"),
+    .refine((name) => name !== "typesafe" && name !== "cloudflare" && !name.startsWith("local-"), "cloudflare, typesafe and local-* names are reserved"),
   base_url: backendUrlSchema,
   model: z.string().min(1).max(128),
   /** Explicit wire adapter; omitted keeps the standard System One contract. */
@@ -60,6 +60,26 @@ export const localBackendSchema = z.object({
     .optional(),
   enabled: z.boolean().default(true),
 });
+
+const hostedSchema = z.object({
+  provider: z.enum(["cloudflare", "legacy"]).default("cloudflare"),
+  enabled: z.boolean().default(false),
+  base_url: backendUrlSchema.default("https://api.cloudflare.com/client/v4"),
+  model: z.string().min(1).max(128).default("clef"),
+  api_key_env: z.string().min(1).max(128).default("CLOUDFLARE_API_TOKEN"),
+}).superRefine((hosted, ctx) => {
+  if (hosted.provider === "cloudflare" && (hosted.base_url !== "https://api.cloudflare.com/client/v4" || !["clef", "clef-flash"].includes(hosted.model) || hosted.api_key_env !== "CLOUDFLARE_API_TOKEN")) {
+    ctx.addIssue({ code: "custom", message: "Cloudflare requires its fixed API origin, clef or clef-flash, and CLOUDFLARE_API_TOKEN (or CLOUDFLARE_AUTH_TOKEN)" });
+  }
+});
+
+function compatibleHosted(value: unknown): unknown {
+  if (value === undefined) return {};
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return value;
+  const hosted = value as Record<string, unknown>;
+  if (hosted["provider"] !== "legacy" && (hosted["provider"] !== undefined || Object.keys(hosted).length === 0)) return hosted;
+  return { base_url: "https://api.typesafe.ai", model: "jev-1.13.0", api_key_env: "TYPESAFE_API_KEY", ...hosted, provider: "legacy" };
+}
 
 export const configSchema = z.object({
   version: z.literal(1),
@@ -76,14 +96,8 @@ export const configSchema = z.object({
       policy: routingPolicySchema.default("auto"),
     })
     .prefault({}),
-  hosted: z
-    .object({
-      enabled: z.boolean().default(false),
-      base_url: backendUrlSchema.default("https://api.typesafe.ai"),
-      model: z.string().min(1).max(128).default("jev-1.13.0"),
-      api_key_env: z.string().min(1).max(128).default("TYPESAFE_API_KEY"),
-    })
-    .prefault({}),
+  hosted: z.preprocess(compatibleHosted, hostedSchema),
+  legacy_hosted: z.preprocess(compatibleHosted, hostedSchema.refine((hosted) => hosted.provider === "legacy", "saved hosted settings must be legacy")).optional(),
   local: z
     .object({
       enabled: z.boolean().default(true),
@@ -192,5 +206,6 @@ export function setConfigValue(
   const target = next[section] as Record<string, unknown>;
   // Define an own property rather than invoking any inherited setter.
   Object.defineProperty(target, field, { value: parsed.data, writable: true, enumerable: true, configurable: true });
-  return { ok: true, config: configSchema.parse(next) };
+  const validated = configSchema.safeParse(next);
+  return validated.success ? { ok: true, config: validated.data } : { ok: false, message: `invalid value for ${key}` };
 }

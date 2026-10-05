@@ -69,7 +69,7 @@ components:
 Current implementation, September 30, 2026. Sys1 uses Tokyo Night colors and
 Nebula Sans throughout its marketing, documentation, and launch article. The
 homepage leads with compact test output from System One Skills, then explains
-optional Sys1 review, completion checks, and the typed decision API. Hosted Jev remains opt-in and local models experimental.
+optional Sys1 review, completion checks, and the typed decision API. Cloudflare Clef remains opt-in and local models experimental.
 The copyable platform installer sits beneath the hero summary at `#install`;
 the later `#setup` section explains the first run.
 

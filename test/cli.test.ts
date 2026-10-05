@@ -134,6 +134,70 @@ describe("Kev and profile CLI", () => {
   });
 });
 
+describe("image file CLI", () => {
+  test("preserves embedded image order and rejects remote URLs before gateway access", async () => {
+    const dir = home();
+    const image = { content_type: "image/png", base64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j1ioAAAAASUVORK5CYII=" };
+    const input = { model: "cloudflare/clef", state: "synthetic screenshot", images: [image, `data:image/png;base64,${image.base64}`], questions: { q: { type: "noul", instructions: "Is the image present?" } } };
+    const file = join(dir, "images.json");
+    writeFileSync(file, JSON.stringify(input));
+    const received: unknown[] = [];
+    const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
+      if (new URL(request.url).pathname === "/healthz") return Response.json({ ok: true });
+      received.push(await request.json());
+      return Response.json({ model: "clef", answers: { q: { type: "noul", noul: 0.9 } }, usage: { input_tokens: 1, output_tokens: 0 } });
+    } });
+    saveConfig(dir, configSchema.parse({ version: 1, gateway: { port: server.port } }));
+    try {
+      const result = await runCli(["eval", "--file", file, "--json"], { home: dir });
+      expect(result.code).toBe(0);
+      expect(received).toEqual([input]);
+      writeFileSync(file, JSON.stringify({ ...input, images: ["https://example.invalid/private.png"] }));
+      const rejected = await runCli(["eval", "--file", file, "--json"], { home: dir });
+      expect(rejected.code).toBe(2);
+      expect(rejected.stdout + rejected.stderr).not.toContain("private.png");
+      expect(received).toHaveLength(1);
+    } finally { server.stop(true); }
+  });
+});
+
+describe("Clef CLI", () => {
+  const env = { CLOUDFLARE_ACCOUNT_ID: "a".repeat(32), CLOUDFLARE_API_TOKEN: "private-clef-token" };
+  test("requires both environment values and stays opt-in", async () => {
+    const dir = home();
+    const status = await runCli(["clef", "status", "--json"], { home: dir, env });
+    expect(status.code).toBe(0);
+    expect(JSON.parse(status.stdout)).toMatchObject({ enabled: false, credential_present: true, active: false });
+    expect((await runCli(["clef", "enable"], { home: dir, env: { CLOUDFLARE_ACCOUNT_ID: "", CLOUDFLARE_API_TOKEN: "", CLOUDFLARE_AUTH_TOKEN: "" } })).code).toBe(3);
+    expect(loadConfig(dir)).toMatchObject({ ok: true, existed: false });
+    const enabled = await runCli(["clef", "enable", "--model", "clef-flash", "--json"], { home: dir, env });
+    expect(enabled.code).toBe(0);
+    expect(JSON.parse(enabled.stdout)).toMatchObject({ model: "clef-flash", routing_policy: "hosted-only", inference_checked: false });
+    expect(JSON.stringify(loadConfig(dir))).not.toContain(env.CLOUDFLARE_API_TOKEN);
+    expect(enabled.stdout + enabled.stderr + status.stdout).not.toContain(env.CLOUDFLARE_API_TOKEN);
+    expect((await runCli(["clef", "disable", "--json"], { home: dir })).code).toBe(0);
+    expect(loadConfig(dir)).toMatchObject({ config: { hosted: { enabled: false }, routing: { policy: "auto" } } });
+  });
+  test("status separates credential presence, readiness, and policy without provider calls", async () => {
+    const dir = home();
+    saveConfig(dir, configSchema.parse({ version: 1, hosted: { provider: "cloudflare", enabled: true }, routing: { policy: "local-only" } }));
+    const status = await runCli(["clef", "status", "--json"], { home: dir, env });
+    expect(JSON.parse(status.stdout)).toMatchObject({ enabled: true, active: false, credentials_ready: true, routing_policy: "local-only", inference_checked: false });
+    const invalid = await runCli(["clef", "status", "--json"], { home: dir, env: { ...env, CLOUDFLARE_ACCOUNT_ID: "invalid" } });
+    expect(JSON.parse(invalid.stdout)).toMatchObject({ credential_present: true, credentials_ready: false, account_present: true, account_valid: false, active: false });
+  });
+
+  test("preserves explicit legacy settings on migration and restores them only on request", async () => {
+    const dir = home();
+    const legacy = configSchema.parse({ version: 1, hosted: { enabled: true, base_url: "https://legacy.example.com", api_key_env: "LEGACY_KEY", model: "custom-jev" } });
+    saveConfig(dir, legacy);
+    expect((await runCli(["clef", "enable", "--json"], { home: dir, env })).code).toBe(0);
+    expect(loadConfig(dir)).toMatchObject({ config: { hosted: { provider: "cloudflare", model: "clef" }, legacy_hosted: { ...legacy.hosted, enabled: false } } });
+    expect((await runCli(["jev", "enable", "--json"], { home: dir, env: { LEGACY_KEY: "private-legacy-token" } })).code).toBe(0);
+    expect(loadConfig(dir)).toMatchObject({ config: { hosted: legacy.hosted } });
+  });
+});
+
 describe("Jev CLI", () => {
   test("a credential does not activate Jev until explicitly enabled", async () => {
     const dir = home();

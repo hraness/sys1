@@ -11,22 +11,21 @@ For project skills, repeated checks, feedback, and rule drafting, use the
 ## Preview and run
 
 Start with [Sys1 installed](../README.md#install). A preview needs no model;
-for a live check, choose an explicit backend and model. For Jev, TypeSafe's
-hosted decision model, provide
-`TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Enabling hosted
-Jev selects the hosted-only routing policy. The audit command sends changed
+for a live check, choose an explicit backend and model. For Cloudflare Clef, provide
+`CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in the environment and run `sys1 clef enable`. Enabling
+Clef selects the hosted-only routing policy. The audit command sends changed
 source and nearby context to that configured backend.
 
 First preview the files, rules, skipped evidence, and number of requests:
 
 ```sh
-sys1 audit --staged --model typesafe/jev-1.13.0 --dry-run --json
+sys1 audit --staged --model cloudflare/clef --dry-run --json
 ```
 
 Then run the same review with a request cap:
 
 ```sh
-sys1 audit --staged --model typesafe/jev-1.13.0 --max-requests 20 --json
+sys1 audit --staged --model cloudflare/clef --max-requests 20 --json
 ```
 
 Use `--worktree` for tracked and nonignored untracked changes against `HEAD`.
@@ -36,14 +35,14 @@ working file contains different changes. Removed lines and deleted files are
 included. To select exact files or directory prefixes, put them after `--`:
 
 ```sh
-sys1 audit --worktree --model typesafe/jev-1.13.0 -- src test
+sys1 audit --worktree --model cloudflare/clef -- src test
 ```
 
 To run only chosen rules, find their active IDs with `sys1 rules list --json`
 and add `--rule` for each one:
 
 ```sh
-sys1 audit --worktree --model typesafe/jev-1.13.0 \
+sys1 audit --worktree --model cloudflare/clef \
   --rule core-removed-test-assertions --dry-run --json -- test
 ```
 
@@ -140,7 +139,7 @@ counts, uncertainty intervals, latency, and token usage. It never promotes a
 rule automatically.
 
 ```sh
-bun scripts/audit-benchmark.ts --pack packs/core --route typesafe/jev-1.13.0 \
+bun scripts/audit-benchmark.ts --pack packs/core --route cloudflare/clef \
   --split calibration --max-requests 100 --timeout-ms 120000
 ```
 

@@ -18,7 +18,7 @@ From the repository root:
 
 ```sh
 bun scripts/evaluate-profile.ts \
-  --profile examples/workflows/failure-triage.profile.json \
+  --profile examples/workflows/failure-triage.clef.profile.json \
   --fixtures benchmarks/workflows/failure-triage.development.json
 ```
 
@@ -49,16 +49,19 @@ integer indices into the criteria. Expected values stay out of model requests.
 ## Run a fixed trial
 
 Use an already configured Sys1 gateway with access to the profile's exact
-`backend/model` route. The included profiles target `typesafe/jev-1.13.0`;
-they do not enable Jev, install a model, or start a gateway. Inspect readiness
-with `bun src/cli.ts jev status --json` or follow the
-[hosted Jev setup guide](../README.md#add-hosted-jev).
+`backend/model` route. The `*.clef.profile.json` examples target `cloudflare/clef`;
+they do not enable Clef, install a model, or start a gateway. Inspect configuration
+with `bun src/cli.ts clef status --json` or follow the
+[Cloudflare Clef setup guide](../README.md#add-cloudflare-clef). The September 28
+results used the earlier Jev routes and profile hashes; they are historical,
+not measurements of Clef. The original `*.profile.json` files without `.clef`
+remain byte-for-byte frozen for reproducing that historical Jev trial.
 
 After inspecting the preview, add `--run`:
 
 ```sh
 bun scripts/evaluate-profile.ts \
-  --profile examples/workflows/failure-triage.profile.json \
+  --profile examples/workflows/failure-triage.clef.profile.json \
   --fixtures benchmarks/workflows/failure-triage.screening.json \
   --run --max-requests 8 --timeout-ms 30000 --deadline-ms 240000
 ```
@@ -69,7 +72,7 @@ report. Keep the same profile and dataset when comparing runs, and preserve
 the first result before making any changes.
 
 The generic GGUF adapter accepts at most 96 characters per criterion. The
-included Jev profiles exceed that limit. To try a local model, make a new
+included hosted profiles exceed that limit. To try a local model, make a new
 profile revision with shorter criteria and move explanatory detail into
 instructions, then freeze and validate it before evaluating. Changing only
 the route is insufficient.

@@ -10,6 +10,7 @@ export interface BackendCapabilities {
   maxOptions?: number;
   /** Largest question count a single request may carry. */
   maxQuestions?: number;
+  images?: boolean;
 }
 
 export interface BackendCandidate {
@@ -39,6 +40,7 @@ export interface RequestNeeds {
   maxOptions: number;
   /** Question count in the request. */
   questions: number;
+  images?: boolean;
 }
 
 export function requestNeeds(request: SystemOneRequest): RequestNeeds {
@@ -57,11 +59,12 @@ export function requestNeeds(request: SystemOneRequest): RequestNeeds {
         break;
     }
   }
-  return { maxOptions, questions: questions.length };
+  return { maxOptions, questions: questions.length, ...((request.images?.length ?? 0) > 0 ? { images: true } : {}) };
 }
 
 function compatible(candidate: BackendCandidate, needs: RequestNeeds): boolean {
   const caps = candidate.capabilities;
+  if (needs.images && caps?.images !== true) return false;
   if (caps === undefined) return true;
   if (caps.maxOptions !== undefined && needs.maxOptions > caps.maxOptions) return false;
   if (caps.maxQuestions !== undefined && needs.questions > caps.maxQuestions) return false;

@@ -46,8 +46,8 @@ describe("sys1 help", () => {
     expect(result.stdout).toContain("sys1 --version");
     expect(result.stdout).toContain("sys1 review --help");
     expect(result.stdout).toContain("sys1 verify --help");
-    expect(result.stdout).toContain("sys1 jev enable");
-    expect(result.stdout).toContain("TYPESAFE_API_KEY");
+    expect(result.stdout).toContain("sys1 clef enable");
+    expect(result.stdout).toContain("account ID and token");
     expect(result.stdout).toContain("sys1 setup --dry-run");
     expect(result.stdout).toContain("experimental local");
     expect(result.stdout).toContain("sys1 eval --help");
@@ -62,6 +62,7 @@ describe("sys1 help", () => {
       expect(lines(result.stdout)[0]).toBe("Usage: sys1 <command> [options]");
       expect(result.stdout).toContain("sys1 --version");
       expect(result.stdout).toContain("sys1 setup [--dry-run]");
+      expect(result.stdout).toContain("sys1 clef status|enable|disable");
       expect(result.stdout).toContain("sys1 jev status|enable|disable");
       expect(lines(result.stdout).length).toBeLessThanOrEqual(60);
       expect(widest(result.stdout)).toBeLessThanOrEqual(80);
@@ -87,7 +88,7 @@ describe("sys1 help", () => {
     const request = systemOneRequestSchema.parse(JSON.parse(example![1]!));
     expect(Object.keys(request.questions)).toHaveLength(1);
     expect(help).toContain("sys1 up");
-    expect(help).toContain("sys1 jev --help");
+    expect(help).toContain("sys1 clef --help");
     expect(help).toContain("sys1 setup --help");
   });
 

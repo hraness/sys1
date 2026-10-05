@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { z } from "zod";
 import { prepareEvaluation } from "../scripts/evaluate-profile.ts";
+import { createProfile } from "../src/profile.ts";
 
 const root = resolve(import.meta.dir, "..");
 const workflows = ["failure-triage", "evidence-relevance", "claim-support"] as const;
@@ -48,6 +49,20 @@ describe("frozen workflow screening corpus", () => {
     for (const workflow of workflows) {
       expect(digest(readFileSync(join(root, `examples/workflows/${workflow}.profile.json`)))).toBe(originalProfiles[workflow]);
     }
+  });
+
+  test("Clef examples are separate revisions and do not relabel the Jev trial", () => {
+    for (const workflow of workflows) {
+      const historical = createProfile(readJson(`examples/workflows/${workflow}.profile.json`)).definition;
+      const clef = createProfile(readJson(`examples/workflows/${workflow}.clef.profile.json`)).definition;
+      expect(historical.model).toBe("typesafe/jev-1.13.0");
+      expect(clef.model).toBe("cloudflare/clef");
+      expect(clef.revision).not.toBe(historical.revision);
+      expect(clef.questions).toEqual(historical.questions);
+    }
+    const reference = readFileSync(join(root, "docs/runtime.md"), "utf8");
+    expect(reference).not.toMatch(/Clef 1\.13\.0/i);
+    expect(reference).toContain("Jev 1.13.0");
   });
 
   test("all six fixture sets validate with 48 unique IDs and documented source families", () => {

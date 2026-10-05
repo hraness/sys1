@@ -1,5 +1,21 @@
 import { expect, test } from "bun:test";
 import { renderPortfolioCopy } from "../scripts/portfolio-copy";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const root = resolve(import.meta.dir, "..");
+
+test("comparison distinguishes the active Clef route from historical Jev measurements", () => {
+  const html = readFileSync(resolve(root, "site-templates/compare.html"), "utf8");
+  const routes = /<section id="routes"[\s\S]*?<\/section>/.exec(html)?.[0];
+  expect(routes).toContain("<dt>Cloudflare Clef");
+  expect(routes).not.toContain("<dt>Jev");
+  expect(html).toContain('data-accuracy="74.0909090909091"');
+  expect(html).toContain('data-key="jev-1.13.0"');
+  const cost = /<section id="cost"[\s\S]*?<\/section>/.exec(html)?.[0];
+  expect(cost).toMatch(/September 2026/);
+  expect(readFileSync(resolve(root, "site/compare.js"), "utf8")).not.toMatch(/Jev bills/);
+});
 
 test("a hosted product page uses its own description and preserves page-specific titles", () => {
   const site = { canonicalUrl: "https://example.test", messaging: { names: { name: "Host" }, meta: "Host description." } };

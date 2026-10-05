@@ -90,14 +90,14 @@
     <main id="main" tabindex="-1" class="comparison-page reference-page">
       <div class="comparison-intro">
         <h1>Sys1 evaluations</h1>
-        <p class="summary">These are Sys1’s own tests of the models it can use, with raw reports, failure analysis, and the steps to rerun them. The small fixtures show how each adapter behaves. For cross-model accuracy and cost, use the <a href="/compare">model comparison</a>.</p>
+        <p class="summary">These dated studies preserve Sys1's Jev and local model results, with raw reports and failure analysis. They do not measure Cloudflare Clef. The small fixtures show how each adapter behaves. For cross-model accuracy and cost, use the <a href="/compare">model comparison</a>.</p>
         <p class="comparison-date">Adapter studies: September 19–20, 2026 · <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">Workflow screening: September 28, 2026</a></p>
         <nav class="contents" aria-label="On this page"><a href="#choose">Choose a route</a><a href="#jev-results">Jev results</a><a href="#jevbench">JevBench</a><a href="#laya">Laya study</a><a href="#latest">Qwen results</a><a href="#tokens">Tokens &amp; cost</a><a href="#method">Reproduce</a></nav>
       </div>
       <section id="choose" class="section" aria-labelledby="choose-heading">
         <div class="section-intro"><h2 id="choose-heading">Can a local model replace hosted Jev?</h2><p>Sys1’s own tests have not shown that. Hosted Jev answered all 20 forms-v1 cases correctly, and local Qwen3 1.7B got 18 right. On the broader 72-case decisions-v2 test, Qwen3 1.7B got 32 right, only five more than a fixed-answer baseline; Qwen3.5 4B got 44 of 72 right on decisions-v3. Jev has no result on either larger test. On the external JevBench table below, the best local CPU entry, openJev Verdict 1.4, scores 72.5 to Jev’s 75.4. The studies below also cover Laya, a local candidate Sys1 does not bundle.</p></div>
         <dl class="accounting-list">
-          <div><dt>Use Jev for a hosted pilot.</dt><dd>Pin <code>jev-1.13.0</code> to preserve the hosted behavior while adopting the Sys1 client. <code>sys1 jev enable</code> selects hosted-only routing. A provider outage returns an error; it does not silently substitute Qwen.</dd></div>
+          <div><dt>Evaluate Clef for hosted use.</dt><dd><a href="/docs#connect-clef">Configure Cloudflare Clef</a> and evaluate it on your own examples. The Jev results below are historical and do not establish Clef quality. Hosted-only routing returns an error on a provider outage rather than substituting Qwen.</dd></div>
           <div><dt>Evaluate Qwen for local use.</dt><dd>Keep requests on your machine after model setup. Local probability readout is experimental and is not interchangeable with Jev. Select a model explicitly and check its decisions on representative cases before using them to drive actions.</dd></div>
         </dl>
         <p class="section-footnote">CUA and Needle adapters are removed in Sys1 0.9. Their <a href="/docs/evaluations-history">original results remain available</a>. OpenJev can be registered as an explicitly selected HTTP server; its extensions and server lifecycle remain separate. <a href="https://github.com/hraness/sys1#external-system-one-backends">Compatible server guide</a>.</p>

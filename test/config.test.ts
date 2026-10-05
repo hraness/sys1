@@ -39,7 +39,8 @@ describe("config", () => {
       expect(loaded.config.routing.policy).toBe("auto");
       expect(loaded.config.local.enabled).toBe(true);
       expect(loaded.config.local.model).toBe("qwen3-1.7b");
-      expect(loaded.config.hosted.model).toBe("jev-1.13.0");
+      expect(loaded.config.hosted.model).toBe("clef");
+      expect(loaded.config.hosted.provider).toBe("cloudflare");
     }
   });
 

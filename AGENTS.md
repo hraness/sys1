@@ -8,12 +8,17 @@
 
 - `src/protocol.ts` owns the System One wire format: request/response schemas,
   body and field bounds, and the shared error envelope.
+- `src/clef.ts` owns Cloudflare model endpoints, REST/binding response validation,
+  provider request constraints, and environment-only Cloudflare credentials.
+- `src/images.ts` owns embedded PNG/JPEG/WebP validation, decoded byte and pixel
+  limits. Remote image URLs are forbidden. Images require an image-capable route;
+  local and text-only backends never receive them.
 - `src/config.ts` owns the `~/.sys1/config.json` schema, defaults, load/save,
   and the settable-key registry. `SYS1_HOME` overrides the state directory.
 - `src/router.ts` owns backend selection as a pure function over probed
   candidates — policy order, model pinning, capability limits, and exclusion
   of explicit-only candidates from unpinned fallback.
-- `src/backends.ts` owns runtime backends: hosted Jev (credential from the
+- `src/backends.ts` owns runtime backends: Cloudflare Clef and legacy hosted services (credentials from the
   environment only), configured HTTP services, installed builtin candidates,
   bounded probing (including advisory `GET /v1/limits`), and request
   forwarding.
@@ -137,10 +142,10 @@
   size, require a trusted SHA-256, stream to a temporary file, and admit only
   after digest, size, bounded GGUF header validation, safe filename, and
   regular-file checks. Never put weights in git, release artifacts, or ordinary CI.
-- Treat generic-GGUF answers as an approximation, not calibrated Jev output.
+- Treat generic-GGUF answers as an approximation, not calibrated Cloudflare Clef output.
   Disclose the adapter and quality signals via `x-sys1-local-*` headers.
   Keep Noul/Choice/Score answer
-  objects exactly Jev-compatible. Do not make stronger model-quality claims
+  objects exactly System One-compatible. Do not make stronger model-quality claims
   without checkpoint-specific qualification.
 - Apply Kev's rounding tolerance only to explicit Kev adapters or the paired
   gateway adapter/precision headers. Never renormalize lossy probabilities or
@@ -157,9 +162,9 @@
 - Keep operator-registered HTTP runners separately owned; never mutate their
   weights, credentials, or process lifecycle. Qualify discovery, limits, and
   response conformance without exposing request or response bodies.
-- Fresh config is local-first: hosted Jev stays disabled even when its
-  environment credential exists. Only `sys1 jev enable` activates it; the
-  credential remains environment-only. Hosted Jev defaults to `jev-1.13.0`;
+- Fresh config is local-first: Cloudflare Clef stays disabled even when its
+  environment credentials exist. Only `sys1 clef enable` activates it; the
+  account ID and token remain environment-only. Clef defaults to `clef`, with optional `clef-flash`;
   enabling it selects `hosted-only`. Local fallback requires an explicit policy
   change after application-specific quality evaluation. Setup must preserve an
   existing hosted-only policy.

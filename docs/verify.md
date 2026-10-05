@@ -32,8 +32,8 @@ below directly.
 ## Use with any coding agent
 
 Run verify inside the Git worktree the agent changed. Choose an enabled
-backend/model route. For hosted Jev, provide `TYPESAFE_API_KEY` in your
-environment and run `sys1 jev enable`; the selected backend receives the
+backend/model route. For Cloudflare Clef, provide `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in your
+environment and run `sys1 clef enable`; the selected backend receives the
 message excerpt and, for a live-page claim, the fetched page excerpt. To use
 an installed local model, start `sys1 up`, select its `local-<id>/<id>` route,
 and add `--gateway`.
@@ -44,19 +44,19 @@ an equivalent local path on Windows. A draft inside the worktree can itself
 create an uncommitted-file contradiction.
 
 ```sh
-sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --dry-run --json
+sys1 verify --message /tmp/final-message.txt --model cloudflare/clef --dry-run --json
 ```
 
 Repeat without `--dry-run` to evaluate it:
 
 ```sh
-sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --json
+sys1 verify --message /tmp/final-message.txt --model cloudflare/clef --json
 ```
 
 Codex, Claude Code, Devin, and other agents can also pipe text:
 
 ```sh
-cat /tmp/final-message.txt | sys1 verify --message - --model typesafe/jev-1.13.0 --json
+cat /tmp/final-message.txt | sys1 verify --message - --model cloudflare/clef --json
 ```
 
 Add `--url https://example.com` for a page the message does not link. Message
@@ -72,8 +72,8 @@ directory is the current directory or an ancestor. It reads the last assistant
 message and the check-command results from that turn:
 
 ```sh
-sys1 verify --model typesafe/jev-1.13.0
-sys1 verify --model typesafe/jev-1.13.0 --url https://example.com
+sys1 verify --model cloudflare/clef
+sys1 verify --model cloudflare/clef --url https://example.com
 ```
 
 It does not select a session by its title. Use `--message` when several

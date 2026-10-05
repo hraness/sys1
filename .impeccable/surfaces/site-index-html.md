@@ -7,6 +7,10 @@ related_targets: ["site/style.css","site/site.js"]
 
 # Sys1 homepage
 
+Current Clef migration: use Cloudflare Clef in the product description and
+model examples. Hosted inference remains disabled and explicitly opt-in;
+local Qwen remains experimental. The dated design records below are historical.
+
 Mode: Persuade. Primary audience: developers building agents and apps; secondary audience: people running agents locally. Confirmed by the user on 2026-09-19. Primary action: install Sys1; secondary: read module documentation. Product truth is in PRODUCT.md. No runtime product changes are in scope.
 
 ## Direction contract

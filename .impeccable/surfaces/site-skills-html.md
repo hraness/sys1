@@ -7,6 +7,11 @@ related_targets: ["site/skills.css"]
 
 # System One Skills guide
 
+Current Clef migration: review and verification examples select
+`cloudflare/clef` and link to explicit Cloudflare setup. Selected evidence goes
+to that provider only after activation. Keep the independent model-free
+compact-output skill and its measured evidence unchanged.
+
 Mode: Read. Developers deciding when the one shipped noisy-check skill is
 useful, and whether any proposed skills deserve their cost. The user asked
 for stronger per-skill justification and clarity about 82% versus 3.94%.

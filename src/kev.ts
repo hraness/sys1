@@ -41,6 +41,7 @@ function render(value: JsonValue, indent = 0): string {
 
 /** Supply Kev's required instructions field without changing caller-owned data. */
 export function adaptKevRequest(request: SystemOneRequest): SystemOneRequest {
+  if ((request.images?.length ?? 0) > 0) throw new Error("Kev does not support images");
   const adapted = structuredClone(request);
   for (const question of Object.values(adapted.questions)) {
     if (question.instructions === undefined) question.instructions = null;

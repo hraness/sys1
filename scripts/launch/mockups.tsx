@@ -7,7 +7,7 @@ import { launchFacts } from "./facts.ts";
 // runtime's src/reduce.js. Byte counts are abbreviated. Accounts, repositories,
 // and paths are made up. Agent and code-host chrome is neutral and unbranded.
 
-const MODEL = "typesafe/jev-1.13.0";
+const MODEL = "cloudflare/clef";
 
 export const compactLines: readonly TerminalLine[] = [
   { kind: "comment", text: "The agent runs a noisy check through the system-one-verify skill" },

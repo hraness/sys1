@@ -47,15 +47,15 @@ npm --prefix "$PERCH_SOURCE" ci --ignore-scripts --no-audit --no-fund
 npm --prefix "$PERCH_SOURCE" run build
 ```
 
-To use hosted Jev, make `TYPESAFE_API_KEY` available in a second terminal, with
+To use Cloudflare Clef, make `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` available in a second terminal, with
 [Sys1 installed](../README.md#install). The following commands create a separate
 configuration and start its gateway on an unused loopback port, 13901 in this
-example. Enabling Jev selects hosted-only routing. Subsequent reviews send the
+example. Enabling Clef selects hosted-only routing. Subsequent reviews send the
 selected source and context to that hosted model.
 
 ```sh
 export SYS1_HOME="$(mktemp -d)"
-sys1 jev enable
+sys1 clef enable
 sys1 serve --port 13901
 ```
 
@@ -64,7 +64,7 @@ file and method to inspect:
 
 ```sh
 PERCH_BASE_URL=http://127.0.0.1:13901/v1/systemone \
-PERCH_MODEL_ID=typesafe/jev-1.13.0 \
+PERCH_MODEL_ID=cloudflare/clef \
 PERCH_API_KEY=public-loopback-dummy \
 node "$PERCH_SOURCE/bin/perch.mjs" check src/example.ts::example --rules defect --json
 ```

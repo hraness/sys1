@@ -22,6 +22,7 @@ import {
   type Manifest,
 } from "./local/store.ts";
 import type { JsonValue } from "./protocol.ts";
+import { cloudflareCredentials } from "./clef.ts";
 
 export type DoctorStatus = "pass" | "warn" | "fail";
 
@@ -199,7 +200,7 @@ function routingCheck(
 ): DoctorCheck {
   const hosted =
     config.hosted.enabled &&
-    (env[config.hosted.api_key_env]?.length ?? 0) > 0;
+    (config.hosted.provider === "cloudflare" ? cloudflareCredentials(env) !== null : (env[config.hosted.api_key_env]?.length ?? 0) > 0);
   const local = config.local.enabled && validModelIds.includes(config.local.model);
   const explicit = config.backends.filter((backend) => {
     if (!backend.enabled) return false;
@@ -213,7 +214,7 @@ function routingCheck(
     return { id: "routing.candidates", status: "warn", summary: 'only named HTTP backends are set up; each request must name one as "model": "backend/model"' };
   }
   if (config.routing.policy === "hosted-only" && !hosted) {
-    return { id: "routing.candidates", status: "fail", summary: "routing is set to hosted Jev only, but no Jev credential is set" };
+    return { id: "routing.candidates", status: "fail", summary: config.hosted.provider === "cloudflare" ? "hosted-only routing needs enabled Clef, a valid CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (or CLOUDFLARE_AUTH_TOKEN)" : "hosted-only routing needs the configured legacy hosted credential" };
   }
   if (config.routing.policy === "local-only" && !local) {
     return { id: "routing.candidates", status: "fail", summary: `local model ${config.local.model} isn't available; run sys1 setup or name another backend in each request` };
@@ -224,7 +225,7 @@ function routingCheck(
   return {
     id: "routing.candidates",
     status: "pass",
-    summary: "at least one model can answer requests",
+    summary: "at least one model is configured; hosted inference and permissions have not been checked",
     detail: { hosted, local },
   };
 }
@@ -265,6 +266,14 @@ export async function runDoctor(options: DoctorOptions): Promise<DoctorReport> {
           detail: boundedDetail(loadedConfig.message, options.home),
         },
   );
+
+  const credentialPresent = config.hosted.provider === "cloudflare" ? cloudflareCredentials(env) !== null : (env[config.hosted.api_key_env]?.length ?? 0) > 0;
+  checks.push({
+    id: "hosted.configuration",
+    status: !config.hosted.enabled || credentialPresent ? "pass" : "fail",
+    summary: !config.hosted.enabled ? "hosted inference is disabled" : credentialPresent ? `${config.hosted.provider === "cloudflare" ? "Cloudflare Clef" : "legacy hosted service"} is configured; inference, token permissions, and model access are not checked` : "hosted inference is enabled but required environment settings are missing or invalid",
+    detail: { provider: config.hosted.provider, enabled: config.hosted.enabled, environment_ready: credentialPresent, inference_checked: false },
+  });
 
   const nativeProbe = options.nativeProbe ?? probeNativeRuntime;
   if (!config.local.enabled) {

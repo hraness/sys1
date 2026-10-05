@@ -10,8 +10,8 @@ fallback behavior. Sys1 owns transport, routing policy, bounded schema
 validation, and the lifecycle of explicitly installed local models. Wire shape
 compatibility does not imply equal calibration or application quality.
 
-Fresh configuration keeps hosted Jev disabled and selects local Qwen3 1.7B;
-model installation is explicit. `sys1 jev enable` activates hosted Jev 1.13.0
+Fresh configuration keeps hosted Cloudflare Clef disabled and selects local Qwen3 1.7B;
+model installation is explicit. `sys1 clef enable` activates hosted Cloudflare Clef
 and selects `hosted-only` routing. The configured `local.model` determines
 the only installed model eligible for unpinned requests. Other installed GGUF models
 and operator-registered HTTP services require explicit selection.
@@ -36,7 +36,7 @@ language clients use the HTTP contract directly.
   and `GET /healthz` with Bun.
 - **Router** (`src/router.ts`) is a pure policy and model-selection function over
   probed candidates, their capability limits, and explicit-selection flags.
-- **Backends** (`src/backends.ts`) adapts hosted Jev, operator-registered HTTP
+- **Backends** (`src/backends.ts`) adapts hosted Cloudflare Clef, operator-registered HTTP
   services, and installed builtin models into router candidates, and merges
   advisory `GET /v1/limits` responses into routing capabilities.
 - **Defaults** (`src/defaults.ts`) maps supported OS/architecture targets to
@@ -100,7 +100,7 @@ repository's normal tests and delivery requirements in place.
    answers against the original questions before returning them.
 6. For a builtin candidate, lazily load llama.cpp and evaluate each question
    at its answer position with full-vocabulary probabilities.
-7. Map the adapter output to the exact Jev answer shape. Adapter identity and
+7. Map the adapter output to the exact Cloudflare Clef answer shape. Adapter identity and
    diagnostics remain in `x-sys1-local-*` response headers.
 
 ## Generic GGUF semantics
@@ -116,7 +116,7 @@ Mass is renormalized across allowed labels for the answer distribution. Noul is
 probability of yes; Choice selects the highest-probability option; Score is the
 zero-based probability-weighted expected level with an exact legend. Choice and
 Score confidence uses concentration above a uniform distribution. Batch-minimum
-coverage and concentration are exposed as `x-sys1-local-*` headers so the Jev
+coverage and concentration are exposed as `x-sys1-local-*` headers so the Cloudflare Clef
 answer objects stay schema-compatible. Neither metric is a calibration guarantee.
 
 The runner is node-llama-cpp rather than a wasm runner. It exposes the complete
@@ -148,18 +148,18 @@ the whole runner. Loading another engine evicts and disposes the least recently
 used resident. Shutdown disposes every model/context. The store and inference
 queues are local only; request state and answers are never written there.
 
-## Local-first defaults and hosted Jev
+## Local-first defaults and hosted Cloudflare Clef
 
 Fresh config enables local inference, sets `local.model` to `qwen3-1.7b`, uses
-`auto` routing, and keeps hosted Jev disabled even when its credential variable
-exists. The default hosted model is `jev-1.13.0`. `sys1 jev enable` requires
-the environment credential, persists only the activation flag, and switches to
-`hosted-only`; `jev disable` repairs `hosted-only` back to `auto`. Credentials never
+`auto` routing, and keeps hosted Cloudflare Clef disabled even when its credential variable
+exists. The default hosted model is `clef`. `sys1 clef enable` requires
+the environment account ID and token, persists provider/model and activation, and switches to
+`hosted-only`; `clef disable` repairs `hosted-only` back to `auto`. Credentials never
 enter config, output, pid files, or logs.
 
 Local fallback requires an explicit policy change after application evaluation.
 `setup` installs/selects a local model without changing an existing hosted-only
-policy. When explicitly selected, `auto` prefers enabled hosted Jev, then the selected installed local model;
+policy. When explicitly selected, `auto` prefers enabled hosted Cloudflare Clef, then the selected installed local model;
 `prefer-local` reverses that order. Installing another model or registering an
 HTTP service does not add an automatic fallback. Bare model IDs and exact
 `backend/model` pins explicitly select those candidates, subject to the routing

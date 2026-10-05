@@ -7,6 +7,10 @@ related_targets: ["site/comparison.css", "site/compare.js", "site/compare-math.j
 
 # Model comparison
 
+Current Clef migration: label this September 2026 comparison historical.
+Preserve JevBench numbers, original provider prices, and dataset attribution.
+Link to current Cloudflare setup/pricing; do not infer or invent Clef scores.
+
 Mode: Read, with an inline cost tool. Developers choose a decision route using
 external evidence, setup constraints, and their workload. Preserve Hraness
 Paper/Peopleblade: Instrument Serif, Nebula Sans, paired colors, quiet rules,

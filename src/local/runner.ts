@@ -181,6 +181,7 @@ export class LocalRunner {
     signal?: AbortSignal,
   ): Promise<DecideResult> {
     signal?.throwIfAborted();
+    if ((request.images?.length ?? 0) > 0) return { ok: false, error: { type: "local_question_unsupported", message: "local models do not support images" } };
     const model = findInstalled(this.options.home, modelId);
     if (model === undefined) {
       return {
