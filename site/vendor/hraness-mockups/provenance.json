@@ -1,6 +1,6 @@
 {
   "source": "@hraness/design-kit/mockups.css",
-  "version": "0.35.0",
-  "sha256": "344bd15f674ed3856d28bcf60e8a5eb247b4de442f5fb090e63349dcf2aea2ef",
+  "version": "0.41.0",
+  "sha256": "226c999f2d0a48e5c95fca193f4db7d866c081866d742a3554fdf16849377ba8",
   "note": "Unmodified copy. Regenerate with bun scripts/launch/build.tsx --write after a design-kit bump."
 }
