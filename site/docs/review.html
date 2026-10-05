@@ -126,8 +126,8 @@ checks newly empty catch blocks and removed test assertions in JavaScript and
 TypeScript. It does not provide general review coverage for every language.</p>
 <p>Start with <a href="/docs#getting-started">Sys1 installed</a> and run these commands inside
 a Git worktree. Skill setup and checkpoint previews need no model. For a live
-review, choose an enabled backend and its exact model. For Jev, TypeSafe's hosted decision model, provide
-<code>TYPESAFE_API_KEY</code> in the environment and run <code>sys1 jev enable</code>. Selected source
+review, choose an enabled backend and its exact model. For Cloudflare Clef, provide
+<code>CLOUDFLARE_ACCOUNT_ID</code> and <code>CLOUDFLARE_API_TOKEN</code> in the environment and run <code>sys1 clef enable</code>. Selected source
 and surrounding diff context go to that backend. Inspect the files and preview
 before sending them. <a href="https://github.com/hraness/sys1/blob/main/docs/audit.md#privacy-and-limits">Audit privacy and limits</a>
 explain exclusions and the limits of hunk context.</p>
@@ -150,13 +150,13 @@ directly, following this guide. Review needs a Git worktree and an enabled
 model route; it does not need an agent transcript or a particular framework.</p>
 <h2 id="preview-and-run-a-checkpoint">Preview and run a checkpoint</h2>
 <p>Select the files in your current task, with a request cap and deadline:</p>
-<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --dry-run --json -- src test
 </code></pre>
 <p>Inspect <code>audit.targets</code>, <code>audit.skipped</code>, and <code>audit.planned_requests</code>. The
 preview makes no model calls or metadata writes. Run the same selection when
 the source is ready to send:</p>
-<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --json -- src test
 </code></pre>
 <p>Choose exactly one source mode. <code>--worktree</code> compares tracked and nonignored
@@ -175,7 +175,7 @@ Checkpoints use the <a href="https://github.com/hraness/sys1/blob/main/docs/audi
 <code>sys1 audit</code>.</p>
 <p>Use <code>sys1 rules list --json</code> to find active IDs, then add <code>--rule</code> to run a
 chosen check:</p>
-<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+<pre tabindex="0"><code class="language-sh">sys1 review checkpoint --worktree --model cloudflare/clef \
   --rule core-removed-test-assertions --max-requests 10 --timeout-ms 60000 \
   --dry-run --json -- test
 </code></pre>
@@ -198,7 +198,7 @@ sys1 review feedback &lt;finding-id&gt; useful --json
 revised. <code>issues</code> lists historical observations, including candidates whose
 source has since changed; it is not a list of confirmed current defects.</p>
 <p>To evaluate a recorded candidate again, keep its original route:</p>
-<pre tabindex="0"><code class="language-sh">sys1 review recheck &lt;finding-id&gt; --model typesafe/jev-1.13.0 \
+<pre tabindex="0"><code class="language-sh">sys1 review recheck &lt;finding-id&gt; --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --json
 </code></pre>
 <p>Recheck makes a fresh evaluation when the original rule and diff evidence are
@@ -227,7 +227,7 @@ Neither an empty report nor <code>not_reported</code> proves a fix.</p>
 <p>After finishing the work, compare the proposed final message with the current
 repository and any linked pull requests or live pages. Save the draft outside
 the Git worktree so the message itself does not become an uncommitted file:</p>
-<pre tabindex="0"><code class="language-sh">sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --json
+<pre tabindex="0"><code class="language-sh">sys1 verify --message /tmp/final-message.txt --model cloudflare/clef --json
 </code></pre>
 <p>Use a file or <code>--message -</code> with any coding agent. Automatic message discovery
 and check-command evidence are available for local Devin sessions. The

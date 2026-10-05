@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { IMAGE_LIMITS, imagesSchema } from "./images.ts";
+export { IMAGE_LIMITS, imageSchema, imagesSchema } from "./images.ts";
+export type { ImageInput } from "./images.ts";
 
 export type JsonValue =
   | string
@@ -11,7 +14,7 @@ export type JsonValue =
 export type EntryType = string | null | JsonValue[] | { [key: string]: JsonValue };
 
 export const PROTOCOL_LIMITS = {
-  maxBodyBytes: 1_048_576,
+  maxBodyBytes: IMAGE_LIMITS.maxBodyBytes,
   maxStateBytes: 262_144,
   maxQuestions: 64,
   maxQuestionNameChars: 128,
@@ -105,6 +108,7 @@ export const questionSchema = z.discriminatedUnion("type", [
 export const systemOneRequestSchema = z.object({
   model: z.string().min(1).max(PROTOCOL_LIMITS.maxModelChars).optional(),
   state: entrySchema,
+  images: imagesSchema.optional(),
   questions: z
     .record(z.string().min(1).max(PROTOCOL_LIMITS.maxQuestionNameChars), questionSchema)
     .refine(

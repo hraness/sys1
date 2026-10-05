@@ -28,7 +28,7 @@ fetches no pages or pull requests, and does not persist the message.
 Inspect which message and repository you selected before evaluating.
 
 Keep the same message and exact route when removing \`--dry-run\`. Hosted
-Jev requires explicit activation and receives message text and fetched page
+Cloudflare Clef requires explicit activation and receives message text and fetched page
 excerpts; confirm that transmission is authorized. Local models are
 experimental and need a running gateway plus \`--gateway\`.
 

@@ -1,6 +1,7 @@
 import { HttpBodyLimitError, readBoundedText } from "./http.ts";
 import { validateResponseForRequest } from "./response.ts";
 import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
+import { clefEndpoint, clefRequestSchema, unwrapClefResponse, type ClefModel } from "./clef.ts";
 import {
   PROTOCOL_LIMITS,
   systemOneRequestSchema,
@@ -11,7 +12,7 @@ import {
 export type {
   Answer, ChoiceAnswer, ChoiceQuestion, EntryType, JsonValue, NoulAnswer,
   NoulQuestion, Question, ScoreAnswer, ScoreQuestion, SystemOneRequest,
-  SystemOneResponse,
+  SystemOneResponse, ImageInput,
 } from "./protocol.ts";
 
 export const DEFAULT_BASE_URL = "http://127.0.0.1:13900";
@@ -47,7 +48,8 @@ export class Sys1ClientError extends Error {
 
 export interface ClientOptions {
   /** Use only for a direct Kev endpoint. Sys1 gateways declare their own adapter. */
-  adapter?: "systemone" | "kev";
+  adapter?: "systemone" | "kev" | "clef";
+  cloudflare?: { accountId: string; model?: ClefModel };
   /** An explicit HTTP(S) endpoint root; /v1/systemone is appended. */
   baseUrl?: string;
   /** Explicit headers, including Authorization if needed. Never read from env. */
@@ -143,7 +145,10 @@ function fetchUntilAborted(
       abort();
       return;
     }
-    Promise.resolve().then(() => fetchFn(url, init)).then((response) => {
+    Promise.resolve().then(() => {
+      signal.throwIfAborted();
+      return fetchFn(url, init);
+    }).then((response) => {
       if (signal.aborted) cancelBody(response);
       resolve(response);
     }, reject).finally(() => signal.removeEventListener("abort", abort));
@@ -157,8 +162,10 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
   const timeoutMs = options.timeoutMs ?? 30_000;
   const fetchFn = options.fetch ?? globalThis.fetch;
   const adapter = options.adapter ?? "systemone";
+  const cloudflare = options.cloudflare === undefined ? undefined : { ...options.cloudflare };
   try {
-    if (adapter !== "systemone" && adapter !== "kev") throw new Error();
+    if (!["systemone", "kev", "clef"].includes(adapter)) throw new Error();
+    if (adapter === "clef" ? options.cloudflare === undefined || options.baseUrl !== undefined : options.cloudflare !== undefined) throw new Error();
     const base = options.baseUrl ?? DEFAULT_BASE_URL;
     if (base.length > 2_048) throw new Error();
     const url = new URL(base);
@@ -166,7 +173,7 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
       throw new Error();
     }
     url.pathname = `${url.pathname.replace(/\/+$/, "")}/v1/systemone`;
-    endpoint = url.href;
+    endpoint = adapter === "clef" ? clefEndpoint(cloudflare!.accountId, cloudflare!.model ?? "clef") : url.href;
     headers = new Headers(options.headers);
     headers.set("content-type", "application/json");
     headers.set("accept", "application/json");
@@ -184,12 +191,18 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
       if (evaluation.signal?.aborted) throw new Sys1ClientError("aborted");
       let request: SystemOneRequest;
       let body: string;
+      let requestEndpoint = endpoint;
       try {
         const serialized = JSON.stringify(input);
         if (new TextEncoder().encode(serialized).byteLength > PROTOCOL_LIMITS.maxBodyBytes) throw new Error();
         request = systemOneRequestSchema.parse(JSON.parse(serialized) as unknown);
+        if (adapter === "clef") {
+          request = clefRequestSchema.parse({ ...request, model: request.model ?? cloudflare!.model ?? "clef" });
+          requestEndpoint = clefEndpoint(cloudflare!.accountId, request.model as ClefModel);
+        }
         const state = typeof request.state === "string" ? request.state : JSON.stringify(request.state);
         if (new TextEncoder().encode(state).byteLength > PROTOCOL_LIMITS.maxStateBytes) throw new Error();
+        if (adapter === "kev" && (request.images?.length ?? 0) > 0) throw new Error();
         body = JSON.stringify(adapter === "kev" ? adaptKevRequest(request) : request);
         if (new TextEncoder().encode(body).byteLength > PROTOCOL_LIMITS.maxBodyBytes) throw new Error();
       } catch {
@@ -200,12 +213,13 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
       let timedOut = false;
       const onAbort = (): void => controller.abort();
       evaluation.signal?.addEventListener("abort", onAbort, { once: true });
+      if (evaluation.signal?.aborted) onAbort();
       const timer = setTimeout(() => {
         timedOut = true;
         controller.abort();
       }, timeoutMs);
       try {
-        const response = await fetchUntilAborted(fetchFn, endpoint, {
+        const response = await fetchUntilAborted(fetchFn, requestEndpoint, {
           method: "POST", headers: new Headers(headers), body,
           signal: controller.signal, redirect: "error", credentials: "omit",
         }, controller.signal);
@@ -223,6 +237,8 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
             parsed = adaptKevResponse(request, value);
             route.adapter = "kev";
             route.probabilityDecimals = 2;
+          } else if (adapter === "clef") {
+            parsed = unwrapClefResponse(request, value);
           } else {
             parsed = validateResponseForRequest(request, value, route.probabilityDecimals ?? 3);
           }
@@ -244,7 +260,7 @@ export function createClient(options: ClientOptions = {}): Sys1Client {
 }
 
 export {
-  PROTOCOL_LIMITS, answerSchema, questionSchema,
+  PROTOCOL_LIMITS, IMAGE_LIMITS, imageSchema, imagesSchema, answerSchema, questionSchema,
   noulQuestionSchema, choiceQuestionSchema, scoreQuestionSchema,
   noulAnswerSchema, choiceAnswerSchema, scoreAnswerSchema,
   systemOneRequestSchema, systemOneResponseSchema,

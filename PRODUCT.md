@@ -41,8 +41,8 @@ advisory. Neither package has demonstrated whole-task token or time savings.
 - Explicitly installed local GGUF models run through node-llama-cpp.
   All local Qwen paths are experimental. Setup selects Qwen3 1.7B;
   Qwen3 0.6B and Qwen3.5 4B require explicit selection.
-- Local inference is enabled and hosted Jev is disabled in fresh config.
-  Hosted activation and model downloads require explicit setup. Enabling Jev
+- Local inference is enabled and Cloudflare Clef is disabled in fresh config.
+  Hosted activation and model downloads require explicit setup. Enabling Clef
   selects hosted-only routing; a provider outage never implicitly substitutes Qwen.
 - Routing policy, capability checks, cancellation, request-matched response
   validation, and local model lifecycle belong to Sys1. Application policy,
@@ -86,7 +86,7 @@ hraness/.github. Design briefs in `.impeccable/surfaces/` follow the same
 guides; update a brief in the same change as its page.
 
 - The canonical Sys1 description is: “Sys1 gives coding agents tools to review
-  code, check completion claims, and get structured answers from Jev or a local
+  code, check completion claims, and get structured answers from Cloudflare Clef or a local
   model.” The portfolio registry owns the shared product messaging. Keep the
   independent System One Skills package distinct in homepage and install copy.
 - The homepage leads with Sys1's saved check and review workflow. The independent
@@ -96,10 +96,10 @@ guides; update a brief in the same change as its page.
 - Write the name as Sys1 in prose. Use `sys1` only for the command, the package
   scope, and the sys1.io domain. The registry's all-caps display (SYS1) is not a
   prose spelling.
-- Introduce Jev at its first mention on a page as TypeSafe's hosted decision
-  model.
+- Introduce Cloudflare Clef at its first mention as a Workers AI decision model.
+  Keep dated Jev results and provider attribution historical; never rename them as Clef.
 - Put each limit beside the feature it limits: model-assisted review is
-  advisory, local Qwen is experimental, and hosted Jev is opt-in.
+  advisory, local Qwen is experimental, and Cloudflare Clef is opt-in.
 - The vocabulary of `AGENTS.md` and these briefs (boundary, contract,
   qualification, admission, surface, pilot, lifecycle, owns) is internal. On a
   public page, say what the reader gets instead.

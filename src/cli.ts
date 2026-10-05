@@ -43,6 +43,8 @@ import { SYS1_VERSION, startGateway } from "./gateway.ts";
 import { probeNativeRuntime } from "./local/engine.ts";
 import { qualifyBackend } from "./qualification.ts";
 import { createProfile } from "./profile.ts";
+import { CLEF_MODELS, cloudflareCredentials } from "./clef.ts";
+import { PROTOCOL_LIMITS, systemOneRequestSchema, serializedBytes } from "./protocol.ts";
 import {
   MODEL_REGISTRY,
   installedModels,
@@ -269,10 +271,74 @@ function downloadProgress(flags: Map<string, string | boolean>, model: string): 
   };
 }
 
+function cmdClef(home: string, args: ParsedArgs): void {
+  const [sub] = args.positional.slice(1);
+  const loaded = loadConfig(home);
+  if (!loaded.ok) fail(loaded.message, EXIT.config);
+  const credentials = cloudflareCredentials(process.env);
+  const selected = loaded.config.hosted.provider === "cloudflare";
+  const enabled = selected && loaded.config.hosted.enabled;
+  if (sub === "status") {
+    const report = {
+      enabled, active: enabled && credentials !== null && loaded.config.routing.policy !== "local-only",
+      routing_policy: loaded.config.routing.policy,
+      provider: loaded.config.hosted.provider,
+      model: loaded.config.hosted.model,
+      selected, inference_checked: false,
+      credential_env: "CLOUDFLARE_API_TOKEN",
+      credential_present: Boolean(process.env["CLOUDFLARE_API_TOKEN"] || process.env["CLOUDFLARE_AUTH_TOKEN"]),
+      credentials_ready: credentials !== null,
+      account_present: Boolean(process.env["CLOUDFLARE_ACCOUNT_ID"]),
+      account_valid: /^[a-fA-F0-9]{32}$/.test(process.env["CLOUDFLARE_ACCOUNT_ID"] ?? ""),
+      legacy_configured: loaded.config.hosted.provider === "legacy" || loaded.config.legacy_hosted !== undefined,
+    };
+    if (wantsJson(args.flags)) out(JSON.stringify(report, null, 2));
+    else out(`Cloudflare Clef: ${report.active ? "configured (inference not checked)" : !enabled ? "disabled" : credentials === null ? "enabled, environment missing or invalid" : "enabled, blocked by local-only routing"}`);
+    return;
+  }
+  if (sub === "enable") {
+    if (credentials === null) fail("set a 32-hex CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (or CLOUDFLARE_AUTH_TOKEN) before enabling Clef", EXIT.config);
+    const model = flagString(args.flags, "model") ?? (selected ? loaded.config.hosted.model : "clef");
+    if (!CLEF_MODELS.includes(model as "clef" | "clef-flash")) fail("Clef model must be clef or clef-flash", EXIT.usage);
+    const next = structuredClone(loaded.config);
+    if (!selected) next.legacy_hosted = { ...next.hosted, enabled: false };
+    next.hosted = { ...DEFAULT_CONFIG.hosted, enabled: true, model };
+    next.routing.policy = "hosted-only";
+    const path = saveConfig(home, next);
+    if (wantsJson(args.flags)) out(JSON.stringify({ enabled: true, active: true, model, routing_policy: next.routing.policy, config_path: path, inference_checked: false }));
+    else {
+      out(`Cloudflare Clef enabled for ${model} (${path}); inference has not been checked`);
+      out("routing is hosted-only; local fallback requires an explicit policy change after evaluation");
+      out("restart the gateway if it was started before the environment variables were exported");
+    }
+    return;
+  }
+  if (sub === "disable") {
+    const next = structuredClone(loaded.config);
+    if (selected) {
+      next.hosted.enabled = false;
+      if (next.routing.policy === "hosted-only") next.routing.policy = "auto";
+    }
+    const path = saveConfig(home, next);
+    if (wantsJson(args.flags)) out(JSON.stringify({ enabled: false, active: false, config_path: path }));
+    else out(`Cloudflare Clef disabled (${path})`);
+    return;
+  }
+  fail("usage: sys1 clef <status|enable|disable> [--model clef|clef-flash] [--json]", EXIT.usage);
+}
+
 function cmdJev(home: string, args: ParsedArgs): void {
   const [sub] = args.positional.slice(1);
   const loaded = loadConfig(home);
   if (!loaded.ok) fail(loaded.message, EXIT.config);
+  if (loaded.config.hosted.provider !== "legacy") {
+    if (sub === "disable") {
+      out(wantsJson(args.flags) ? JSON.stringify({ enabled: false, active: false }) : "Legacy Jev is disabled; Cloudflare settings were not changed");
+      return;
+    }
+    loaded.config = structuredClone(loaded.config);
+    loaded.config.hosted = loaded.config.legacy_hosted ?? configSchema.parse({ version: 1, hosted: { provider: "legacy", base_url: "https://api.typesafe.ai", model: "jev-1.13.0", api_key_env: "TYPESAFE_API_KEY" } }).hosted;
+  }
   const credentialPresent = (process.env[loaded.config.hosted.api_key_env]?.length ?? 0) > 0;
   if (sub === "status") {
     const report = {
@@ -420,6 +486,8 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
       explicit_only: backend.explicitOnly === true,
       capabilities: backend.capabilities ?? null,
       probe: probes.get(backend.name)?.detail ?? null,
+      probe_scope: backend.adapter === "clef" ? "model_catalog" : "model_discovery",
+      inference_checked: false,
     })),
   };
   if (wantsJson(flags)) {
@@ -435,7 +503,8 @@ async function cmdStatus(home: string, flags: Map<string, string | boolean>): Pr
   for (const backend of report.backends) {
     const size = backend.size_b === null ? "" : ` ${backend.size_b}B`;
     const pin = backend.explicit_only ? ", only when a request names it" : "";
-    out(`  ${sym(backend.available ? "on" : "off", process.stdout)} ${backend.name} (${backend.kind}${pin})${size}: ${backend.available ? "up" : "down"} · ${backend.models.join(", ")}`);
+    const state = backend.probe_scope === "model_catalog" ? backend.available ? "catalog reachable (inference not checked)" : "catalog unavailable (inference not checked)" : backend.available ? "up" : "down";
+    out(`  ${sym(backend.available ? "on" : "off", process.stdout)} ${backend.name} (${backend.kind}${pin})${size}: ${state} · ${backend.models.join(", ")}`);
   }
   if (report.backends.length === 0) {
     out(`${sym("warn", process.stdout)} No backends are set up, so nothing can answer yet.`);
@@ -570,10 +639,10 @@ async function cmdEval(home: string, flags: Map<string, string | boolean>): Prom
   const file = flagString(flags, "file");
   let raw: string;
   if (file === undefined || file === "-") {
-    raw = await readBoundedText({ body: Bun.stdin.stream() }, 1_048_576);
+    raw = await readBoundedText({ body: Bun.stdin.stream() }, PROTOCOL_LIMITS.maxBodyBytes);
   } else {
     if (!existsSync(file)) fail(`no such file: ${file}`, EXIT.usage);
-    raw = await readBoundedText({ body: Bun.file(file).stream() }, 1_048_576);
+    raw = await readBoundedText({ body: Bun.file(file).stream() }, PROTOCOL_LIMITS.maxBodyBytes);
   }
   const profileFile = flagString(flags, "profile");
   if (flags.has("profile") && profileFile === undefined) fail("--profile requires a file path", EXIT.usage);
@@ -588,6 +657,13 @@ async function cmdEval(home: string, flags: Map<string, string | boolean>): Prom
     } catch {
       fail("invalid profile or input; --profile needs a valid profile file and JSON containing only state", EXIT.usage);
     }
+  }
+  try {
+    const request = systemOneRequestSchema.parse(JSON.parse(raw) as unknown);
+    if (serializedBytes(request.state) > PROTOCOL_LIMITS.maxStateBytes) throw new Error();
+    raw = JSON.stringify(request);
+  } catch {
+    fail("invalid request; check the question schema, state limit, and embedded image format and limits", EXIT.usage);
   }
   const record = readPidFile(home);
   const host = record?.host ?? config.gateway.host;
@@ -869,6 +945,9 @@ async function main(): Promise<void> {
     }
     case "setup":
       await cmdSetup(home, args.flags);
+      return;
+    case "clef":
+      cmdClef(home, args);
       return;
     case "jev":
       cmdJev(home, args);

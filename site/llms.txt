@@ -1,6 +1,6 @@
 # Sys1
 
-> Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Jev or a local model.
+> Sys1 gives coding agents tools to review code, check completion claims, and get structured answers from Cloudflare Clef or a local model.
 
 Start with `sys1 workflow check -- <command>` to run a repository check and save its result and private log. This needs a Git worktree on macOS or Linux, with no model or API key. `sys1 workflow review` runs a check before an optional scoped review; it requires an explicit model route and request limit. A paused review can continue with the same inputs within an hour. Changed inputs and uncertain interrupted steps require inspection and a new run. ALGAL handles execution and saved state inside Sys1; no separate ALGAL installation is needed. Saved results do not replace fresh required delivery checks.
 
@@ -8,7 +8,7 @@ For compact test or build output, the independent System One Skills package runs
 
 Sys1 adds optional model-assisted tools. The sys1-review skill checks selected Git changes against repository rules; bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript. The sys1-verify skill compares completion messages with Git, linked pull requests, and live pages. Both are experimental and advisory. Missing evidence is unverifiable, model scores are not calibrated defect probabilities, and a result without contradictions does not prove completion.
 
-Jev is TypeSafe's hosted decision model. Sys1 also supports experimental local Qwen models and compatible HTTP services. Hosted Jev requires explicit activation and an environment credential. Selected source, messages, or state go to the configured backend. Setup installs project instructions without hooks or model calls. The MIT-licensed CLI requires Bun 1.3.14 or newer and supports macOS, Linux, and Windows.
+Cloudflare Clef runs on Workers AI. Sys1 also supports experimental local Qwen models and compatible HTTP services. Hosted Clef requires explicit activation with CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (CLOUDFLARE_AUTH_TOKEN is an alias). Embedded PNG, JPEG, and WebP images are supported only on Clef routes, with local byte and dimension validation; remote image URLs are rejected. Selected source, messages, or state go to the configured backend. Setup installs project instructions without hooks or model calls. The MIT-licensed CLI requires Bun 1.3.14 or newer and supports macOS, Linux, and Windows.
 
 Latest release: v0.19.1.
 
@@ -28,10 +28,10 @@ Latest release: v0.19.1.
 
 Applications supply state and yes/no, choice, or score questions, then receive validated answer shapes and probabilities. A valid response can still be wrong. The same API is available through a Node or Bun client, an embedded Bun router, and a loopback HTTP daemon.
 
-- [First API request](https://sys1.io/docs#jev): Configure Jev, start the gateway, and submit a pinned request.
+- [First API request](https://sys1.io/docs#clef): Configure Cloudflare Clef, start the gateway, and submit a pinned request.
 - [Runtime reference](https://sys1.io/docs/runtime): Client, embedded router, loopback endpoint and request format, routing, configuration, and local models.
 - [Decision profiles](https://sys1.io/docs#profiles): Reuse fixed questions and a model route with changing state.
-- [Compare models](https://sys1.io/compare): External JevBench scores, runtime choices, and workload cost estimates.
+- [Compare models](https://sys1.io/compare): Historical JevBench scores and workload estimates; these are not Clef measurements.
 
 ## Evidence and source
 

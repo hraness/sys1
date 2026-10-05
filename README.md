@@ -1,8 +1,8 @@
 # Sys1
 
 Sys1 gives coding agents tools to review code, check completion claims, and get
-structured answers from Jev or a local model. Jev is TypeSafe’s hosted decision
-model. Project skills work with Codex, Claude Code, and Devin; applications can
+structured answers from Cloudflare Clef or a local model. Clef runs on Cloudflare
+Workers AI. Project skills work with Codex, Claude Code, and Devin; applications can
 use the same tools through a CLI, Node/Bun client, or HTTP API.
 
 Latest release: v0.19.1. Install the GitHub release with npm and run it with
@@ -71,7 +71,7 @@ project instructions and preview a review without calling a model:
 
 ```sh
 sys1 review setup codex
-sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --dry-run --json -- src test
 ```
 
@@ -87,25 +87,30 @@ for conventions that need judgment. For an exact syntax pattern, use a linter.
 Review and completion checks are experimental and advisory: investigate
 findings and keep the repository’s normal tests and review.
 
-### Add hosted Jev
+### Add Cloudflare Clef
 
-Get a key from [TypeSafe](https://console.typesafe.ai/) and provide it as
-`TYPESAFE_API_KEY` through your shell or secret manager. Then enable Jev:
+Provide your 32-hex `CLOUDFLARE_ACCOUNT_ID` and a Workers AI API token as
+`CLOUDFLARE_API_TOKEN` through your shell or secret manager. `CLOUDFLARE_AUTH_TOKEN`
+is also accepted. Then enable Clef:
 
 ```sh
-sys1 jev enable
-sys1 jev status
+sys1 clef enable
+sys1 clef status
 ```
 
-The key stays in the environment. Enabling Jev selects `hosted-only` routing,
+The token stays in the environment. Enabling Clef selects `hosted-only` routing,
 so a failed hosted request cannot silently use a local model. Selected source
-and diff context go to Jev; inspect the preview before sending them. Provider
-usage is billed by TypeSafe at its [published rates](https://docs.typesafe.ai/models).
+and diff context go to Cloudflare; inspect the preview before sending them.
+The default model is `clef`; use `sys1 clef enable --model clef-flash` for the
+other model. See [Cloudflare's model reference](https://developers.cloudflare.com/workers-ai/models/clef/)
+for provider capabilities and prices. Status and doctor check configuration,
+not inference access. [Legacy configuration compatibility](docs/runtime.md#legacy-hosted-compatibility)
+explains how previously configured Jev services are preserved.
 
 Run the previewed check by removing `--dry-run`:
 
 ```sh
-sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --json -- src test
 ```
 
@@ -129,7 +134,7 @@ with available evidence:
 
 ```sh
 sys1 verify --message /tmp/final-message.txt \
-  --model typesafe/jev-1.13.0 --dry-run --json
+  --model cloudflare/clef --dry-run --json
 ```
 
 Choose an equivalent external file path on Windows. The preview reports the
@@ -160,7 +165,7 @@ import { createClient } from "@hraness/sys1/client";
 
 const sys1 = createClient(); // http://127.0.0.1:13900
 const { response } = await sys1.evaluate({
-  model: "typesafe/jev-1.13.0",
+  model: "cloudflare/clef",
   state: "Customers cannot complete checkout after today’s release.",
   questions: {
     urgent: {
@@ -179,13 +184,18 @@ application decides which actions are allowed and evaluates the model on its
 own examples. A valid answer can still be wrong.
 
 The [client and embedded router guide](docs/runtime.md#use-as-a-module) covers
-custom endpoints, the in-process Bun router, and existing Jev applications.
+custom endpoints, the in-process Bun router, and existing System One applications.
 
 ## The endpoint
 
 The loopback gateway serves `POST /v1/systemone` for decisions,
 `GET /v1/models` for discovery, and `GET /healthz` for liveness.
 [HTTP request and response reference](docs/runtime.md#the-endpoint).
+
+The client, Bun router, HTTP API, and `sys1 eval --file` can send embedded PNG,
+JPEG, and WebP images to an explicitly enabled Clef route. Remote image URLs
+are rejected, and text-only or local models never receive images.
+[Image formats and limits](docs/runtime.md#images).
 
 ## Local models
 
@@ -223,7 +233,7 @@ does not change default routing. [Compatible server setup](docs/runtime.md#exter
 
 If `sys1` is missing after installation, check that npm’s global binary
 directory is on your `PATH` and that `bun --version` works. If a request cannot
-find a model, inspect `sys1 jev status` and `sys1 doctor`. Restart an existing
+find a model, inspect `sys1 clef status` and `sys1 doctor`. Restart an existing
 gateway after changing its credential environment.
 
 ## Releases

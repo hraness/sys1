@@ -168,7 +168,7 @@ describe("gateway /v1/systemone", () => {
     const parsed = (await response.json()) as { error: { type: string; message: string } };
     expect(parsed.error.type).toBe("no_backend_configured");
     expect(parsed.error.message).toContain("sys1 setup");
-    expect(parsed.error.message).toContain("sys1 jev enable");
+    expect(parsed.error.message).toContain("sys1 clef enable");
   });
 
   test("a Jev credential alone does not activate hosted routing", async () => {

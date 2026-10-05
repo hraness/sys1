@@ -189,6 +189,10 @@ export type {
   VerifyModelResult,
 } from "./local/store.ts";
 
+export { IMAGE_LIMITS, imageSchema, imagesSchema } from "./images.ts";
+export type { ImageInput } from "./images.ts";
+export { CLEF_MODELS, clefEndpoint, clefRequestSchema, unwrapClefResponse } from "./clef.ts";
+export type { ClefModel, ClefRequest, ClefImage } from "./clef.ts";
 export { createClient, DEFAULT_BASE_URL, Sys1ClientError } from "./client.ts";
 export type {
   ClientErrorCode, ClientOptions, EvaluationOptions, EvaluationResult,

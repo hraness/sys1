@@ -7,6 +7,10 @@ related_targets: ["site/launch-article.css", "docs/launch-editorial.md"]
 
 # Introducing Sys1
 
+Current Clef migration: active setup, API copy, and illustrative commands use
+Cloudflare Clef with environment-only credentials and explicit activation.
+The September Jev screening remains historical; its results do not measure Clef.
+
 Mode: Read. Developers evaluating whether small structured model decisions can improve the review and completion steps of an agent's work.
 
 ## Direction

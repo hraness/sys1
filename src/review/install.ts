@@ -15,7 +15,7 @@ Choose rules that match the change and the repository's languages. Bundled
 rules have path scopes; inspect active rules and skipped coverage instead of
 assuming every language is covered. Select actual task-owned files or
 directories; repositories need not have \`src\` or \`test\` folders.
-Hosted Jev (TypeSafe's hosted decision model) needs explicit activation and
+Cloudflare Clef needs explicit activation and
 receives selected source diff context. Local models are experimental.
 Installing this skill configures neither a backend nor automatic hooks.
 

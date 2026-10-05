@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { launchBeats, resolvedBeats } from "../scripts/launch/beats.ts";
-import { launchFacts, launchRelease } from "../scripts/launch/facts.ts";
+import { launchFacts, launchRelease, launchMessaging, CANONICAL_URL } from "../scripts/launch/facts.ts";
+import { assertLaunchKit, buildSocialKit } from "@hraness/design-kit/launch";
 
 // Pins the launch facts to the files they cite. Prose is free to change;
 // a number in the beats, the social kit, or the mockups may not drift from its source.
@@ -31,6 +32,13 @@ describe("launch facts", () => {
     const published = JSON.parse(read("site/published-release.json")) as { version: string };
     expect(launchFacts.version.value).toBe(published.version);
     expect(launchRelease.status as string).toBe(`Latest release: v${published.version}`);
+  });
+
+  test("social copy fits every channel and identifies Clef source-checkout support", () => {
+    const kit = buildSocialKit(resolvedBeats, launchMessaging, launchRelease, CANONICAL_URL);
+    expect(() => assertLaunchKit(resolvedBeats, kit, { status: launchRelease.status, publicInstall: true, tagline: launchMessaging.tagline, canonicalUrl: CANONICAL_URL })).not.toThrow();
+    expect(kit.x.filter((post) => post.includes("Clef")).every((post) => /source checkout/i.test(post))).toBe(true);
+    expect(kit.linkedin).toMatch(/source checkout/i);
   });
 
   test("every beat resolves, and the status beat carries the release status", () => {

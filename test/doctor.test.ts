@@ -63,6 +63,7 @@ describe("runDoctor", () => {
       "runtime.bun",
       "state.directory",
       "config",
+      "hosted.configuration",
       "native.runtime",
       "models.manifest",
       "models.files",
@@ -71,7 +72,7 @@ describe("runDoctor", () => {
       "daemon",
     ]);
     expect(report.checks.find((check) => check.id === "routing.candidates")?.status).toBe("warn");
-    expect(report.counts).toEqual({ pass: 8, warn: 1, fail: 0 });
+    expect(report.counts).toEqual({ pass: 9, warn: 1, fail: 0 });
   });
 
   test("fails closed for an old runtime, invalid config and manifest", async () => {
@@ -140,7 +141,7 @@ describe("runDoctor", () => {
     });
     const routing = report.checks.find((check) => check.id === "routing.candidates");
     expect(routing?.status).toBe("fail");
-    expect(routing?.summary).toContain("credential");
+    expect(routing?.summary).toContain("CLOUDFLARE_API_TOKEN");
   });
   test("explicit HTTP routes remain usable without an automatic local model", async () => {
     const dir = home();

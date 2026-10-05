@@ -26,9 +26,9 @@
     {
       "page": "https://sys1.io/docs/evaluations",
       "path": "site/og/docs-evaluations.png",
-      "input": "9dab8c5c07fb37022eccc0182b52eb22c33fb1a03e01ec5ed1b57aef671ffccf",
-      "bytes": 47156,
-      "sha256": "891b45a1391f9256aeaaff48f2b13a253cb6a11c9a011ef6b78fb569ce4556f9"
+      "input": "f4476cb863d6a99b386dd5a9684b3b5bfdee4ebe4638307474204a49e3429738",
+      "bytes": 45147,
+      "sha256": "1dc56c564722f615103ab346ba831cb3197ed2c7071a112639acc08a0052f849"
     },
     {
       "page": "https://sys1.io/docs/evaluations-history",
@@ -54,9 +54,9 @@
     {
       "page": "https://sys1.io/compare",
       "path": "site/og/compare.png",
-      "input": "13da1eda6f9b395fd0475bcf0a61df65726f9dd4bf6be0c31c13b5bb7a14a549",
-      "bytes": 47808,
-      "sha256": "50cbf1dc76969da5154fde47a7c0dc4224c95dc79fa8cc7ba84e9d3b22cd8e4c"
+      "input": "d0e1f38dd9a403d31cd21e7667a27ef0a65fad7078514b2db4c61f5f49e51bfc",
+      "bytes": 54117,
+      "sha256": "feed81d70584cab5c884e81cb1dfa9197eb2c69cc8c3931e75ab8a25af57ee02"
     },
     {
       "page": "https://sys1.io/skills",

@@ -7,6 +7,11 @@ related_targets: ["site/docs.css", "site/docs/evaluations.html", "site/docs/eval
 
 # Sys1 documentation hub
 
+Current Clef migration: document environment-only Cloudflare account ID/token,
+explicit enablement, `clef` and `clef-flash`, configuration-only status/doctor,
+embedded image limits, and preserved legacy Jev settings. Model studies remain
+historical and cannot be presented as Clef results.
+
 Mode: Read. Developers deciding how to install Sys1, embed the router, or
 connect a compatible System One service. The docs hub is the evergreen route;
 dated model studies remain under `/docs/evaluations` and `/docs/evaluations-history`.

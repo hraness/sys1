@@ -129,11 +129,11 @@ describe("decision profiles", () => {
   });
 
   test("bounds the full profile and combined request independently", () => {
-    const question = { type: "choice" as const, instructions: "i".repeat(4_096), criteria: Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`o${i}`, "c".repeat(1_024)])) };
+    const question = { type: "choice" as const, instructions: "i".repeat(4_096), criteria: Object.fromEntries(Array.from({ length: 255 }, (_, i) => [`o${i}`, "c".repeat(830)])) };
     const questions = Object.fromEntries(Array.from({ length: 60 }, (_, i) => [`q${i}`, question]));
     const profile = createProfile({ ...definition(), questions });
     expect(Object.keys(profile.request(null).questions)).toHaveLength(60);
-    expect(() => profile.request("s".repeat(100_000))).toThrow("Invalid Sys1 profile request");
+    expect(() => profile.request("s".repeat(14 * 1024 * 1024))).toThrow("Invalid Sys1 profile request");
     const oversized = Object.fromEntries(Array.from({ length: 64 }, (_, i) => [`q${i}`, question]));
     expect(() => createProfile({ ...definition(), questions: oversized })).toThrow("Invalid Sys1 profile");
   });

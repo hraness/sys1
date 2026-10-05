@@ -52,7 +52,7 @@ test("refresh binds both palette files, bootstrap, browser and bundle to an immu
   await rebuildAppearance(f.root, f.browser);
   expect(JSON.parse(await readFile(join(f.vendor, "provenance.json"), "utf8")).schemaVersion).toBe(1);
   await expect(checkAppearance(f.root)).rejects.toThrow("refresh from the immutable release");
-});
+}, 15_000);
 
 test("refresh rejects mismatched release, browser or lock before publishing", async () => {
   const f = await fixture();

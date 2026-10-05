@@ -8,7 +8,10 @@ import { modelsDir, type InstalledModel } from "./local/store.ts";
 import { errorBody } from "./protocol.ts";
 import type { BackendCandidate, BackendCapabilities } from "./router.ts";
 
-export const HOSTED_BACKEND_NAME = "typesafe";
+import { CLEF_MODELS, clefEndpoint, clefRequestSchema, cloudflareCredentials, type ClefModel } from "./clef.ts";
+
+export const HOSTED_BACKEND_NAME = "cloudflare";
+export const LEGACY_HOSTED_BACKEND_NAME = "typesafe";
 const MAX_PROBE_BYTES = 1_048_576;
 const MAX_RESPONSE_BYTES = 4_194_304;
 
@@ -18,13 +21,33 @@ function trimTrailingSlashes(value: string): string {
   return value.slice(0, end);
 }
 
+function fetchUntilAborted(fetchFn: typeof fetch, url: string, init: RequestInit, signal: AbortSignal): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const abort = (): void => reject(signal.reason);
+    signal.addEventListener("abort", abort, { once: true });
+    if (signal.aborted) {
+      signal.removeEventListener("abort", abort);
+      abort();
+      return;
+    }
+    Promise.resolve().then(() => {
+      signal.throwIfAborted();
+      return fetchFn(url, init);
+    }).then((response) => {
+      if (signal.aborted) void response.body?.cancel().catch(() => {});
+      resolve(response);
+    }, reject).finally(() => signal.removeEventListener("abort", abort));
+  });
+}
+
 function boundedSignal(timeoutMs: number, signal?: AbortSignal): AbortSignal {
   const timeout = AbortSignal.timeout(timeoutMs);
   return signal === undefined ? timeout : AbortSignal.any([signal, timeout]);
 }
 
 export interface RuntimeBackend extends BackendCandidate {
-  adapter?: "systemone" | "kev";
+  adapter?: "systemone" | "kev" | "clef";
+  cloudflare_account?: string;
   base_url: string;
   headers: Record<string, string>;
   /** Model id forwarded in the request body when the caller did not pin one. */
@@ -121,18 +144,20 @@ export function runtimeBackends(
 ): RuntimeBackend[] {
   const backends: RuntimeBackend[] = [];
   if (config.hosted.enabled) {
-    const apiKey = env[config.hosted.api_key_env];
+    const credentials = config.hosted.provider === "cloudflare" ? cloudflareCredentials(env) : null;
+    const apiKey = config.hosted.provider === "cloudflare" ? credentials?.token : env[config.hosted.api_key_env];
     if (apiKey !== undefined && apiKey.length > 0) {
       backends.push({
-        name: HOSTED_BACKEND_NAME,
+        name: config.hosted.provider === "cloudflare" ? HOSTED_BACKEND_NAME : LEGACY_HOSTED_BACKEND_NAME,
         kind: "hosted",
         available: false,
-        models: [config.hosted.model],
+        models: config.hosted.provider === "cloudflare" ? [...CLEF_MODELS] : [config.hosted.model],
         size_b: null,
         cost_rank: 0,
         base_url: trimTrailingSlashes(config.hosted.base_url),
         headers: { authorization: `Bearer ${apiKey}` },
         default_model: config.hosted.model,
+        ...(credentials === null ? {} : { adapter: "clef" as const, cloudflare_account: credentials.accountId, capabilities: { images: true, maxQuestions: 64, maxOptions: 255 } }),
       });
     }
   }
@@ -210,12 +235,12 @@ async function probeLimits(
   try {
     const activeSignal = boundedSignal(timeoutMs, signal);
     activeSignal.throwIfAborted();
-    const response = await fetchFn(`${backend.base_url}/v1/limits`, {
+    const response = await fetchUntilAborted(fetchFn, `${backend.base_url}/v1/limits`, {
       method: "GET",
       headers: { accept: "application/json", ...backend.headers },
       redirect: "manual",
       signal: activeSignal,
-    });
+    }, activeSignal);
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});
       return;
@@ -249,12 +274,13 @@ export async function probeBackend(
   const started = Date.now();
   try {
     const activeSignal = boundedSignal(timeoutMs, signal);
-    const response = await fetchFn(`${backend.base_url}/v1/models`, {
+    const discoveryPath = backend.adapter === "clef" ? `/accounts/${backend.cloudflare_account}/ai/models/search?search=clef` : "/v1/models";
+    const response = await fetchUntilAborted(fetchFn, `${backend.base_url}${discoveryPath}`, {
       method: "GET",
       headers: { accept: "application/json", ...backend.headers },
       redirect: "manual",
       signal: activeSignal,
-    });
+    }, activeSignal);
     const latency = Date.now() - started;
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});
@@ -262,10 +288,16 @@ export async function probeBackend(
         available: false,
         models: backend.models,
         latency_ms: latency,
-        detail: `GET /v1/models -> ${response.status}`,
+        detail: `GET ${backend.adapter === "clef" ? "Cloudflare model catalog" : "/v1/models"} -> ${response.status}`,
       };
     }
     const body: unknown = JSON.parse(await readBoundedText(response, MAX_PROBE_BYTES, activeSignal));
+    if (backend.adapter === "clef") {
+      const catalog = z.object({ success: z.literal(true), result: z.array(z.object({ name: z.string() })).max(512) }).parse(body);
+      const models = CLEF_MODELS.filter((model) => catalog.result.some((entry) => entry.name === `@cf/cloudflare/${model}`));
+      const available = models.includes(backend.default_model as ClefModel);
+      return { available, models, latency_ms: latency, detail: available ? null : "configured Clef model not listed in Cloudflare catalog" };
+    }
     const models = extractModelIds(body);
     await probeLimits(backend, timeoutMs, fetchFn, signal);
     return {
@@ -279,7 +311,8 @@ export async function probeBackend(
       available: false,
       models: backend.models,
       latency_ms: null,
-      detail: error instanceof Error ? error.name : "probe_failed",
+      detail: backend.adapter === "clef" ? "Cloudflare model catalog unavailable"
+        : error instanceof Error && ["AbortError", "TimeoutError", "TypeError"].includes(error.name) ? error.name : "probe_failed",
     };
   }
 }
@@ -302,7 +335,7 @@ export async function probeAll(
 }
 
 export type ForwardResult =
-  | { kind: "response"; status: number; body: string; content_type: string }
+  | { kind: "response"; status: number; body: string; content_type: string; generated_error?: true }
   | { kind: "transport"; detail: string };
 
 /**
@@ -330,11 +363,28 @@ export async function forwardToBackend(
       // body was already schema-validated; keep it unchanged on a parse surprise
     }
   }
+  let endpoint = `${backend.base_url}/v1/systemone`;
+  if (backend.adapter === "clef") {
+    try {
+      const request = clefRequestSchema.parse(JSON.parse(body) as unknown);
+      endpoint = clefEndpoint(backend.cloudflare_account ?? "", request.model);
+      body = JSON.stringify(request);
+    } catch {
+      return { kind: "response", status: 422, body: JSON.stringify(errorBody("request_unsupported", "request does not meet Cloudflare Clef input requirements")), content_type: "application/json" };
+    }
+  } else {
+    try {
+      const request = JSON.parse(body) as { images?: unknown[] };
+      if ((request.images?.length ?? 0) > 0) return { kind: "response", status: 422, body: JSON.stringify(errorBody("request_unsupported", "backend does not support images")), content_type: "application/json" };
+    } catch {
+      return { kind: "response", status: 422, body: JSON.stringify(errorBody("invalid_request", "invalid request body")), content_type: "application/json" };
+    }
+  }
   const activeSignal = boundedSignal(timeoutMs, signal);
   let response: Response;
   try {
     activeSignal.throwIfAborted();
-    response = await fetchFn(`${backend.base_url}/v1/systemone`, {
+    response = await fetchUntilAborted(fetchFn, endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -344,8 +394,15 @@ export async function forwardToBackend(
       body,
       redirect: "manual",
       signal: activeSignal,
-    });
+    }, activeSignal);
   } catch (error) {
+    if (backend.adapter === "clef") {
+      return {
+        kind: "response", status: 503, generated_error: true,
+        body: JSON.stringify(errorBody("backend_outcome_uncertain", "Cloudflare Clef request outcome is unknown; the request was not retried")),
+        content_type: "application/json",
+      };
+    }
     const detail =
       error instanceof Error && error.name === "TimeoutError"
         ? "backend timeout"

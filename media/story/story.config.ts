@@ -40,7 +40,7 @@ export default () => defineStory({
       kind: "terminal", headline: "Sys1 checks each claim in the message against that evidence.", accents: ["each", "claim"], sample: true,
       title: "sys1 verify",
       lines: [
-        { cmd: "sys1 verify --message final-message.txt --model typesafe/jev-1.13.0" },
+        { cmd: "sys1 verify --message final-message.txt --model cloudflare/clef" },
         { out: "merged_or_pushed   confirmed     linked pull request merged", tone: "ok" },
         { out: "checks_passed      confirmed     CI run passed", tone: "ok" },
         { out: "deployed_or_live   contradicted  live page shows the old version", tone: "accent" },

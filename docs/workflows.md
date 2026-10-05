@@ -35,14 +35,14 @@ allow up to fifteen minutes. A check failure prevents the optional review.
 
 ## Check, then review
 
-First [configure a backend](../README.md#add-hosted-jev). Review remains
+First [configure a backend](../README.md#add-cloudflare-clef). Review remains
 experimental and advisory: investigate candidates and keep the repository’s
 normal tests and review.
 
 Preview a staged-change workflow:
 
 ```sh
-sys1 workflow review --staged --model typesafe/jev-1.13.0 \
+sys1 workflow review --staged --model cloudflare/clef \
   --max-requests 10 --dry-run -- bun test
 ```
 
@@ -69,7 +69,7 @@ Add `--pause-after-check` to a review workflow to inspect the check before
 allowing its review:
 
 ```sh
-sys1 workflow review --staged --model typesafe/jev-1.13.0 \
+sys1 workflow review --staged --model cloudflare/clef \
   --max-requests 10 --pause-after-check -- bun test
 ```
 

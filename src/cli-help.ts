@@ -2,12 +2,12 @@
 // root help, and one block per command for `sys1 <command> --help`.
 
 export const SYS1_COMMANDS = [
-  "setup", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
+  "setup", "clef", "jev", "up", "down", "serve", "status", "doctor", "pull", "model", "models",
   "backend", "config", "eval", "audit", "review", "rules", "usage", "verify", "workflow", "help", "version", "update",
 ] as const;
 
 const DESCRIPTION = `Sys1 runs checks and saves review workflows for coding agents.
-Use Jev or a local model for advisory reviews and structured answers.`;
+Use Cloudflare Clef or a local model for reviews and structured answers.`;
 
 export function bareScreen(version: string): string {
   return `${DESCRIPTION}
@@ -19,7 +19,7 @@ Start here
   sys1 verify --help         Check a proposed completion message
 
 Choose a model
-  sys1 jev enable            Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 clef enable            Use Cloudflare Clef (account ID and token)
   sys1 setup --dry-run       Preview experimental local model setup
   sys1 eval --help           See a complete request example
 
@@ -39,13 +39,13 @@ ${DESCRIPTION}
 
 Start here
   sys1 --version             Confirm your installation
-  sys1 workflow check -- bun test
-                             Run a check and save its result
+  sys1 workflow check -- bun test  Run a check and save its result
   sys1 workflow --help       Check, review, inspect, and resume a saved run
 
 Setup
-  sys1 jev status|enable|disable
-                             Use hosted Jev (needs TYPESAFE_API_KEY)
+  sys1 clef status|enable|disable
+                             Use Cloudflare Clef (account ID and token)
+  sys1 jev status|enable|disable  Manage legacy hosted configuration
   sys1 setup [--dry-run]     Set up an experimental local model
   sys1 doctor                Check the install and say what to fix
 
@@ -138,10 +138,10 @@ Start with a check:
   sys1 workflow check -- bun test
 
 Review changes after a passing check:
-  sys1 workflow review --worktree --model typesafe/jev-1.13.0 \\
+  sys1 workflow review --worktree --model cloudflare/clef \\
     --max-requests 10 --path src -- bun test
 
-Configure that model first: sys1 jev --help or sys1 setup --help.
+Configure that model first: sys1 clef --help or sys1 setup --help.
 Model routes follow backend configuration and can change with that service.
 For a local model, start sys1 up and use --gateway. Repeat --path to select
 more paths. --pause-after-check saves a review run before making model calls.
@@ -170,7 +170,8 @@ Resume never automatically repeats an uncertain command or paid request.
        sys1 review setup codex|claude-code|devin [--dry-run] [--json]
 
 Review a batch of Git changes, investigate candidates, and record feedback.
-Experimental and advisory. Hosted Jev is opt-in; local models are experimental.
+Experimental and advisory. Hosted Cloudflare Clef is opt-in; local models are
+experimental.
 
 Checkpoint/recheck options
   --model <route>       Exact backend/model, with no fallback
@@ -198,7 +199,7 @@ Exit 8: incomplete, stale, unavailable, or superseded evidence; inspect report.
 
 Examples
   sys1 review setup codex
-  sys1 review checkpoint --staged --model typesafe/jev-1.13.0 --dry-run
+  sys1 review checkpoint --staged --model cloudflare/clef --dry-run
   sys1 review issues --json
 `,
   rules: `Usage: sys1 rules list [--json]
@@ -261,10 +262,10 @@ Scores are uncalibrated. At most five model requests run per evaluation.
 
 Examples
   sys1 verify setup codex --dry-run
-  sys1 verify --message /tmp/message.txt --model typesafe/jev-1.13.0 --dry-run
-  sys1 verify --message /tmp/message.txt --model typesafe/jev-1.13.0 \\
+  sys1 verify --message /tmp/message.txt --model cloudflare/clef --dry-run
+  sys1 verify --message /tmp/message.txt --model cloudflare/clef \\
     --url https://example.com
-  cat /tmp/message.txt | sys1 verify --message - --model typesafe/jev-1.13.0
+  cat /tmp/message.txt | sys1 verify --message - --model cloudflare/clef
 `,
   usage: `Usage: sys1 usage [--days <n>] [--json]
 
@@ -309,16 +310,17 @@ Rules load from bundled packs, SYS1_HOME/rules, then .sys1/rules in the repo.
 Later rules replace earlier rules with the same id. Only hunk rules run.
 Omit --rule to use all active rules. Find IDs with sys1 rules list.
 Unknown IDs fail before model calls; selection does not activate draft rules.
-Source diff context goes to the pinned configured backend. Hosted Jev must be
-enabled explicitly. Sensitive/generated paths and oversized evidence are
-skipped and reported. No source, answers, or findings are saved by audit.
+Source diff context goes to the pinned configured backend. Hosted Cloudflare
+Clef must be enabled explicitly. Sensitive/generated paths and oversized
+evidence are skipped and reported. No source, answers, or findings are saved
+by audit.
 
 Exit 0: completed or previewed (including advisory findings).
 Exit 8: incomplete coverage or a model error; inspect skipped in the report.
 
 Examples
-  sys1 audit --staged --model typesafe/jev-1.13.0 --dry-run --json
-  sys1 audit --worktree --model typesafe/jev-1.13.0 -- src test
+  sys1 audit --staged --model cloudflare/clef --dry-run --json
+  sys1 audit --worktree --model cloudflare/clef -- src test
 `,
   setup: `Usage: sys1 setup [--tier quality|compact] [--dry-run] [--json]
 
@@ -334,13 +336,25 @@ Options
 Example
   sys1 setup --dry-run
 `,
+  clef: `Usage: sys1 clef status|enable|disable [--model clef|clef-flash] [--json]
+
+Use Cloudflare Workers AI for structured decisions. Enable requires a 32-hex
+CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (CLOUDFLARE_AUTH_TOKEN is an
+alias).
+Default model: clef. Enable selects hosted-only; disable restores auto routing.
+Credentials stay in the environment. Status checks configuration, not inference.
+Existing legacy hosted settings are saved as legacy_hosted when switching.
+
+Examples
+  sys1 clef enable
+  sys1 clef enable --model clef-flash
+  sys1 clef status
+`,
   jev: `Usage: sys1 jev status|enable|disable [--json]
 
-Use hosted Jev for answers. enable needs TYPESAFE_API_KEY in the environment
-and sends every request to Jev; disable goes back to automatic routing.
-
-Example
-  sys1 jev status
+Compatibility command for previously configured legacy hosted services.
+Enable restores saved legacy_hosted settings and uses their environment key.
+It never sends the legacy credential to Cloudflare. Use sys1 clef for new setup.
 `,
   up: `Usage: sys1 up [--port <n>] [--json]
 
@@ -419,8 +433,8 @@ Send one System One request to the running gateway and print the answer. The
 request is JSON from --file or standard input. With --profile, the input is
 {"state": ...} and the profile turns it into the request.
 
-First enable hosted Jev or set up a local model, then run sys1 up. See
-sys1 jev --help and sys1 setup --help for those choices.
+First enable hosted Cloudflare Clef or set up a local model, then run
+sys1 up. See sys1 clef --help and sys1 setup --help for those choices.
 
 Example
   echo '{

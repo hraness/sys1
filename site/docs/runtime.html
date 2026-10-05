@@ -102,7 +102,7 @@
           <nav class="docs-nav">
             <a href="#use-as-a-module">Use as a module</a>
             <a href="#experimental-local-decisions">Experimental local decisions</a>
-            <a href="#add-hosted-jev">Add hosted Jev</a>
+            <a href="#add-hosted-clef">Add hosted Clef</a>
             <a href="#local-models">Local models</a>
             <a href="#the-endpoint">The endpoint</a>
             <a href="#routing">Routing</a>
@@ -167,13 +167,13 @@ the <code>/client</code> entry point is portable to Node. Keep one router per ap
 not one per request. The root package also exposes lower-level routing and
 model-management APIs; applications should normally use <code>createClient</code> or
 <code>createRouter</code>.</p>
-<h3 id="adopting-sys1-in-an-existing-jev-application">Adopting Sys1 in an existing Jev application</h3>
+<h3 id="adopting-sys1-in-an-existing-system-one-application">Adopting Sys1 in an existing System One application</h3>
 <p>Keep domain questions, deterministic fallback, action authorization, and quality
 thresholds in the application. Put endpoint configuration, transport, routing,
 response validation, and local engine lifecycle behind Sys1. Existing HTTP
 clients in other languages can use the same daemon without a JavaScript module.</p>
 <p>Use <code>model: &quot;auto&quot;</code> or omit <code>model</code> to use the configured routing policy and
-selected local model. A hardcoded <code>jev-1.13.0</code> remains a model pin and cannot
+selected local model. A hardcoded <code>clef</code> remains a model pin and cannot
 select an unrelated local model.
 Local calls need no hosted API key; hosted activation stays explicit. A remote
 server's loopback address points to that server. A browser running on the user's
@@ -183,7 +183,7 @@ and accepts decision POSTs only as <code>application/json</code>.</p>
 <p>Start with an opt-in, non-authoritative pilot. Compare decisions on the
 application's representative fixtures and record backend/adapter identity,
 latency, errors, abstentions, and disagreement with the current decision path.
-Do not reuse Jev probability thresholds for generic GGUF output
+Do not reuse Clef probability thresholds for generic GGUF output
 without model-specific evidence. A local-only policy also constrains explicit
 pins; a pin never bypasses the policy. Broad production adoption requires the
 consumer's own quality and operational acceptance, not just wire compatibility.</p>
@@ -192,7 +192,7 @@ consumer's own quality and operational acceptance, not just wire compatibility.<
 sys1 up         # starts the gateway on 127.0.0.1:13900
 sys1 status
 </code></pre>
-<p>Local Qwen is experimental. Do not treat it as a drop-in replacement for Jev.
+<p>Local Qwen is experimental. Do not treat it as a drop-in replacement for Clef.
 The broader tests found 32/72 correct decisions for Qwen3 1.7B and 44/72 for
 Qwen3.5 4B on a different fresh fixture. <a href="/docs/evaluations">Read the evidence</a>
 before using local decisions to drive actions.</p>
@@ -240,34 +240,35 @@ This matrix does not prove every OS/architecture pair above; run
 EOF
 </code></pre>
 <p>Or point any System One client at <code>http://127.0.0.1:13900</code>.</p>
-<h2 id="add-hosted-jev">Add hosted Jev</h2>
-<p>Hosted Jev is disabled by default, even if <code>TYPESAFE_API_KEY</code> is already set in
-the environment. Obtain a key from <a href="https://console.typesafe.ai/">TypeSafe</a>,
-provide it through your shell or secret manager, and enable the backend:</p>
-<pre tabindex="0"><code class="language-sh"># Provide TYPESAFE_API_KEY privately in this shell first.
-sys1 jev enable
-sys1 jev status
+<h2 id="add-hosted-clef">Add hosted Clef</h2>
+<p>Cloudflare Clef is disabled by default, even if its environment variables are
+set. Provide your 32-hex <code>CLOUDFLARE_ACCOUNT_ID</code> and Workers AI token through
+your shell or secret manager as <code>CLOUDFLARE_API_TOKEN</code>. <code>CLOUDFLARE_AUTH_TOKEN</code>
+is an alias. Then enable the backend:</p>
+<pre tabindex="0"><code class="language-sh"># Provide the Cloudflare account ID and token privately in this shell first.
+sys1 clef enable
+sys1 clef status
 </code></pre>
-<p><code>jev enable</code> requires the credential to be present, stores only
+<p><code>clef enable</code> requires the credential to be present, stores the Cloudflare provider, model, and
 <code>hosted.enabled: true</code>, and sets routing to <code>hosted-only</code>. The key remains in the
 environment; Sys1 never writes it to its config or prints it. Avoid putting
 the key in source files or shell history. Restart a gateway that was
-started before the key was exported. To disable hosted Jev:</p>
-<pre tabindex="0"><code class="language-sh">sys1 jev disable
+started before the key was exported. To disable hosted Clef:</p>
+<pre tabindex="0"><code class="language-sh">sys1 clef disable
 </code></pre>
-<p>Enabling Jev selects <code>hosted-only</code>: a hosted outage or missing credential returns
+<p>Enabling Clef selects <code>hosted-only</code>: a hosted outage or missing credential returns
 an error without substituting Qwen. To experiment with local fallback after
 measuring its quality on your application, explicitly run
-<code>sys1 config set routing.policy auto</code>. That policy prefers reachable Jev, then
-the installed model named by <code>local.model</code>. Disabling Jev returns a hosted-only
+<code>sys1 config set routing.policy auto</code>. That policy prefers reachable Clef, then
+the installed model named by <code>local.model</code>. Disabling Clef returns a hosted-only
 configuration to <code>auto</code> for the selected local model. Installing additional
 models does not change the selection. If no eligible route is available, Sys1
 reports an error instead of silently choosing another installed model.</p>
-<h3 id="make-your-first-jev-api-request">Make your first Jev API request</h3>
-<p>After enabling Jev, start the loopback daemon with <code>sys1 up</code>. Save this as
+<h3 id="make-your-first-clef-api-request">Make your first Clef API request</h3>
+<p>After enabling Clef, start the loopback daemon with <code>sys1 up</code>. Save this as
 <code>request.json</code>; it asks about a small, supplied piece of evidence:</p>
 <pre tabindex="0"><code class="language-json">{
-  &quot;model&quot;: &quot;typesafe/jev-1.13.0&quot;,
+  &quot;model&quot;: &quot;cloudflare/clef&quot;,
   &quot;state&quot;: { &quot;result&quot;: &quot;The check exited with code 1.&quot; },
   &quot;questions&quot;: {
     &quot;failed&quot;: {
@@ -281,15 +282,57 @@ reports an error instead of silently choosing another installed model.</p>
 </code></pre>
 <p>Read <code>answers.failed.noul</code> as the model's probability of yes. This request
 demonstrates the API; code should read an available exit status directly.
-Pinning <code>typesafe/jev-1.13.0</code> selects the hosted route and version. TypeSafe's
-<a href="https://docs.typesafe.ai/models"><code>jev-latest</code> alias</a> can move to a new version;
-Sys1's default remains the configured version until you change it. Review and
-verify commands can call Jev directly without starting the daemon; the client,
-<code>sys1 eval</code>, and commands using <code>--gateway</code> need a running gateway.</p>
-<p>For a failed request, check <code>sys1 jev status</code> and <code>sys1 doctor</code>. Restart the
+Pinning <code>cloudflare/clef</code> selects the Cloudflare route and model alias, not
+immutable weights. <code>clef</code> is the default; use <code>sys1 clef enable --model clef-flash</code>
+to select the other model. Sys1 does not claim checkpoint-specific quality for either alias. Review and
+verify commands can call Clef directly without starting the daemon; the gateway client,
+<code>sys1 eval</code>, and commands using <code>--gateway</code> need a running gateway. The direct
+REST client below does not.</p>
+<p>For a failed request, check <code>sys1 clef status</code> and <code>sys1 doctor</code>. Restart the
 daemon after changing its environment. An HTTP error from a backend is
 returned without a retry; the client does not silently try a different model.
-Current provider limits and prices are in <a href="https://docs.typesafe.ai/models">TypeSafe's model reference</a>.</p>
+Provider limits and prices are in <a href="https://developers.cloudflare.com/workers-ai/models/clef/">Cloudflare's model reference</a>.
+Catalog discovery uses <code>GET /client/v4/accounts/{account}/ai/models/search?search=clef</code>;
+it does not run inference or establish model access. Doctor checks environment
+configuration only; <code>/healthz</code> checks the gateway process without provider calls.</p>
+<h3 id="legacy-hosted-compatibility">Legacy hosted compatibility</h3>
+<p>A saved hosted configuration without a <code>provider</code> field keeps its original
+System One URL, model, environment-variable name, and <code>typesafe/model</code> route.
+It is treated as <code>provider: &quot;legacy&quot;</code>; its token is never reused for Cloudflare.
+Fresh configurations use <code>provider: &quot;cloudflare&quot;</code>, disabled, with model <code>clef</code>.</p>
+<p><code>sys1 clef enable</code> explicitly switches providers and saves the previous hosted
+settings under <code>legacy_hosted</code>, disabled, without saving any credentials.
+Use <code>sys1 jev enable</code> with the original environment credential to restore those
+settings. <code>sys1 clef disable</code> does not reactivate the legacy service. Separate
+<code>SYS1_HOME</code> directories can keep both configurations without changing either
+service's credentials or process. Historical Jev measurements remain Jev
+measurements and do not establish Clef quality.</p>
+<h3 id="images">Images</h3>
+<p>Pass an optional <code>images</code> array through the client, embedded router, HTTP API,
+or <code>sys1 eval --file request.json</code>. Each entry is a PNG, JPEG, or WebP data URL,
+or an object with <code>content_type</code> and <code>base64</code>. Sys1 validates canonical base64,
+matching image headers, dimensions, and byte limits before dispatch: at most
+four images, 4 MiB of base64-decoded file bytes and 16 megapixels each,
+8 MiB of file bytes total, and 13 MiB for the complete JSON body. Pixel buffers
+are not counted against the file-byte limits. Remote image URLs are rejected; nothing is
+fetched on your behalf. Text-only HTTP and local models cannot receive images.
+Images and state go to Cloudflare only after explicit hosted activation.</p>
+<p>For direct REST access without a gateway, pass explicit credentials to the portable client:</p>
+<pre tabindex="0"><code class="language-ts">const clef = createClient({
+  adapter: &quot;clef&quot;,
+  cloudflare: { accountId, model: &quot;clef&quot; },
+  headers: { authorization: `Bearer ${token}` },
+});
+const result = await clef.evaluate({
+  state: &quot;Inspect the screenshot.&quot;,
+  images: [{ content_type: &quot;image/png&quot;, base64: imageBase64 }],
+  questions: { readable: { type: &quot;noul&quot;, instructions: &quot;Is the text readable?&quot; } },
+});
+</code></pre>
+<p>The client sends <code>model: &quot;clef&quot;</code> to the fixed Cloudflare REST endpoint and unwraps
+its success/result envelope. The Workers AI binding returns the decision object
+directly. Neither form bypasses answer, option, probability, legend, or model
+validation. The client never reads environment variables or retries a request.</p>
 <h2 id="local-models">Local models</h2>
 <p><code>sys1 setup</code> and <code>sys1 pull</code> manage model artifacts under
 <code>~/.sys1/models</code> (or <code>$SYS1_HOME/models</code>). Downloads stream to a temporary
@@ -331,7 +374,7 @@ probability mass over constrained answer labels. Choice and score use unique
 one-character labels to avoid ambiguous multi-token option names. Builtin
 inference supports up to 35 options per question; hosted and external
 backends retain the protocol's 255-option limit. Builtin answers use the
-official Jev wire shapes and disclose <code>generic-gguf</code> in the
+official Clef wire shapes and disclose <code>generic-gguf</code> in the
 <code>x-sys1-local-adapter</code> response header:</p>
 <ul>
 <li>Noul returns only <code>type</code> and probability-of-yes <code>noul</code>;</li>
@@ -349,8 +392,8 @@ bounds returns an error without being sent to a different backend.</p>
 allowed labels, and <code>x-sys1-local-min-concentration</code> is the least
 distribution concentration in the batch. Low coverage means the model did not
 cleanly follow the decision instruction. These are useful local signals, not
-a calibration guarantee. Use hosted Jev, or a System One-specific backend
-whose behavior has been evaluated for your task.</p>
+a calibration guarantee. Use hosted Clef or a task-qualified System One-specific
+backend when its behavior has been evaluated for your task.</p>
 <p>An unlisted public Hugging Face GGUF can be installed explicitly:</p>
 <pre tabindex="0"><code class="language-sh">sys1 pull 'hf:owner/repository:path/model.gguf' --sha256 &lt;64-hex-digest&gt;
 </code></pre>
@@ -360,7 +403,7 @@ whose behavior has been evaluated for your task.</p>
 <tr><th>Route</th><th align="right">Purpose</th></tr>
 </thead>
 <tbody>
-<tr><td><code>POST /v1/systemone</code></td><td align="right">Evaluate <code>{model?, state, questions}</code> through the selected backend</td></tr>
+<tr><td><code>POST /v1/systemone</code></td><td align="right">Evaluate <code>{model?, state, images?, questions}</code> through the selected backend</td></tr>
 <tr><td><code>GET /v1/models</code></td><td align="right">List model ids, backend names, kinds, and reachability</td></tr>
 <tr><td><code>GET /healthz</code></td><td align="right">Report daemon liveness and version</td></tr>
 </tbody>
@@ -368,9 +411,14 @@ whose behavior has been evaluated for your task.</p>
 <p>Responses carry <code>x-sys1-backend</code> and <code>x-sys1-attempts</code>; builtin responses
 also carry the local adapter and diagnostic headers above. Any HTTP response
 from a remote backend, including 4xx or 5xx, is definitive. Only a transport
-failure may re-dispatch, at most once, and never for a pinned <code>backend/model</code>.</p>
+failure on another System One backend may re-dispatch, at most once, and never
+for a pinned <code>backend/model</code>. Clef transport failures have an uncertain outcome
+and never trigger a retry or fallback dispatch.</p>
 <p><code>state</code>, <code>instructions</code>, and criterion descriptions accept text, JSON objects,
-JSON arrays, or <code>null</code> where the official Jev contract permits it. The public
+JSON arrays, or <code>null</code> where the selected adapter permits it. Clef questions
+require nonempty instructions, IDs matching <code>[A-Za-z0-9_.-]{1,100}</code>, and two or
+more choice options. Legacy System One services keep their earlier optional
+instructions and one-option choice support. The public
 package exports request and response schemas for boundary validation.</p>
 <h3 id="request-example">Request example</h3>
 <pre tabindex="0"><code class="language-json">{
@@ -396,17 +444,17 @@ package exports request and response schemas for boundary validation.</p>
 </code></pre>
 <h2 id="routing">Routing</h2>
 <p>For unpinned requests (<code>model: &quot;auto&quot;</code> or omitted), <code>routing.policy</code> controls
-the order of enabled hosted Jev and the installed model named by <code>local.model</code>:</p>
+the order of enabled hosted Clef and the installed model named by <code>local.model</code>:</p>
 <div class="table-scroll" role="region" aria-label="Routing" tabindex="0"><table class="comparison-table">
 <thead>
 <tr><th>Policy</th><th align="right">Order</th></tr>
 </thead>
 <tbody>
-<tr><td><code>auto</code> (default)</td><td align="right">hosted Jev, then the selected local model</td></tr>
-<tr><td><code>prefer-local</code></td><td align="right">selected local model, then hosted Jev</td></tr>
-<tr><td><code>prefer-hosted</code></td><td align="right">hosted Jev, then the selected local model</td></tr>
+<tr><td><code>auto</code> (default)</td><td align="right">hosted Clef, then the selected local model</td></tr>
+<tr><td><code>prefer-local</code></td><td align="right">selected local model, then hosted Clef</td></tr>
+<tr><td><code>prefer-hosted</code></td><td align="right">hosted Clef, then the selected local model</td></tr>
 <tr><td><code>local-only</code></td><td align="right">selected local model only</td></tr>
-<tr><td><code>hosted-only</code></td><td align="right">hosted Jev only</td></tr>
+<tr><td><code>hosted-only</code></td><td align="right">hosted Clef only</td></tr>
 </tbody>
 </table></div>
 <p>Other installed models and all registered HTTP services require an explicit
@@ -415,10 +463,10 @@ traffic. A missing selected model does not promote another installed model.
 Registered HTTP services are local only when their URL uses a
 loopback host; off-machine URLs count as hosted. Redirects are never followed.
 <code>local-only</code> decisions neither probe nor dispatch to hosted endpoints. Explicit
-model discovery and doctor may probe all configured backends. Backend names must
-be unique; <code>typesafe</code> and <code>local-*</code> are reserved for managed candidates. Requests can pin either a model id or an exact backend/model:</p>
+model discovery may probe all configured backends; doctor does not call providers. Backend names must
+be unique; <code>cloudflare</code>, <code>typesafe</code>, and <code>local-*</code> are reserved for managed candidates. Requests can pin either a model id or an exact backend/model:</p>
 <ul>
-<li><code>&quot;model&quot;: &quot;jev-1.13.0&quot;</code> selects a backend serving that hosted model;</li>
+<li><code>&quot;model&quot;: &quot;clef&quot;</code> selects a backend serving that hosted model;</li>
 <li><code>&quot;model&quot;: &quot;local-qwen3-1.7b/qwen3-1.7b&quot;</code> pins the builtin Qwen runner;</li>
 <li><code>&quot;model&quot;: &quot;local-qwen3-0.6b/qwen3-0.6b&quot;</code> explicitly selects the experimental model;</li>
 <li><code>&quot;model&quot;: &quot;openjev/openjev-latest&quot;</code> pins a registered HTTP backend that advertises that alias.</li>
@@ -427,7 +475,7 @@ be unique; <code>typesafe</code> and <code>local-*</code> are reserved for manag
 count and total question count against the backend's published limits. A backend the request exceeds is skipped; when no configured backend
 can serve the request at all the gateway answers <code>422 request_unsupported</code>
 rather than dispatching a request that would fail downstream. Builtin
-backends publish their adapter limit (<code>generic-gguf</code> 35 options); remote backends
+backends publish their adapter limit (<code>generic-gguf</code> 35 options); System One HTTP backends
 are probed at <code>GET /v1/limits</code> (openjev-style <code>max_answers_per_question</code> and
 <code>max_questions</code>). A backend that publishes nothing has unknown capacity; Sys1 can enforce only
 its configured limits and the common protocol envelope. Missing limits never
@@ -464,7 +512,7 @@ weights, mutate credentials, or own their lifecycle.</p>
 <p><a href="https://github.com/jaredpalmer/kev">Kev</a> servers use a dedicated adapter
 (<code>--adapter kev</code>) that handles Kev's two-decimal probability output and
 structured Score legends. Versioned decision profiles reuse task instructions
-with Jev, local models, or a separately trained Kev checkpoint.
+with Clef, local models, or a separately trained Kev checkpoint.
 <a href="https://github.com/hraness/sys1/blob/main/docs/kev.md">Kev and tuning guide</a>.</p>
 <p>After starting and verifying a separately owned Kev server, register it explicitly:</p>
 <pre tabindex="0"><code class="language-sh">sys1 backend add --adapter kev --name kev \
@@ -497,7 +545,7 @@ support. These experiments require Bun and the project dependencies; they are
 separate from the installed review and verification skills. Read the
 <a href="https://github.com/hraness/sys1/blob/main/benchmarks/workflows/results/2026-09-28.md">September 28, 2026 trial</a> for the
 method, recorded outcomes, and limits.</p>
-<p>That trial submitted 48 frozen synthetic examples to Jev 1.13.0 once each:</p>
+<p>That September 28 trial submitted 48 frozen synthetic examples to Jev 1.13.0 once each. These are historical Jev results, not Clef measurements:</p>
 <div class="table-scroll" role="region" aria-label="Kev and decision profiles" tabindex="0"><table class="comparison-table">
 <thead>
 <tr><th>Source workflow</th><th align="right">Correct / submitted</th><th align="right">Errors</th><th align="right">Deterministic baseline</th></tr>
@@ -535,7 +583,7 @@ sys1 doctor --json
 versioned (<code>version: 1</code>) and check identifiers are stable and additive.</p>
 <h2 id="commands">Commands</h2>
 <pre tabindex="0"><code class="language-text">sys1 setup [--tier compact|quality] [--dry-run]
-sys1 jev status|enable|disable
+sys1 clef status|enable|disable
 sys1 up|down|serve|status|doctor
 sys1 pull [MODEL]|pull --list
 sys1 model list|verify|remove
@@ -568,17 +616,18 @@ the state directory. Settable keys:</p>
 <li><code>routing.policy</code>;</li>
 <li><code>gateway.host</code> (loopback addresses only), <code>gateway.port</code>,
 <code>gateway.request_timeout_ms</code>, <code>gateway.probe_timeout_ms</code>;</li>
-<li><code>hosted.base_url</code>, <code>hosted.model</code>, <code>hosted.api_key_env</code> (activation uses
-<code>sys1 jev</code>);</li>
+<li><code>hosted.model</code> (<code>clef</code> or <code>clef-flash</code> for Cloudflare; activation uses <code>sys1 clef</code>);</li>
+<li><code>hosted.base_url</code> and <code>hosted.api_key_env</code> for legacy providers only; Cloudflare
+uses a fixed origin and its named environment variables;</li>
 <li><code>local.enabled</code>, <code>local.model</code>, <code>local.context_tokens</code>, <code>local.eval_timeout_ms</code>,
 <code>local.max_loaded_models</code>.</li>
 </ul>
 <p>Fresh config uses <code>routing.policy: auto</code>, <code>local.enabled: true</code>,
-<code>local.model: qwen3-1.7b</code>, <code>hosted.model: jev-1.13.0</code>, and
+<code>local.model: qwen3-1.7b</code>, <code>hosted.provider: cloudflare</code>, <code>hosted.model: clef</code>, and
 <code>hosted.enabled: false</code>. The daemon reads config per request, so routing and
 backend changes do not need a restart. Restart after changing local runtime
 context, timeout, or residency settings. Environment variables are inherited when
-the daemon starts, so restart it after exporting a new Jev credential. Already
+the daemon starts, so restart it after exporting a new Clef credential. Already
 loaded GGUFs stay resident up to <code>local.max_loaded_models</code> (default one) and are
 released on eviction or daemon shutdown. Local requests are serialized
 to keep context state isolated and the number of loaded models limited. GGUF inference lives in

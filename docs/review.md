@@ -14,8 +14,8 @@ TypeScript. It does not provide general review coverage for every language.
 
 Start with [Sys1 installed](../README.md#install) and run these commands inside
 a Git worktree. Skill setup and checkpoint previews need no model. For a live
-review, choose an enabled backend and its exact model. For Jev, TypeSafe's hosted decision model, provide
-`TYPESAFE_API_KEY` in the environment and run `sys1 jev enable`. Selected source
+review, choose an enabled backend and its exact model. For Cloudflare Clef, provide
+`CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in the environment and run `sys1 clef enable`. Selected source
 and surrounding diff context go to that backend. Inspect the files and preview
 before sending them. [Audit privacy and limits](audit.md#privacy-and-limits)
 explain exclusions and the limits of hunk context.
@@ -48,7 +48,7 @@ model route; it does not need an agent transcript or a particular framework.
 Select the files in your current task, with a request cap and deadline:
 
 ```sh
-sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --dry-run --json -- src test
 ```
 
@@ -57,7 +57,7 @@ preview makes no model calls or metadata writes. Run the same selection when
 the source is ready to send:
 
 ```sh
-sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+sys1 review checkpoint --worktree --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --json -- src test
 ```
 
@@ -81,7 +81,7 @@ Use `sys1 rules list --json` to find active IDs, then add `--rule` to run a
 chosen check:
 
 ```sh
-sys1 review checkpoint --worktree --model typesafe/jev-1.13.0 \
+sys1 review checkpoint --worktree --model cloudflare/clef \
   --rule core-removed-test-assertions --max-requests 10 --timeout-ms 60000 \
   --dry-run --json -- test
 ```
@@ -114,7 +114,7 @@ source has since changed; it is not a list of confirmed current defects.
 To evaluate a recorded candidate again, keep its original route:
 
 ```sh
-sys1 review recheck <finding-id> --model typesafe/jev-1.13.0 \
+sys1 review recheck <finding-id> --model cloudflare/clef \
   --max-requests 10 --timeout-ms 60000 --json
 ```
 
@@ -145,7 +145,7 @@ repository and any linked pull requests or live pages. Save the draft outside
 the Git worktree so the message itself does not become an uncommitted file:
 
 ```sh
-sys1 verify --message /tmp/final-message.txt --model typesafe/jev-1.13.0 --json
+sys1 verify --message /tmp/final-message.txt --model cloudflare/clef --json
 ```
 
 Use a file or `--message -` with any coding agent. Automatic message discovery

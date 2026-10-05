@@ -1,6 +1,9 @@
 # Model comparison: evidence and measurement
 
-Sys1 has two built-in paths: hosted Jev 1.13.0 and experimental local Qwen.
+This September 2026 comparison is historical. Its Jev results, pricing, and
+benchmarks are not measurements of Cloudflare Clef. For the current hosted route,
+see [Cloudflare Clef setup](runtime.md#add-hosted-clef). Sys1 supports Clef and
+experimental local Qwen.
 Qwen3 1.7B remains the local setup selection; 0.6B and 3.5 4B
 require explicit selection. No local candidate is generally qualified. CUA and Needle
 adapters have been removed; their historical measurements remain below.

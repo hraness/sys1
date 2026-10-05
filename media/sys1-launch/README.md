@@ -2,7 +2,7 @@
 
 A 52-second launch film for Sys1, authored as deterministic Canvas typography and diagrams and rendered locally with Slopcamera 3.4.0. The score is an original synthesized instrumental composition. There is no spoken narration.
 
-The film follows the shared Hraness Tokyo Night palette and uses the repository's unmodified Nebula Sans typeface assets. Review and verification examples are illustrative and advisory. Hosted Jev remains opt-in, local Qwen remains experimental, and the workflow profiles are identified as source-checkout experiments.
+The film follows the shared Hraness Tokyo Night palette and uses the repository's unmodified Nebula Sans typeface assets. Review and verification examples are illustrative and advisory. Cloudflare Clef remains opt-in, local Qwen remains experimental, and the workflow profiles are identified as source-checkout experiments.
 
 ## Edit and render
 

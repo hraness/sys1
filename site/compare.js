@@ -39,9 +39,9 @@ function updateCost() {
   byId("model-cost-note").textContent = local
     ? "Local inference has no per-token API bill. Estimate the machine cost you allocate to this workload."
     : custom ? "Enter rates for a compatible service you operate or use. No provider price or integration is implied."
-    : "Jev bills $0.042 per million input tokens. Output tokens are free.";
+    : "The September 2026 Jev price was $0.042 per million input tokens, with free output tokens.";
   byId("price-source").hidden = local || custom;
-  byId("estimate-kind").textContent = local ? "Allocated machine cost" : custom ? "Estimated service cost" : "Estimated Jev input cost";
+  byId("estimate-kind").textContent = local ? "Allocated machine cost" : custom ? "Estimated service cost" : "Historical Jev input-cost estimate";
   byId("cost-note").textContent = local
     ? "An operating-budget estimate, not a speed or capacity prediction. Changing volume changes the unit cost, not the allocated machine bill."
     : "Usage arithmetic, not a quote. Excludes retries, taxes, and price changes.";

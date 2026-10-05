@@ -24,6 +24,7 @@ import { chooseBackend, requestNeeds } from "./router.ts";
 import { ModelStoreError } from "./local/store.ts";
 import { validateResponseForRequest } from "./response.ts";
 import { adaptKevRequest, adaptKevResponse } from "./kev.ts";
+import { clefRequestSchema, unwrapClefResponse } from "./clef.ts";
 
 import { SYS1_VERSION } from "./version.ts";
 export { SYS1_VERSION } from "./version.ts";
@@ -163,7 +164,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
   async function handleSystemOne(request: Request, config: Sys1Config, signal: AbortSignal): Promise<Response> {
     const lengthHeader = request.headers.get("content-length");
     if (lengthHeader !== null && Number(lengthHeader) > PROTOCOL_LIMITS.maxBodyBytes) {
-      return json(errorBody("request_too_large", "body exceeds 1 MiB"), 413);
+      return json(errorBody("request_too_large", "body exceeds 13 MiB"), 413);
     }
     let rawBody: string;
     try {
@@ -171,7 +172,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
     } catch (error) {
       signal.throwIfAborted();
       return error instanceof HttpBodyLimitError
-        ? json(errorBody("request_too_large", "body exceeds 1 MiB"), 413)
+        ? json(errorBody("request_too_large", "body exceeds 13 MiB"), 413)
         : json(errorBody("request_unreadable", "request body could not be read"), 400);
     }
     let parsedJson: unknown;
@@ -197,7 +198,7 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
       return json(
         errorBody(
           "no_backend_configured",
-          "no backends configured; run `sys1 setup`, `sys1 jev enable`, or add a backend with `sys1 backend add`",
+          "no backends configured; run `sys1 setup`, `sys1 clef enable`, or add a backend with `sys1 backend add`",
         ),
         503,
       );
@@ -231,9 +232,12 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
       }
       const backend = choice.backend;
       const hopRequest = { ...body, model: forwardModel(body.model, backend) ?? backend.default_model };
+      if (backend.adapter === "clef" && !clefRequestSchema.safeParse(hopRequest).success) {
+        return json(errorBody("request_unsupported", "Clef needs question IDs using letters, digits, _, . or - (1..100), nonempty instructions, and at least two choice options"), 422);
+      }
       const forwardedBody = backend.adapter === "kev" ? JSON.stringify(adaptKevRequest(hopRequest)) : rawBody;
       if (new TextEncoder().encode(forwardedBody).byteLength > PROTOCOL_LIMITS.maxBodyBytes) {
-        return json(errorBody("request_too_large", "adapted request body exceeds 1 MiB"), 413);
+        return json(errorBody("request_too_large", "adapted request body exceeds 13 MiB"), 413);
       }
       attempts += 1;
       let result;
@@ -291,13 +295,18 @@ export function createFetchHandler(deps: GatewayDeps): (req: Request) => Promise
         let status = result.status;
         let responseBody = result.body;
         let contentType = result.content_type;
+        if (backend.adapter === "clef" && !(status >= 200 && status < 300) && !("generated_error" in result)) {
+          contentType = "application/json";
+          responseBody = JSON.stringify(errorBody("backend_http_error", "Cloudflare Clef returned an HTTP error"));
+        }
         if (status >= 200 && status < 300) {
           contentType = "application/json";
           try {
             const value: unknown = JSON.parse(responseBody ?? "");
             responseBody = JSON.stringify(backend.adapter === "kev"
               ? adaptKevResponse(hopRequest, value)
-              : validateResponseForRequest(body, value));
+              : backend.adapter === "clef" ? unwrapClefResponse(hopRequest, value)
+                : validateResponseForRequest(body, value));
           } catch {
             status = 502;
             responseBody = JSON.stringify(errorBody(
