@@ -53,10 +53,12 @@ inactive. Rule selection preserves each rule's file filters; evidence without
 an applicable selected rule is reported as skipped. Keep the same rules and
 paths when repeating a preview without `--dry-run`.
 
-For an already installed local model, start `sys1 up` and add `--gateway` with
-its exact `local-<id>/<id>` route. HTTP backends registered with
-`sys1 backend add` also accept explicit routes. The configured routing policy
-still applies. Audit never starts a daemon or downloads or loads weights itself.
+The part of a route before the slash may use only lowercase letters, digits,
+and hyphens, so audit rejects the bundled local Qwen routes such as
+`local-qwen3-1.7b/qwen3-1.7b`. HTTP backends registered with
+`sys1 backend add` accept explicit routes, with or without `--gateway`. The
+configured routing policy still applies. Audit never starts a daemon or
+downloads or loads weights itself.
 
 ## Read the report
 

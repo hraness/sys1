@@ -45,7 +45,7 @@ const answer = {
   answers: { urgent: { type: "noul" as const, noul: 0.99 } },
   usage: { input_tokens: 30, output_tokens: 0 },
 };
-const image = { content_type: "image/png", base64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j1ioAAAAASUVORK5CYII=" };
+const image = { content_type: "image/png" as const, base64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j1ioAAAAASUVORK5CYII=" };
 
 describe("Cloudflare Clef contract", () => {
   test("recorded fixtures have only repository-local or builtin imports", () => {
@@ -138,24 +138,24 @@ describe("Cloudflare Clef contract", () => {
     for (const record of [
       { model: "clef", noul: 0.9869, technical: 0.9635, sales: 0.0365, teamConfidence: 0.8593, score: 2.931, probabilities: [0.0047, 0.0051, 0.0448, 0.9454], scoreConfidence: 0.8612 },
       { model: "clef-flash", noul: 0.9354, technical: 0.9724, sales: 0.0276, teamConfidence: 0.8928, score: 2.7378, probabilities: [0.0149, 0.0157, 0.186, 0.7834], scoreConfidence: 0.5316 },
-    ]) {
+    ] as const) {
       const input = { model: record.model, state: "synthetic text", questions };
       const response = { model: record.model, usage: { input_tokens: 319, output_tokens: 0 }, answers: {
-        urgent: { type: "noul", noul: record.noul },
-        team: { type: "choice", choice: "technical", probabilities: { technical: record.technical, sales: record.sales }, confidence: record.teamConfidence },
-        severity: { type: "score", score: record.score, legend: Object.fromEntries(questions.severity.criteria.map((criterion, level) => [String(level), criterion])), probabilities: Object.fromEntries(record.probabilities.map((probability, level) => [String(level), probability])), confidence: record.scoreConfidence },
+        urgent: { type: "noul" as const, noul: record.noul },
+        team: { type: "choice" as const, choice: "technical", probabilities: { technical: record.technical, sales: record.sales }, confidence: record.teamConfidence },
+        severity: { type: "score" as const, score: record.score, legend: Object.fromEntries(questions.severity.criteria.map((criterion, level) => [String(level), criterion])), probabilities: Object.fromEntries(record.probabilities.map((probability, level) => [String(level), probability])), confidence: record.scoreConfidence },
       } };
       expect(unwrapClefResponse(input, { success: true, result: response, errors: [], messages: [] })).toEqual(response);
     }
     for (const record of [
       { model: "clef", first: [0.9946, 0.0054], second: [0.0173, 0.9827], confidence: [0.9784, 0.9322] },
       { model: "clef-flash", first: [0.9765, 0.0235], second: [0.0168, 0.9832], confidence: [0.9082, 0.9337] },
-    ]) {
+    ] as const) {
       const question = { type: "choice" as const, instructions: "Choose the image color", criteria: { red: "Red", blue: "Blue" } };
       const input = { model: record.model, state: "synthetic images", questions: { first: question, second: question } };
       const response = { model: record.model, usage: { input_tokens: 340, output_tokens: 0 }, answers: {
-        first: { type: "choice", choice: "red", probabilities: { red: record.first[0], blue: record.first[1] }, confidence: record.confidence[0] },
-        second: { type: "choice", choice: "blue", probabilities: { red: record.second[0], blue: record.second[1] }, confidence: record.confidence[1] },
+        first: { type: "choice" as const, choice: "red", probabilities: { red: record.first[0], blue: record.first[1] }, confidence: record.confidence[0] },
+        second: { type: "choice" as const, choice: "blue" as const, probabilities: { red: record.second[0], blue: record.second[1] }, confidence: record.confidence[1] },
       } };
       expect(unwrapClefResponse(input, response)).toEqual(response);
     }
@@ -177,7 +177,7 @@ describe("Cloudflare Clef contract", () => {
 
   test("accepts only jointly normalized probability intervals and weighted scores", () => {
     const input = { model: "clef", state: null, questions: { severity: { type: "score" as const, instructions: "Rate severity", criteria: ["low", "medium", "high"] } } };
-    const response = { ...answer, answers: { severity: { type: "score", score: 1, legend: { "0": "low", "1": "medium", "2": "high" }, probabilities: { "0": 0.333, "1": 0.333, "2": 0.333 }, confidence: 0 } } };
+    const response = { ...answer, answers: { severity: { type: "score" as const, score: 1, legend: { "0": "low", "1": "medium", "2": "high" }, probabilities: { "0": 0.333, "1": 0.333, "2": 0.333 }, confidence: 0 } } };
     expect(unwrapClefResponse(input, response)).toEqual(response);
     for (const override of [
       { score: 1.01 },
@@ -199,7 +199,7 @@ describe("Cloudflare Clef contract", () => {
         const probabilities = Object.fromEntries(masses.map((mass, level) => [String(level), Number((mass / total).toFixed(3))]));
         const score = Number(masses.reduce((sum, mass, level) => sum + level * mass / total, 0).toFixed(3));
         const input = { model: "clef", state: null, questions: { q: { type: "score" as const, instructions: "Rate the state", criteria } } };
-        const response = { ...answer, answers: { q: { type: "score", score, legend: Object.fromEntries(criteria.map((criterion, level) => [String(level), criterion])), probabilities, confidence: 0 } } };
+        const response = { ...answer, answers: { q: { type: "score" as const, score, legend: Object.fromEntries(criteria.map((criterion, level) => [String(level), criterion])), probabilities, confidence: 0 } } };
         expect(unwrapClefResponse(input, response)).toEqual(response);
       }
     }

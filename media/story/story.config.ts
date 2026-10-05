@@ -69,5 +69,5 @@ export default () => defineStory({
     terms: `MIT licensed · Latest release v${launchFacts.version.value}`, url: "sys1.io",
     finePrint: "Sample messages and results.",
   },
-  formats: ["wide", "square"],
+  formats: ["wide", "square", "portrait"],
 });

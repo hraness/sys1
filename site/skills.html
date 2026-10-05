@@ -33,7 +33,7 @@
   "@id": "https://sys1.io/skills",
   "url": "https://sys1.io/skills",
   "name": "Agent skills · Sys1",
-  "dateModified": "2026-09-30",
+  "dateModified": "2026-10-04",
   "isPartOf": {
     "@type": "WebSite",
     "@id": "https://sys1.io/#website",
@@ -94,7 +94,7 @@
           <p>System One Skills runs your noisy tests and builds once, returns a short result, and saves the full log. Install the <code>system-one-verify</code> skill for Codex, Claude Code, or Devin.</p>
           <p class="skills-scope">Free and open source · Node.js 20+ · macOS and Linux<br>No model, API key, or Sys1 installation required.</p>
         </div>
-        <nav class="skills-contents" aria-label="On this page"><a href="#install">Install &amp; run</a><a href="#review">Add code review</a><a href="#verify">Add completion checks</a><a href="#evidence">Measurements</a></nav>
+        <nav class="skills-contents" aria-label="On this page"><a href="#install">Install &amp; run</a><a href="#claude-code">Claude Code and RTK</a><a href="#review">Add code review</a><a href="#verify">Add completion checks</a><a href="#evidence">Measurements</a></nav>
       </section>
 
       <section id="install" class="section" aria-labelledby="install-heading">
@@ -118,6 +118,13 @@
           <div><dt>Failed check</dt><dd>The command’s failure status is preserved. Read the full log when the excerpt is not enough to understand the failure.</dd></div>
           <div><dt>Everyday use</dt><dd>Ask your agent to use <code>system-one-verify</code> for a known noisy check. Prefer the command’s native quiet reporter when it already gives you a useful result.</dd></div>
         </dl>
+        <div id="claude-code" class="skills-research">
+          <p><strong>With Claude Code.</strong> Claude Code already shortens long command output. Its <a href="https://code.claude.com/docs/en/tools-reference#output-limits">tools reference</a>, checked on October 4, 2026, describes two cases. By default, a command that succeeds returns up to about 30,000 characters inline; longer output arrives as a file path and a preview of up to the first 2,000 characters, and Claude reads the file when it needs more. A command that fails returns up to about 10,000 characters; longer output becomes an excerpt from its beginning and end, with no file path. <code>BASH_MAX_OUTPUT_LENGTH</code>, 30,000 characters by default and at most 150,000, sets how much output Claude Code reads back, which is also the window a failing command’s excerpt comes from. In Claude Code v2.1.261 or later, the <a href="https://code.claude.com/docs/en/settings-reference#bashoutputmaxchars"><code>bashOutputMaxChars</code></a> setting, up to 128,000 characters, sets the inline limit for a successful command and that window together; when it is set, Claude Code ignores the variable.</p>
+          <p>That difference marks where this skill can help: for a long failing check, the result keeps the exit status, early diagnostic lines, and the end of the output, and its <code>log=</code> line gives the path to the full log. For a long passing check, Claude Code already saves the output to a file it can read. In a September 2026 trial of 26 tasks with a failing type check, Claude Code with Sonnet 5.5 never called the skill. With or without it installed, the agent redirected the output to a file and read it with <code>grep</code> and <code>tail</code>, and the trial found no measurable token or time saving. <a href="https://github.com/hraness/system-one-skills/blob/main/docs/WHOLE-TASK-RESULT-2026-09.md">Read the Claude Code trial</a>. The replay under <a href="#evidence">Measurements</a> used Codex and Devin sessions only.</p>
+        </div>
+        <div id="rtk" class="skills-research">
+          <p><strong>Compared with RTK.</strong> On October 4, 2026, the latest release of <a href="https://github.com/rtk-ai/rtk">RTK</a> was v0.51.0. Its <a href="https://github.com/rtk-ai/rtk/blob/v0.51.0/README.md">README at that release</a> describes an Apache-2.0 command-line proxy whose hook rewrites an agent’s shell commands, for example <code>git status</code> to <code>rtk git status</code>. RTK filters the output of more than 100 commands, and when a command fails, it saves the full output for <code>rtk recall</code>. The README reports up to 90% less Bash output and notes that this is not a 90% smaller bill. Choose RTK for automatic filtering across everyday commands. Choose <code>system-one-verify</code> for a few checks you know are noisy, without a hook, when you want the full log saved as a file.</p>
+        </div>
         <div class="install-links skills-links"><a href="https://github.com/hraness/system-one-skills#commands">Command reference</a></div>
       </section>
 
@@ -130,7 +137,7 @@
         <p class="skills-prose">Use <code>setup claude-code</code> or <code>setup devin</code> for those agents. Setup adds project instructions, with no automatic hooks. The bundled rules cover empty catch blocks and removed test assertions in JavaScript and TypeScript; add rules for your repository’s other conventions.</p>
         <p class="skills-prose">The example selects Cloudflare Clef. <a href="/docs#connect-clef">Configure Clef</a>, inspect the files and requests in the preview, then remove <code>--dry-run</code> to send the selected source and diff context to it. You can also choose an experimental local model or compatible server.</p>
         <p class="skills-prose"><strong>Review is experimental and advisory.</strong> Investigate findings before editing code and keep your tests and ordinary review. Model scores rank candidates; they are not calibrated defect probabilities.</p>
-        <div class="install-links skills-links"><a href="https://github.com/hraness/sys1/blob/main/docs/review.md">Review guide and repository rules</a></div>
+        <div class="install-links skills-links"><a href="/docs/review">Review guide and repository rules</a></div>
       </section>
 
       <section id="verify" class="section" aria-labelledby="verify-heading">
